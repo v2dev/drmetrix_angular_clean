@@ -1,0 +1,92 @@
+<section class="section">
+      <div class="left-div">
+          <div class="build-features">
+              <h1>New February 2020 build features:</h1>
+              <ul>
+                 <li>
+                    UI Enhancements &amp; New Dark Mode!
+                 </li>
+                 <li>
+                    Custom Advertiser / Brand Filter lists<br>
+                    (Map media spend across multiple brands or advertisers of your
+                    choice.)
+                 </li>
+                 <li>
+                    Global Search Enhancements
+                 </li>
+              </ul>
+              <a href="https://adsphere.drmetrix.com/blog/2020/02/04/new-february-2020-build/" target="_blank" class="learn-more">Learn More</a>
+           </div>
+      </div>
+      <div class="right-div">
+          <div class="inner-right">
+            <img src="/drmetrix/assets/img/adspherelogow.png" />
+              <form name="frmLogin" novalidate="" ng-submit="loginForm(frmLogin);">
+                  <div class="form-row align-items-center" ng-show="eulaDisagreeFlag == 0">
+                      <div class="col-sm-12">
+                          <div class="custom-input-group  mb-3 mt-4" ng-class="{'error':frmLogin.username.$invalid && frmLogin.$submitted}">
+                              <i class="fa fa-user" aria-hidden="true"></i>
+                              <input type="text" placeholder="Username" ng-change="user.invalid=false;user.deactive_msg = false;user.contactemail = user.username" ng-model="user.username" name="username" ng-minlength="6" required>
+                          </div>
+                          <label class="error-text"  ng-show="frmLogin.username.$invalid && frmLogin.$submitted">Please enter your Username (minimum 6 characters).</label>
+                          <div class="custom-input-group mb-3" ng-class="{'error':frmLogin.password.$invalid && frmLogin.$submitted}">
+                              <i class="fa fa-lock" aria-hidden="true"></i>
+                              <input type="password" placeholder="Password" ng-change="user.invalid=false;user.deactive_msg = false;"
+                              ng-model="user.password" name="password" ng-minlength="6" required >
+                          </div>
+                          <label class="error-text" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       <label
+                          ng-if="user.invalid && frmLogin.username.$valid && frmLogin.password.$valid && frmLogin.$submitted"
+                          class="inline-label error-text">Invalid Username/Password.</label>
+                       <label ng-if="user.deactive_msg" class="error-text" id="user_inactive_msg">We apologize but
+                          your user account has been deactivated by your
+                          system administrator. Please contact {{user.admin_name}} at
+                          <i>{{user.admin_email}}</i> if you wish to have your account
+                          reactivated.</label>
+                       <label ng-if="user.deleted_msg" class="error-text" id="user_inactive_msg">We're sorry, your
+                          user account has been disabled. Please ask
+                          one of your Adsphere System Administrators to enable your
+                          account. If your company requires additional user licenses,
+                          please contact <i>sales@drmetrix.com</i></label>
+                       <label ng-if="user.admin_inactive_msg" class="error-text">Your company's evaluation of
+                          AdSphere has ended or your
+                          subscription is no longer valid. To enable access again, please
+                          contact <i>sales@drmetrix.com</i></label>
+                       <label ng-if="user.staging_access_inactive_msg" class="error-text">Adsphere staging build
+                          is currently not available. Please login
+                          to regular production build at
+                          <i><a href="http://adsphere.drmetrix.com">http://adsphere.drmetrix.com</a></i>
+                          <br /><br />To gain access to staging build, please contact
+                          DRMetrix.</label>
+                       <label class="inline-label error-text ng-scope" ng-show="send_sms_error == 1" id="send_sms_error" ng-bind-html="send_sms_error"></label>
+                       <input type="hidden" ng-model="user.contactemail" name="contactemail" value="" />                  
+                          <button type="submit" class="btn login-submit btn-blue mt-3">Login</button>
+                          <p><a href="forgot.html" target="_blank">Forgot Password?</a></p>
+                      </div>
+                  </div>
+              </form>
+              <div class="network-info">
+                  <p>Adsphere works best in<i class="fa fa-chrome" aria-hidden="true"></i>Google Chrome.<a href="https://www.google.com/chrome/" target="_blank">Download Chrome Now</a></p>
+                  <p><i class="fa fa-apple apple-icon" aria-hidden="true"></i><span>Mac Users - Please use Safari for better video experience</span></p>
+              </div>
+          </div>
+          <div class="eula-message-container" ng-show="eulaDisagreeFlag == 1">
+            <div class="grid-block">
+               <div class="grid-content collapse">
+                  <h6 class="text-center bold-text eula-login-message">
+                     We apologize for any inconvenience, please contact
+                     info@drmetrix.com regarding your concerns with respect to the End
+                     User License Agreement.
+                  </h6>
+               </div>
+            </div>
+            <div class="grid-block">
+               <div class="grid-content text-center eula-login-button">
+                  <a ng-click="relogin()" href="#" class="button ">Login</a>
+               </div>
+            </div>
+         </div>
+      </div>
+  </section>
+
+
+

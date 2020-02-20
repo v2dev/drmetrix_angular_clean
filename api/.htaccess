@@ -1,0 +1,19 @@
+RewriteEngine On
+
+# Some hosts may require you to use the `RewriteBase` directive.
+# If you need to use the `RewriteBase` directive, it should be the
+# absolute physical path to the directory that contains this htaccess file.
+#
+# RewriteBase /
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Max-Age "1000"
+	Header set Access-Control-Allow-Headers "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding"
+	Header set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+</IfModule>
+
+RewriteCond %{REQUEST_METHOD} OPTIONS 
+RewriteRule ^(.*)$ blank.php [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [QSA,L]
