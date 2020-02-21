@@ -1,0 +1,662 @@
+<!-- Simultaneous login found -->
+<div class="modal fade md-popup" id="browser_timeout" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Simultaneous login found</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p> Another user session has been established for your user ID. <br>
+                You can only be logged into one session at a time. <br>
+                If additional user licenses are required, please contact <i>sales@drmetrix.com</i>
+             </p>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button  class="btn btn-blue" type="button" ng-click="logout()" data-dismiss="modal" aria-label="Close"><i class="fa fa-check" title="OK"></i>OK</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Session TImeout -->
+ <div class="modal fade md-popup" id="session_timeout" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Session Timeout!</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p class="text-center">
+                Sorry, your session has expired! <br>
+                Try logging in again.<br>
+             </p>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button  class="btn btn-blue" type="button" ng-click="logout()" data-dismiss="modal" aria-label="Close"><i class="fa fa-check" title="OK"></i>OK</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Server Error -->
+ <div class="modal fade md-popup" id="request_timeout" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Unexpected Error!</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p class="text-center">
+                We're sorry but something went wrong.<br>
+                This issue has been reported.
+             </p>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button  class="btn btn-blue" type="button" ng-click="logout()" data-dismiss="modal" aria-label="Close"><i class="fa fa-check" title="OK"></i>OK</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Access Denied! -->
+ <div class="modal fade md-popup" id="access_error" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Access Denied!</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p class="text-center">
+                Your company's evaluation of AdSphere has ended or your subscription is no longer valid. To enable access again, please contact sales@drmetrix.com
+             </p>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button  class="btn btn-blue" type="button" ng-click="logout()" data-dismiss="modal" aria-label="Close"><i class="fa fa-check" title="OK"></i>OK</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!--Apple notification for video  -->
+ <div class="modal fade md-popup" id="apple_help" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p class="pop-up-applehelp">Mac users: If you're having a problem with video playback we recommend using Safari browser with AdSphere. Also, if you're having issues with play links from Excel/CSV files, please change your default browser to Safari. To do so, please click Apple menu, select system preferences, choose general tab, click on menu next to "default web browser". Change setting to Safari. If you're still having problems please email <a href="mailto:support@drmetrix.com">support@drmetrix.com</a></p>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Password changed -->
+ <div class="modal fade md-popup" id="my-notify" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p><em>Your password has been changed successfully.</em></p>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Reset password -->
+ <div class="modal fade md-popup" id="dialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p><em>Instructions to reset your password has been sent to your email address. <br/>Thank You!</em></p>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Tracking section -->
+ <div id="openTrackModal" class="modal fade network-filter-popup filter-data md-popup show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Set Alert</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="d-flex pb-2">
+                <span id="tracker_element_name" class="element_name"></span>
+             </div>
+             <div class="edit-parent-container border-top" id="following_occurs">
+                <div class="edit-inner-div d-flex pt-3">
+                   <p>Alert when the following occurs: </p>
+                   <ul class="ml-3">
+                      <li class="text-center checkbox" id="track_advertiser_ul">
+                         <input type="checkbox" id="track_advertiser_input" name="track_advertiser_input">
+                         <label for="track_advertiser_input" class="checkbox-custom-label">
+                         <span class="v-align-middle">New Advertisers are Detected</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox" id="track_brand_ul">
+                         <input type="checkbox" id="track_brand_input" name="track_brand_input">
+                         <label for="track_brand_input"  class="checkbox-custom-label">
+                         <span class="v-align-middle">New Brands are Detected</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox" id="track_creative_ul">
+                         <input type="checkbox" id="track_creative_input" name="track_creative_input" >
+                         <label for="track_creative_input"  class="checkbox-custom-label">
+                         <span class="v-align-middle">New Creative are Detected</span>
+                         </label>
+                      </li>
+                   </ul>
+                </div>
+                <div class="edit-inner-div d-flex pt-3" id="brand_classification_div">
+                   <p>Brand Classification: </p>
+                   <ul class="d-flex middle-child">
+                      <li class="text-center checkbox mr-2">
+                         <input type="checkbox" id="short_form_products" name="short_form_products" >
+                         <label for="short_form_products"   class="checkbox-custom-label">
+                         <span class="v-align-middle">Short From Products</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox">
+                         <input type="checkbox" id="lead_generation" value="lead_generation" name="lead_generation" >
+                         <label for="lead_generation"   class="checkbox-custom-label">
+                         <span class="v-align-middle">Lead Generation</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox mr-2">
+                         <input type="checkbox" id="brand_direct" value="brand_direct" name="brand_direct" >
+                         <label for="brand_direct"   class="checkbox-custom-label">
+                         <span class="v-align-middle">Barnd/Direct</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox">
+                         <input type="checkbox" id="285_mins" value="285_mins" name="285_mins" >
+                         <label for="285_mins"   class="checkbox-custom-label">
+                         <span class="v-align-middle">28.5 Mins</span>
+                         </label>
+                      </li>
+                   </ul>
+                </div>
+                <div class="edit-inner-div  pt-2 pb-3">
+                   <p>Alert frequency:</p>
+                   <div class="grid-content medium-8" id="AlertfrequencyLabel">
+                      <label class="m-top5"></label>
+                   </div>
+                   <ul class="d-flex" id="AlertfrequencyUL">
+                      <li class="text-center checkbox">
+                         <input type="checkbox" id="alert_frequency_daily" name="alert_frequency_daily" value="daily" >
+                         <label for="alert_frequency_daily" class="checkbox-custom-label">
+                         <span class="v-align-middle">Daily</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox  ml-2">
+                         <input type="checkbox" id="alert_frequency_weekly" name="alert_frequency_weekly" value="weekly" >
+                         <label for="alert_frequency_weekly" class="checkbox-custom-label">
+                         <span class="v-align-middle">Weekly</span>
+                         </label>
+                      </li>
+                      <li class="text-center checkbox  ml-2" ng-show="show_monthly">
+                         <input type="checkbox" id="alert_frequency_monthly" name="alert_frequency_monthly" value="monthly" >
+                         <label for="alert_frequency_monthly" class="checkbox-custom-label">
+                         <span class="v-align-middle">monthly</span>
+                         </label>
+                      </li>
+                   </ul>
+                </div>
+             </div>
+             <div class="d-flex border-top pt-2 notice">
+                <label>Notification Type: <span class="ml-5">Email</span></label>
+             </div>
+             <div class="grid-block" style="display:none;">
+                <input type="text" id="alert_type_val" name="alert_type_val" val="" />
+                <input type="text" id="type_id_val" name="type_id_val" val="" />
+             </div>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3" id="feedback_msg_block_btn">
+                <div class="align-center" id="success_alert_setup_msg" style="display:none;" >
+                </div>
+                <div class="align-center" id="error_alert_setup_msg" style="display:none;" >
+                </div>
+                <button class="btn btn-blue" type="Set" id="set_tracking_btn"><i class="fa fa-check" title="apply"></i>Set</button>
+                <button class="btn btn-blue" type="button" id="del_tracking_btn" style="display:none;"><i class="fa fa-trash" title="cancel"></i>Delete</button>
+                <button id="cancel_tracking_btn" class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Behind commercial -->
+ <div zf-modal="" id="behindCommercialModal" class="" overlay-close="false">
+    <div class="grid-block vertical">
+       <div class="primary title-bar">
+          <div class="left title">Advertiser Feedback</div>
+          <span class="right"><a zf-close="" class="close_filter"><img src="/drmetrix/assets/img/menuiconblue/VC002-closebutton-02.svg"/></a></span>
+       </div>
+       <div class="grid-content  feedback-modal-content">
+          <div class="grid-block" id="behind_commercial">
+             <div class="grid-content">
+                <p>To assist us in researching the company behind this advertising, we'd appreciate any information you may have such as company name, address, as well as any information on key contacts including phone and email. Any and all information is helpful. Thank you!</p>
+             </div>
+             <div class="grid-content" id="behind_commercial_error" style="font-size:0.8em;color:red;width:100%;display:none;">Please provide feedback</div>
+             <div class="grid-content">
+                <textarea rows="3" class="feedback-textarea" autocomplete="off" id="commercialInfoText"></textarea>
+             </div>
+          </div>
+          <div class="grid-block align-center" id="success_behind_commercial_msg" style="display:none;">
+             <p>Feedback email sent successfully.</p>
+          </div>
+          <div class="grid-block align-center" id="error_behind_commercial_msg" style="display:none;">
+             <p>Error while sending feedback email.</p>
+          </div>
+          <div class="grid-block" id="behindCommercial_msg_block_btn">
+             <div class="grid-content top-border">
+                <div class="align-center grid-block p-topbottom-20">
+                   <button zf-close="" class="cancelBtn btn btn-sm btn-default btn-change" id="cancelBtn_abc" type="button">Cancel</button>
+                   <button class="applyBtn btn btn-sm btn-success btn-change"  id="applyBtn_abc"  onclick="sendCommercialInfoEmail();" type="button">Send</button>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Category Tracking section -->
+ <div id="openCategoryTrackModal" class="modal fade network-filter-popup filter-data lg-popup show">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Track Categories</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="row pt-1 pb-2">
+                <div class="col-md-7 text-center">
+                   <label><b>Categories</b></label>
+                </div>
+                <div class="col-md-5 text-center">
+                   <label><b>Track New Brands or Creatives</b></label>
+                </div>
+             </div>
+             <div class="category-modal-table table-responsive" id="category_modal_table">
+             </div>
+             <div class="edit-parent-container border-top">
+                <div class="edit-inner-div d-flex pt-2 pb-2">
+                   <p>Brand Classification: </p>
+                   <ul class="d-flex middle-child">
+                   <li class="checkbox mr-2">
+                      <input type="checkbox" name="cat-brand-classification" id="cat_short_form_products" value="cat_short_form_products">
+                      <label for="cat_short_form_products">Short From Products</label>
+                   </li>
+                   <li class="checkbox mr-2">
+                      <input type="checkbox" name="cat-brand-classification" id="cat_lead_generation" value="cat_lead_generation">
+                      <label for="cat_lead_generation">Lead Generation</label>
+                   </li>
+                   <li class="checkbox mr-2">
+                      <input type="checkbox" name="cat-brand-classification" id="cat_brand_direct" value="cat_brand_direct">
+                      <label for="cat_brand_direct">Barnd/Direct</label>
+                   </li>
+                   <li class="checkbox">
+                      <input type="checkbox" name="cat-brand-classification" id="cat_285_mins" value="cat_285_mins">
+                      <label for="cat_285_mins">28.5 Mins</label>
+                   </li>
+                </div>
+                <div class="edit-inner-div d-flex border-top pt-2 pb-2">
+                   <p>Alert frequency:</p>
+                   <ul class="d-flex">
+                   <li class="text-center checkbox">
+                      <input type="checkbox" name="cat-alert-frequency" id="cat_alert_frequency_daily" checked="" value="daily">
+                      <label for="cat_alert_frequency_daily">Daily</label>
+                   </li>
+                   <li class="text-center checkbox  ml-2">
+                      <input type="checkbox" name="cat-alert-frequency" id="cat_alert_frequency_weekly" value="weekly">
+                      <label for="cat_alert_frequency_weekly">Weekly</label>
+                   </li>
+                </div>
+             </div>
+             <div class="d-flex border-top pt-3 pb-1 notice">
+                <label>Notification Type: <span class="ml-5 pl-3">Email</span></label>
+             </div>
+             <div class="border-top display-none">
+                <input type="text" id="cat_alert_type_val" name="alert_type_val" val="" />
+                <input type="text" id="cat_type_id_val" name="type_id_val" val="" />
+             </div>
+             <div id="feedback_msg_block_btn">
+                <div class="align-center display-none" id="cat_success_alert_setup_msg">
+                </div>
+                <div class="align-center display-none" id="cat_error_alert_setup_msg">
+                </div>
+             </div>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button class="btn btn-blue applyBtn" type="button" id="cat_set_tracking_btn"><i class="fa fa-check" title="apply"></i>Set</button>
+                <button class="btn btn-black cancelBtn" type="button" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Update Version -->
+ <div zf-modal="" id="update_version" class="" overlay-close="false">
+    <div class="grid-block vertical">
+       <div class="primary title-bar">
+          <div class="center title">Latest update available!</div>
+       </div>
+       <div class="grid-content" style="padding: 1em;">
+          <p class="text-center">
+             Try logging in again<br>
+             to get the latest updates! <br>
+          </p>
+          <div class="align-center grid-block upgrade">
+             <input type="button" zf-close="" class="button" value="OK" ng-click="logout()">
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- validate ADV / Agency / Contact -->
+ <div zf-modal="" id="validateInformationModal" class="" overlay-close="false">
+    <div class="grid-block vertical">
+       <div class="primary title-bar">
+          <div class="left title">Report to Adsphere</div>
+          <span class="right"><a zf-close="" class="close_filter"><img src="/drmetrix/assets/img/menuiconblue/VC002-closebutton-02.svg"/></a></span>
+       </div>
+       <div class="grid-content  feedback-modal-content">
+          <div class="grid-block" id="validate_info_block">
+             <div class="grid-content">
+                <p>We appreciate your feedback. Please let us know what information is incorrect and if you have more up to date information, please provide.</p>
+             </div>
+             <div class="grid-content" id="feedback_text_error" style="font-size:0.8em;color: red;width:100%">Please provide feedback</div>
+             <div class="grid-content">
+                <textarea rows="3" class="feedback-textarea" autocomplete="off" id="validateInfoText"></textarea>
+             </div>
+          </div>
+          <div class="grid-block align-center" id="success_validateInfo_msg" style="display:none;">
+             <p>Feedback email sent successfully.</p>
+          </div>
+          <div class="grid-block align-center" id="error_validateInfo_msg" style="display:none;">
+             <p>Error while sending feedback email.</p>
+          </div>
+          <div class="grid-block" id="validateInfo_msg_block_btn">
+             <div class="grid-content top-border">
+                <div class="align-center grid-block p-topbottom-20">
+                   <button zf-close="" class="cancelBtn btn btn-sm btn-default btn-change" id="cancelBtn_uf" type="button">Cancel</button>
+                   <button class="applyBtn btn btn-sm btn-success btn-change"  id="applyBtn_uf"  onclick="sendValidateInfoEmail();" type="button">Send</button><a zf-open="validateInformationModal" id="a_tag_validateInfo"></a><input id="data_to_verify" type="hidden" value='' />
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Reding 800/URL -->
+ <div id="refineSearchModal" class="modal fade network-filter-popup filter-data xl-popup show" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">
+                <div class="left title">Refine By <span id="refine_by"></span> with <span id="refine_by_text"></span> for <span id="tab_title"></span>: <span id="header_refine_log"></span></div>
+             </h5>
+             <div class="d-flex justify-content-end align-items-center">
+                <div id="excel_loader_refine_log" class="loader-exl" style="display:none; margin: 0 1em 0 3.2em;"><img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"  /></div>
+                <button class="btn btn-blue excel-btn" id="tfn_url_export" onclick="tfn_url_export();"><img src="assets/img/download.svg"> Excel</button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true"></span>
+                </button>
+             </div>
+             <div class="excel-ranking-popup refine_log_exp renamefile-popup" id="refine_log_exp" style="display: none;">
+                <p class="black-txt">Your report is ready for download in the <button class="btn btn-black report-tab"><img src="/drmetrix/assets/img/reports.svg"> Reports</button> tab.</p>
+                <div class="rename-form">
+                   <div class="medium-9">
+                      <span class="form-label black-txt">File Name</span>
+                      <input type="text" id="refine_log_filename" class="rename-filename" maxlength = "200">
+                      <input type="hidden" id="refine_log_old_filename" class="rename-filename">
+                      <input type="hidden" id="refine_log_filepath" class="rename-filepath">
+                      <input type="hidden" id="refine_log_export_id" class="export-id">
+                      <input type="hidden" id="refine_log_export_brand_id" class="export_brand_id">
+                      <input type="hidden" id="refine_log_export_creative_id" class="export_creative_id">
+                      <span><small class="error custom">File name already exist.</small></span>
+                   </div>
+                   <div class="rename-saveclose shrink medium-3">
+                      <button class="btn btn-blue" id="reset-filename" title="Reset Filename" onClick="resetFilename('refine_log');"> <i class="fa fa-undo"></i>Reset </button>
+                   </div>
+                </div>
+                <span style="display:block;text-align:left;">
+                   <input type="checkbox" class="checkbox-custom" id="dont_ask_refine_log"  onclick="dontAskAlert(this.id)"/>
+                   <label class="checkbox-custom-label">
+                      <div class="custom-div">Don't show me this again</div>
+                   </label>
+                </span>
+                <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                   <button class="btn btn-black" onclick="$('.refine_log_exp').hide();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+                   <button class="btn btn-blue" onclick="renameRefineExcelFile();"><i class="fa fa-check" title="apply"></i>OK</button>
+                </div>
+             </div>
+          </div>
+          <div class="modal-body">
+             <div id="grid_container" class="refine-search-table grid-block">
+                <table id="refineSearchGrid"></table>
+                <div id="pager_refineSearchGrid"></div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Advertising page excel -->
+ <div class="modal fade network-filter-popup filter-data md-popup show" id="adv_exp_popup">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Excel</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <span>Your report is ready for download in the <button class="btn btn-black report-tab mr-0"><img src="/drmetrix/assets/img/reports.svg"> Reports</button> tab.</span>
+             <span class="form-label">File Name</span>
+             <input type="text" id="adv_page_filename" class="mt-2 mb-2 rename-filename" maxlength = "200">
+             <input type="hidden" id="adv_page_old_filename" class="mt-2 mb-2 rename-filename">
+             <input type="hidden" id="adv_page_filepath" class="mt-2 mb-2 rename-filepath">
+             <input type="hidden" id="adv_page_export_id" class="mt-2 mb-2 export-id">
+             <span><small class="error custom">File name already exist.</small></span>
+             <span class="checkbox">
+             <input type="checkbox" id="dont_ask_alt_ranking_detail"  onclick="dontAskAlert(this.id)"/>
+             <label for="dont_ask_alt_ranking_detail" class="mb-3 mt-3">Don't show me this again</label>
+             </span>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button class="btn btn-blue" onclick="renameExcelFile('adv_page');"><i class="fa fa-check" title="apply"></i>OK</button>
+                <button class="btn btn-blue" id="reset-filename" title="Reset Filename" onClick="resetFilename('adv_page')"> <i class="fa fa-undo"></i>Reset </button>
+                <button class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- feedback -->
+ <div id="userFeedbackModal" tabindex="-1" role="dialog" class="modal md-popup">
+    <div id="validateInformationModal" class="modal-dialog modal-dialog-centered" overlay-close="false">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Report to Adsphere</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="mb-2" id="feedback_msg_block">
+                <span>We appreciate your feedback. Please let us know what information is incorrect and if you have more up to date information, please provide.</span>
+                <textarea rows="3" class="feedback-textarea mt-2" autocomplete="off" id="globalSearchFeedbackText" onKeyUp="sendButtonSetState()" ></textarea>
+             </div>
+             <div class="mb-2" id="success_feedback_msg" style="display:none;">
+                <span>Feedback email sent successfully.</span>
+             </div>
+             <div class="mb-2" id="error_feedback_msg" style="display:none;">
+                <span>Error while sending feedback email.</span>
+             </div>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button class="applyBtn btn btn-blue" onclick="sendFeedbackEmail();" type="button" id="globalSearchFeedbackTextSend"><i class="fa fa-check" title="apply"></i>Send</button>
+                <button class="cancelBtn btn btn-black" data-dismiss="modal" aria-label="Close" type="button"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ 
+ <!-- Filter Schedule Email -->
+ <div class="modal fade schedule-email-popup sm-popup show" id="freq-popup-filter" tabindex="-1" role="dialog" aria-labelledby="freq-popup-filter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Schedule Email Frequency</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="schedule-popup">
+                <p>Please choose to receive:</p>
+                <ul class="top-search-bar schedule_email_ui filter-ui-col">
+                   <li class="checkbox">
+                      <input type="checkbox" name="freq-filter-options" id="opt_filter_daily" class="checkbox-custom" ng-model="freq_filter_options.daily" value="daily">
+                      <label class="checkbox-custom-label" for="opt_filter_daily">Daily</label>
+                   </li>
+                   <li class="checkbox">
+                      <input type="checkbox" name="freq-filter-options" id="opt_filter_weekly" class="checkbox-custom" ng-model="freq_filter_options.weekly" value="weekly">
+                      <label class="checkbox-custom-label" for="opt_filter_weekly">Weekly</label>
+                   </li>
+                   <li class="checkbox" ng-show="show_monthly">
+                      <input type="checkbox" name="freq-filter-options" id="opt_filter_monthly" class="checkbox-custom" ng-model="freq_filter_options.monthly" value="monthly">
+                      <label class="checkbox-custom-label" for="opt_filter_monthly">Monthly</label>
+                   </li>
+                </ul>
+                <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                   <button class="cancelBtn btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+                   <button class="applyBtn btn btn-blue" onclick="setOverlayPopupScheduleEmail()" ng-disabled="!freq_filter_options.daily && !freq_filter_options.weekly && !freq_filter_options.monthly"><i class="fa fa-check" title="ok"></i>Ok</button>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ 
+ <!-- Excel pop-up for network grid -->
+ <div class="modal fade network-filter-popup filter-data md-popup show" id="network_ranking_excel-grid-popup" style="display:none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Excel</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Please check the <span class="report-tab"><img src="/drmetrix/assets/img/reports.svg" /> Reports</span> tab to see the progress of your report as it is created.</p>
+             <span class="pb-2">File Name</span>
+             <input type="text" id="network_excel_rename_filename" class="rename-filename"  maxlength="200" >
+             <input type="hidden" id="network_excel_rename_old_filename" class="rename-filename">
+             <span><small class="error custom">File name already exist.</small></span>
+             <div class="grid-block rename-saveclose shrink medium-3">
+                <button class="btn btn-blue" id="reset-filename" title="Reset Filename" onClick="resetFilename('network_excel_rename');"> <i class="fa fa-undo"></i>Reset </button>
+             </div>
+          </div>
+          <span class="checkbox">
+             <input type="checkbox" class="checkbox-custom" id="dont_ask_alt_networks_list" onclick="dontAskAlert(this.id)"/>
+             <label for="dont_ask_alt_networks_list" class="checkbox-custom-label dontshow-custom">
+                <div class="custom-div">Don't show me this again</div>
+             </label>
+          </span>
+          <div class="btn-grp d-flex justify-content-end border-top pt-3">
+             <button class="btn btn-blue" onclick="networkExcelFileRename();"><i class="fa fa-check" title="OK"></i>OK</button>
+             <button class="btn btn-blue" id="reset-filename" title="Reset Filename" onClick="resetFilename('home_page')"> <i class="fa fa-undo"></i>Reset </button>
+             <button class="btn btn-black" onclick="$('#network_ranking_excel-grid-popup').hide();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- filter-excel-popup modal -->
+ <div class="modal fade network-filter-popup filter-data md-popup show" id="progress_ranking_exp">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Excel</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Please check the  <button class="btn btn-black report-tab mr-0"><img src="/drmetrix/assets/img/reports.svg"> Reports</button>  tab to see the progress of your report as it is created.</p>
+             <span class="pb-2">File Name</span>
+             <input type="text" id="network_rename_filename" class="mt-2 mb-2 rename-filename filename_input" maxlength = "200" value="{{excel_file_values.filename}}">
+             <input type="hidden" id="network_rename_old_filename" class="mt-2 mb-2 rename-filename oldfilename_input" value="{{excel_file_values.old_filename}}">
+             <input type="hidden" id="{{excel_file_id.filepath}}" class="mt-2 mb-2 rename-filepath filepath_input" value="{{excel_file_values.filepath}}">
+             <input type="hidden" id="{{excel_file_id.export_id}}" class="mt-2 mb-2 export-id" value="{{excel_file_values.export_id}}">
+             <span><small class="error custom">File name already exist.</small></span>
+             <span class="checkbox">
+             <input type="checkbox" id="dont_ask_alt_ranking"  onclick="dontAskAlert(this.id)"/>
+             <label for="dont_ask_alt_ranking" class="mb-3 mt-3">
+             Don't show me this again
+             </label>
+             </span>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button class="btn btn-blue" ng-click="renameExcelFile();" data-dismiss="modal" aria-label="Ok"><i class="fa fa-check" title="apply"></i>OK</button>
+                <button class="btn btn-blue" id="reset-filename" title="Reset Filename" onClick="resetFilename('home_page')"> <i class="fa fa-undo"></i>Reset </button>
+                <button class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- filter-excel-popup for large file modal -->
+ <div class="modal fade network-filter-popup filter-data md-popup show" id="large_ranking_exp">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Excel</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>The requested file is too large to create in Excel. If you proceed, it will be created as a CSV file which does not support clickable links. <button class="btn btn-black report-tab mr-0"><img src="/drmetrix/assets/img/reports.svg"> Reports</button>  tab to see the progress of your report as it is created.</p>
+             <span class="pb-2">File Name</span>
+             <input type="text" id="{{excel_file_id.filename}}" class="mt-2 mb-2 rename-filename filename_input" maxlength = "200" value="{{excel_file_values.filename}}">
+             <input type="hidden" id="{{excel_file_id.old_filename}}" class="mt-2 mb-2 rename-filename oldfilename_input" value="{{excel_file_values.old_filename}}">
+             <span><small class="error custom">File name already exist.</small></span>
+             <span class="checkbox">
+             <input type="checkbox" id="dont_ask_alt_ranking"  onclick="dontAskAlert(this.id)"/>
+             <label for="dont_ask_alt_ranking" class="mb-3 mt-3">
+             Don't show me this again
+             </label>
+             </span>
+             <span>
+                <input type="checkbox" class="checkbox-custom" id="email_popup_check" />
+                <label class="checkbox-custom-label dontshow-custom">
+                   <div class="custom-div">Email me when the report is ready</div>
+                </label>
+             </span>
+             <div class="btn-grp d-flex justify-content-end border-top pt-3">
+                <button class="btn btn-blue" ng-click="renameExcelFile();" data-dismiss="modal" aria-label="Ok"><i class="fa fa-check" title="apply"></i>OK</button>
+                <button class="btn btn-blue" id="reset-filename" title="Reset Filename" onClick="resetFilename('home_page')"> <i class="fa fa-undo"></i>Reset </button> 
+                <button class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>

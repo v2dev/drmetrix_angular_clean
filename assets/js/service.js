@@ -15,7 +15,6 @@ angular.module('starter.services', [])
                 return $http.get(myConfig.apiUrl + path,{timeout :120000});
             },
             post: function(path, postData) {
-                console.log(myConfig.apiUrl + path);
                 return $http.post(myConfig.apiUrl + path, postData,{timeout :120000});
             },
             isUserLogged: function isUserLogged($scope){

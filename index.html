@@ -11,7 +11,6 @@
 
 		 <!-- Start - Bootstrap CSS -->
 		<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-		<!-- <link href="./assets/css/font-awesome.min.css" rel="stylesheet"/> -->
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 		<!-- End - Bootstrap CSS -->
 
@@ -23,9 +22,11 @@
 
 		<!-- Start - Angular Js -->
 		<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
-		<script type="text/javascript" src="./assets/scripts/angular-route.min.js"></script>
-		<script type="text/javascript" src="./assets/scripts/angular-route.min.js"></script>
+		<script src="//code.angularjs.org/1.2.20/angular-sanitize.min.js"></script>
+		<!-- <script type="text/javascript" src="./assets/scripts/angular-route.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.25/angular-ui-router.min.js"></script>
 		<script type="text/javascript" src="./assets/scripts/angular-cookies.js"></script>
+		<script src="//morgul.github.io/ui-bootstrap4/ui-bootstrap-tpls-3.0.6.js"></script>
 		<!-- End - Angular Js -->
 
 		<!-- Start - Daterangepicker -->
@@ -33,7 +34,9 @@
 
 		<!--Start - Angular Js controllers-->
 		<script type="text/javascript" src="./app.js"></script>
+		<script type="text/javascript" src="./assets/js/shared/confirmBox/modalConfirmService.js" ></script>
 		<script type="text/javascript" src="./assets/js/service.js"></script>
+		<script type="text/javascript" src="./assets/js/filters/safehtml.js" ></script>
 		<script type="text/javascript" src="./assets/controller/login.js"></script>
 		<!--End - Angular Js controllers-->
 
@@ -48,11 +51,10 @@
         '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-T3CWFZ');
 		</script>
-	
-		<div class="grid-frame vertical">
-				<div ng-view></div>
-				
-		</div>
+		 
+		
+		<div ui-view></div>
+		<?php //include_once('./templates/bootstrap-modal.html'); ?>
 		<div class="term-conditions">
 			<span><a onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms &amp; Conditions</a>|
 				<a onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy Policy</a>|

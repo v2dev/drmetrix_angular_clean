@@ -287,7 +287,7 @@ input[type="password"] {
 .error-msg {
     border: none;
     color: #ffb644;
-    font-size: .9em;
+    font-size: 14px;
 }
 .iconic-color-dark *,
 .iconic-color-dark *.iconic-property-accent {

@@ -20,47 +20,29 @@
       </div>
       <div class="right-div">
           <div class="inner-right">
-            <img src="/drmetrix/assets/img/adspherelogow.png" />
+            <img src="./assets/images/adspherelogow.png" />
               <form name="frmLogin" novalidate="" ng-submit="loginForm(frmLogin);">
                   <div class="form-row align-items-center" ng-show="eulaDisagreeFlag == 0">
                       <div class="col-sm-12">
                           <div class="custom-input-group  mb-3 mt-4" ng-class="{'error':frmLogin.username.$invalid && frmLogin.$submitted}">
                               <i class="fa fa-user" aria-hidden="true"></i>
-                              <input type="text" placeholder="Username" ng-change="user.invalid=false;user.deactive_msg = false;user.contactemail = user.username" ng-model="user.username" name="username" ng-minlength="6" required>
+                              <input type="text" placeholder="Username" ng-change="user.invalid=false;user.contactemail = user.username" ng-model="user.username" name="username" ng-minlength="6" required>
                           </div>
-                          <label class="error-text"  ng-show="frmLogin.username.$invalid && frmLogin.$submitted">Please enter your Username (minimum 6 characters).</label>
+                          <label class="error-msg"  ng-show="frmLogin.username.$invalid && frmLogin.$submitted">Please enter your Username (minimum 6 characters).</label>
                           <div class="custom-input-group mb-3" ng-class="{'error':frmLogin.password.$invalid && frmLogin.$submitted}">
                               <i class="fa fa-lock" aria-hidden="true"></i>
-                              <input type="password" placeholder="Password" ng-change="user.invalid=false;user.deactive_msg = false;"
+                              <input type="password" placeholder="Password" ng-change="user.invalid=false;"
                               ng-model="user.password" name="password" ng-minlength="6" required >
                           </div>
-                          <label class="error-text" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       <label
-                          ng-if="user.invalid && frmLogin.username.$valid && frmLogin.password.$valid && frmLogin.$submitted"
-                          class="inline-label error-text">Invalid Username/Password.</label>
-                       <label ng-if="user.deactive_msg" class="error-text" id="user_inactive_msg">We apologize but
-                          your user account has been deactivated by your
-                          system administrator. Please contact {{user.admin_name}} at
-                          <i>{{user.admin_email}}</i> if you wish to have your account
-                          reactivated.</label>
-                       <label ng-if="user.deleted_msg" class="error-text" id="user_inactive_msg">We're sorry, your
-                          user account has been disabled. Please ask
-                          one of your Adsphere System Administrators to enable your
-                          account. If your company requires additional user licenses,
-                          please contact <i>sales@drmetrix.com</i></label>
-                       <label ng-if="user.admin_inactive_msg" class="error-text">Your company's evaluation of
-                          AdSphere has ended or your
-                          subscription is no longer valid. To enable access again, please
-                          contact <i>sales@drmetrix.com</i></label>
-                       <label ng-if="user.staging_access_inactive_msg" class="error-text">Adsphere staging build
-                          is currently not available. Please login
-                          to regular production build at
-                          <i><a href="http://adsphere.drmetrix.com">http://adsphere.drmetrix.com</a></i>
-                          <br /><br />To gain access to staging build, please contact
-                          DRMetrix.</label>
-                       <label class="inline-label error-text ng-scope" ng-show="send_sms_error == 1" id="send_sms_error" ng-bind-html="send_sms_error"></label>
-                       <input type="hidden" ng-model="user.contactemail" name="contactemail" value="" />                  
+                          <label class="error-msg" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       <label
+                          ng-if="user.invalid && frmLogin.$valid && frmLogin.$submitted"
+                          class="inline-label error-msg">Invalid Username/Password.</label>
+
+                        <div class="error-msg"  ng-show="user.errors" ng-bind-html="error_text | trustAsHtml"></div>
+                       <label class="inline-label error-msg ng-scope" ng-show="login_error == 1" id="send_sms_error" ng-bind-html="send_sms_error"></label>
+                       <input type="hidden" ng-model="user.contactemail" name="contactemail" value="" />    
                           <button type="submit" class="btn login-submit btn-blue mt-3">Login</button>
-                          <p><a href="forgot.html" target="_blank">Forgot Password?</a></p>
+                          <p><a ui-sref="forgotPassword">Forgot Password?</a></p>
                       </div>
                   </div>
               </form>
@@ -81,7 +63,7 @@
             </div>
             <div class="grid-block">
                <div class="grid-content text-center eula-login-button">
-                  <a ng-click="relogin()" href="#" class="button ">Login</a>
+                  <a ng-click="relogin()" href="#" class="button">Login</a>
                </div>
             </div>
          </div>
