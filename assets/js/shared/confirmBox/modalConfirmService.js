@@ -8,14 +8,13 @@ angular.module('drmApp').service('modalConfirmService', ['$uibModal',
         };
 
         var modalOptions = {
-            closeButtonText: 'Close',
-            actionButtonText: 'OK',
-            headerText: 'Proceed?',
-            bodyText: 'Perform this action?'
+            closeButtonText: '',
+            actionButtonText: '',
+            headerText: '',
+            bodyText:  '',
+            closeReq: 0
         };
-
         this.showModal = function (customModalDefaults, customModalOptions) {
-            debugger;
             if (!customModalDefaults) customModalDefaults = {};
             customModalDefaults.backdrop = 'static';
             //Create temp objects to work with since we're in a singleton service

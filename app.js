@@ -12,9 +12,10 @@ drmApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/home.html',
 			controller: 'LoginController'
 		})
-		.state('about', {
-			url: '/about',
-			templateUrl: 'templates/about.html',
+        .state('authy', {
+			url: '/authy',
+            templateUrl: 'templates/authy.html',
+            controller: 'AuthyController'
             // we'll get to this in a bit       
         })
         
@@ -34,6 +35,8 @@ drmApp.config(function($stateProvider, $urlRouterProvider) {
 			controller: 'LoginController'
         });
 });
+
+
 
 
 // mainApp.controller('StudentController', function($scope) {

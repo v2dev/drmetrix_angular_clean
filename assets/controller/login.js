@@ -1,7 +1,6 @@
 var app = angular.module('drmApp');
 
-app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $sce , $state, modalConfirmService) {
-  var username = sessionStorage.loggedIn !== "undefined" && sessionStorage.loggedIn ? sessionStorage.loggedIn : '';
+app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService) {
   var pdf = sessionStorage.pdf;
   sessionStorage.lastLoginTime = '';
   $scope.login_error = 0;
@@ -122,16 +121,15 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
   $scope.msg = '';
   $scope.showModal = function(){
     var defaultOptions = {
-      size: 'sm modal-dialog-centered'
+      size: 'lg modal-dialog-centered'
     }
     var options = {
           bodyText: 'Instructions to reset your password has been sent to your email address. <br/>Thank You!',
-          footerReq: 0,
-          headerReq: 0
+          headerText: ' ',
+          closeReq: 1
       };
 
     modalConfirmService.showModal(defaultOptions, options).then(function (result) {
-       
     });
   }
 
@@ -143,7 +141,6 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
           if (data.status) {
             $state.go('home');
             $scope.showModal();
-            // $('#dialog').modal('show');
           } else {
             $scope.user.invalid = true;
           }

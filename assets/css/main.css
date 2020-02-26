@@ -884,6 +884,8 @@ header {
   .modal .modal-header h5 {
     font-size: 18px;
     font-weight: 400; }
+    .modal .modal-header h3 {
+      color : #fff;}
 .modal .modal-body {
   padding: 15px; }
 .modal .close {
@@ -2794,5 +2796,6 @@ header {
   .tokenMsg > div input {
     padding: 4px 8px;
     width: 100%; }
+   
 
 /*# sourceMappingURL=main.css.map */

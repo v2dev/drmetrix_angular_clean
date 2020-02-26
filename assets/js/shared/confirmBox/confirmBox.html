@@ -1,15 +1,15 @@
-<div class="modal-header">
-    <h3 ng-show="modalOptions.headerReq == 1">{{modalOptions.headerText}}</h3>
-    <button type="button" class="close" data-ng-click="modalOptions.close()" aria-label="Close">
+<div class="modal-header" ng-show="modalOptions.headerText != ''">
+    <h3 >{{modalOptions.headerText}}</h3>
+    <button type="button" class="close" data-ng-click="modalOptions.close()" aria-label="Close" ng-show="modalOptions.closeReq == 1">
         <span aria-hidden="true"></span>
-        </button>
-  </div>
+    </button>
+</div>
   <div class="modal-body">
     <p  ng-bind-html="modalOptions.bodyText | trustAsHtml"></p>
   </div>
-  <div class="modal-footer" ng-show="modalOptions.footerReq == 1">
-    <button type="button" class="btn btn-primary">{{modalOptions.closeButtonText}}</button>
-    <button class="btn btn-danger" data-ng-click="modalOptions.ok();">{{modalOptions.actionButtonText}}</button>
+  <div class="modal-footer" ng-show="modalOptions.actionButtonText != ''">
+    <button type="button" class="btn btn-primary" ng-show="modalOptions.closeButtonText != ''">{{modalOptions.closeButtonText | trustAsHtml}}</button>
+    <span ng-bind-html="modalOptions.actionButtonText | trustAsHtml"></span>
   </div>
 
 

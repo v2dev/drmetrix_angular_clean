@@ -49,5 +49,4 @@ angular.module('starter.services', [])
                 return 0;
             },
         };
-    })
-    ;
+    });
