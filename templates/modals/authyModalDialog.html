@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h3 >Authy Validation</h3>
+</div>
+<form name="verification" id="verification" ng-submit="verifyLogin();" ng-init="invalidToken = true">
+    <div class="modal-body">
+        <p class="tokenMsg">A message has been sent to your registered cell phone number.</p>
+        <label>Authy Token</label>
+        <input type="text" value=""  name="token" pattern="^[0-9]+$" ng-pattern-restrict ng-model="token" required ng-change="error_reset();" />
+        <p class="invalid" ng-show="!invalidToken" >Invalid Token.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-blue" value="Validate" ng-disabled="buttonClicked">Validate</button>
+    </div>
+</form>

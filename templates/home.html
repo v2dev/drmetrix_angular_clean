@@ -22,26 +22,25 @@
           <div class="inner-right">
             <img src="./assets/images/adspherelogow.png" />
             <div  ng-show="eulaDisagreeFlag == 0">
-              <form name="frmLogin" novalidate="" ng-submit="loginForm(frmLogin);">
+              <form name="frmLogin" novalidate="" ng-submit="loginForm(frmLogin);" >
                   <div class="form-row align-items-center">
                       <div class="col-sm-12">
-                          <div class="custom-input-group  mb-3 mt-4" ng-class="{'error':frmLogin.username.$invalid && frmLogin.$submitted}">
+                          <div class="custom-input-group  mb-3 mt-4" ng-class="{'error':frmLogin.username.$invalid && frmLogin.$submitted}" ng-init="user.invalid = false">
                               <i class="fa fa-user" aria-hidden="true"></i>
-                              <input type="text" placeholder="Username" ng-change="user.invalid=false;user.contactemail = user.username" ng-model="user.username" name="username" ng-minlength="6" required>
+                              <input type="text" placeholder="Username" ng-change="user.contactemail = user.username" ng-model="user.username" name="username" ng-minlength="6" required>
                           </div>
                           <label class="error-msg"  ng-show="frmLogin.username.$invalid && frmLogin.$submitted">Please enter your Username (minimum 6 characters).</label>
                           <div class="custom-input-group mb-3" ng-class="{'error':frmLogin.password.$invalid && frmLogin.$submitted}">
                               <i class="fa fa-lock" aria-hidden="true"></i>
-                              <input type="password" placeholder="Password" ng-change="user.invalid=false;"
-                              ng-model="user.password" name="password" ng-minlength="6" required >
+                              <input type="password" placeholder="Password" ng-model="user.password" name="password" ng-minlength="6" required >
                           </div>
-                          <label class="error-msg" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       <label
-                          ng-if="user.invalid && frmLogin.$valid && frmLogin.$submitted"
-                          class="inline-label error-msg">Invalid Username/Password.</label>
+                          <label class="error-msg" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       
+                          <label ng-if="user.invalid && frmLogin.$valid && frmLogin.$submitted" class="inline-label error-msg">Invalid Username/Password.</label>
 
                         <div class="error-msg"  ng-show="user.errors" ng-bind-html="error_text | trustAsHtml"></div>
                        <label class="inline-label error-msg ng-scope" ng-show="login_error == 1" id="send_sms_error" ng-bind-html="send_sms_error"></label>
                        <input type="hidden" ng-model="user.contactemail" name="contactemail" value="" />    
+                       <!-- ng-disabled="(user.invalid && frmLogin.$invalid) || frmLogin.$submitted" -->
                           <button type="submit" class="btn login-submit btn-blue mt-3">Login</button>
                           <p><a ui-sref="forgotPassword">Forgot Password?</a></p>
                       </div>

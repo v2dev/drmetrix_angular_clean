@@ -1,12 +1,9 @@
-var drmApp = angular.module('drmApp', ['ui.router','starter.services','ngCookies','ui.bootstrap']);
-
+var drmApp = angular.module('drmApp', ['ui.router','starter.services','ngCookies','ui.bootstrap','ngPatternRestrict']);
 drmApp.config(function($stateProvider, $urlRouterProvider) {
     
     $urlRouterProvider.otherwise('/home');
     
     $stateProvider
-        
-        // HOME STATES AND NESTED VIEWS ========================================
         .state('home', {
             url: '/home',
             templateUrl: 'templates/home.html',
@@ -22,38 +19,18 @@ drmApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/eulaAgreement.html',
             controller: 'EulaAgreementController'
         })
-        .state('ranking', {
-			url: '/ranking',
-            templateUrl: 'templates/ranking.html',
-            controller: 'RankingController'
-        })
-        
-        // // nested list with custom controller
-        // .state('home.list', {
-        //     url: '/list',
-        //     templateUrl: 'partial-home-list.html',
-        //     controller: function($scope) {
-        //         $scope.dogs = ['Bernese', 'Husky', 'Goldendoodle'];
-        //     }
-        // })
-        
-        // nested list with just some random string data
         .state('forgotPassword', {
 			url: '/forgotPassword',
             templateUrl: 'templates/forgot-password.html',
 			controller: 'LoginController'
+        })
+        .state('ranking', {
+			url: '/ranking',
+            templateUrl: 'templates/ranking.html',
+            controller: 'RankingController'
+        }).state('network', {
+            url: '/network',
+            templateUrl: 'templates/network.html',
+            controller: 'NetworkController'
         });
 });
-
-
-
-
-// mainApp.controller('StudentController', function($scope) {
-// 	$scope.students = [
-// 		{name: 'Mark Waugh', city:'New York'},
-// 		{name: 'Steve Jonathan', city:'London'},
-// 		{name: 'John Marcus', city:'Paris'}
-// 	];
-
-// 	$scope.message = "Click on the hyper link to view the students list.";
-// });

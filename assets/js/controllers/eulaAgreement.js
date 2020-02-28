@@ -30,9 +30,7 @@ angular.module('drmApp').controller('EulaModalCtrl', function($scope, $rootScope
         return false;
       }
   
-     
     $scope.eulaAgree = function(){  
-      debugger;
         apiService.post('/eula_check_updated',{})
         .then(function(response) {
           $uibModalInstance.dismiss();
