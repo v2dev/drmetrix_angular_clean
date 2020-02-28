@@ -1,65 +1,72 @@
 <!DOCTYPE html>
 <html>
-	<head lang="en">
-		<meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="format-detection" content="telephone=no"/>
-		<title>DRMetrix - THE DNA OF DIRECT RESPONSE</title>
-		<link href='./assets/css/circle.css' rel='stylesheet' type='text/css'/>
-    <link href="./assets/css/v-accordion.css" rel="stylesheet"/>
-		<link href="./assets/css/listnav.css" rel="stylesheet"/>
 
-		 <!-- Start - Bootstrap CSS -->
-		<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-		<!-- End - Bootstrap CSS -->
+<head lang="en">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no" />
+	<title>DRMetrix - THE DNA OF DIRECT RESPONSE</title>
+	<link href='./assets/css/circle.css' rel='stylesheet' type='text/css' />
+	<link href="./assets/css/v-accordion.css" rel="stylesheet" />
+	<link href="./assets/css/listnav.css" rel="stylesheet" />
 
-		<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&display=swap" rel="stylesheet">
-    <link href="./assets/css/ui.jqgrid.min.css"  rel="stylesheet"/>
-    <link href="./assets/css/app.css" rel="stylesheet" type="text/css"/>
-		<link href="./assets/css/main.css" rel="stylesheet" type="text/css"/>
-    <link href="./assets/css/style.css" rel="stylesheet" type="text/css"/>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+		type="text/css" />
 
-		<!-- Start - Angular Js -->
-		<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
-		<script src="//code.angularjs.org/1.2.20/angular-sanitize.min.js"></script>
-		<!-- <script type="text/javascript" src="./assets/scripts/angular-route.min.js"></script> -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.25/angular-ui-router.min.js"></script>
-		<script type="text/javascript" src="./assets/scripts/angular-cookies.js"></script>
-		<script src="//morgul.github.io/ui-bootstrap4/ui-bootstrap-tpls-3.0.6.js"></script>
-		<!-- <script type="text/javascript" src="./assets/scripts/jquery.min.js"></script> -->
-		
-		<!-- End - Angular Js -->
 
-		<!-- Start - Daterangepicker -->
-		<!-- End - Daterangepicker -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&display=swap" rel="stylesheet">
+	<link href="./assets/css/ui.jqgrid.min.css" rel="stylesheet" />
+	<link href="./assets/css/app.css" rel="stylesheet" type="text/css" />
+	<link href="./assets/css/main.css" rel="stylesheet" type="text/css" />
+	<link href="./assets/css/style.css" rel="stylesheet" type="text/css" />
 
-		<!--Start - Angular Js Services/Directives/Filters-->
-		<script type="text/javascript" src="./app.js"></script>
-		<script type="text/javascript" src="./assets/js/shared/confirmBox/modalConfirmService.js" ></script>
-		<script type="text/javascript" src="./assets/js/service.js"></script>
-		<script type="text/javascript" src="./assets/js/filters/safehtml.js" ></script>
-		<script type="text/javascript" src="./assets/js/service.js"></script>
-		<!--End - Angular Js Services/Directives/Filters-->
+	<!-- Angular Js -->
+	<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
+	<script src="//code.angularjs.org/1.2.20/angular-sanitize.min.js"></script>
+	<!-- <script type="text/javascript" src="./assets/scripts/angular-route.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.25/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="./assets/scripts/angular-cookies.js"></script>
+	<script src="//morgul.github.io/ui-bootstrap4/ui-bootstrap-tpls-3.0.6.js"></script>
 
-		<!--Start - Angular Js controllers-->
-		<script type="text/javascript" src="./assets/js/controllers/main.js"></script>
-		<script type="text/javascript" src="./assets/js/controllers/login.js"></script>
-		<script type="text/javascript" src="./assets/js/controllers/authy.js"></script>
-		<script type="text/javascript" src="./assets/js/controllers/eulaAgreement.js"></script>
-		<script type="text/javascript" src="./assets/js/controllers/ranking.js"></script>
-		<!--End - Angular Js controllers-->
+	<!--Angular Js Services/Directives/Filters-->
+	<script type="text/javascript" src="./app.js"></script>
+	<script type="text/javascript" src="./assets/js/shared/confirmBox/modalConfirmService.js"></script>
+	<script type="text/javascript" src="./assets/js/service.js"></script>
+	<script type="text/javascript" src="./assets/js/filters/safehtml.js"></script>
+	<script type="text/javascript" src="./assets/js/service.js"></script>
 
-		<script src="https://content.jwplatform.com/libraries/AkDbgEI8.js"></script> <!-- For video play -->
-	</head>
-	<body ng-app="drmApp" ng-controller="MainController">	
-		<div ui-view></div>
-		<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
-		<div class="term-conditions">
-			<span><a onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms &amp; Conditions</a>|
-				<a onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy Policy</a>|
-				<a  href="javascript:void(0)" onclick="downloadPdf();">EULA</a></span>
-			<p>&copy; {{user.year_of_copyrights}} DRMetrix</p>
-		</div>
+	<!--Start - Angular Js controllers-->
+	<script type="text/javascript" src="./assets/js/controllers/main.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/login.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/authy.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/eulaAgreement.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/ranking.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/user.js"></script>
+
+	<!--Start - Angular UI grid -->
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-touch.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-animate.js"></script>
+	<script src="http://ui-grid.info/release/ui-grid.js"></script>
+	<link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css" type="text/css">
+
+	<script src="https://content.jwplatform.com/libraries/AkDbgEI8.js"></script> <!-- For video play -->
+</head>
+
+<body ng-app="drmApp" ng-controller="MainController">
+	<div ui-view></div>
+	<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
+	<div class="term-conditions">
+		<span><a
+				onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms
+				&amp; Conditions</a>|
+			<a
+				onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy
+				Policy</a>|
+			<a href="javascript:void(0)" onclick="downloadPdf();">EULA</a></span>
+		<p>&copy; {{user.year_of_copyrights}} DRMetrix</p>
+	</div>
 </body>
+
 </html>

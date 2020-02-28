@@ -1,0 +1,22 @@
+<div class="user-addmin-wrapper">
+    <div class="black-top-menu">
+        <nav class="user-menu-icons d-flex justify-content-between align-items-center">
+            <span class="welcome-text">Welcome ,</span>
+            <label class="mb-0" ng-click="showTab(1)">User Accounts</label>
+            <ul class="d-flex justify-content-between align-items-center">
+                <li class="mr-3">
+                    <button class="btn btn-blue" ng-click="openAddUser()"><img class="help"
+                            src="./assets/images/add-user.svg">Add New User</button>
+                </li>
+                <li class="mr-3">
+                    <button class="btn btn-blue" ng-click="toggle_search()"><img class="help"
+                            src="./assets/images/search-white.svg">Search</button>
+                </li>
+                <li>
+                    <button class="btn btn-blue" ng-click="export()"><img class="help"
+                            src="./assets/images/download.svg">Excel</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div id="gridUser" ui-grid="gridOptions1" ui-grid-exporter ui-grid-selection class="grid"></div>
