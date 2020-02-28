@@ -2796,6 +2796,19 @@ header {
   .tokenMsg > div input {
     padding: 4px 8px;
     width: 100%; }
-   
+   .eula-agreement img {
+    max-width: 220px;
+}
+.eula-agreement .agreement-sec p ,.eula-agreement .agreement-sec ol {
+  font-size: 14px;
+    color: #202b39;
+}
+.eula-login-message{
+  color: #fff;
+  margin: 0 0 20px;
+  border-top: solid 1px #fff;
+  padding: 20px 0 20px;
+  border-bottom: solid 1px #fff;
+}
 
 /*# sourceMappingURL=main.css.map */

@@ -21,8 +21,9 @@
       <div class="right-div">
           <div class="inner-right">
             <img src="./assets/images/adspherelogow.png" />
+            <div  ng-show="eulaDisagreeFlag == 0">
               <form name="frmLogin" novalidate="" ng-submit="loginForm(frmLogin);">
-                  <div class="form-row align-items-center" ng-show="eulaDisagreeFlag == 0">
+                  <div class="form-row align-items-center">
                       <div class="col-sm-12">
                           <div class="custom-input-group  mb-3 mt-4" ng-class="{'error':frmLogin.username.$invalid && frmLogin.$submitted}">
                               <i class="fa fa-user" aria-hidden="true"></i>
@@ -46,27 +47,30 @@
                       </div>
                   </div>
               </form>
+             
               <div class="network-info">
                   <p>Adsphere works best in<i class="fa fa-chrome" aria-hidden="true"></i>Google Chrome.<a href="https://www.google.com/chrome/" target="_blank">Download Chrome Now</a></p>
                   <p><i class="fa fa-apple apple-icon" aria-hidden="true"></i><span>Mac Users - Please use Safari for better video experience</span></p>
               </div>
+            </div>
+            <div class="eula-message-container" ng-show="eulaDisagreeFlag == 1">
+                <div class="grid-block">
+                   <div class="grid-content collapse">
+                      <h6 class="text-center eula-login-message">
+                         We apologize for any inconvenience, please contact
+                         <a href="mailto:info@drmetrix.com" >info@drmetrix.com</a> regarding your concerns with respect to the End
+                         User License Agreement.
+                      </h6>
+                   </div>
+                </div>
+                <div class="grid-block">
+                   <div class="grid-content text-center eula-login-button">
+                        <button class="btn btn-blue" ng-click="relogin()">Login</button>
+                   </div>
+                </div>
+             </div>
           </div>
-          <div class="eula-message-container" ng-show="eulaDisagreeFlag == 1">
-            <div class="grid-block">
-               <div class="grid-content collapse">
-                  <h6 class="text-center bold-text eula-login-message">
-                     We apologize for any inconvenience, please contact
-                     info@drmetrix.com regarding your concerns with respect to the End
-                     User License Agreement.
-                  </h6>
-               </div>
-            </div>
-            <div class="grid-block">
-               <div class="grid-content text-center eula-login-button">
-                  <a ng-click="relogin()" href="#" class="button">Login</a>
-               </div>
-            </div>
-         </div>
+        
       </div>
   </section>
 

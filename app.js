@@ -16,7 +16,16 @@ drmApp.config(function($stateProvider, $urlRouterProvider) {
 			url: '/authy',
             templateUrl: 'templates/authy.html',
             controller: 'AuthyController'
-            // we'll get to this in a bit       
+        })
+        .state('eulaAgreement', {
+			url: '/eulaAgreement',
+            templateUrl: 'templates/eulaAgreement.html',
+            controller: 'EulaAgreementController'
+        })
+        .state('ranking', {
+			url: '/ranking',
+            templateUrl: 'templates/ranking.html',
+            controller: 'RankingController'
         })
         
         // // nested list with custom controller
