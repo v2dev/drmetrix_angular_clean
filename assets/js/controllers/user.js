@@ -22,10 +22,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $http, $
         apiService.post('./../../assets/json/100.json', config)
         // apiService.post('/show_users', config)
             .then(function (response) {
-                console.log(response.status);
-                console.log(response.result);
-                console.log(response.count);
-                $scope.gridOptions1.data = response.status;
+                $scope.gridOptions1.data = response.data;
             });
 
     }

@@ -49,11 +49,7 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/forgot-password.html',
 			controller: 'LoginController'
         })
-        .state('ranking', {
-			url: '/ranking',
-            templateUrl: 'templates/ranking.html',
-            controller: 'RankingController'
-        }).state('network', {
+        .state('network', {
             url: '/network',
             templateUrl: 'templates/network.html',
             controller: 'NetworkController'
