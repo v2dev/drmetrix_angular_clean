@@ -47,19 +47,15 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
         .state('forgotPassword', {
             url: '/forgotPassword',
             templateUrl: 'templates/forgot-password.html',
-            controller: 'LoginController'
+			controller: 'LoginController'
+        })
+        .state('ranking', {
+			url: '/ranking',
+            templateUrl: 'templates/ranking.html',
+            controller: 'RankingController'
+        }).state('network', {
+            url: '/network',
+            templateUrl: 'templates/network.html',
+            controller: 'NetworkController'
         });
 });
-
-
-
-
-// mainApp.controller('StudentController', function($scope) {
-// 	$scope.students = [
-// 		{name: 'Mark Waugh', city:'New York'},
-// 		{name: 'Steve Jonathan', city:'London'},
-// 		{name: 'John Marcus', city:'Paris'}
-// 	];
-
-// 	$scope.message = "Click on the hyper link to view the students list.";
-// });

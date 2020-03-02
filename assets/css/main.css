@@ -2514,7 +2514,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 97vh;
+  height: calc(100vh - 37px);
+  position: relative;
   /*login left section*/ }
   .section:after, .section:before {
     content: "";
@@ -2692,7 +2693,9 @@ header {
   bottom: 0;
   height: 37px;
   padding: 0 10px;
-  font-size: 13px; }
+  font-size: 13px;
+  z-index: 1;
+}
   .term-conditions span {
     position: relative;
     top: 7px; }

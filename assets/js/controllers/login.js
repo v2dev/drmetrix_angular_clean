@@ -3,6 +3,7 @@ var app = angular.module('drmApp');
 app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService) {
   var pdf = sessionStorage.pdf;
   sessionStorage.lastLoginTime = '';
+  $rootScope.login_user_id = '';
   $scope.login_error = 0;
   $scope.loginForm = function (form) {
     if (form.$valid) {
@@ -17,13 +18,13 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
             sessionStorage.lastLoginTime    = data.last_login;
             sessionStorage.assistant_admin  =  $rootScope.assistant_admin = data.assistant_admin;
             sessionStorage.role             = $rootScope.role = data.role;
-            sessionStorage.login_user_id    = data.user_id;
-            sessionStorage.complete_name    = sessionStorage.loggedIn = $rootScope.complete_name = data.name;
+            localStorage.login_user_id     = data.user_id;
+            sessionStorage.complete_name    = sessionStorage.loggedIn = $rootScope.complete_name = localStorage.complete_name.complete_name = data.name;
             $cookies.put("loggedIn",data.name);
             $cookies.put("userrole",data.role);
             if (data.new_user == 1) {
-              sessionStorage.mobile = data.mobile;
-              sessionStorage.authy_id = data.authy_id;
+              localStorage.mobile = data.mobile;
+              localStorage.authy_id = data.authy_id;
               $state.go('authy');
             } else {
               if (data.eulaFlag == 0) {
@@ -32,7 +33,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
               } else {
                 sessionStorage.roles            = data.roles;
                 sessionStorage.contactemail     = data.contactemail;
-                sessionStorage.loggedInUserId   = data.user_id;
+                sessionStorage.loggedInUserId   = $rootScope.login_user_id = data.user_id;
                 sessionStorage.company_id       = data.company_id;
                 sessionStorage.company_name     = data.company_name;
                 sessionStorage.admin_id         = data.admin_id;
