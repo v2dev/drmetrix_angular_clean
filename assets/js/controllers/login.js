@@ -18,8 +18,8 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
             sessionStorage.lastLoginTime    = data.last_login;
             sessionStorage.assistant_admin  =  $rootScope.assistant_admin = data.assistant_admin;
             sessionStorage.role             = $rootScope.role = data.role;
-            localStorage.login_user_id     = data.user_id;
-            sessionStorage.complete_name    = sessionStorage.loggedIn = $rootScope.complete_name = localStorage.complete_name.complete_name = data.name;
+            localStorage.login_user_id     =  data.user_id;
+            sessionStorage.complete_name    = sessionStorage.loggedIn = $rootScope.complete_name = localStorage.complete_name = data.name;
             $cookies.put("loggedIn",data.name);
             $cookies.put("userrole",data.role);
             if (data.new_user == 1) {
@@ -38,8 +38,8 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
                 sessionStorage.company_name     = data.company_name;
                 sessionStorage.admin_id         = data.admin_id;
                 $rootScope.loggedIn             = 1;
-                $rootScope.adsphere_blog_url = $rootScope.sub_menu[2].href = $rootScope.right_sub_menu[2].href = data.ADSPHERE_BLOG_URL;
-                $rootScope.system_status_url = $rootScope.sub_menu[5].href = $rootScope.right_sub_menu[5].href = data.SYSTEM_STATUS_URL;
+                $rootScope.adsphere_blog_url = $rootScope.right_menu[2].href = data.ADSPHERE_BLOG_URL;
+                $rootScope.system_status_url = $rootScope.right_menu[5].href = data.SYSTEM_STATUS_URL;
                 if (sessionStorage.role == 'superadmin') {
                   sessionStorage.superadmin = 1;
                   $scope.init1(data);
@@ -80,9 +80,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
                         localStorage.notifBlogStatusLink = data.adsphere_blog_url;
                     }
 
-                    $('#blog_status').attr('href', data.ADSPHERE_BLOG_URL);
-                    $('#sys_status').attr('href', data.SYSTEM_STATUS_URL);
-                    $scope.init1(data);
+                    // $scope.init1(data);
 
                     $state.go('ranking');
                   }

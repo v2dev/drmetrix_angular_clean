@@ -1,1 +1,29 @@
-Ranking called
+	<!-- black-top menu -->
+    <div class="black-top-menu" ng-init="showTab('brands')">
+            <ul class="left-menu">
+                <li>Welcome {{complete_name}},</li>
+                <li ng-class="{active_alert : ranking.type == 'brands'}">
+                    <a ng-click="showTab('brands')">
+                        <label for="">Brands</label>
+                    </a>
+                </li>
+                <li ng-class="{active_alert : ranking.type == 'advertisers'}">
+                    <a ng-click="showTab('advertisers')">
+                        <label for="">Advertisers</label>
+                    </a>
+                </li>
+            </ul>
+            <ul class="checkbox-filter">
+                           
+                <li>
+                        <a href="#" class="filter-listing dropdown-toggle" data-toggle="modal" data-target="#filterlisting">
+                                Filters
+                        </a>
+                </li>
+                <li>
+                        <a href="#" class="btn btn-blue btn-sm">
+                                <i class="fa fa-download"></i> Excel
+                        </a>
+                </li>
+            </ul>
+        </div>
