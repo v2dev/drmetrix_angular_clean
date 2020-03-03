@@ -4909,19 +4909,19 @@ function showActiveSharedUsers() {
 
 function getUserDetails($search){
     $where = '';
-    
-    $admin_id = $_SESSION['user_id'];
-    if($_SESSION['role'] == 'user') {
-        $admin_id = $_SESSION['admin_id'];
-    }
+    $admin_id = "2056";
+    // $admin_id = $_SESSION['user_id'];
+    // if($_SESSION['role'] == 'user') {
+    //     $admin_id = $_SESSION['admin_id'];
+    // }
 
     if (!empty($search)){  $where = ' AND (u.username LIKE "%'.$search.'%" OR u.phone_number LIKE "%'.$search.'%" OR u.status LIKE "%'.$search.'%" OR u.first_name LIKE "%'.$search.'%" OR u.last_name LIKE "%'.$search.'%" OR u.position LIKE "%'.$search.'%"  OR u.last_login LIKE "%'.$search.'%" )';}
-    $sql="(SELECT u.user_id,u.username,u.phone_number,u.password,u.status,concat(u.first_name,' ',u.last_name) as name,u.position,u.role,u.last_login,u.email,u.passphrase,u.assistant_admin,u.authy_cookie, DATE_FORMAT(u.verify_date,'%m/%d/%Y') as vdate , country_code , COUNT(user_logs.user_id) as login_count, SUM(CASE WHEN user_logs.created_at >= '".date('Y-m-d', strtotime('-30 days'))."' THEN 1 ELSE 0 END) as last_30_days_count, u.tracking_alert_subscribed "
+    $sql="(SELECT u.user_id,u.username,u.phone_number,u.password,u.status,concat(u.first_name,' ',u.last_name) as name,u.position,u.role,u.last_login,u.email,u.passphrase,u.assistant_admin,u.authy_cookie, DATE_FORMAT(u.verify_date,'%m/%d/%Y') as vdate , country_code , COUNT(user_logs.user_id) as login_count, SUM(CASE WHEN user_logs.created_at >= '".date('Y-m-d', strtotime('-30 days'))."' THEN 1 ELSE 0 END) as last_30_days_count, u.tracking_alert_subscribed , if(u.authy_bypass_until > '0000-00-00' and u.authy_bypass_until > (NOW() - INTERVAL 24 HOUR), 1, 0) skip_authy "
            . "FROM user u "
            . "INNER JOIN admin_user a ON u.user_id = a.user_id LEFT JOIN user_logs ON u.user_id = user_logs.user_id "
            . "WHERE u.status != 'deleted' and a.admin_id= " .$admin_id . $where." group by u.user_id)";
     $sql.=" union all ";
-    $sql.="(SELECT u.user_id,u.username,u.phone_number,u.password,u.status,concat(u.first_name,' ',u.last_name) as name,u.position,u.role,u.last_login,u.email,u.passphrase,u.assistant_admin,u.authy_cookie, DATE_FORMAT(u.verify_date,'%m/%d/%Y') as vdate , country_code , COUNT(user_logs.user_id) as login_count, SUM(CASE WHEN user_logs.created_at >= '".date('Y-m-d', strtotime('-30 days'))."' THEN 1 ELSE 0 END) as last_30_days_count, u.tracking_alert_subscribed "
+    $sql.="(SELECT u.user_id,u.username,u.phone_number,u.password,u.status,concat(u.first_name,' ',u.last_name) as name,u.position,u.role,u.last_login,u.email,u.passphrase,u.assistant_admin,u.authy_cookie, DATE_FORMAT(u.verify_date,'%m/%d/%Y') as vdate , country_code , COUNT(user_logs.user_id) as login_count, SUM(CASE WHEN user_logs.created_at >= '".date('Y-m-d', strtotime('-30 days'))."' THEN 1 ELSE 0 END) as last_30_days_count, u.tracking_alert_subscribed , if(u.authy_bypass_until > '0000-00-00' and u.authy_bypass_until > (NOW() - INTERVAL 24 HOUR), 1, 0) skip_authy "
            . "FROM user u "
            . "LEFT JOIN user_logs ON u.user_id = user_logs.user_id "
            . "WHERE u.status != 'deleted' and u.user_id= " .$admin_id . $where." group by u.user_id)";
@@ -10486,7 +10486,7 @@ function chkUser() {
             $new_user = 0;  
             $authy_flag = 0;
             $server = explode(':',$_SERVER['HTTP_HOST']);
-            if($server[0] != "localhos") { 
+            if($server[0] != "localhost") {
                 if($user->username != EMIL_BYPASS){
                     $authy_flag = !isset($_COOKIE[$user2[0]->authy_id]);
                 }
