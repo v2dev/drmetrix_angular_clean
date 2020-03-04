@@ -49,6 +49,7 @@ angular.module('drmApp').controller('AuthyModalCtrl', function($scope, $rootScop
             localStorage.notifBlogStatusLink = data.adsphere_blog_url;
         }
         $uibModalInstance.dismiss();
+        $rootScope.login_user_id =  localStorage.login_user_id;
         $state.go('ranking');
       } else{
           $scope.invalidToken = false;

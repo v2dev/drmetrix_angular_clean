@@ -3876,7 +3876,7 @@ function getUser(){
                                 'user_id' => $user2[0]->user_id,'status'=>1,
                                 /*'company_name' => $user2[0]->company_name, 'new_user'=>$new_user,'last_login'=>$last_login,*/'session_login' => $_SESSION['lastLoginTime'],
                                 /*'eulaFlag'=>$checkEulaFlag,'user_company'=>$user_company,*/'contactemail'=>$user2[0]->username,'company_id' =>$user2[0]->company_id,'admin_id' =>$_SESSION['admin_id'],'assistant_admin'=>$user2[0]->assistant_admin,
-                                'adsphere_blog_url'=>$user2[0]->adsphere_blog_url,'system_status_url'=>$user2[0]->system_status_url,'notification_build_url'=>$user2[0]->notification_build_url,'notification_new_count'=>$user2[0]->notification_new_count,'notification_new_clicked'=>$user2[0]->notification_new_clicked));
+                                'adsphere_blog_url'=>$user2[0]->adsphere_blog_url,'system_status_url'=>$user2[0]->system_status_url,'notification_build_url'=>$user2[0]->notification_build_url,'notification_new_count'=>$user2[0]->notification_new_count,'notification_new_clicked'=>$user2[0]->notification_new_clicked, 'theme' => $user2[0]->theme));
     } catch (Exception $ex) {
         echo '{"status":0,"error":{"text":'. $ex->getMessage() .'}}';
     }
@@ -5657,6 +5657,11 @@ function updateUser(){
     if( isset($user->notificationNewLiClicked) ) {
         $updateFields .= $updateFields ? ', ' : '';
         $updateFields .= 'notification_new_clicked = "'.$user->notificationNewLiClicked.'"';
+    }
+
+    if( isset($user->theme) ) {
+        $updateFields .= $updateFields ? ', ' : '';
+        $updateFields .= 'theme = "'.$user->theme.'"';
     }
 
     if($updateFields) {
@@ -10464,7 +10469,6 @@ function chkUser() {
 
         if(isset($user2[0]->user_id))
             $user_eula_flag_check = $user2[0]->eula_flag;
-            //$user_eula_flag_check = checkUserEulaData($user2[0]->user_id);
 
         $flag = 0;
         if($role == 'user'){
@@ -10481,12 +10485,11 @@ function chkUser() {
                 $status = $adminDetails->status;
             }
         }
-
         if($status == 'active' ||  $role == 'superadmin'){
             $new_user = 0;  
             $authy_flag = 0;
             $server = explode(':',$_SERVER['HTTP_HOST']);
-            if($server[0] != "localhos") { 
+            if($server[0] != "localhost") { 
                 if($user->username != EMIL_BYPASS){
                     $authy_flag = !isset($_COOKIE[$user2[0]->authy_id]);
                 }
@@ -10495,15 +10498,10 @@ function chkUser() {
             if( isset($user_eula_flag_check[0]['eula_flag']) && $user_eula_flag_check[0]['eula_flag'] == '0'){
                 $authy_flag =  1;
             }
-            // $authy_flag = 1;
-            //if (false) {  || ($_COOKIE['DrMeTrIxUsEr'] != $user2[0]->authy_cookie)
+          
             if($authy_flag) {
                 $new_user = 1;
-                //adsphereauthenticationUpdate($user2[0]->user_id);
-                  // create a new cURL resource
                 $ch = curl_init();
-                
-                 // set URL and other appropriate options                    
                 curl_setopt($ch, CURLOPT_URL, "http://".HOST."/drmetrix/api/authy-php-master/sendSMS.php?authy_user_id=" . $user2[0]->authy_id);
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -10511,7 +10509,7 @@ function chkUser() {
                 $server_output = curl_exec ($ch);   
                 curl_close($ch);
                 if($server_output != 1){
-                    echo json_encode(array('status'=>0,'response'=>$server_output));
+                    echo json_encode(array('status'=>1,'new_user'=>$new_user));
                 }else{
                     echo json_encode(array('status'=>1,'new_user'=>$new_user,'mobile'=>$user2[0]->phone_number,'authy_id'=>$user2[0]->authy_id,'user_id'=>$user_id,'company_id'=>$user2[0]->company_id,'assistant_admin'=>$user2[0]->assistant_admin));
                 }                
@@ -10520,7 +10518,6 @@ function chkUser() {
 
                 if($user2[0]->role != 'superadmin'){
                     if($user2[0]->role == 'admin'){
-                        //$get_company_id = getUserCompany($user2[0]->user_id);
                         $get_company_id = $user2[0]->admin_company_id;
                     }
                     $get_company_info = getCompanyInfoById($get_company_id);
@@ -10530,7 +10527,6 @@ function chkUser() {
                 }
 
                 $_SESSION['access_network_tab'] = $user_company;
-                //update last_login
                 $sql = "UPDATE  user SET last_login = '".$last_login."' WHERE username = :username and Password = :password;";
                 $stmt = $db->prepare($sql);
                 $stmt->bindParam("username", $user->username);
@@ -10578,7 +10574,6 @@ function chkUser() {
                         exit;
                     }
                 }
-
                 echo json_encode(array('first_name'=>$user2[0]->first_name, 'last_name'=>$user2[0]->last_name, 'name'=>$user2[0]->first_name.' '.$user2[0]->last_name,'role'=>$user2[0]->role, 'roles' => $roles_array, 'user_id' => $user2[0]->user_id,'status'=>1,'company_name' => $user2[0]->company_name, 'new_user'=>$new_user,'last_login'=>$last_login,'session_login' => $_SESSION['lastLoginTime'],'eulaFlag'=>$checkEulaFlag,'user_company'=>$user_company,'contactemail'=>$user2[0]->username,'company_id' =>$user2[0]->company_id,'admin_id' =>$_SESSION['admin_id'],'assistant_admin'=>$user2[0]->assistant_admin,'adsphere_blog_url'=>$user2[0]->adsphere_blog_url,'system_status_url'=>$user2[0]->system_status_url,'notification_build_url'=>$user2[0]->notification_build_url,'notification_new_count'=>$user2[0]->notification_new_count,'notification_new_clicked'=>$user2[0]->notification_new_clicked, 'SYSTEM_STATUS_URL'=>SYSTEM_STATUS_URL, 'ADSPHERE_BLOG_URL'=>ADSPHERE_BLOG_URL));
             }
         }else if($status == 'inactive'){

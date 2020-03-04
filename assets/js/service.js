@@ -1,11 +1,11 @@
 //Application services used commonly throughout the app
 angular.module('starter.services', [])
     .constant('myConfig', {
-        'apiUrl': window.location.pathname +'/api/index.php',
+        'apiUrl': './api/index.php',
         'apiVersion': 'QA 2.6.3'
     })
     //API service for all GET and POST calls to QA and PROD Server
-    .service('apiService', function($http, myConfig, $rootScope, $location) {
+    .service('apiService', function($http, myConfig, $rootScope, $location, $cookies) {
         var category;
         return {
             getext: function(path) {
@@ -19,20 +19,13 @@ angular.module('starter.services', [])
             },
             isUserLogged: function isUserLogged($scope){
                var pdf =  sessionStorage.pdf;
-               var username = $rootScope.getCookie("loggedIn");
-               var user_role = $rootScope.getCookie("userrole");
+               var username = $cookies.get('loggedIn');
+               var user_role = $cookies.get('userrole');
       
                 if(pdf == 1){
                     username = true;
                 }
                 if(username){
-                    //$scope.user.loggedIn = true;
-                    var prototype= Object.getPrototypeOf($scope); //$scope.__proto__
-                    //console.log(prototype);
-                    prototype.user.loggedIn = true;
-                    prototype.user.name = username;
-                    prototype.user.notLoggedIn = false;
-                    prototype.user.assistant_admin = sessionStorage.assistant_admin;
                     localStorage.superadmin = 0;
                     localStorage.admin = 0;
                     localStorage.login_user = 0;
