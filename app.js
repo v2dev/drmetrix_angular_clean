@@ -1,4 +1,4 @@
-var drmApp = angular.module('drmApp', ['ui.router','starter.services','ngCookies','ui.bootstrap','ngPatternRestrict']);
+var drmApp = angular.module('drmApp', ['ui.router','starter.services','ngCookies','ui.bootstrap']);
 drmApp.config(function($stateProvider, $urlRouterProvider) {
     
     $urlRouterProvider.otherwise('/home');

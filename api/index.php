@@ -10458,7 +10458,6 @@ function chkUser() {
         $status     = (isset($user2) && !empty($user2)) ? $user2[0]->status : '';
         $role       = (isset($user2) && !empty($user2)) ? $user2[0]->role : '';
         $user_id    = $_SESSION['user_id'] = (isset($user2) && !empty($user2)) ? $user2[0]->user_id : '';
-
         $_SESSION['admin_id'] = $_SESSION['user_id'];
         if($role == 'user'){
             $_SESSION['admin_id'] = (isset($user2) && !empty($user2)) ? $user2[0]->admin_id : '';
