@@ -150,10 +150,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         });	
     }
 
-    $scope.showTab = function(tab) {
-        $scope.type = tab;
-    }
-
+    
     $rootScope.menuItemClick = function (item) {
         var page = item.aid
         if(page == 'network_list'){
@@ -348,7 +345,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         delete localStorage.notificationBuildLink;
         delete localStorage.notifSystemStatusLink;
         delete localStorage.notifBlogStatusLink;
-        // if(!sessionStorage.loggedIn) return;
+        if(!sessionStorage.loggedIn) return;
 
         apiService.post('/get_user', $scope.user)
             .then(function (response) {
