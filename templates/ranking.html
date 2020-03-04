@@ -27,3 +27,186 @@
                 </li>
             </ul>
         </div>
+
+    <!-- primary filter -->
+    <div class="main-filter">
+        <div class="collapse-menu">
+            Primary Filter
+            <a href="#"><i class="fa fa-chevron-down"></i></a>
+        </div>
+        <ul class="filter-menu hide-filter-menu">
+            <li>
+                <div>
+                    Date Range -
+                    <span>
+                        Media Week 40 - 09/30/2019 thru 10/06/2019
+                    </span>
+                </div>
+                <ul class="left-menu" ng-show="rankingPrimaryFiler==1">
+                    <li class="active-alert">
+                        <a href="#">
+                            <label>
+                                Last Week
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>Current Week</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>Other</label>
+                        </a>
+                    </li>
+                    <li class="datepicker-li checkbox-radio">
+                        <input type="radio" name="date_type" id="datepicker_checkbox"
+                            value="2019-10-12 - 2019-10-12" class="radio-custom-checkbox datepicker_checkbox"
+                            ng-click="changeHiddenVal()">
+                        <label for="datepicker_checkbox" class="radio-custom-checkbox-label">
+                            <div class="custom-div" for="datepicker_checkbox">
+                                <span class="v-align-middle">
+                                    <i id="datepickeropen" class="fa fa-calendar" aria-hidden="true" \=""></i>
+                                </span></div>
+                        </label>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div>
+                    Brand Classification -
+                    <span>
+                        All Short Form (All Duration)
+                    </span>
+                </div>
+                <ul class="left-menu" ng-show="rankingPrimaryFiler==1">
+                    <li class="active-alert">
+                        <a href="#">
+                            <label>
+                                Short Form
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>
+                                Long Form
+                            </label>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div>
+                    Creative -
+                    <span>
+                        All
+                    </span>
+                </div>
+                <ul class="left-menu" ng-show="rankingPrimaryFiler==1">
+                    <li class="active-alert">
+                        <a href="#">
+                            <label>
+                                All
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>
+                                English
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>
+                                Spanish
+                            </label>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div>
+                    Break Type -
+                    <span class="text-disabled" id="breakType_filter">{{ranking.selectBreakType == 'A' ? 'All' : ranking.selectBreakType == 'N' ? 'National' : 'DPI'}}</span>
+                </div>
+                <ul class="left-menu" ng-show="rankingPrimaryFiler==1">
+                    <li class="active-alert">
+                        <a href="#">
+                            <label>
+                                All
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>
+                                National
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>
+                                DPI
+                            </label>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="response-type">
+                <div class="response-type-text d-flex align-items-center">
+                    Response Type -
+                    <span>
+                        URL or SMS or TFN or MAR
+                    </span>
+                    <ul class="left-menu" ng-show="rankingPrimaryFiler==1">
+                        <li class="active-alert">
+                            <a href="#">
+                                <label>
+                                    At Least
+                                </label>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <label>
+                                    Only
+                                </label>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="response-menu" ng-show="rankingPrimaryFiler==1">
+                    <li class="checkbox">
+                        <input type="checkbox" id="urlCheckbox">
+                        <label for="urlCheckbox">URL</label>
+                        <span class="or_content">or</span>
+                    </li>
+                    <li class="checkbox">
+                        <input type="checkbox" id="smsCheckbox">
+                        <label for="smsCheckbox">SMS</label>
+                        <span class="or_content">or</span>
+                    </li>
+                    <li class="checkbox">
+                        <input type="checkbox" id="tfnCheckbox">
+                        <label for="tfnCheckbox">TFN</label>
+                        <span class="or_content">or</span>
+                    </li>
+                    <li class="checkbox">
+                        <input type="checkbox" id="marCheckbox">
+                        <label for="marCheckbox">MAR</label>
+                    </li>
+                </ul>
+            </li>
+            <li class="btn-wrapper">
+                <button class="btn btn-blue show-div edit btn-sm" ng-click="editable();"><i class="fa fa-pencil" title="edit"></i>Edit</button>
+                <button class="btn btn-blue apply btn-sm" ng-click="applicable();"><i class="fa fa-check" title="apply"></i>Apply</button>
+                <button class="btn btn-blue reset btn-sm" ng-click="resettable();"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
+                <button class="btn btn-blue hide-div cancel btn-sm" ng-click="cancelable();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+            </li>
+        </ul>
+    </div>
