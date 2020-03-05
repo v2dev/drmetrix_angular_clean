@@ -2238,16 +2238,11 @@ function brandCreatives($export = 0,$request_data = null){
         $requestData = $request_data;
     }else{  
         $request = Slim::getInstance()->request();
-        $query_string = $request->getBody();    
-        $set_one = explode('&', $query_string);        
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
-        $sidx       = $requestData['sidx'];
-        $sord       = $requestData['sord'];
-        $page       = $requestData['page'];
-        $limit      = $requestData['rows'];
+        $requestData = (array)(json_decode($request->getBody()));
+        $sidx       = 'spend_index';
+        $sord       = 'desc';
+        $page       = 1;
+        $limit      = 10;
     }
 
     $c                          = urldecode($requestData['c']);
@@ -2329,15 +2324,19 @@ function brandCreatives($export = 0,$request_data = null){
               $ResTypeImg = '<span class="response_img">';
                    if($resultV->response_url == 1){
                    $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
+                   $nestedData['response_url'] = $resultV->response_url;
                }
                    if($resultV->response_sms == 1){
                    $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
+                   $nestedData['response_sms'] = $resultV->response_sms;
                }
                    if($resultV->response_tfn == 1){
                    $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
+                   $nestedData['response_tfn'] = $resultV->response_tfn;
                }
                    if($resultV->response_mar == 1){
                    $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
+                   $nestedData['response_mar'] = $resultV->response_mar;
                }
                   $ResTypeImg .= '</span>';
                   
@@ -2383,7 +2382,11 @@ function brandCreatives($export = 0,$request_data = null){
               $nestedData['local'] = $local ;
               $nestedData['response_type'] = $ResTypeImg ;
               $nestedData['first_detection'] = $resultV->first_aired_date ? $resultV->first_aired_date : '-' ;
+              if(!empty($nestedData['first_detection']))
+                $nestedData['first_detection'] = date('m-d-Y h:i A', strtotime($nestedData['first_detection']));
               $nestedData['last_aired'] = $resultV->last_aired_date ? $resultV->last_aired_date : '-' ;
+                if(!empty($nestedData['last_aired']))
+                $nestedData['last_aired'] = date('m-d-Y h:i A', strtotime($nestedData['last_aired']));
               if($resultV->spanish_creative_count == $resultV->total_creative_count) {
                   $nestedData['language'] = 'ES';
               } else {
@@ -2401,21 +2404,21 @@ function brandCreatives($export = 0,$request_data = null){
                   $nestedData['status']        = '<i class="fa fa-circle" id="'.$active_class.'"></i>';
                   $nestedData['creative_name'] = $resultV->creative_name;
               } else {
-                  $nestedData['creative_name'] = '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->display_name).'\','.$resultV->adv_id.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\'creatives\','.$resultV->creative_id.',\''.addslashes(htmlspecialchars($resultV->creative_name)).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->creative_name.'</a></span>';
+                  $nestedData['creative_name'] = $resultV->creative_name;
               }
               $nestedData['hidden_creative_name'] = $resultV->creative_name;
               $creative_name = "'".addslashes(htmlspecialchars($resultV->creative_name.' - '.$nestedData['duration']))."'";
               $brand_name = "'".addslashes($resultV->brand_name)."'";
               $adv_name = "'".addslashes($resultV->display_name)."'";
-              $nestedData['airings'] = $airings  ? '<a href="#" onclick="viewAiringGraph('.$creative_name.','.$resultV->creative_id.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\',0,'.$resultV->airings.',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$responseType.'\',\''.$spanish.'\',\'creative\','.$adv_name.','.$brand_name.','.$resultV->brand_id.')" >'.number_format($airings).'</a>'  : '-' ;  
+              $nestedData['airings'] = $resultV->airings;
               $nestedData['hidden_spend_index']  =    $resultV->hidden_spend_index != '' ? $resultV->hidden_spend_index : 0 ;
       
               // if($c > 5) {
               //     $nestedData['spend_index'] = $resultV->spend_index ? : 0;
               // }else {
-                  $nestedData['spend_index'] = $resultV->spend_index ? '<a href="#" onclick="viewAiringSpendGraph('.$creative_name.','.$resultV->creative_id.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\',0,\''.$spend_index.'\',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$responseType.'\',\''.$spanish.'\',\'creative\','.$adv_name.','.$brand_name.','.$resultV->brand_id.')" >'.$spend_index.'</a>' : 0;  
+                  $nestedData['spend_index'] = $resultV->spend_index;
               //}
-      
+              $nestedData['thumbnail'] = $resultV->thumbnail;
               if(!$resultV->thumbnail){
                  $nestedData['video'] = '<i class="fa fa-play-circle-o fa-2x" style="color:#cbcccc;"></i>';
               }else{
@@ -7308,6 +7311,14 @@ function filterResults(){
     $request = Slim::getInstance()->request();
     $query_string = $request->getBody();
     parse_str($query_string, $output);
+    $output12 = (array)json_decode($query_string, TRUE);
+
+    $query_string = implode('&', $output12);
+    $arrTest = array();
+    foreach($output12 as $key => $val) {
+        $arrTest[] = "$key"."=".urlencode($val)."&";
+    }
+    $query_string =implode('', $arrTest);
     $set_one = explode('&', $query_string);
 
     $_SESSION['filter_data'] = addslashes($query_string);
@@ -7333,7 +7344,6 @@ function filterResults(){
     $_SESSION['apply_filter_data']      = query_string_to_json($apply_data_array );
    
     /***** End - Cancel filter */
-  
     $requestData = $raw_data = array();
     foreach($set_one as $k =>$v){
         $raw_data  = explode('=',$v);
@@ -7351,6 +7361,8 @@ function filterResults(){
             $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
         }
         
+        if(!isset($raw_data[1]))
+            $raw_data[1] = null;
         $requestData[$raw_data[0]] = $raw_data[1];
     }
     $requestData['programs'] = isset($output['programs']) ? $output['programs'] : [];
@@ -7360,7 +7372,7 @@ function filterResults(){
     $c  = urldecode($requestData['c']);
     $tab = $requestData['type'];
     $cat = rtrim($requestData['cat'],",");
-    $cat = rtrim($cat,"all,");
+    // $cat = rtrim($cat,"all,");
     $catIn = '('.$cat.')';
     $uncheckedCatIn = '('.rtrim($requestData['unchecked_category'],",").')';
     $requestData['applied_ids'] = isset($requestData['applied_ids']) ? urldecode($requestData['applied_ids']) : '';
@@ -8130,10 +8142,10 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
     $sd_dir                     = LIFETIME_START_DATE;
     $ed_dir                     = customDate('Y-m-d');
    
-    $sidx                       = $requestData['sidx'];
-    $sord                       = $requestData['sord'];
-    $page                       = $requestData['page'];
-    $limit                      = $requestData['rows'];
+    $sidx                       = 'hidden_spend_index';
+    $sord                       = 'desc';
+    $page                       = 1;
+    $limit                      = 10;
     $new_filter_opt             = isset($requestData['new_filter_opt']) ? $requestData['new_filter_opt'] : 'none';
     $refine_filter_opt          = isset($requestData['refine_filter_opt']) ? $requestData['refine_filter_opt'] : 'none';
     $refine_filter_opt_text     = isset($requestData['refine_filter_opt_text']) ? $requestData['refine_filter_opt_text'] : 'none';
@@ -8200,7 +8212,7 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
     }
    
     $brand_classification  = getBrandClassification($c,$creative_durations);
-    
+
     $cols = $cols.' b.'.$active_col .' as is_active_brand, adv.'.$active_col .' as is_active_adv';
     $cols .= ',b.main_sub_category_id, b.alt_sub_category_id';
 
@@ -8395,9 +8407,9 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
             //$export['id']  = $resultV->ID;
             $nestedData['rank'] = ++$rank;
             $export['current_week']  = $nestedData['rank'];
-            $nestedData['brand_name'] = '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#"  title="'.$resultV->brand_name.'" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\'brand\','.$resultV->ID.',\''.addslashes($resultV->brand_name).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->brand_name.'</a></span>';
+            $nestedData['brand_name'] = $resultV->brand_name;
             $export['brand_name'] = $resultV->brand_name;
-            $nestedData['creative_count'] = $resultV->creative_count ? '<a href="#"><span id="brand_plus_'.$resultV->ID.'" style="display:inline;padding-right: 0.5em;"><span class="icon-border icon-border-plus" onclick="getBrandCreativeList('.$resultV->ID.',\'brand\',\''.$c.'\','.$tab.',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$creative_durations.'\')"></span></span></a><a href="#"><span style="display:none;padding-right: 0.5em;" id="brand_minus_'.$resultV->ID.'"><span class="icon-border icon-border-minus"  onclick="getBrandCreativeList('.$resultV->ID.',\'brand\',\''.$c.'\','.$tab.',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$creative_durations.'\')"></span></span></a>'.$resultV->creative_count : 0;
+            $nestedData['creative_count'] = $resultV->creative_count ?  : 0;
             $export['creative_count'] = $resultV->creative_count ?  $resultV->creative_count : 0;
             $nestedData['is_active_brand'] = $resultV->is_active_brand ;
             $export['is_active_brand'] = $resultV->is_active_brand ;
@@ -8411,18 +8423,18 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
                 $string = substr($resultV->category, 0, 23).'...';
             }
           // $nestedData['category_name'] = isset($resultV->category) ? '<i class="fa fa-caret-down float-right" style="color: #666665;"></i><a href="#" onclick="fetchList('.$resultV->ID.','.$tab.',\''.addslashes($resultV->category).'\');">'. $resultV->category.'</a><div class="cat_col_dropdown select" id="cat_col_dropdown_'.$resultV->ID.'" style="display:none;"></div>' :  '-' ;
-            $nestedData['category_name'] = isset($resultV->category) ? '<span class="tooltip-hover" onclick="fetchList('.$resultV->ID.','.$tab.',\''.addslashes($resultV->category).'\');"><i class="fa fa-caret-down float-right"></i>'. $resultV->category.'</span><div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_'.$resultV->ID.'" style="display:none;"></div>' :  '-' ;
+            $nestedData['category_name'] = $resultV->category;
             $export['category']  = isset($resultV->category) ? $resultV->category : '-';
             //$nestedData['category_name'] = isset($resultV->category) ? $resultV->category :  '-' ;
             //$nestedData['advertiser_name'] = !empty($resultV->advertiser_name) ? '<span>'.$resultV->advertiser_name.'</span>' : '-' ;
-            $nestedData['advertiser_name'] = !empty($resultV->advertiser_name) ? '<span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\'adv\',\'\',\'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->advertiser_name.'</a></span>' : '-' ;
+            $nestedData['advertiser_name'] = $resultV->advertiser_name;
             $export['advertiser_name']  = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-' ;
             $nestedData['hidden_creatives'] = $resultV->creative_count;
             $nestedData['hidden_category'] = $resultV->category;
             $nestedData['hidden_airings'] = $resultV->airings;
             $nestedData['brand_name_hidden'] = !empty($resultV->brand_name) ? $resultV->brand_name : '-' ;
             
-            $nestedData['airings'] = $resultV->airings ? '<a href="#" class="ranking_airings" onclick="viewAiringGraph(\''.addslashes($resultV->brand_name).'\','.$resultV->ID.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\','.$resultV->networks.','.$resultV->airings.',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$_resp_type.'\',\''.$spanish.'\',\'brand\',\'\',\'\',\'\')" >'.number_format($resultV->airings).'</a>' : 0 ;
+            $nestedData['airings'] = $resultV->airings;
             $export['airings'] = $resultV->airings ? $resultV->airings : 0;
 
             $nestedData['hidden_spend_index'] = $resultV->spend_index_export ? : 0;
@@ -8430,7 +8442,7 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
             // if($c > 5) {
             //     $nestedData['spend_index'] = $resultV->spend_index ? : 0;
             // }else {
-                $nestedData['spend_index'] = $resultV->spend_index ? '<a href="#" onclick="viewAiringSpendGraph(\''.addslashes($resultV->brand_name).'\','.$resultV->ID.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\','.$resultV->networks.',\''.$resultV->spend_index.'\',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$_resp_type.'\',\''.$spanish.'\',\'brand\',\'\',\'\',\'\')" >'.$resultV->spend_index.'</a>' : 0 ;
+                $nestedData['spend_index'] = $resultV->spend_index;
            // }
          
             $export['spend_index'] = $resultV->spend_index_export ? $resultV->spend_index_export : 0 ;
@@ -8504,6 +8516,7 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
             }
             $export['total_weeks'] = $resultV->total_weeks ? $resultV->total_weeks : '-' ;
             $nestedData['networks'] = $resultV->networks ? '<span> '.$resultV->networks.'</span>' : 0 ;
+            $nestedData['need_help'] = $resultV->need_help;
 
             if(isTrackingPresent('advertiser', $resultV->ID)) {
                 $nestedData['tracking'] = '<a href="#" onclick="viewTrackingDialogue(\'advertiser\','.$resultV->ID.',\''.addslashes($resultV->advertiser_name).'\');"><i custom-attr="advertiser_'.$resultV->ID.'" class="fa fa-eye blue-eye" title="Track"></i></a>';
