@@ -1,6 +1,7 @@
 <div class="user-addmin-wrapper" ng-init="showUsers();">
     <!-- Edit User Page Start -->
-    <div class="modal fade filter-data md-popup super-admin-popup" id="advancedModalEdit" tabindex="-1" role="dialog" aria-labelledby="advancedModalEdit">
+    <div class="modal fade filter-data md-popup super-admin-popup" id="advancedModalEdit" tabindex="-1" role="dialog"
+        aria-labelledby="advancedModalEdit">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -20,8 +21,8 @@
                                     <label>{{admin_user.user_result[0].first_name}}</label>
                                     <input type="hidden" value="{{admin_user.user_result[0].user_id}}" name="user_id"
                                         id="edit_data_user_id" />
-                                    <input type="hidden" ng-model="admin_user.user_result[0].first_name" name="first_name"
-                                        required />
+                                    <input type="hidden" ng-model="admin_user.user_result[0].first_name"
+                                        name="first_name" required />
                                     <span class="color-red"
                                         ng-show="edit_user.first_name.$dirty && edit_user.first_name.$invalid">
                                         <span class="inline-label" ng-show="edit_user.first_name.$error.required">First
@@ -66,7 +67,8 @@
                                         <span class="inline-label color-red" ng-show='usernameValidInCompany'>User
                                             with this email already exists. Do you
                                             want to reactivate? &nbsp;&nbsp;<input type="button"
-                                                ng-click="deactivate(email_user_id, 'inactive')" value="Reactivate"></span>
+                                                ng-click="deactivate(email_user_id, 'inactive')"
+                                                value="Reactivate"></span>
                                     </span>
                                 </div>
                             </li>
@@ -150,14 +152,15 @@
                                         <label>Receive Weekly Retail Report</label>
                                     </div>
                                     <div>
-                                        <div class="d-flex flex-wrap" ng-init="admin_user.user_result[0].receive_report = 1">
+                                        <div class="d-flex flex-wrap"
+                                            ng-init="admin_user.user_result[0].receive_report = 1">
                                             <label for="yes2" class="radio mr-2">
                                                 <input type="radio" ng-model="admin_user.user_result[0].receive_report"
-                                                name="receive_report" value="1" id="yes2" /><span>Yes</span>
+                                                    name="receive_report" value="1" id="yes2" /><span>Yes</span>
                                             </label>
                                             <label for="no2" class="radio mr-2">
                                                 <input type="radio" ng-model="admin_user.user_result[0].receive_report"
-                                                name="receive_report" value="0" id="no2" /><span>No</span>
+                                                    name="receive_report" value="0" id="no2" /><span>No</span>
                                             </label>
                                         </div>
                                     </div>
@@ -165,17 +168,25 @@
                             </li>
                         </ul>
                         <div class="btn-grp d-flex justify-content-end border-top pt-3">
-                            <button class="cancelBtn btn btn-black" data-dismiss="modal" aria-label="Close" type="button" value="Cancel"
-                            ng-click="backToAdmin('edit')" ><i class="fa fa-times" title="cancel"></i>Cancel</button>
-                            <button class="applyBtn btn btn-blue mr-2" data-dismiss="modal" aria-label="save" type="button" value="Save"
-                            ng-disabled="edit_user.$invalid || usernameValid || mobileValid" ng-click="editUser(admin_user.user_result[0].user_id)" id="edit_user_btn"><i class="fa fa-check" title="save"></i>Save</button>
+                            <button class="cancelBtn btn btn-black" data-dismiss="modal" aria-label="Close"
+                                type="button" value="Cancel" ng-click="backToAdmin('edit')"><i class="fa fa-times"
+                                    title="cancel"></i>Cancel</button>
+                            <button class="applyBtn btn btn-blue mr-2" data-dismiss="modal" aria-label="save"
+                                type="button" value="Save"
+                                ng-disabled="edit_user.$invalid || usernameValid || mobileValid"
+                                ng-click="editUser(admin_user.user_result[0].user_id)" id="edit_user_btn"><i
+                                    class="fa fa-check" title="save"></i>Save</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade network-filter-popup filter-data md-popup" id="animatedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <!-- Edit User Page End -->
+
+    <!-- ResetPassword Start -->
+    <div class="modal fade network-filter-popup filter-data md-popup" id="animatedModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -185,12 +196,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">Instructions to reset your password has been sent to your email address. <br/>Thank You!</p>
+                    <p class="text-center">Instructions to reset your password has been sent to your email address.
+                        <br />Thank You!</p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Edit User Page End -->
+    <!-- Reset Password End -->
+
+    <!-- Delete User Page Start -->
+    <div class="modal fade network-filter-popup filter-data md-popup" id="deleteMessage" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="text-center">Record deleted successfully. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete User Page End -->
+
+    <!-- Deactived User Start -->
+    <div class="modal fade network-filter-popup filter-data md-popup show" id="deactivateMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="text-center">Record deactivated successfully. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Deactived User End -->
+
     <div class="black-top-menu">
         <nav class="user-menu-icons d-flex justify-content-between align-items-center">
             <span class="welcome-text">Welcome ,</span>

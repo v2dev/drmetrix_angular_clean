@@ -333,6 +333,94 @@ select::-ms-expand {
   font-size: 13px;
   line-height: 20px; }
 
+
+/* Checkbox normal*/
+.checkbox-normal .checkbox-custom + .checkbox-custom-label:before{
+  margin-top: 0;
+}
+.checkbox-normal {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+}
+
+.checkbox-normal label.checkbox-custom-label {
+  color: #000;
+  margin-right: 26px;
+}
+
+.checkbox-normal .checkbox-custom+.checkbox-custom-label:before,
+.checkbox-radio .radio-custom-checkbox+.radio-custom-checkbox-label:before {
+  font-size: 12px;
+  content: '';
+  background-color: #fff;
+  border: 1px solid #9ea6b0;
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 2px;
+  margin-right: 5px;
+  margin-top: 2px;
+  text-align: center;
+  float: left;
+}
+
+.checkbox-normal .checkbox-custom:checked+.checkbox-custom-label:before,
+.checkbox-radio .radio-custom-checkbox:checked+.radio-custom-checkbox-label:before {
+  border: 1px solid #9ea6b0;
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  color: #202b39;
+  background-color: #fff;
+  line-height: 17px;
+}
+
+input[type="checkbox"].checkbox-custom {
+  opacity: 0;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+}
+.radio-custom-checkbox + .radio-custom-checkbox-label:before {
+  font-size: 0.9em;
+  content: '';
+  background-color: #fff;
+  border: 1px solid #9ea6b0;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.6em;
+  height: 1.6em;
+  padding: 0;
+  border-radius: 5px;
+  margin-right: 0.5em;
+  text-align: center;
+}
+.checkbox-custom + .checkbox-custom-label:before {
+  content: '';
+  font-size: 12px;
+  background-color: #fff;
+  border: 1px solid #9ea6b0;
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 4px;
+  margin-top: 2px;
+  text-align: center;
+  line-height: 16px;
+}
+.checkbox-custom:checked + .checkbox-custom-label:before,
+.radio-custom-checkbox:checked + .radio-custom-checkbox-label:before {
+  border: 1px solid #9ea6b0;
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  color: #fff;
+  background-color: #1a191a;
+}
+
 /*long text*/
 .text-ellipsis {
   white-space: nowrap;
@@ -360,7 +448,11 @@ input[type="checkbox"].checkbox-custom,
 input[type="radio"].radio-custom-checkbox,
 .network-content input[type="radio"].radio-custom {
   opacity: 0;
-  position: absolute; }
+  position: absolute;
+  left: 0;
+  top: 2px;
+  margin: 0;
+ }
 
 .checkbox-radio .radio-custom-checkbox + .radio-custom-checkbox-label:before {
   font-size: 0.9em;
@@ -2829,6 +2921,8 @@ header {
     height: auto !important;
     overflow:visible;
     position: static;
+    padding: 5px;
+    font-size: 12px;
 }
 
 .ui-grid-row {
@@ -2853,4 +2947,79 @@ header {
 
 .ui-grid-cell.overflow-visible {
   overflow: visible;
+}
+
+.ui-grid-header-cell-label {
+  font-size: 14px;
+  font-weight: normal
+}
+
+.setting-icon {
+  text-align: center;
+}
+
+.setting-icon .dropdown {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.setting-icon .dropdown-menu {
+  right: 0;
+  left: auto;
+  width: 160px;
+  min-width: auto;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+.setting-icon .dropdown-menu>li>a {
+  padding: 10px;
+  background: #fff;
+  font-size: 14px;
+  color: #004978;
+  border-bottom: 1px solid #b5b0b0!important;
+}
+
+.setting-icon .dropdown-menu>li>a:hover {
+  background: #d1d1d1;
+  color: #004978;
+}
+
+.ui-grid-pager-panel {
+  justify-content: flex-end;
+}
+
+.setting-icon  .fa.fa-cog {
+  font-size: 22px;
+}
+
+.first-page:before {
+  content: '\f100';
+  color: #202b39;
+  font-family: fontAwesome;
+}
+.prev-page:before {
+  content: '\f104';
+  color: #202b39;
+  font-family: fontAwesome;
+}
+.next-page:before {
+  content: '\f105';
+    color: #202b39;
+    font-family: fontAwesome;
+}
+
+.last-page:before {
+  content: '\f101';
+  color: #202b39;
+  font-family: fontAwesome;
+}
+
+.ui-grid-pager-control button {
+  line-height: 12px;
+  padding: 5px 0;
+  min-width: 20px;
+  background: #fff;
+  border-radius: 0;
 }
