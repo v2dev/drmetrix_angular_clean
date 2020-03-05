@@ -42,4 +42,14 @@ angular.module('drmApp').service('modalConfirmService', ['$uibModal',
             return $modal.open(tempModalDefaults).result;
         };
 
+        this.hideModal = function() {
+            var tempModalDefaults = {};
+            var tempModalOptions = {};
+            if (!tempModalDefaults.controller) {
+                tempModalDefaults.controller = function ($scope, $uibModalInstance) {
+                    $scope.modalOptions = tempModalOptions;
+                        $uibModalInstance.dismiss('cancel');
+                }
+            }
+        }
     }]);

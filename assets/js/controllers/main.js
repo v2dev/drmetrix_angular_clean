@@ -222,6 +222,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
                     sessionStorage.clear();
                     localStorage.clear();
                 }
+                $state.go('home');
             })
             ,(function (data, status, headers, config) {
             })
