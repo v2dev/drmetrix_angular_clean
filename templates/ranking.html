@@ -1,147 +1,247 @@
-	<!-- black-top menu -->
-    <div class="black-top-menu" ng-init="showTab('brands')">
-        <ul class="left-menu">
-            <li>Welcome {{complete_name}},</li>
-            <li ng-class="{active_alert : type == 'brands'}">
-                <a ng-click="showTab('brands')">
-                    <label for="">Brands</label>
-                </a>
-            </li>
-            <li ng-class="{active_alert : type == 'advertisers'}">
-                <a ng-click="showTab('advertisers')">
-                    <label for="">Advertisers</label>
-                </a>
-            </li>
-        </ul>
-        <ul class="checkbox-filter">
 
-            <li class="filter-listing">
-                <a href="unsafe:javascript:void(0);" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
-                <div class="dropdown-menu"  aria-labelledby="chooseList">
-                        <a class="dropdown-item newbuild-link" href="#">New October Build<i class="fa fa-chain"></i></a>
-                        <a class="dropdown-item" href="#">Advertiser Page Update<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">Auto-Email Reports<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">New Network Excel<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">New Airing Detail Page<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">Other Training Videos<i class="fa fa-play-circle-o fa-2x"></i></a>
-                </div> 
-                </li>                
-            <li>
-                <a class="filter-listing"  ng-click="call_filter_list('filter_list_rank');">
-                    Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
-                </a>
-            </li>
-            <li>
-                <a class="btn btn-blue">
-                    <i class="fa fa-download"></i> Excel
-                </a>
-            </li>
-        </ul>
+ <!-- primary filter -->
+ <div class="main-filter" ng-show="headerDisplay == 1">
+    <div class="collapse-menu">
+        Primary Filter
+        <a href="#"><i class="fa fa-chevron-down"></i></a>
+    </div>
+    <ul class="filter-menu hide-filter-menu">
+        <li>
+            <div>
+                Date Range -
+                <span>
+                    Media Week 40 - 09/30/2019 thru 10/06/2019
+                </span>
+            </div>
+            <ul class="left-menu">
+                <li class="active-alert">
+                    <a href="#">
+                        <label>
+                            Last Week
+                        </label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>Current Week</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>Other</label>
+                    </a>
+                </li>
+                <li class="datepicker-li checkbox-radio">
+                    <input type="radio" name="date_type" id="datepicker_checkbox"
+                        value="2019-10-12 - 2019-10-12" class="radio-custom-checkbox datepicker_checkbox"
+                        ng-click="changeHiddenVal()">
+                    <label for="datepicker_checkbox" class="radio-custom-checkbox-label">
+                        <div class="custom-div" for="datepicker_checkbox">
+                            <span class="v-align-middle">
+                                <i id="datepickeropen" class="fa fa-calendar" aria-hidden="true" \=""></i>
+                            </span></div>
+                    </label>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <div>
+                Brand Classification -
+                <span>
+                    All Short Form (All Duration)
+                </span>
+            </div>
+            <ul class="left-menu">
+                <li class="active-alert">
+                    <a href="#">
+                        <label>
+                            Short Form
+                        </label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>
+                            Long Form
+                        </label>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <div>
+                Creative -
+                <span>
+                    All
+                </span>
+            </div>
+            <ul class="left-menu">
+                <li class="active-alert">
+                    <a href="#">
+                        <label>
+                            All
+                        </label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>
+                            English
+                        </label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>
+                            Spanish
+                        </label>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <div>
+                Break Type -
+                <span>
+                    All
+                </span>
+            </div>
+            <ul class="left-menu">
+                <li class="active-alert">
+                    <a href="#">
+                        <label>
+                            All
+                        </label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>
+                            National
+                        </label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <label>
+                            DPI
+                        </label>
+                    </a>
+                </li>                        
+            </ul>
+        </li>                
+        <li class="response-type">
+            <div class="response-type-text d-flex align-items-center">
+                Response Type -
+                <span>
+                    URL or SMS or TFN or MAR
+                </span>
+                <ul class="left-menu">
+                    <li class="active-alert">
+                        <a href="#">
+                            <label>
+                                At Least
+                            </label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <label>
+                                Only
+                            </label>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="response-menu">
+                <li class="checkbox">
+                    <input type="checkbox" id="urlCheckbox">
+                    <label for="urlCheckbox">URL</label>
+                    <span class="or_content">or</span>
+                </li>
+                <li class="checkbox">
+                    <input type="checkbox" id="smsCheckbox">
+                    <label for="smsCheckbox">SMS</label>
+                    <span class="or_content">or</span>
+                </li>
+                <li class="checkbox">
+                    <input type="checkbox" id="tfnCheckbox">
+                    <label for="tfnCheckbox">TFN</label>
+                    <span class="or_content">or</span>
+                </li>
+                <li class="checkbox">
+                    <input type="checkbox" id="marCheckbox">
+                    <label for="marCheckbox">MAR</label>
+                </li>
+            </ul>
+        </li>
+        <li class="btn-wrapper">
+            <button class="btn btn-blue show-div edit btn-sm" ng-click="editable()"><i class="fa fa-pencil" title="edit"></i>Edit</button>
+            <button class="btn btn-blue apply btn-sm"><i class="fa fa-check" title="apply"></i>Apply</button>
+            <button class="btn btn-blue reset btn-sm"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
+            <button class="btn btn-blue hide-div cancel btn-sm"><i class="fa fa-times" title="cancel"></i>Cancel</button>                            
+        </li>
+    </ul>
 </div>
 <div class="container-fluid">
-        <div class="row">
-            <nav class="sidebar">
-                <a  href="" class="open-left-sidebar-nav slideBtn" id="slidebtn" ng-click="cateorySideBar = !cateorySideBar;"> 
-                    <i data-feather="align-justify"></i>
-                    <span>Categories</span>
-                </a>
-                <div class="sidebar-sticky sidenav scrollbar" id="sidenav"  ng-class="cateorySideBar == 1 ? 'addWidthAndLeft' : 'minusWidthAndLeft'">
-                    <div class="d-flex justify-content-between align-items-center position-relative">
-                        <div class="checkbox">
-                            <input class="checkbox-custom cat_all"  type="checkbox" id="checkbox5_all"  name="checkbox5[]" ng-click="allcategory = !allcategory;selectCategory(category_list, allcategory, 'all')" ng-model="allcategory" />
-                            <label for="checkbox5_all" class="checkbox-custom-label full-filled">
-                                <span class="v-align-middle">All Categories</span></label>
-                        </div>
-                        <a class="btn btn-black category-track-btn" onclick="openCategoryTrack()"  id="category_track_btn" ng-class="category_data_flag ? 'btn-black': ''"><i class="fa fa-eye" title="Track"></i>
-                            <span>Track</span>
-                        </a>
-                        <a href="" class="close-left-sidebar-nav slideBtn" id="slidebtn" ng-click="cateorySideBar = !cateorySideBar;">
-                            <i data-feather="align-justify"></i>
-                        </a>
+    <div class="row">
+        <category-part></category-part> 
+        <!-- ng-style="{{sideNavWidth}} == '0px' ? {'paddingLeft':'322'} : {'paddingLeft': '60px'} -->
+        <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
+            <div class="notify-msg">
+                <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
+                <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
+            </div>
+            <div class="disclaimer-msg d-md-flex justify-content-between align-items-center">
+                <span>Selected Network: <b>AMerican Heroes</b></span>
+            </div>
+            <div class="top-grid-filter">
+                <div class="network">
+                    <div class="search-input">
+                        <span class="search-icon">
+                            <i data-feather="search"></i>
+                        </span>
+                        <input type="search" placeholder="Search Brands">
+                        <i class="fa fa-times-circle"></i>
                     </div>
-                    <ul ng-repeat="item in category_list" class="menu-bar vertical no-bullet" id="categories_list">
+                    <button class="btn btn-black btn-sm"><i class="fa fa-eye"
+                            title="Track"></i> <span>Track</span></button>
+                    <button class="btn btn-black btn-sm"><i class="fa fa-align-justify"
+                            title="Track"></i> <span>Network Log</span></button>
+                </div>
+                <div class="filter-refine-by">
+                    <span>Refine By</span>
+                    <ul>
                         <li>
-                            <div class="checkbox" data-toggle="collapse" href="#collapseExample" role="button"
-                                aria-expanded="false" aria-controls="collapseExample">
-                                <input class="checkbox-custom cat_all" type="checkbox" name="checkbox5[]" id="checkbox_{{item.category_id}}" ng-click="item.isSelected = !item.isSelected;selectCategory(item, item.isSelected)" ng-model="item.isSelected">
-                                <label for="checkbox_{{item.category_id}}" class="checkbox-custom-label" ng-class="selectedValue(item)">
-                                    <span class="v-align-middle">{{item.category}}</span>
-                                    <a ng-click="subCategory = !subCategory" class="toggle-arrow">
-                                        <i class="fa fa-lg" ng-class="subCategory ? 'fa-caret-down' : 'fa-caret-right'" id="right_1"></i>
-                                    </a>
-                                </label>
+                            Network
+                            <div class="open-filter-popup custom-tooltip" data-toggle="modal"
+                                data-target="#network-filter">All <i class="fa fa-caret-down fa-lg"></i>
+                                <div class="top">
+                                    <i></i>
+                                    All
+                                </div>
                             </div>
-                            <ul ng-show="subCategory">
-                                <li id="all_categories" ng-repeat="subitem in item.subcategory" class="checkbox">
-                                    <input id="label_{{subitem.sub_category_id}}" custom-attr="subcat_cust_attr" class="checkbox-custom" type="checkbox" ng-click="selectCategory(category_list, subitem.isSelected, 'subCategory')" ng-model="subitem.isSelected">
-                                    <label for="label_{{subitem.sub_category_id}}" custom-id="label_{{subitem.sub_category_id}}" class="checkbox-custom-label full-filled">
-                                        <span class="custom-label-sub-div">{{subitem.sub_category}}</span>
-                                    </label>
-                                </li>
-                            </ul>
+                        </li>
+                        <li>
+                            New
+                            <span class="open-filter-popup" data-toggle="modal" data-target="#filter-new">
+                                All <i class="fa fa-caret-down fa-lg"></i>
+                            </span>
+                        </li>
+                        <li>
+                            TNF/URL
+                            <span class="open-filter-popup" data-toggle="modal" data-target="#tnf-url">
+                                All <i class="fa fa-caret-down fa-lg"></i>
+                            </span>
+                        </li>
+                        <li>
+                            <button class="btn btn-blue btn-sm"><i class="fa fa-save"></i> Save Filter</button>
                         </li>
                     </ul>
                 </div>
-            </nav>
-            <!-- ng-style="{{sideNavWidth}} == '0px' ? {'paddingLeft':'322'} : {'paddingLeft': '60px'} -->
-            <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
-                <div class="notify-msg">
-                    <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
-                    <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
-                </div>
-                <div class="disclaimer-msg d-md-flex justify-content-between align-items-center">
-                    <span>Selected Network: <b>AMerican Heroes</b></span>
-                    <!-- <span>
-                        <strong>Disclaimer:</strong> Airing data shown in ET calendar day/week.
-                    </span> -->
-                </div>
-                <div class="top-grid-filter">
-                    <div class="network">
-                        <div class="search-input">
-                            <span class="search-icon">
-                                <i data-feather="search"></i>
-                            </span>
-                            <input type="search" placeholder="Search Brands">
-                            <i class="fa fa-times-circle"></i>
-                        </div>
-                        <button class="btn btn-black btn-sm"><i class="fa fa-eye"
-                                title="Track"></i> <span>Track</span></button>
-                        <button class="btn btn-black btn-sm"><i class="fa fa-align-justify"
-                                title="Track"></i> <span>Network Log</span></button>
-                    </div>
-                    <div class="filter-refine-by">
-                        <span>Refine By</span>
-                        <ul>
-                            <li>
-                                Network
-                                <div class="open-filter-popup custom-tooltip" data-toggle="modal"
-                                    data-target="#network-filter">All <i class="fa fa-caret-down fa-lg"></i>
-                                    <div class="top">
-                                        <i></i>
-                                        All
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                New
-                                <span class="open-filter-popup" data-toggle="modal" data-target="#filter-new">
-                                    All <i class="fa fa-caret-down fa-lg"></i>
-                                </span>
-                            </li>
-                            <li>
-                                TNF/URL
-                                <span class="open-filter-popup" data-toggle="modal" data-target="#tnf-url">
-                                    All <i class="fa fa-caret-down fa-lg"></i>
-                                </span>
-                            </li>
-                            <li>
-                                <button class="btn btn-blue btn-sm"><i class="fa fa-save"></i> Save Filter</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="gridoverlay"></div>
-            </main>
-        </div>
+            </div>
+            
+        </main>
     </div>
+</div>
    

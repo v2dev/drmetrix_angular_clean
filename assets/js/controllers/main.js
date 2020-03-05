@@ -2,6 +2,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     $scope.date = new Date(); // Footer copyright display year
     $rootScope.eulaDisagreeFlag = 0; // this flag will show poup on login page if we disagree eula agreement and redreict to login message with popup message
     $scope.whats_new_toggle = false;
+    $rootScope.headerDisplay = 0;
     $rootScope.searchTextValidation = '3 or more characters.';
     $rootScope.main_menu = [{
         liid: 'rank',
@@ -340,6 +341,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
 
     $scope.init = function () {
+        $rootScope.cateorySideBar = 0; // hide category section on load
         delete localStorage.notificationNewCount;
         delete localStorage.notificationNewLiClicked;
         delete localStorage.notificationBuildLink;
@@ -380,4 +382,5 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             // $scope.global_search_ajax(nVal);
         }
     });
+
 });
