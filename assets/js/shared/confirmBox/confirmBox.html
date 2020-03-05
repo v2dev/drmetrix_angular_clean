@@ -5,7 +5,7 @@
     </button>
 </div>
   <div class="modal-body">
-    <p  ng-bind-html="modalOptions.bodyText | trustAsHtml"></p>
+    <p ng-bind-html="modalOptions.bodyText | trustAsHtml"></p>
   </div>
   <div class="modal-footer" ng-show="modalOptions.actionButtonText != ''">
     <button type="button" class="btn btn-primary" ng-show="modalOptions.closeButtonText != ''">{{modalOptions.closeButtonText | trustAsHtml}}</button>
