@@ -1,6 +1,12 @@
+<div class="modal-header">
+  <h3 >{{modalOptions.headerText}}</h3>
+  <button type="button" class="close" data-ng-click="modalOptions.close()" aria-label="Close" ng-show="modalOptions.closeReq == 1">
+    <span aria-hidden="true"></span>
+  </button>
+</div>
 <div class="modal-body" id="eulaAgreement">
-  <div class="d-flex mt-3 mb-4">
-    <span class="text-center">By clicking “Agree" you are representing that you have read the Agreement and agree to be bound by its terms and conditions.</span>
+  <div class="text-center">
+    By clicking “Agree" you are representing that you have read the Agreement and agree to be bound by its terms and conditions.
 </div>
 </div>
 <div class="modal-footer">
