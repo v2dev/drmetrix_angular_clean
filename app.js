@@ -34,16 +34,6 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             controller: 'UserController'
         })
 
-        // // nested list with custom controller
-        // .state('home.list', {
-        //     url: '/list',
-        //     templateUrl: 'partial-home-list.html',
-        //     controller: function($scope) {
-        //         $scope.dogs = ['Bernese', 'Husky', 'Goldendoodle'];
-        //     }
-        // })
-
-        // nested list with just some random string data
         .state('forgotPassword', {
             url: '/forgotPassword',
             templateUrl: 'templates/forgot-password.html',

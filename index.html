@@ -17,17 +17,17 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&display=swap" rel="stylesheet">
 	<link href="./assets/css/ui.jqgrid.min.css" rel="stylesheet" />
 	<link href="./assets/css/ui-grid.css" rel="stylesheet" type="text/css" />
-	<link href="./assets/css/app.css" rel="stylesheet" type="text/css" />
-	<link href="./assets/css/style.css" rel="stylesheet" type="text/css" />
+	<!-- <link href="./assets/css/app.css" rel="stylesheet" type="text/css" />
+	<link href="./assets/css/style.css" rel="stylesheet" type="text/css" /> -->
 	<link href="./assets/css/main.css" rel="stylesheet" type="text/css" />
 
 	<!-- Angular Js -->
 	<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
-	<script src="//code.angularjs.org/1.2.20/angular-sanitize.min.js"></script>
-	<!-- <script type="text/javascript" src="./assets/scripts/angular-route.min.js"></script> -->
+	<!-- <script src="//code.angularjs.org/1.2.20/angular-sanitize.min.js"></script> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.25/angular-ui-router.min.js"></script>
 	<script type="text/javascript" src="./assets/scripts/angular-cookies.js"></script>
 	<script src="//morgul.github.io/ui-bootstrap4/ui-bootstrap-tpls-3.0.6.js"></script>
+	<script src="./assets/icons/feather.min.js"></script>
 
 	<!--Angular Js Services/Directives/Filters-->
 	<script type="text/javascript" src="./app.js"></script>
@@ -58,174 +58,167 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 	<script src="https://content.jwplatform.com/libraries/AkDbgEI8.js"></script> <!-- For video play -->
 	</head>
-	<body ng-app="drmApp" ng-controller="MainController">	
-			<header class="navbar navbar-dark sticky-top bg-dark p-0" ng-show="login_user_id != ''">
-					<ul class="nav-menu">
-							<li>
-									<a href="index.html">
-											<img src="./assets/images/adspherelogowhite.svg" alt="drmetrix-logo">
-									</a>
-							</li>
-							<li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
-									<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}"   id="{{item.aid}}" >
-										<img src="{{item.src}}" alt="{{item.title}}">{{item.title}}
-									</a>
-							</li>
-							 <li class="dropdown show whats-new d-none d-xl-flex">
-									<a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
-											<i data-feather="mail"></i><label> What's New</label>
-											<div class="notification-new">5</div>
-									</a>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-											<a class="dropdown-item" href="{{item.href}}" ng-class="{'newbuild-link' : newBuild == 1}" ng-repeat="item in whatsNew_menu">
-												{{item.title}}
-													<i class="newBuild == 1 ? 'fa fa-chain' : 'fa fa-play-circle-o fa-2x'"></i>
-											</a>
-									</div>
-							</li>
-							<li class="global-search border-r-desktop">
-									<form class="shrink align-right" name="frmSearch" no-validate="" ng-submit="search_result()">
-										<span class="search-filter" ng-class="!frmSearch.globalSearchInputText.$valid ? 'error-text-box':''">
-												<span class="search-icon">
-														<i data-feather="search"></i>
-												</span>
-												<input type="text" placeholder="Search Advertiser, Brand or Creative" autocomplete="off" ng-model-options="{debounce: 250}" ng-model="globalSearchInputText" id="globalSearchInputText" name="globalSearchInputText" ng-minlength="3">
-										</span>
-										<span class="inline-label search-text-validation-error" ng-show="frmSearch.globalSearchInputText.$error.minlength">
-												<b>Note:</b> <span>{{searchTextValidation}}</span>
-										</span>
-										<div class="search-container scrollbar" style="display: none;">
-												<div id="no_record_msg" style="display:none;">Can't find what you're looking for?
-														<a href="#" zf-open="userFeedbackModal" onclick="showModalBolcks();">Click here</a>
-												</div>
-												<div id="adv_gs_view">
-														<div class="search-heading-main">
-																Advertisers (<span id="global_search_adv_count"></span>)
-																<span id="adv_view_all"></span>
-														</div>
-														<ul class="no-bullet" id="adv_list_ul">
-														</ul>
-												</div>
-												<div id="brands_gs_view">
-														<div class="search-heading-main">
-																Brands (<span id="global_search_brand_count"></span>)
-																<span id="brand_view_all"></span>
-														</div>
-														<ul class="no-bullet" id="brand_list_ul">
-														</ul>
-												</div>
-												<div id="creatives_gs_view">
-														<div class="search-heading-main">
-																Creatives (<span id="global_search_creative_count"></span>)
-																<span id="creative_view_all"></span>
-														</div>
-														<ul class="no-bullet" id="creative_list_ul">
-														</ul>
-												</div>
-												<div class="show-feedback-option top-border" id="feddback_div" style="display:none;">
-														Can't find what you're looking for?
-														<a zf-open="userFeedbackModal" onclick="showModalBolcks();" class="link-color m-left8">Click here</a>
-												</div>
+	<body ng-app="drmApp" ng-controller="MainController" ng-class="{'dark-theme' : theme_val == 1}"  ng-init="init()">
+		<header class="navbar navbar-dark sticky-top bg-dark p-0" ng-show="login_user_id != ''">
+			<ul class="nav-menu">
+				<li>
+					<a ui-sref="ranking" ui-sref-active="top-menu-active">
+							<img ng-src="./assets/images/adspherelogowhite.svg" alt="drmetrix-logo">
+					</a>
+				</li>
+				<li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
+					<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}"   id="{{item.aid}}" >
+						<img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
+					</a>
+				</li>
+					<li class="dropdown show whats-new d-none d-xl-flex">
+					<a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
+							<i data-feather="mail"></i><label> What's New</label>
+							<div class="notification-new">5</div>
+					</a>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+							<a class="dropdown-item" href="{{item.href}}" class="whatsnew-ul" ng-class="{'newbuild-link' : newBuild == 1}" ng-repeat="item in whatsNew_menu">
+								{{item.title}}
+									<i class="newBuild == 1 ? 'fa fa-chain' : 'fa fa-play-circle-o fa-2x'"></i>
+							</a>
+					</div>
+				</li>
+				<li class="global-search border-r-desktop">
+					<form class="shrink align-right" name="frmSearch" no-validate="" ng-submit="search_result()">
+						<span class="search-filter" ng-class="!frmSearch.globalSearchInputText.$valid ? 'error-text-box':''">
+								<span class="search-icon">
+										<i data-feather="search"></i>
+								</span>
+								<input type="text" placeholder="Search Advertiser, Brand or Creative" autocomplete="off" ng-model-options="{debounce: 250}" ng-model="globalSearchInputText" id="globalSearchInputText" name="globalSearchInputText" ng-minlength="3" >
+						</span>
+						<span class="inline-label search-text-validation-error" ng-show="frmSearch.globalSearchInputText.$error.minlength">
+								<b>Note:</b> <span>{{searchTextValidation}}</span>
+						</span>
+						<div class="search-container scrollbar" style="display: none;">
+								<div id="no_record_msg" style="display:none;">Can't find what you're looking for?
+										<a href="#" zf-open="userFeedbackModal" onclick="showModalBolcks();">Click here</a>
+								</div>
+								<div id="adv_gs_view">
+										<div class="search-heading-main">
+												Advertisers (<span id="global_search_adv_count"></span>)
+												<span id="adv_view_all"></span>
 										</div>
-									</form>
-							</li>
-							<li ng-repeat="item in sub_menu" class="d-none d-xl-flex">
-									<a title="{{item.title}}" target="{{item.target}}" ui-sref={{item.href}}  id="{{item.aid}}" ng-click="menuItemClick(item.title, this);" >
-										<img src="{{item.src}}" alt="{{item.alt}}">{{item.title}}
-									</a>
-							</li>
-							<!--
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<i data-feather="user"></i><label>User</label>
-									</a>
-							</li>        
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<i data-feather="share-2"></i> <label>Network List</label>
-									</a>
-							</li>    
-							
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<img src="./assets/images/menuiconset-02.svg" alt=""> <label>Blog</label>
-									</a>
-							</li>      
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<i data-feather="file-text"></i><label> User Guide</label>
-									</a>
-							</li>
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<img src="./assets/images/menuiconset-08.svg" alt=""> <label>Dark Mode</label>
-									</a>
-							</li>
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<img src="./assets/images/menuiconset-15.svg" alt=""><label> System Status</label>
-									</a>
-							</li>            
-							<li class="d-none d-xl-flex">
-									<a href="#">
-											<i data-feather="log-out"></i> <label>Logout</label>
-									</a>            
-							</li>
-							<li class="right-menu d-lg-flex d-xl-none">
-									<a class=" open-menu">
-											<i data-feather="align-justify"></i>
-									</a>  
-							</li>             -->
-					</ul>
-					<!-- black-top menu -->
-					<!-- <div class="black-top-menu">
-							<ul class="left-menu">
-									<li>Welcome Joseph,</li>
-									<li class="active-alert">
-											<a href="#">
-													<label for="">Brands</label>
-											</a>
-									</li>
-									<li>
-											<a href="#">
-													<label for="">Advertisers</label>
-											</a>
-									</li>
-							</ul>
-							<ul class="checkbox-filter">
-									<li class="filter-listing">
-											<a href="javascript:void(0);" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
-											<div class="dropdown-menu" aria-labelledby="chooseList">
-													<a class="dropdown-item newbuild-link" href="#">New October Build<i class="fa fa-chain"></i></a>
-													<a class="dropdown-item" href="#">Advertiser Page Update<i class="fa fa-play-circle-o fa-2x"></i></a>
-													<a class="dropdown-item" href="#">Auto-Email Reports<i class="fa fa-play-circle-o fa-2x"></i></a>
-													<a class="dropdown-item" href="#">New Network Excel<i class="fa fa-play-circle-o fa-2x"></i></a>
-													<a class="dropdown-item" href="#">New Airing Detail Page<i class="fa fa-play-circle-o fa-2x"></i></a>
-													<a class="dropdown-item" href="#">Other Training Videos<i class="fa fa-play-circle-o fa-2x"></i></a>
-											</div> 
-									 </li>                
-									<li>
-											<a href="#" class="filter-listing dropdown-toggle" data-toggle="modal" data-target="#filterlisting">
-													Filters
-											</a>
-									</li>
-									<li>
-											<a href="#" class="btn btn-blue btn-sm">
-													<i class="fa fa-download"></i> Excel
-											</a>
-									</li>
-							</ul>
-					</div> -->
-		</header>  
-		<div ui-view></div>
-		<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
-		<div class="term-conditions">
-			<span>
-				<a onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms &amp; Conditions</a>|
-				<a onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy Policy</a>|
-				<a onclick="downloadPdf();">EULA</a></span>
-			<p>&copy; {{date| date:'yyyy'}} DRMetrix</p>
-		</div>
+										<ul class="no-bullet" id="adv_list_ul">
+										</ul>
+								</div>
+								<div id="brands_gs_view">
+										<div class="search-heading-main">
+												Brands (<span id="global_search_brand_count"></span>)
+												<span id="brand_view_all"></span>
+										</div>
+										<ul class="no-bullet" id="brand_list_ul">
+										</ul>
+								</div>
+								<div id="creatives_gs_view">
+										<div class="search-heading-main">
+												Creatives (<span id="global_search_creative_count"></span>)
+												<span id="creative_view_all"></span>
+										</div>
+										<ul class="no-bullet" id="creative_list_ul">
+										</ul>
+								</div>
+								<div class="show-feedback-option top-border" id="feddback_div" style="display:none;">
+										Can't find what you're looking for?
+										<a zf-open="userFeedbackModal" onclick="showModalBolcks();" class="link-color m-left8">Click here</a>
+								</div>
+						</div>
+					</form>
+				</li>
+				<li ng-repeat="item in right_menu" class="d-none d-xl-flex">
+					<a title="{{item.title}}" target="{{item.target}}" id="{{item.aid}}" ng-click="menuItemClick(item);" >
+						<img ng-src="{{item.src}}" alt="{{item.alt}}">{{item.title}}
+					</a>
+				</li>
+				<li class="right-menu d-lg-flex d-xl-none" ng-click="click();">
+					<a class="open-menu">
+						<i data-feather="align-justify"></i>
+					</a>  
+				</li>  
+					<!--
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<i data-feather="user"></i><label>User</label>
+							</a>
+					</li>        
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<i data-feather="share-2"></i> <label>Network List</label>
+							</a>
+					</li>    
+					
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<img src="./assets/images/menuiconset-02.svg" alt=""> <label>Blog</label>
+							</a>
+					</li>      
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<i data-feather="file-text"></i><label> User Guide</label>
+							</a>
+					</li>
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<img src="./assets/images/menuiconset-08.svg" alt=""> <label>Dark Mode</label>
+							</a>
+					</li>
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<img src="./assets/images/menuiconset-15.svg" alt=""><label> System Status</label>
+							</a>
+					</li>            
+					<li class="d-none d-xl-flex">
+							<a href="#">
+									<i data-feather="log-out"></i> <label>Logout</label>
+							</a>            
+					</li>
+					<li class="right-menu d-lg-flex d-xl-none">
+							<a class=" open-menu">
+									<i data-feather="align-justify"></i>
+							</a>  
+					</li>             -->
+			</ul>
+			<!-- mobile menu -->
+			<div class="right-nav d-md-block d-lg-none" ng-show="showme">
+				<a class="close-menu" ng-click="showme=false">
+					<i data-feather="x"></i>
+				</a>
+				
+				<a ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="mob-menu-active" class="d-md-flex d-lg-none" alt="{{item.title}}" ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" >
+					<i data-feather="home"></i>{{item.title}}
+				</a>
+				<a href="#" class="d-md-flex d-lg-none">
+						<i data-feather="mail"></i> What's New <div class="notification-new">5</div>
+				</a>
+				<a href="#" class="d-md-flex d-lg-none">
+						<img src="./assets/images/menuiconblue/menuiconset-08.svg" alt=""> Dark Theme
+					</a>
+				<a ng-repeat="item in right_menu" class="d-md-flex d-lg-none" title="{{item.title}}" target="{{item.target}}" id="{{item.aid}}" ng-click="menuItemClick(item);" >
+						<i data-feather="user"></i>{{item.title}}
+				</a>
+				
+				
+			</div>            
+		  
+		
+	</header>  
+	<div ui-view></div>
+	<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
+	<div class="term-conditions">
+		<span>
+			<a onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms &amp; Conditions</a>|
+			<a onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy Policy</a>|
+			<a onclick="downloadPdf();">EULA</a></span>
+		<p>&copy; {{date| date:'yyyy'}} DRMetrix</p>
+	</div>
+	<script>
+			feather.replace()
+	</script>
+
 </body>
 
 </html>
