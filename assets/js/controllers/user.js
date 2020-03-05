@@ -1,4 +1,8 @@
-angular.module('drmApp').controller('UserController', function ($scope, $timeout, $state, $stateParams, $http, $interval, uiGridTreeViewConstants, $rootScope, apiService) {
+angular.module('drmApp').controller('UserController', function ($scope, $timeout, $state, $stateParams, $http, $interval, uiGridTreeViewConstants, $rootScope, apiService, modalConfirmService,  $uibModal) {
+    if (!apiService.isUserLogged($scope)) {
+        $state.go('home');
+        return;
+    }
     var usCtrl = this;
     $scope.showUsers = function () {
         var config = {
@@ -26,20 +30,20 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
 
                 { name: 'ads_authenticated', displayName:'Adsphere Authenticated', width: '120',enableColumnMenus: false, cellTemplate:'<span class="{{row.entity.ads_authenticated ? \'user-not-verified\' : \'\'}}"  >{{row.entity.ads_authenticated ? \'No\' : \'\'}}</span><span class="{{row.entity.ads_authenticated ? \'user-not-verified-link\' : \'user-verified\'}}" id ="resend_link_{{row.entity.user_id}}" ng-click="sendPassword(row.entity.passphrase,row.entity.user_id)" >{{row.entity.ads_authenticated ? \'Resend Email\' : \'Yes\'}}</span>' },
 
-                { name: 'authy_cookie', displayName:'Authy Authenticated', cellTemplate:'<span class="{{row.entity.authy_cookie ? \'user-verified\' : \'user-not-verified-authy\'}}">{{row.entity.authy_cookie ? \'Yes\' : \'No\'}}<span>' },
+                { name: 'authy_cookie', displayName:'Authy Authenticated', width: '100', cellTemplate:'<span class="{{row.entity.authy_cookie ? \'user-verified\' : \'user-not-verified-authy\'}}">{{row.entity.authy_cookie ? \'Yes\' : \'No\'}}<span>' },
 
                 { name: 'vdate', displayName: 'Verified Date', cellTemplate:'<span>{{row.entity.vdate ? row.entity.vdate : \'-\'}}</span>' },
-                { name: 'assistant_admin', displayName: 'Assistant Admin', cellTemplate:'<span>{{row.entity.assistant_admin == 1 ? \'Yes\' : \'No\'}}</span>' },
+                { name: 'assistant_admin', displayName: 'Assistant Admin', width: '90',cellTemplate:'<span>{{row.entity.assistant_admin == 1 ? \'Yes\' : \'No\'}}</span>' },
 
                 { name: 'skip_authy', displayName: 'Skip Authy', width: '70', cellClass:'text-center', cellTemplate:'<nav class="grid-content" id="skip_authy"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="checkbox-custom" id="skip_authy_check_{{row.entity.user_id}}" ng-click="manageSkipAuthy(row.entity.user_id)" ng-checked="row.entity.skip_authy == 1 ? true : false " /><label class="checkbox-custom-label"></label></li></ul></nav>' },
 
                 { name: 'status', displayName: 'Status', width: '80', cellTemplate:'<span>{{row.entity.status == "active" ? "Active" : "Inactive"}}</span>' },
                 { name: 'last_login', displayName: 'Last Login', cellTemplate:'<span>{{row.entity.last_login}}</span>' },
                 { name: 'login_count', displayName:'Total Logins', cellTemplate:'<span>{{row.entity.login_count}}</span>' },
-                { name: 'last_30_days_count', displayName:'Last 30 Days Logins', cellTemplate:'<span>{{row.entity.last_30_days_count}}</span>' },
-                { name: 'tracking_alert_subscribed', displayName:'Tracking alert', cellTemplate:'<span>{{row.entity.tracking_alert_subscribed == 1 ? \'Yes\' : \'No\'}}</span>' },
+                { name: 'last_30_days_count', displayName:'Last 30 Days Logins', width: '80',cellTemplate:'<span>{{row.entity.last_30_days_count}}</span>' },
+                { name: 'tracking_alert_subscribed', displayName:'Tracking alert', width: '90',cellTemplate:'<span>{{row.entity.tracking_alert_subscribed == 1 ? \'Yes\' : \'No\'}}</span>' },
 
-                { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown"><i class="fa fa-cog fa-2x" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"><li><a ng-click="grid.appScope.getUser(row.entity.user_id)" >Edit User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deleteUser(row.entity.user_id)">Delete User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.resetPassword(row.entity.email,row.entity.user_id)" data-toggle="modal" data-target="#animatedModal">Reset Password</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deactivate(row.entity.user_id,row.entity.status)">{{row.entity.status == "active" ? "Deactivate" : "Activate"}} User</a></li></ul></div>' }
+                { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown" ng-hide="row.entity.role!=\'user\'"><i class="fa fa-cog fa-2x" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"><li><a ng-click="grid.appScope.getUser(row.entity.user_id)" >Edit User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deleteUser(row.entity.user_id)">Delete User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.resetPassword(row.entity.email,row.entity.user_id)" data-toggle="modal" data-target="#animatedModal">Reset Password</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deactivate(row.entity.user_id,row.entity.status)">{{row.entity.status == "active" ? "Deactivate" : "Activate"}} User</a></li></ul></div>' }
 
                 // { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">D</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div>' }
             ],
@@ -121,29 +125,79 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         });
     }
 
+    $scope.openModal = function() {
+        var modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/MaxLimitTemplate.html",
+            controller: "MaxLimitController",
+            size: 'md modal-dialog-centered',
+            backdrop : false
+          });
+
+          modalInstance.result.then(function(response){
+              $scope.result = `${response} button hitted`;
+          });
+    };
+
     $scope.deactivate = function(user_id,status){
-        $("#options_div"+user_id).css("display", "none");
-       apiService.post('/deactivate_user',{'user_id':user_id,'status':status} )
-           .then(function(data){
+        var displaymessage = status == 'active' ? 'activated' : 'deactivated';
+        var defaultOptions = {
+            size: 'md modal-dialog-centered'
+          }
+        var options = {
+                bodyText: 'Record '+displaymessage+' successfully.',
+                headerText: ' ',
+                closeReq: 1
+          };
+
+        apiService.post('/deactivate_user',{'user_id':user_id,'status':status} )
+           .then(function(response){
+            var data = response.data;
                $("#advancedModal").modal('hide');
                $("#advancedModalEdit").modal('hide');
              if(data.status == 1){
                    if(data.max_limit == 'yes'){
-                       $("#advancedModal3").modal('show');
+                        $scope.openModal();
+
+                        $scope.error_reset = function (){
+                            $scope.invalidToken = true;
+                        }
                    }else{
-                       if(status == 'active') { $("#deactivateMessage").modal('show'); }
-                       if(status == 'inactive') { $("#activateMessage").modal('show'); }
-                       setTimeout(function(){
-                           if(status == 'inactive') { $("#activateMessage").modal('hide'); }
-                           if(status == 'active') { $("#deactivateMessage").modal('hide'); }
-                           $scope.showUsers();
-                       } , 1000 );
-                   }
+                        modalConfirmService.showModal(defaultOptions, options).then(function (result) {
+                        });
+                        $scope.showUsers();
+                    }
                }
            }, function (response) {
                // this function handlers error
-           });
-   }
+        });
+    }
+});
 
+angular.module('drmApp').controller('MaxLimitController', function($scope, $rootScope, $timeout, $uibModalInstance, $state, apiService, modalConfirmService) {
+
+    $scope.sendMail = function(){
+        var defaultOptions = {
+            size: 'md modal-dialog-centered'
+          }
+        var options = {
+                bodyText: 'Email sent successfully.',
+                headerText: ' ',
+                closeReq: 1
+          };
+        var admin_id = sessionStorage.loggedInUserId;
+        apiService.post('/contact_us',{'admin_id' : admin_id })
+        .then(function(data) {
+          if(data.status){
+                modalConfirmService.showModal(defaultOptions, options).then(function (result) {
+                });
+            }
+        }, function (response) {
+            // this function handlers error
+        });
+    }
+
+    $scope.closeModal = function(defaultOptions, options) {
+            $uibModalInstance.dismiss();
+    }
 
 });
