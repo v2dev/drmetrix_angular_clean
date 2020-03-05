@@ -4,8 +4,8 @@ global $dbh;
 // error_reporting(E_ALL);
 
 define("DEBUG", FALSE);
-define("DEBUG_FILE_PATH", 'E:\xampp7.3\htdocs\drmetrix_log\\');
-define("SESSION_DIR", 'E:\xampp7.3\htdocs\drmetrix_session\\');
+define("DEBUG_FILE_PATH", 'D:\xampp7.3\htdocs\drmetrix_log\\');
+define("SESSION_DIR", 'D:\xampp7.3\htdocs\drmetrix_session\\');
 date_default_timezone_set('US/Eastern');
 ini_set('max_execution_time', 2000);
 define("HOST", $_SERVER['HTTP_HOST']);
@@ -123,7 +123,7 @@ defineConstants();
 // exit;
 
 function show($var, $exit = 0) {
-    $debug_file_path = 'E:\xampp7.3\htdocs\drmetrix_log\show.txt';
+    $debug_file_path = 'D:\xampp7.3\htdocs\drmetrix_log\show.txt';
     $fp = fopen($debug_file_path, 'a+');
     fwrite($fp, print_r($var, 1) . PHP_EOL);
     fclose($fp);

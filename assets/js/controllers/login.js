@@ -18,7 +18,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
             sessionStorage.lastLoginTime    = data.last_login;
             sessionStorage.assistant_admin  =  $rootScope.assistant_admin = data.assistant_admin;
             sessionStorage.role             = $rootScope.role = data.role;
-            localStorage.login_user_id     =  data.user_id;
+            localStorage.login_user_id     = data.user_id;
             sessionStorage.complete_name    = sessionStorage.loggedIn = $rootScope.complete_name = localStorage.complete_name = data.name;
             $cookies.put("loggedIn",data.name);
             $cookies.put("userrole",data.role);
