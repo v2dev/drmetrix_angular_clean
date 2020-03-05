@@ -63,8 +63,8 @@
                         <li>
                             <div class="checkbox" data-toggle="collapse" href="#collapseExample" role="button"
                                 aria-expanded="false" aria-controls="collapseExample">
-                                <input class="checkbox-custom cat_all" type="checkbox" name="checkbox5[]" id="checkbox2" ng-click="item.isSelected = !item.isSelected;selectCategory(item, item.isSelected)" ng-model="item.isSelected">
-                                <label for="checkbox2" class="checkbox-custom-label" ng-class="selectedValue(item)">
+                                <input class="checkbox-custom cat_all" type="checkbox" name="checkbox5[]" id="checkbox_{{item.category_id}}" ng-click="item.isSelected = !item.isSelected;selectCategory(item, item.isSelected)" ng-model="item.isSelected">
+                                <label for="checkbox_{{item.category_id}}" class="checkbox-custom-label" ng-class="selectedValue(item)">
                                     <span class="v-align-middle">{{item.category}}</span>
                                     <a ng-click="subCategory = !subCategory" class="toggle-arrow">
                                         <i class="fa fa-lg" ng-class="subCategory ? 'fa-caret-down' : 'fa-caret-right'" id="right_1"></i>
@@ -75,7 +75,7 @@
                                 <li id="all_categories" ng-repeat="subitem in item.subcategory" class="checkbox">
                                     <input id="label_{{subitem.sub_category_id}}" custom-attr="subcat_cust_attr" class="checkbox-custom" type="checkbox" ng-click="selectCategory(category_list, subitem.isSelected, 'subCategory')" ng-model="subitem.isSelected">
                                     <label for="label_{{subitem.sub_category_id}}" custom-id="label_{{subitem.sub_category_id}}" class="checkbox-custom-label full-filled">
-                                    <span class="custom-label-sub-div">{{subitem.sub_category}}</span>
+                                        <span class="custom-label-sub-div">{{subitem.sub_category}}</span>
                                     </label>
                                 </li>
                             </ul>
