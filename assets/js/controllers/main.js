@@ -1,8 +1,9 @@
-angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location) {
+angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location, $uibModal) {
     $scope.date = new Date(); // Footer copyright display year
     $rootScope.eulaDisagreeFlag = 0; // this flag will show poup on login page if we disagree eula agreement and redreict to login message with popup message
     $scope.whats_new_toggle = false;
     $rootScope.headerDisplay = 0;
+    $rootScope.options  = ['My','Shared','All'];
     $rootScope.searchTextValidation = '3 or more characters.';
     $rootScope.main_menu = [{
         liid: 'rank',
@@ -382,6 +383,105 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $scope.type = tab;
     }
 
+    /** Filters code -- Start */
+    $scope.call_filter_list = function () {
+        $scope.getAllFilters();
+        $scope.getActiveSharedUsers('filters');
+        $scope.openFilterModal();
+    }
+
+    $scope.openFilterModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+          templateUrl: "./templates/modals/FilterDialog.html",
+          controller: "FiltersCtrl",
+          size: 'lg modal-dialog-centered',
+        });
+      };
+
+  
+
+    $scope.getAllFilters = function () {
+        var page = $state.current.name;
+        apiService.post('/get_all_filter_data',{'page': page})
+        .then(function (response) {
+          var data = response.data;
+            if (data.status) {
+                $rootScope.cachedFilterReportsData = data.return_arr;
+            }
+        }
+        , function (response) {
+          // this function handles error
+          }); 
+    }
+
+   
+    
+     /** Filters code -- End */
+    $scope.getActiveSharedUsers = function (page) {
+        apiService.post('/show_active_shared_users', { 'page': page })
+            .then(function (response) {
+                var data = response.data;
+                if (data.status) {
+                    $rootScope.users = data.result;
+                    $rootScope.users_count = data.count;
+                }
+            })
+            ,(function (data, status, headers, config) {
+                console.log("error inside");
+            });
+    }
+
+    /***List code starts */
+
+    $scope.getAllList = function () {
+        var page = $state.current.name;
+        console.log($rootScope.list_tab.length);
+        var list_tab = $rootScope.list_tab.substr(0, ($rootScope.list_tab.length - 1));
+        apiService.post('/get_all_list_data',{  "primary_tab": list_tab })
+        .then(function (response) {
+          var data = response.data;
+            if (data.status) {
+                $rootScope.cachedListsData = data.return_arr;
+            }
+        }
+        , function (response) {
+          // this function handles error
+          }); 
+    }
+
+    
+    $scope.openListModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/ListDialog.html",
+            controller: "ListsCtrl",
+            size: 'lg modal-dialog-centered',
+          });
+    }
+  
+    $scope.call_brand_tab_list = function(list_item) {
+        // $.ajax({
+        //     url: "/drmetrix/assets/js/jquery.dropdown.js?"+Math.random(),
+        //     dataType: "script",
+        //     cache: true,
+        //     success: function() {
+        //     }
+        // });
+        // $.ajax({
+        //     url: '/drmetrix/assets/css/jquery.dropdown.css?'+Math.random(),
+        //     dataType: 'text',
+        //     success: function(data) {
+        //         $('<style type="text/css">\n' + data + '</style>').appendTo("head");
+        //     }
+        // });
+        var tab = $scope.type;
+        $rootScope.my_list = list_item[0].toUpperCase() + list_item.slice(1);
+        $rootScope.list_tab = $scope.type;
+        $scope.getAllList();
+        $scope.choose_list = true;
+        $scope.getActiveSharedUsers('list');
+        $scope.openListModal();
+    }
+    /***List code Ends */
 
     $scope.$watch('globalSearchInputText', function(nVal, oVal) {
         if (nVal !== oVal) {
@@ -389,4 +489,48 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         }
     });
 
+});
+
+angular.module('drmApp').controller('FiltersCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.sharedFilter = 'My';
+    $scope.selected_user = '';
+    
+    $scope.show_user_filters = function () {
+        //ui grid code
+    }
+
+    $scope.show_user_filters();
+    
+    $scope.showSharedFilters = function(item) {
+        $scope.sharedFilter = item;
+            //with ui grid code, displayes grid data according to rules set
+    }
+
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+  
+});
+
+
+angular.module('drmApp').controller('ListsCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.sharedList = 'My';
+    $scope.selected_user = '';
+   
+    
+    $scope.show_user_list = function () {
+        //ui grid code
+    }
+
+    $scope.show_user_list();
+    
+    $scope.showSharedLists = function(item) {
+        $scope.sharedList = item;
+            //with ui grid code, displayes grid data according to rules set
+    }
+
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+      }
+  
 });
