@@ -1,6 +1,6 @@
 var app = angular.module('drmApp');
 
-app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService) {
+app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService, $timeout) {
   var pdf = sessionStorage.pdf;
   sessionStorage.lastLoginTime = '';
   $rootScope.login_user_id = '';
@@ -101,7 +101,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
               } else if (data.flag == 2) {
                 $scope.error_text = '<p>Adsphere staging build is currently not available. Please login to regular production build at <a href="http://adsphere.drmetrix.com">http://adsphere.drmetrix.com</a></p><p>To gain access to staging build, please contact DRMetrix.</p>';
               } else {
-                $scope.error_text = "<p>We apologize but your user account has been deactivated by your system administrator.</p><p> Please contact <a href='mailto:"+data.admin_email+"'>"+data.admin_email+"</a> if you wish to have your account reactivated.</p>";
+                $scope.error_text = "<p>We apologize but your user account is deactivated by system administrator.</p><p> Please contact <a href='mailto:"+data.admin_email+"'>"+data.admin_email+"</a> if you wish to have your account reactivated.</p>";
               }
             } else if (data.response == 'deleted') {
               $scope.error_text = "<p>We're sorry, your user account has been disabled.</p> <p>Please ask one of your Adsphere System Administrators to enable your account.</p><p> If your company requires additional user licenses, please contact <a href='mailto:sales@drmetrix.com'>sales@drmetrix.com</a></p>";
@@ -124,7 +124,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
 
   $scope.showModal = function(){
     var defaultOptions = {
-      size: 'lg modal-dialog-centered'
+      size: 'md modal-dialog-centered'
     }
     var options = {
           bodyText: 'Instructions to reset your password has been sent to your email address. <br/>Thank You!',

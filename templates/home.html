@@ -1,21 +1,11 @@
 <section class="section">
       <div class="left-div">
           <div class="build-features">
-              <h1>New February 2020 build features:</h1>
-              <ul>
-                 <li>
-                    UI Enhancements &amp; New Dark Mode!
-                 </li>
-                 <li>
-                    Custom Advertiser / Brand Filter lists<br>
-                    (Map media spend across multiple brands or advertisers of your
-                    choice.)
-                 </li>
-                 <li>
-                    Global Search Enhancements
-                 </li>
-              </ul>
-              <a href="https://adsphere.drmetrix.com/blog/2020/02/04/new-february-2020-build/" target="_blank" class="learn-more">Learn More</a>
+             <h1>Welcome to<br>the new AdSphere<sup>TM</sup></h1>
+             <a href="https://adsphere.drmetrix.com/blog/2020/02/04/new-february-2020-build/" target="_blank" class="learn-more">Learn More</a>
+             <hr>
+            <p>Q4 rate "<strong>actuals</strong>" are now <strong>LIVE</strong>!</p>
+            <p>For more info, please <a href="https://www.drmetrix.com/spendmethodology.html">Click here.</a></p>
            </div>
       </div>
       <div class="right-div">
@@ -29,19 +19,19 @@
                               <i class="fa fa-user" aria-hidden="true"></i>
                               <input type="text" placeholder="Username" ng-change="user.contactemail = user.username" ng-model="user.username" name="username" ng-minlength="6" required>
                           </div>
-                          <label class="error-msg"  ng-show="frmLogin.username.$invalid && frmLogin.$submitted">Please enter your Username (minimum 6 characters).</label>
+                          <label class="error-msg mb-3 text-left"  ng-show="frmLogin.username.$invalid && frmLogin.$submitted">Please enter your Username (minimum 6 characters).</label>
                           <div class="custom-input-group mb-3" ng-class="{'error':frmLogin.password.$invalid && frmLogin.$submitted}">
                               <i class="fa fa-lock" aria-hidden="true"></i>
                               <input type="password" placeholder="Password" ng-model="user.password" name="password" ng-minlength="6" required >
                           </div>
-                          <label class="error-msg" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       
+                          <label class="error-msg mb-3 text-left" ng-show="frmLogin.password.$invalid && frmLogin.$submitted">Please enter your Password (minimum 6 characters).</label>       
                           <label ng-if="user.invalid && frmLogin.$valid && frmLogin.$submitted" class="inline-label error-msg">Invalid Username/Password.</label>
 
-                        <div class="error-msg"  ng-show="user.errors" ng-bind-html="error_text | trustAsHtml"></div>
+                        <div class="error-msg deactivate-msg mb-3"  ng-show="user.errors" ng-bind-html="error_text | trustAsHtml"></div>
                        <label class="inline-label error-msg ng-scope" ng-show="login_error == 1" id="send_sms_error" ng-bind-html="send_sms_error"></label>
                        <input type="hidden" ng-model="user.contactemail" name="contactemail" value="" />    
                        <!-- ng-disabled="(user.invalid && frmLogin.$invalid) || frmLogin.$submitted" -->
-                          <button type="submit" class="btn login-submit btn-blue mt-3">Login</button>
+                          <button type="submit" class="btn login-submit btn-blue">Login</button>
                           <p><a ui-sref="forgotPassword">Forgot Password?</a></p>
                       </div>
                   </div>
@@ -53,25 +43,13 @@
               </div>
             </div>
             <div class="eula-message-container" ng-show="eulaDisagreeFlag == 1">
-                <div class="grid-block">
-                   <div class="grid-content collapse">
-                      <h6 class="text-center eula-login-message">
-                         We apologize for any inconvenience, please contact
-                         <a href="mailto:info@drmetrix.com" >info@drmetrix.com</a> regarding your concerns with respect to the End
-                         User License Agreement.
-                      </h6>
-                   </div>
-                </div>
-                <div class="grid-block">
-                   <div class="grid-content text-center eula-login-button">
-                        <button class="btn btn-blue" ng-click="relogin()">Login</button>
-                   </div>
-                </div>
+               <h6 class="text-center eula-login-message">
+                  We apologize for any inconvenience, please contact
+                  <a href="mailto:info@drmetrix.com" >info@drmetrix.com</a> regarding your concerns with respect to the End
+                  User License Agreement.
+               </h6>
+               <button class="btn btn-blue" ng-click="relogin()">Login</button>
              </div>
           </div>
-        
       </div>
   </section>
-
-
-
