@@ -377,6 +377,11 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             })
     }
 
+    $scope.showTab = function(tab) {
+        $scope.type = tab;
+    }
+
+
     $scope.$watch('globalSearchInputText', function(nVal, oVal) {
         if (nVal !== oVal) {
             // $scope.global_search_ajax(nVal);

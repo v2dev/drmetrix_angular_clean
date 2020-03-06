@@ -12,11 +12,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $state
     }
     $scope.initialisation() ;
 
-    $scope.showTab = function(tab) {
-        $scope.type = tab;
-        
-    }
-
+  
     $scope.call_filter_list = function(menu) {
         var modalInstance = $uibModal.open({
             templateUrl: './templates/ranking-modals.html',

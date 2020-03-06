@@ -140,48 +140,6 @@
 						<i data-feather="align-justify"></i>
 					</a>  
 				</li>  
-					<!--
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="user"></i><label>User</label>
-							</a>
-					</li>        
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="share-2"></i> <label>Network List</label>
-							</a>
-					</li>    
-					
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<img src="./assets/images/menuiconset-02.svg" alt=""> <label>Blog</label>
-							</a>
-					</li>      
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="file-text"></i><label> User Guide</label>
-							</a>
-					</li>
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<img src="./assets/images/menuiconset-08.svg" alt=""> <label>Dark Mode</label>
-							</a>
-					</li>
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<img src="./assets/images/menuiconset-15.svg" alt=""><label> System Status</label>
-							</a>
-					</li>            
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="log-out"></i> <label>Logout</label>
-							</a>            
-					</li>
-					<li class="right-menu d-lg-flex d-xl-none">
-							<a class=" open-menu">
-									<i data-feather="align-justify"></i>
-							</a>  
-					</li>             -->
 			</ul>
 			<!-- mobile menu -->
 			<div class="right-nav d-md-block d-lg-none" ng-show="showme">
@@ -204,15 +162,13 @@
 				
 				
 			</div>            
-		  
-		
 	</header>  
 	<!-- black-top menu -->
     <div class="black-top-menu" ng-init="showTab('brands')" ng-show="headerDisplay == 1">
         <ul class="left-menu">
             <li>Welcome {{complete_name}},</li>
             <li ng-class="{active_alert : type == 'brands'}">
-                <a ng-click="showTab('brands')">
+                <a ng-click="showTab('brands')">{{type}}
                     <label for="">Brands</label>
                 </a>
             </li>
@@ -225,18 +181,14 @@
         <ul class="checkbox-filter">
 
             <li class="filter-listing">
-                <a href="unsafe:javascript:void(0);" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
+                <a href="" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
                 <div class="dropdown-menu"  aria-labelledby="chooseList">
-                        <a class="dropdown-item newbuild-link" href="#">New October Build<i class="fa fa-chain"></i></a>
-                        <a class="dropdown-item" href="#">Advertiser Page Update<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">Auto-Email Reports<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">New Network Excel<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">New Airing Detail Page<i class="fa fa-play-circle-o fa-2x"></i></a>
-                        <a class="dropdown-item" href="#">Other Training Videos<i class="fa fa-play-circle-o fa-2x"></i></a>
+						<a href="" ng-click="call_brand_tab_list()" class="dropdown-item s">Brands List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+						<a href="" ng-click="call_brand_tab_list()" class="dropdown-item s">Advertisers List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
                 </div> 
                 </li>                
             <li>
-                <a class="filter-listing"  ng-click="call_filter_list('filter_list_rank');">
+                <a href="" class="filter-listing"  ng-click="call_filter_list('filter_list_rank');">
                     Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
                 </a>
             </li>
