@@ -39,7 +39,8 @@
 	<script type="text/javascript" src="./assets/js/filters/safehtml.js"></script>
 	<script type="text/javascript" src="./assets/js/service.js"></script>
 
-	<!--Start - Angular Js controllers-->
+    <!--Start - Angular Js controllers-->
+    <script type="text/javascript" src="./assets/js/components/categories.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/main.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/login.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/authy.js"></script>
@@ -152,8 +153,44 @@
 				</a>
 			</div>            
 	</header>  
+	<!-- black-top menu -->
+    <div class="black-top-menu" ng-init="showTab('brands')" ng-show="headerDisplay == 1">
+        <ul class="left-menu">
+            <li>Welcome {{complete_name}},</li>
+            <li ng-class="{active_alert : type == 'brands'}">
+                <a ng-click="showTab('brands')">{{type}}
+                    <label for="">Brands</label>
+                </a>
+            </li>
+            <li ng-class="{active_alert : type == 'advertisers'}">
+                <a ng-click="showTab('advertisers')">
+                    <label for="">Advertisers</label>
+                </a>
+            </li>
+        </ul>
+        <ul class="checkbox-filter">
+            <li class="filter-listing">
+                <a href="" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
+                <div class="dropdown-menu"  aria-labelledby="chooseList">
+						<a href="" ng-click="call_brand_tab_list()" class="dropdown-item s">Brands List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+						<a href="" ng-click="call_brand_tab_list()" class="dropdown-item s">Advertisers List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+                </div> 
+                </li>                
+            <li>
+                <a href="" class="filter-listing"  ng-click="call_filter_list('filter_list_rank');">
+                    Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
+                </a>
+            </li>
+            <li>
+                <a class="btn btn-blue">
+                    <i class="fa fa-download"></i> Excel
+                </a>
+            </li>
+        </ul>
+</div>
+
+
 	<div class="main-wrapper" ui-view></div>
-	<!-- <section class="section" ui-view></section> -->
 	<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
 	<div class="term-conditions">
 		<span>
