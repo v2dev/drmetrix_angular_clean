@@ -1999,16 +1999,11 @@ function advBrandsList($export = 0,$request_data = null){
         $requestData = $request_data;
     }else{        
         $request = Slim::getInstance()->request();
-        $query_string = $request->getBody();    
-        $set_one = explode('&', $query_string);        
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
-        $sidx   = $requestData['sidx'];
-        $sord   = $requestData['sord'];
-        $page   = $requestData['page'];
-        $limit  = $requestData['rows'];
+        $requestData = (array)(json_decode($request->getBody()));
+        $sidx       = 'spend_index';
+        $sord       = 'desc';
+        $page       = 1;
+        $limit      = 10;
     }
 
     $c                  = urldecode($requestData['c']);
@@ -2019,7 +2014,7 @@ function advBrandsList($export = 0,$request_data = null){
     $_resp_type         = urldecode($requestData['responseType']);
     $responseType       = "(".$_resp_type.")";
     $spanish            = urldecode($requestData['spanish']);
-    $cat                = rtrim(urldecode($requestData['cat_id']),",");
+    $cat                = rtrim(urldecode($requestData['cat']),",");
     $cat                = rtrim($cat,"all,");
     $catIn              = '('.$cat.')';
     $brand_classification = '';
@@ -2091,6 +2086,7 @@ function advBrandsList($export = 0,$request_data = null){
     $params_brands['order_by']              = $_order_by;
     $params_brands['new_filter_opt']        = $new_filter_opt;
     $params_brands['program_ids']           = $program_ids;
+    $params_brands['list_id_condition'] = "";
 
     
     if(!$export){
@@ -2158,7 +2154,7 @@ function advBrandsList($export = 0,$request_data = null){
         $nestedData['hidden_spend_index'] =findSpendIndex($spendIndexCalculate, 0);                  
         $nestedData['export_spend_index'] =  $resultV->spend_index ;          
        
-        $nestedData['spend_index'] = $resultV->spend_index ? '<a href="#" onclick="viewAiringSpendGraph(\''.addslashes($resultV->brand_name).'\','.$resultV->brand_id.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\','.$resultV->networks.',\''.$resultV->spend_index.'\',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$_resp_type.'\',\''.$spanish.'\',\'adv\',\''.addslashes($resultV->advertiser_name).'\',\'\',\'\')" >'.$resultV->spend_index.'</a>' : 0 ;
+        $nestedData['spend_index'] = $resultV->spend_index;
        
       
         $nestedData['national'] = isset($resultV->national) ? $resultV->national : '';
@@ -2181,8 +2177,8 @@ function advBrandsList($export = 0,$request_data = null){
            $nestedData['is_brand_active'] = $resultV->is_brand_active;
         }else{
             //$nestedData['brand_name'] = $resultV->brand_name ? '<i class="fa fa-circle" id="'.$active_class.'"></i><span>'.$resultV->brand_name.'</span>' : '-' ;
-            $nestedData['brand_name'] = '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\'brand\','.$resultV->brand_id.',\''.addslashes($resultV->brand_name).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->brand_name.'</a></span>';
-            $nestedData['creatives_count'] = $resultV->creative_count ? '<a href="#"><span id="adv_brand_plus_'.$resultV->brand_id.'" style="display:inline;padding-right: 0.5em;"><span class="icon-border icon-border-plus"></span></span></a><a href="#"><span style="display:none;padding-right: 0.5em;" id="adv_brand_minus_'.$resultV->brand_id.'"><span class="icon-border icon-border-minus"></span></span></a>'.$resultV->creative_count : 0;
+            $nestedData['brand_name'] = $resultV->brand_name;
+            $nestedData['creatives_count'] = $resultV->creative_count;
             if(!in_array($resultV->main_sub_category_id , $unchecked_categoryArray)) {
                 $resultV->category = get_category_names_by_ids($resultV->main_sub_category_id, $resultV->alt_sub_category_id);
             } else {
@@ -2193,8 +2189,8 @@ function advBrandsList($export = 0,$request_data = null){
                 $string = substr($resultV->category, 0, 23).'...';
             }
          
-            $nestedData['category_name'] = isset($resultV->category) ? '<span class="tooltip-hover" title="'.$resultV->category.'" onclick="fetchList('.$resultV->brand_id.',\''.$tab.'\',\''.addslashes($resultV->category).'\');"><i class="fa fa-caret-down float-right"></i>'.$resultV->category.'</span><nav class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_'.$resultV->brand_id.'" style="display:none;"></nav>' :  '-' ;            
-            $nestedData['airings'] = $resultV->airings ? '<a href="#" onclick="viewAiringGraph(\''.addslashes($resultV->brand_name).'\','.$resultV->brand_id.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\','.$resultV->networks.','.$resultV->airings.',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$_resp_type.'\',\''.$spanish.'\',\'adv\',\''.addslashes($resultV->advertiser_name).'\',\'\',\'\')" >'.number_format($resultV->airings).'</a>' : 0 ;
+            $nestedData['category_name'] = $resultV->category;
+            $nestedData['airings'] = $resultV->airings;
             
             $nestedData['hidden_creatives'] = $resultV->creative_count;
             $nestedData['hidden_brand_name'] = $resultV->brand_name;
@@ -8142,7 +8138,7 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
     $sd_dir                     = LIFETIME_START_DATE;
     $ed_dir                     = customDate('Y-m-d');
    
-    $sidx                       = 'hidden_spend_index';
+    $sidx                       = 'spend_index'; // for Brand 'hidden_spend_index'
     $sord                       = 'desc';
     $page                       = 1;
     $limit                      = 10;
@@ -8491,7 +8487,7 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
             $nestedData['rank'] = ++$rank;
             $export['current_week']  = $nestedData['rank'];
             //$nestedData['advertiser_name'] = !empty($resultV->advertiser_name) ? '<i class="fa fa-circle" id="'.$active_class.'"></i><span>'.$resultV->advertiser_name.'</span>' : '-' ;
-            $nestedData['advertiser_name'] = !empty($resultV->advertiser_name) ? '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#"  title="'.$resultV->advertiser_name.'" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->ID.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\'adv\',\'\',\'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->advertiser_name.'</a></span>' : '-' ;
+            $nestedData['advertiser_name'] = $resultV->advertiser_name;
             $nestedData['advertiser_name_hidden'] = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-' ;
             $export['advertiser_name']  = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-';
             $nestedData['adv_name_search'] = $resultV->advertiser_name;

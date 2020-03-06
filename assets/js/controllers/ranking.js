@@ -27,9 +27,11 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     /* Ranking Grid Start */
 
     // var formdata = {'sd': data['sd'], 'ed': data['ed'], 'startDate': $scope.ranking.selectDate, 'val': data['selectDateDropDown'], 'c': $scope.ranking.selectClassfication, 'type': data['type'], 'cat': data['cat_id'], 'flag': active_flag, spanish: $scope.ranking.selectLang, responseType: $scope.ranking.returnText,'unchecked_category': data['unchecked_cat'], 'length_unchecked': unchecked_len, 'creative_duration': duration, 'new_filter_opt': new_filter_opt, 'lifetime_flag': lifetime_flag, 'all_ytd_flag': all_ytd_flag, 'refine_filter_opt': refine_filter_opt, 'refine_filter_opt_text': refine_filter_opt_text, 'refine_apply_filter': refine_apply_filter, 'programs_ids': airings_data['all_programs_ids'],'applied_ids' : $scope.ranking.applied_list_ids , 'primary_tab' : $scope.ranking.applied_list_type}; 
-    var formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""}
 
-    $scope.uigridDataBrand = function(formData) {
+    $scope.uigridDataBrand = function() {
+        var formData = $scope.formdata;
+        console.log("in brand");
+        debugger;
         var vm = this;
         var config = {
             headers : {
@@ -195,7 +197,102 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         });
 
     }
-    $scope.uigridDataBrand(formdata);
+
+    $scope.uigridDataAdv = function() {
+        var correctTotalPaginationTemplate =
+    "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-triangle\"><div class=\"first-bar\"></div></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-triangle prev-triangle\"></div></button> <input type=\"number\" ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\">/</abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"last-triangle next-triangle\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-triangle\"><div class=\"last-bar\"></div></div></button></div></div><div class=\"ui-grid-pager-count-container\"><div class=\"ui-grid-pager-count\"><span ng-show=\"grid.options.totalItems > 0\">{{(((grid.options.paginationCurrentPage-1)*grid.options.paginationPageSize)+1)}} <abbr ui-grid-one-bind-title=\"paginationThrough\">-</abbr> {{(grid.options.paginationCurrentPage*grid.options.paginationPageSize>grid.options.totalItems?grid.options.totalItems:grid.options.paginationCurrentPage*grid.options.paginationPageSize)}} {{paginationOf}} {{grid.options.totalItems}} {{totalItemsLabel}}</span></div></div></div>";
+        var formData = {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":0,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":"", "_search": false, "nd":'1583484966962', "row":20, "page":1, "sidx": "spend_index", "sort":"desc", "totalrows":2000};
+
+        var vm = this;
+        var config = {
+            headers : {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }
+        // var c_dir = $scope.ranking.creative_type == 'short' ? '6':'1';
+        var c_dir = '6';
+
+        vm.gridOptions = {
+            expandableRowTemplate: '/drmetrix/templates/expandableRowTemplate.html',
+            expandableRowHeight: 385,
+            enableGridMenu: true,
+            enableSelectAll: true,
+            enableSorting: true,
+            showTreeExpandNoChildren: true,
+            enableExpandableRowHeader: true,
+            //Pagination
+            paginationPageSizes: [20],
+            paginationPageSize: 10,
+            paginationTemplate: correctTotalPaginationTemplate,
+            onRegisterApi: function (gridApi) {
+                gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+                    formData.network_code = '';
+                    formData.programs_ids = '';
+                    formData.is_adv_page  = 0;
+                    formData.adv_id = row.entity.id;
+                    formData.tab = 'adv';
+                    if (row.isExpanded) {
+                        row.entity.subGridOptions = {
+                            columnDefs: [
+                            // { name: 'id', displayName:'id', width:'50' },
+                            { name: 'brand_name', displayName:'Brand Name', cellTemplate:'<i class="fa fa-circle" id="{{data.rows.is_brand_active == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i><span><a href="#" title="{{row.entity.advertiser_name}}" ng-click="view_adv_tab({{row.entity.advertiser_name}},{{row.entity.id}},'+c_dir+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+',\'brand\',{{row.entity.id}},{{COL_FIELD}},\'ranking\',{{row.entity.need_help}})" >{{COL_FIELD}}</a></span>' },
+                            { name: 'creatives_count', displayName: 'Creatives', cellTemplate:'<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>' },
+                            { name: 'category_name', displayName:'Category', cellTemplate:'<a href="#"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover" ng-click="fetchList({{row.entity.id}},'+formData.type+',{{COL_FIELD}});"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"> - </span></a>' },
+                            { name: 'airings', displayName:'Airings', cellTemplate:'<a href="#"><span ng-if="row.entity.airings!=\'\'" class="ranking_airings" ng-click="viewAiringGraph({{row.entity.brand_name}},{{row.entity.id}},\'dow\','+formData.network_code+',\'all_day\',\'all_hour\',{{row.entity.networks}},{{row.entity.airings}},'+formData.c+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+','+formData.responseType+','+formData.spanish+',\'brand\',\'\',\'\',\'\');">{{COL_FIELD}} </span><span ng-if="row.entity.airings==\'\'"> - </span></a>'  },
+                            { name: 'spend_index', displayName: 'Spend',  cellTemplate: '<a href="#"><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="viewAiringSpendGraph({{row.entity.brand_name}},{{row.entity.id}},\'dow\','+formData.network_code+',\'all_day\',\'all_hour\',{{row.entity.networks}},{{row.entity.spend_index}},'+formData.c+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+','+formData.responseType+','+formData.spanish+',\'brand\',\'\',\'\',\'\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>' },
+                            { name: 'national', displayName: 'National %'},
+                            { name: 'local', displayName:'DPI %'},
+                            { name: 'asd', displayName:'ADS'},
+                            { name: 'total_weeks', displayName: 'Weeks' },
+                            { name: 'tracking', displayName: "Tracking", cellTemplate: '<a href="#"><i custom-attr="brand_{{row.entity.id}}" class="fa fa-eye-slash grey-eye" title="Track"></i></a>' }
+                        ],enableGridMenu: true,
+                          enableSelectAll: true,
+                          paginationPageSize: 10,
+                          paginationTemplate: correctTotalPaginationTemplate,
+                        };
+
+                        apiService.post('/adv_brand', formData, config)
+                        .then(function (data) {
+                            console.log(data.data);
+                            row.entity.subGridOptions.data = data.data.rows;
+                        }, function (response) {
+                            // this function handlers error
+                        });
+                    }
+                });
+            },
+        };
+
+        vm.gridOptions.columnDefs = [
+            // { name: 'id', displayName: 'AVD_ID' },
+            { name: 'rank', displayName: 'Rank' },
+
+            { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_adv == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="#" title="{{row.entity.advertiser_name}}" ng-click="view_adv_tab({{row.entity.advertiser_name}},{{row.entity.id}},'+c_dir+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+',\'adv\',{{row.entity.id}},{{COL_FIELD}},\'ranking\',{{row.entity.need_help}})" >{{COL_FIELD}}</a></span>', pinnedLeft:true },
+
+            { name: 'hidden_brand', displayName: 'Brand', cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>' },
+
+            { name: 'airings', displayName: 'Airings', pinnedLeft:true },
+            { name: 'spend_index', displayName: 'Spend' },
+            { name: 'national', displayName: 'National %', pinnedLeft:true },
+            { name: 'local', displayName: 'Local' },
+            { name: 'tracking', displayName: "Tracking", cellTemplate: '<a href="#"><i custom-attr="brand_{{row.entity.id}}" class="fa fa-eye-slash grey-eye" title="Track"></i></a>', width: '110' }
+        ];
+        apiService.post('/filter_results', formData, config)
+        .then(function (data) {
+            $scope.PostDataResponse = formData;
+            vm.gridOptions.data = data.data.rows;
+        }, function (response) {
+            // this function handlers error
+        });
+    }
+
+    $scope.initializeRankingPage = function() {
+    $scope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""}
+
+        console.log($scope.type);
+        ($scope.type != 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
+    }
+    // $scope.uigridDataBrand(formdata);
 });
 
 angular.module('drmApp').controller('FilterCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {

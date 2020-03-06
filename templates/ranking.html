@@ -183,7 +183,7 @@
         </li>
     </ul>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" ng-init="initializeRankingPage();">
     <div class="row">
         <category-part></category-part> 
         <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
@@ -241,5 +241,6 @@
             </div>
         </main>
     </div>
+    <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination class="grid"></div>
 </div>
    
