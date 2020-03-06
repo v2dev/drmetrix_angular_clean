@@ -133,10 +133,10 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $rootScope.theme_val = item.theme_val;
         var theme;	
         if($rootScope.theme_val == 1) {	
-            item.src = './assets/images/menuiconwhite/menuiconset-14.svg';
+            item.src = './assets/images/menuiconwhite/menuiconset-11.svg';
             themeName = 'black';	
         } else {
-            item.src = './assets/images/menuiconblue/menuiconset-08.svg';
+            item.src = './assets/images/menuiconblue/menuiconset-11.svg';
             themeName = 'original';	
         }	
        
@@ -238,9 +238,9 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             let obj = $rootScope.right_menu.find(obj => obj.aid == 'app_theme');
             obj.theme_val = data.theme;
             if($rootScope.theme_val == 1) {	
-                obj.src = './assets/images/menuiconwhite/menuiconset-14.svg'; // dark theme on
+                obj.src = './assets/images/menuiconwhite/menuiconset-11.svg'; // dark theme on
             } else {
-                obj.src = './assets/images/menuiconblue/menuiconset-08.svg'; // dark theme off
+                obj.src = './assets/images/menuiconblue/menuiconset-11.svg'; // dark theme off
             }	
        
             // angular.element(document.querySelector('#app_theme'));
