@@ -73,10 +73,11 @@
 							<i data-feather="mail"></i><label> What's New</label>
 							<div class="notification-new">5</div>
 					</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-							<a class="dropdown-item" href="{{item.href}}" class="whatsnew-ul" ng-class="{'newbuild-link' : newBuild == 1}" ng-repeat="item in whatsNew_menu">
+					<div class="dropdown-menu common-dropdown" aria-labelledby="dropdownMenuLink" >
+							<a href="{{item.href}}" target="_blank" class="dropdown-item" ng-class="{'newbuild-link' : item.newBuild == 1, 'whatsnew-visited': clicked}"  ng-click="clicked = !clicked"ng-repeat="item in whatsNew_menu">
 								{{item.title}}
-									<i class="newBuild == 1 ? 'fa fa-chain' : 'fa fa-play-circle-o fa-2x'"></i>
+								<img src="assets/images/blue-link-icon.svg" alt="" ng-if="item.newBuild == 1"> 
+								<i class="fa fa-play-circle-o fa-2x'" ng-if="item.newBuild != 1"></i>
 							</a>
 					</div>
 				</li>
