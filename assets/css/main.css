@@ -848,12 +848,10 @@ header.sticky-top {
   text-align: center;
   border-right: 1px solid #bcbdc1;
   width: 112px;
-  display: flex;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
   align-content: center;
-  padding: 0 4px;
   height: 64px;
 }
 
@@ -863,15 +861,14 @@ header.sticky-top {
   font-weight: 700;
   padding: 0;
   height: auto;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 17px;
   cursor: pointer;
 }
 
-.nav-menu > li > a svg {
-  height: 24px;
-  display: inline-block;
-  margin: 0;
+.nav-menu > li > a img {
+  display: block;
+  margin: 0 auto;
   padding: 0;
 }
 
@@ -883,28 +880,16 @@ header.sticky-top {
 
 .nav-menu > li:first-child {
   width: 100%;
-  max-width: 155px;
+  max-width: 140px;
   background: #202733;
   border-right: 1px solid #5c5c5f;
   align-content: space-between;
-}
-
-@media (max-height: 768px) {
-  .nav-menu li:first-child {
-    max-width: 150px;
-  }
 }
 
 @media (max-width: 680px) {
   .nav-menu li:first-child {
     max-width: 100%;
   }
-}
-
-.nav-menu li:first-child a {
-  background: #202733;
-  padding: 2px 8px;
-  height: 64px;  
 }
 
 .nav-menu li:first-child img {

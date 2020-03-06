@@ -64,13 +64,13 @@
 					</a>
 				</li>
 				<li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
-					<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}"   id="{{item.aid}}" >
+					<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}" id="{{item.aid}}" >
 						<img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
 					</a>
 				</li>
 					<li class="dropdown show whats-new d-none d-xl-flex">
 					<a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
-							<i data-feather="mail"></i><label> What's New</label>
+						<img src="assets/images/menuiconblue/menuiconset-6.svg"><label> What's New</label>
 							<div class="notification-new">5</div>
 					</a>
 					<div class="dropdown-menu common-dropdown" aria-labelledby="dropdownMenuLink" >
