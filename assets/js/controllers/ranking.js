@@ -11,17 +11,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
     $scope.initialisation() ;
 
-  
-    $scope.call_filter_list = function(menu) {
-        var modalInstance = $uibModal.open({
-            templateUrl: './templates/ranking-modals.html',
-            controller: "FilterCtrl",
-            backdrop:'static',
-            size :'lg',
-            keyboard:false,
-        });
-    }
-    
     feather.replace();
 
     /* Ranking Grid Start */
@@ -197,10 +186,33 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
     $scope.uigridDataBrand(formdata);
 
+    $scope.openNewTypeModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/newTypeDialog.html",
+            controller: "newCtrl",
+            size: 'md modal-dialog-centered',
+          });
+    }
+
+    $scope.openRefineModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/refineDialog.html",
+            controller: "refineCtrl",
+            size: 'md modal-dialog-centered',
+          });
+    }
     
 });
 
-angular.module('drmApp').controller('FilterCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
-    console.log('filter called');
+angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+});
+
+angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
 });
   
