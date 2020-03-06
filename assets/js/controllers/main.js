@@ -12,7 +12,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'ranking',
         aid: 'ranking',
         title: 'Home',
-        src: './assets/images/menuiconblue/menuiconset-01.svg',
+        src: './assets/images/menuiconblue/menuiconset-1.svg',
     }, {
         liid: 'networks',
         nghide: 'superadmin || user_company == 0',
@@ -20,7 +20,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'my_networks',
         aid: 'my_networks',
         title: 'Networks',
-        src: './assets/images/menuiconblue/menuiconset-12.svg',
+        src: './assets/images/menuiconblue/menuiconset-2.svg',
     }, {
         liid: 'my_reports',
         nghide: 'superadmin',
@@ -28,7 +28,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'my_reports',
         aid: '',
         title: 'Reports',
-        src: './assets/images/menuiconblue/menuiconset-03.svg',
+        src: './assets/images/menuiconblue/menuiconset-3.svg',
     }, {
         liid: 'directories',
         nghide: 'superadmin',
@@ -36,7 +36,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'directories',
         aid: '',
         title: 'Directories',
-        src: './assets/images/menuiconblue/menuiconset-13.svg',
+        src: './assets/images/menuiconblue/menuiconset-4.svg',
     }, {
         liid: '',
         nghide: 'superadmin',
@@ -44,7 +44,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'tracking',
         aid: 'tracking',
         title: 'Configure Emails',
-        src: './assets/images/menuiconblue/menuiconset-06.svg',
+        src: './assets/images/menuiconblue/menuiconset-5.svg',
     },];
 
     $rootScope.whatsNew_menu = [{
@@ -82,47 +82,47 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         href: 'userAccount',
         aid: 'user_account',
         title: 'User',
-        src: './assets/images/menuiconblue/menuiconset-11.svg',
+        src: './assets/images/menuiconblue/menuiconset-7.svg',
         target: '',
     }, {
         alt: 'Network List',
         aid: 'network_list',
         title: 'Network List',
-        src: './assets/images/menuiconblue/menuiconset-04.svg',
+        src: './assets/images/menuiconblue/menuiconset-8.svg',
         target: '_blank',
     }, {
         alt: 'AdSphere Blog',
         href: $rootScope.adsphere_blog_url,
         aid: 'blog_status',
         title: 'Blog',
-        src: './assets/images/menuiconblue/menuiconset-02.svg',
+        src: './assets/images/menuiconblue/menuiconset-9.svg',
         target: '_blank',
     }, {
         alt: 'User Guide',
         href: 'https://drmetrix.com/public/AdSphere%20User%20Guide.pdf',
         aid: 'user_guide',
         title: 'User Guide',
-        src: './assets/images/menuiconblue/menuiconset-05.svg',
+        src: './assets/images/menuiconblue/menuiconset-10.svg',
         target: '_blank',
     }, {
         alt: 'Dark Theme',
         aid: 'app_theme',
-        title: 'Dark mode',
-        src: './assets/images/menuiconblue/menuiconset-08.svg',
+        title: 'Dark Mode',
+        src: './assets/images/menuiconblue/menuiconset-11.svg',
         theme_val: '0' // code remaining - needs to set once set, now set to dark mode off
     }, {
         alt: 'System Status',
         href: $rootScope.SYSTEM_STATUS_URL,
         aid: 'sys_status',
         title: 'System Status',
-        src: './assets/images/menuiconblue/menuiconset-15.svg',
+        src: './assets/images/menuiconblue/menuiconset-12.svg',
         target: '_blank',
     },
     {
         alt: 'Log Out',
         aid: 'log_out',
         title: 'Log Out',
-        src: './assets/images/menuiconblue/menuiconset-09.svg',
+        src: './assets/images/menuiconblue/menuiconset-13.svg',
     }]
 
     $scope.click = function() {
@@ -133,10 +133,10 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $rootScope.theme_val = item.theme_val;
         var theme;	
         if($rootScope.theme_val == 1) {	
-            item.src = './assets/images/menuiconwhite/menuiconset-14.svg';
+            item.src = './assets/images/menuiconwhite/menuiconset-11.svg';
             themeName = 'black';	
         } else {
-            item.src = './assets/images/menuiconblue/menuiconset-08.svg';
+            item.src = './assets/images/menuiconblue/menuiconset-11.svg';
             themeName = 'original';	
         }	
        
@@ -238,9 +238,9 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             let obj = $rootScope.right_menu.find(obj => obj.aid == 'app_theme');
             obj.theme_val = data.theme;
             if($rootScope.theme_val == 1) {	
-                obj.src = './assets/images/menuiconwhite/menuiconset-14.svg'; // dark theme on
+                obj.src = './assets/images/menuiconwhite/menuiconset-11.svg'; // dark theme on
             } else {
-                obj.src = './assets/images/menuiconblue/menuiconset-08.svg'; // dark theme off
+                obj.src = './assets/images/menuiconblue/menuiconset-11.svg'; // dark theme off
             }	
        
             // angular.element(document.querySelector('#app_theme'));

@@ -862,10 +862,7 @@ div.img-display {
 .track-menu ul li a:hover {
     background-color: transparent;
 }
-.track-menu ul li.active_alert a {
-    color: #00beff;
-    border-bottom: 1px solid #00beff;
-}
+
 .track-menu ul.icon-left > li > a {
     font-size: 0.8em;
     padding: 0.3em 1.2em;
@@ -3289,12 +3286,7 @@ input[type='text'].searchRefine {
     color: #fff;
 }
 
-.track-menu ul li.active_alert a {
-    background: #fff;
-    border: 0;
-    border-radius: 15px;
-    padding: 5px 10px;
-}
+
 
 .track-menu ul li a label:before {
     content: '';
@@ -3311,28 +3303,13 @@ input[type='text'].searchRefine {
     float: left;
     font-size: 12px;
 }
-.track-menu ul li.active_alert a label:before {
-    font-size:7px;
-    content: "\f111";
-    font-family: 'FontAwesome';
-    color: #202733;
-    background-color: #fff;
-    border: 1px solid #202733;
-    padding: 1em;
-    text-align: center;
-    text-indent: -3px;
-    line-height: 1px;
-    margin-right: 0.5em;
-}
+
 .track-menu ul li a label {
     margin-bottom: 0;
     display: flex;
     align-items: center;
     color: #fff;
     cursor: pointer;
-}
-.track-menu ul li.active_alert a label {
-    color: #202733;
 }
 .left-report-nav ul li a label{color: #000;}
 .left-report-nav ul li a label:before {
@@ -3407,7 +3384,6 @@ input[type='text'].searchRefine {
 .bulletspnt ul{border: 0; background: none;}
 .bulletspnt ul li:first-child{background: none; padding: 0;}
 .bulletspnt ul li a label:before{  border: 2px solid #202733; width: 25px;  height: 25px;}
-.bulletspnt ul li.active_alert a label:before{font-size:11px; border: 2px solid #202733; text-indent: -4px; }
 .bulletspnt ul li a.button {background-color: #f2f1f1; margin: 0 3px; border-radius: 20px;}
 .bulletspnt ul li:last-child {  margin-top: 0px; padding: 0;}
 /* Radio custom */
