@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h5 class="modal-title">New Brand(s) / Creative(s)</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="checkbox">
+        <input class="checkbox-custom cat_all" type="checkbox" id="New">
+        <label for="New" class="checkbox-custom-label full-filled">
+            <span class="v-align-middle">New</span></label>
+    </div>
+    <div class="d-flex mt-3 mb-4">
+        <label class="radio mr-2">
+            <input type="radio" name="r" value="10">
+            <span>Brands</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="r" value="12">
+            <span>Creatives</span>
+        </label>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="btn-grp d-flex justify-content-end border-top pt-3">
+        <button id="cancelNet" class="btn btn-black" data-dismiss="modal" aria-label="Close">
+            <i class="fa fa-times" title="cancel" ng-click="closeModal();"></i>Cancel</button>
+        <button id="applyNet" class="btn btn-blue">
+            <i class="fa fa-check" title="apply" ng-click="closeModal();"></i>Apply</button>
+    </div>
+</div>
