@@ -129,7 +129,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     var formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""}
 
     $scope.uigridDataBrand = function(formData) {
-        debugger;
         var vm = this;
         var config = {
             headers : {
@@ -208,20 +207,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             },
             onRegisterApi: function (gridApi) {
                 gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                    // var formData = {
-                    //     'c': airings_data['c'],
-                    //     'val': airings_data['c'],
-                    //     'sd': airings_data['sd'],
-                    //     'ed': airings_data['ed'],
-                    //     'responseType': '(response_url=1  or  response_sms=1  or  response_tfn=1  or  response_mar=1)',
-                    //     'spanish': '0,1',
-                    //     'network_code': '',
-                    //     'creative_duration': airings_data['creative_durations'],
-                    //     'new_filter_opt': 'none',
-                    //     'is_adv_page': 0,
-                    //     'network_id': '',
-                    //     'programs_ids':''
-                    // }
                     formData.network_code = '';
                     formData.programs_ids = '';
                     formData.is_adv_page  = 0;
@@ -308,8 +293,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             // this function handlers error
         });
 
-        callProgressBar = 0;
-        $("#r_loader").hide();
     }
     $scope.uigridDataBrand(formdata);
 });
