@@ -1,6 +1,6 @@
 var app = angular.module('drmApp');
 
-app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService) {
+app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService, $timeout) {
   var pdf = sessionStorage.pdf;
   sessionStorage.lastLoginTime = '';
   $rootScope.login_user_id = '';

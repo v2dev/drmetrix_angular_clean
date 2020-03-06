@@ -130,70 +130,24 @@
 						<img ng-src="{{item.src}}" alt="{{item.alt}}">{{item.title}}
 					</a>
 				</li>
-				<li class="right-menu d-lg-flex d-xl-none" ng-click="click();">
+				<li class="right-menu d-lg-flex d-xl-none" ng-click="showme=true">
 					<a class="open-menu">
 						<i data-feather="align-justify"></i>
 					</a>  
 				</li>  
-					<!--
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="user"></i><label>User</label>
-							</a>
-					</li>        
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="share-2"></i> <label>Network List</label>
-							</a>
-					</li>    
-					
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<img src="./assets/images/menuiconset-02.svg" alt=""> <label>Blog</label>
-							</a>
-					</li>      
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="file-text"></i><label> User Guide</label>
-							</a>
-					</li>
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<img src="./assets/images/menuiconset-08.svg" alt=""> <label>Dark Mode</label>
-							</a>
-					</li>
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<img src="./assets/images/menuiconset-15.svg" alt=""><label> System Status</label>
-							</a>
-					</li>            
-					<li class="d-none d-xl-flex">
-							<a href="#">
-									<i data-feather="log-out"></i> <label>Logout</label>
-							</a>            
-					</li>
-					<li class="right-menu d-lg-flex d-xl-none">
-							<a class=" open-menu">
-									<i data-feather="align-justify"></i>
-							</a>  
-					</li>             -->
 			</ul>
 			<!-- mobile menu -->
-			<div class="right-nav d-md-block d-lg-none" ng-show="showme">
+			<div class="right-nav d-md-block" ng-show="showme">
 				<a class="close-menu" ng-click="showme=false">
 					<i data-feather="x"></i>
 				</a>
-				
-				<a ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="mob-menu-active" class="d-md-flex d-lg-none" alt="{{item.title}}" ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" >
+				<a ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="mob-menu-active" class="d-md-flex" alt="{{item.title}}" ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" >
 					<i data-feather="home"></i>{{item.title}}
 				</a>
-				<a href="#" class="d-md-flex d-lg-none">
-						<i data-feather="mail"></i> What's New <div class="notification-new">5</div>
+				<a href="" class="d-md-flex">
+					<i data-feather="mail"></i> What's New <div class="notification-new">5</div>
 				</a>
-				<a href="#" class="d-md-flex d-lg-none">
-						<img src="./assets/images/menuiconblue/menuiconset-08.svg" alt=""> Dark Theme
-					</a>
-				<a ng-repeat="item in right_menu" class="d-md-flex d-lg-none" title="{{item.title}}" target="{{item.target}}" id="{{item.aid}}" ng-click="menuItemClick(item);" >
+				<a ng-repeat="item in right_menu" class="d-md-flex" title="{{item.title}}" target="{{item.target}}" id="{{item.aid}}" ng-click="menuItemClick(item);" >
 						<i data-feather="user"></i>{{item.title}}
 				</a>
 			</div>            
