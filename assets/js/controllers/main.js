@@ -343,7 +343,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
 
     $scope.init = function () {
-        $rootScope.cateorySideBar = 0; // hide category section on load
+        $rootScope.catgeorySideBar = 0; // hide category section on load
         delete localStorage.notificationNewCount;
         delete localStorage.notificationNewLiClicked;
         delete localStorage.notificationBuildLink;

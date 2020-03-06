@@ -1595,33 +1595,7 @@ input[type="checkbox"].checkbox-custom {
 .ntwk-popup div i.fa-caret-down:before {
     color: #666665;
 }
-/* .half-filled:before {
-    background-color: #fff !important;
-    color: #050607 !important;
-    font-family: 'fontAwesome' !important;
-    content: '\f00c' !important;
-}
-.full-filled:before {
-    content: '\f00c';
-    font-family: 'FontAwesome';
-    color: #fff;
-    background-color: #1a191a;
-    border: 1px solid #050607;
-}
-.empty:before {
-    content: '';
-    background-color: #fff;
-    border: 1px solid #9ea6b0;
-    display: inline-block;
-    vertical-align: middle;
-    width: 1.6em;
-    height: 1.6em;
-    padding: 0;
-    border-radius: 4px;
-    margin-right: 1.2em;
-    text-align: center;
-    float: left;
-} */
+
 .creative-grid {
     background-color: #f6f6f7;
     border-bottom: 1px solid #dddddd;
