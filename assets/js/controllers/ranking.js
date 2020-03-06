@@ -196,9 +196,11 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     }
     $scope.uigridDataBrand(formdata);
+
+    
 });
 
 angular.module('drmApp').controller('FilterCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
     console.log('filter called');
-  });
+});
   
