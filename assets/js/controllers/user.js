@@ -93,8 +93,6 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     // Delete Users
     $scope.deleteUser = function (user_id) {
         if(confirm("Are you sure want to delete the record?")) {
-            // debugger;
-            // console.log("user_id "+user_id);
             $("#options_div" + user_id ).css("visibility", "hidden");
             apiService.post('/delete_user_from_company', { 'user_id': user_id, 'company_id': sessionStorage.company_id })
             .then(function (data) {
