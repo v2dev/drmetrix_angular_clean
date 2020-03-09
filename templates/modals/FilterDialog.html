@@ -1,0 +1,29 @@
+
+<div class="modal-header">
+    <h5 class="modal-title">Filters</h5>
+    <button type="button" class="close" ng-click="closeModal();">
+       <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="report-tab-section">
+        <a href="javascript:void(0);" ng-click="show_user_filters();" class="refresh-report">Refresh <i class="fa fa-refresh fa-lg"></i></a>
+        <div class="my-report-select">
+            <label>User</label>
+            <select class="filter_users network_users" id="network_filter_users" ng-model="selected_user" ng-Change="refreshFilterGrid();">
+                <option id="" value="">All</option>
+                <option ng-repeat="user in users" id="user.user_id" value="user.user_id">{{user.name}}</option>
+            </select>
+        </div>
+        <ul class="left-menu">
+            <li ng-repeat="option in options" ng-class="{'active-alert' :  sharedFilter ==  option}">
+                <a href="" ng-click="showSharedFilters(option)">
+                    <label>{{option}} Filters</label>
+                </a>
+            </li>
+        </ul>
+        </div>
+        <span id="duplicate-filter-error" class="duplicate-filter-error" ng-show="filter_error">Filter name already exists.</span>
+        <div class="grid-content" id='filter_list_network'></div>
+    </div>
+</div>

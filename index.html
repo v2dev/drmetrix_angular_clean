@@ -64,19 +64,20 @@
 					</a>
 				</li>
 				<li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
-					<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}"   id="{{item.aid}}" >
+					<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}" id="{{item.aid}}" >
 						<img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
 					</a>
 				</li>
 					<li class="dropdown show whats-new d-none d-xl-flex">
 					<a class="dropdown-toggle"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
-							<i data-feather="mail"></i><label> What's New</label>
+						<img src="assets/images/menuiconblue/menuiconset-6.svg"><label> What's New</label>
 							<div class="notification-new">5</div>
 					</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-							<a class="dropdown-item" href="{{item.href}}" class="whatsnew-ul" ng-class="{'newbuild-link' : newBuild == 1}" ng-repeat="item in whatsNew_menu">
+					<div class="dropdown-menu common-dropdown" aria-labelledby="dropdownMenuLink" >
+							<a href="{{item.href}}" target="_blank" class="dropdown-item" ng-class="{'newbuild-link' : item.newBuild == 1, 'whatsnew-visited': clicked}"  ng-click="clicked = !clicked"ng-repeat="item in whatsNew_menu">
 								{{item.title}}
-									<i class="newBuild == 1 ? 'fa fa-chain' : 'fa fa-play-circle-o fa-2x'"></i>
+								<img src="assets/images/blue-link-icon.svg" alt="" ng-if="item.newBuild == 1"> 
+								<i class="fa fa-play-circle-o fa-2x'" ng-if="item.newBuild != 1"></i>
 							</a>
 					</div>
 				</li>
@@ -157,12 +158,12 @@
     <div class="black-top-menu" ng-init="showTab('brands')" ng-show="headerDisplay == 1">
         <ul class="left-menu">
             <li>Welcome {{complete_name}},</li>
-            <li ng-class="{active_alert : type == 'brands'}">
+            <li ng-class="{'active-alert' : type == 'brands'}">
                 <a ng-click="showTab('brands')">
                     <label for="">Brands</label>
                 </a>
             </li>
-            <li ng-class="{active_alert : type == 'advertisers'}">
+            <li ng-class="{'active-alert' : type == 'advertisers'}">
                 <a ng-click="showTab('advertisers')">
                     <label for="">Advertisers</label>
                 </a>
@@ -172,12 +173,12 @@
             <li class="filter-listing">
                 <a href="" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
                 <div class="dropdown-menu"  aria-labelledby="chooseList">
-						<a href="" ng-click="call_brand_tab_list()" class="dropdown-item s">Brands List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
-						<a href="" ng-click="call_brand_tab_list()" class="dropdown-item s">Advertisers List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+						<a href="" ng-click="call_brand_tab_list('brand')" class="dropdown-item s">Brands List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+						<a href="" ng-click="call_brand_tab_list('advertiser')" class="dropdown-item s">Advertisers List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
                 </div> 
                 </li>                
             <li>
-                <a href="" class="filter-listing"  ng-click="call_filter_list('filter_list_rank');">
+                <a href="" class="filter-listing"  ng-click="call_filter_list();">
                     Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
                 </a>
             </li>

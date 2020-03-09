@@ -194,7 +194,7 @@ angular.module('drmApp').controller('MaxLimitController', function($scope, $root
         });
     }
 
-    $scope.closeModal = function(defaultOptions, options) {
+    $scope.closeModal = function() {
             $uibModalInstance.dismiss();
     }
 

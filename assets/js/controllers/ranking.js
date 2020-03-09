@@ -11,17 +11,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
     $scope.initialisation() ;
 
-  
-    $scope.call_filter_list = function(menu) {
-        var modalInstance = $uibModal.open({
-            templateUrl: './templates/ranking-modals.html',
-            controller: "FilterCtrl",
-            backdrop:'static',
-            size :'lg',
-            keyboard:false,
-        });
-    }
-    
     feather.replace();
 
     /* Ranking Grid Start */
@@ -31,7 +20,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     $scope.uigridDataBrand = function() {
         var formData = $scope.formdata;
         console.log("in brand");
-        debugger;
+        
         var vm = this;
         var config = {
             headers : {
@@ -317,14 +306,39 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.initializeRankingPage = function() {
-    $scope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""}
-
-        ($scope.type != 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
+    $scope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""};
+console.log($scope.type);
+        ($scope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
     }
     // $scope.uigridDataBrand(formdata);
+
+    $scope.openNewTypeModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/newTypeDialog.html",
+            controller: "newCtrl",
+            size: 'md modal-dialog-centered',
+          });
+    }
+
+    $scope.openRefineModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/refineDialog.html",
+            controller: "refineCtrl",
+            size: 'md modal-dialog-centered',
+          });
+    }
+    
 });
 
-angular.module('drmApp').controller('FilterCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
-    console.log('filter called');
-  });
+angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+});
+
+angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+});
   

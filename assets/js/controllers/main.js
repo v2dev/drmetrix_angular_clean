@@ -1,8 +1,9 @@
-angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location) {
+angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location, $uibModal) {
     $scope.date = new Date(); // Footer copyright display year
     $rootScope.eulaDisagreeFlag = 0; // this flag will show poup on login page if we disagree eula agreement and redreict to login message with popup message
     $scope.whats_new_toggle = false;
     $rootScope.headerDisplay = 0;
+    $rootScope.options  = ['My','Shared','All'];
     $rootScope.searchTextValidation = '3 or more characters.';
     $rootScope.main_menu = [{
         liid: 'rank',
@@ -11,7 +12,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'ranking',
         aid: 'ranking',
         title: 'Home',
-        src: './assets/images/menuiconblue/menuiconset-01.svg',
+        src: './assets/images/menuiconblue/menuiconset-1.svg',
     }, {
         liid: 'networks',
         nghide: 'superadmin || user_company == 0',
@@ -19,7 +20,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'my_networks',
         aid: 'my_networks',
         title: 'Networks',
-        src: './assets/images/menuiconblue/menuiconset-12.svg',
+        src: './assets/images/menuiconblue/menuiconset-2.svg',
     }, {
         liid: 'my_reports',
         nghide: 'superadmin',
@@ -27,7 +28,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'my_reports',
         aid: '',
         title: 'Reports',
-        src: './assets/images/menuiconblue/menuiconset-03.svg',
+        src: './assets/images/menuiconblue/menuiconset-3.svg',
     }, {
         liid: 'directories',
         nghide: 'superadmin',
@@ -35,7 +36,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'directories',
         aid: '',
         title: 'Directories',
-        src: './assets/images/menuiconblue/menuiconset-13.svg',
+        src: './assets/images/menuiconblue/menuiconset-4.svg',
     }, {
         liid: '',
         nghide: 'superadmin',
@@ -43,7 +44,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         aclass: 'tracking',
         aid: 'tracking',
         title: 'Configure Emails',
-        src: './assets/images/menuiconblue/menuiconset-06.svg',
+        src: './assets/images/menuiconblue/menuiconset-5.svg',
     },];
 
     $rootScope.whatsNew_menu = [{
@@ -81,47 +82,47 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         href: 'userAccount',
         aid: 'user_account',
         title: 'User',
-        src: './assets/images/menuiconblue/menuiconset-11.svg',
+        src: './assets/images/menuiconblue/menuiconset-7.svg',
         target: '',
     }, {
         alt: 'Network List',
         aid: 'network_list',
         title: 'Network List',
-        src: './assets/images/menuiconblue/menuiconset-04.svg',
+        src: './assets/images/menuiconblue/menuiconset-8.svg',
         target: '_blank',
     }, {
         alt: 'AdSphere Blog',
         href: $rootScope.adsphere_blog_url,
         aid: 'blog_status',
         title: 'Blog',
-        src: './assets/images/menuiconblue/menuiconset-02.svg',
+        src: './assets/images/menuiconblue/menuiconset-9.svg',
         target: '_blank',
     }, {
         alt: 'User Guide',
         href: 'https://drmetrix.com/public/AdSphere%20User%20Guide.pdf',
         aid: 'user_guide',
         title: 'User Guide',
-        src: './assets/images/menuiconblue/menuiconset-05.svg',
+        src: './assets/images/menuiconblue/menuiconset-10.svg',
         target: '_blank',
     }, {
         alt: 'Dark Theme',
         aid: 'app_theme',
-        title: 'Dark mode',
-        src: './assets/images/menuiconblue/menuiconset-08.svg',
+        title: 'Dark Mode',
+        src: './assets/images/menuiconblue/menuiconset-11.svg',
         theme_val: '0' // code remaining - needs to set once set, now set to dark mode off
     }, {
         alt: 'System Status',
         href: $rootScope.SYSTEM_STATUS_URL,
         aid: 'sys_status',
         title: 'System Status',
-        src: './assets/images/menuiconblue/menuiconset-15.svg',
+        src: './assets/images/menuiconblue/menuiconset-12.svg',
         target: '_blank',
     },
     {
         alt: 'Log Out',
         aid: 'log_out',
         title: 'Log Out',
-        src: './assets/images/menuiconblue/menuiconset-09.svg',
+        src: './assets/images/menuiconblue/menuiconset-13.svg',
     }]
 
     $scope.click = function() {
@@ -132,10 +133,10 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $rootScope.theme_val = item.theme_val;
         var theme;	
         if($rootScope.theme_val == 1) {	
-            item.src = './assets/images/menuiconwhite/menuiconset-14.svg';
+            item.src = './assets/images/menuiconwhite/menuiconset-11.svg';
             themeName = 'black';	
         } else {
-            item.src = './assets/images/menuiconblue/menuiconset-08.svg';
+            item.src = './assets/images/menuiconblue/menuiconset-11.svg';
             themeName = 'original';	
         }	
        
@@ -237,9 +238,9 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             let obj = $rootScope.right_menu.find(obj => obj.aid == 'app_theme');
             obj.theme_val = data.theme;
             if($rootScope.theme_val == 1) {	
-                obj.src = './assets/images/menuiconwhite/menuiconset-14.svg'; // dark theme on
+                obj.src = './assets/images/menuiconwhite/menuiconset-11.svg'; // dark theme on
             } else {
-                obj.src = './assets/images/menuiconblue/menuiconset-08.svg'; // dark theme off
+                obj.src = './assets/images/menuiconblue/menuiconset-11.svg'; // dark theme off
             }	
        
             // angular.element(document.querySelector('#app_theme'));
@@ -342,7 +343,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
 
     $scope.init = function () {
-        $rootScope.cateorySideBar = 0; // hide category section on load
+        $rootScope.catgeorySideBar = 0; // hide category section on load
         delete localStorage.notificationNewCount;
         delete localStorage.notificationNewLiClicked;
         delete localStorage.notificationBuildLink;
@@ -382,6 +383,105 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $scope.type = tab;
     }
 
+    /** Filters code -- Start */
+    $scope.call_filter_list = function () {
+        $scope.getAllFilters();
+        $scope.getActiveSharedUsers('filters');
+        $scope.openFilterModal();
+    }
+
+    $scope.openFilterModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+          templateUrl: "./templates/modals/FilterDialog.html",
+          controller: "FiltersCtrl",
+          size: 'lg modal-dialog-centered',
+        });
+      };
+
+  
+
+    $scope.getAllFilters = function () {
+        var page = $state.current.name;
+        apiService.post('/get_all_filter_data',{'page': page})
+        .then(function (response) {
+          var data = response.data;
+            if (data.status) {
+                $rootScope.cachedFilterReportsData = data.return_arr;
+            }
+        }
+        , function (response) {
+          // this function handles error
+          }); 
+    }
+
+   
+    
+     /** Filters code -- End */
+    $scope.getActiveSharedUsers = function (page) {
+        apiService.post('/show_active_shared_users', { 'page': page })
+            .then(function (response) {
+                var data = response.data;
+                if (data.status) {
+                    $rootScope.users = data.result;
+                    $rootScope.users_count = data.count;
+                }
+            })
+            ,(function (data, status, headers, config) {
+                console.log("error inside");
+            });
+    }
+
+    /***List code starts */
+
+    $scope.getAllList = function () {
+        var page = $state.current.name;
+        console.log($rootScope.list_tab.length);
+        var list_tab = $rootScope.list_tab.substr(0, ($rootScope.list_tab.length - 1));
+        apiService.post('/get_all_list_data',{  "primary_tab": list_tab })
+        .then(function (response) {
+          var data = response.data;
+            if (data.status) {
+                $rootScope.cachedListsData = data.return_arr;
+            }
+        }
+        , function (response) {
+          // this function handles error
+          }); 
+    }
+
+    
+    $scope.openListModal = function() {
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/ListDialog.html",
+            controller: "ListsCtrl",
+            size: 'lg modal-dialog-centered',
+          });
+    }
+  
+    $scope.call_brand_tab_list = function(list_item) {
+        // $.ajax({
+        //     url: "/drmetrix/assets/js/jquery.dropdown.js?"+Math.random(),
+        //     dataType: "script",
+        //     cache: true,
+        //     success: function() {
+        //     }
+        // });
+        // $.ajax({
+        //     url: '/drmetrix/assets/css/jquery.dropdown.css?'+Math.random(),
+        //     dataType: 'text',
+        //     success: function(data) {
+        //         $('<style type="text/css">\n' + data + '</style>').appendTo("head");
+        //     }
+        // });
+        var tab = $scope.type;
+        $rootScope.my_list = list_item[0].toUpperCase() + list_item.slice(1);
+        $rootScope.list_tab = $scope.type;
+        $scope.getAllList();
+        $scope.choose_list = true;
+        $scope.getActiveSharedUsers('list');
+        $scope.openListModal();
+    }
+    /***List code Ends */
 
     $scope.$watch('globalSearchInputText', function(nVal, oVal) {
         if (nVal !== oVal) {
@@ -389,4 +489,48 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         }
     });
 
+});
+
+angular.module('drmApp').controller('FiltersCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.sharedFilter = 'My';
+    $scope.selected_user = '';
+    
+    $scope.show_user_filters = function () {
+        //ui grid code
+    }
+
+    $scope.show_user_filters();
+    
+    $scope.showSharedFilters = function(item) {
+        $scope.sharedFilter = item;
+            //with ui grid code, displayes grid data according to rules set
+    }
+
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+  
+});
+
+
+angular.module('drmApp').controller('ListsCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.sharedList = 'My';
+    $scope.selected_user = '';
+   
+    
+    $scope.show_user_list = function () {
+        //ui grid code
+    }
+
+    $scope.show_user_list();
+    
+    $scope.showSharedLists = function(item) {
+        $scope.sharedList = item;
+            //with ui grid code, displayes grid data according to rules set
+    }
+
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+      }
+  
 });
