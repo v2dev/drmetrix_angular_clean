@@ -1,0 +1,69 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="networkFilter">Networks</h5>
+    <button type="button" class="close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="filter-popup">
+        <ul class="top-filter-bar">
+            <li>
+                <h5>Network</h5>
+                <div class="checkbox">{{selectedNetwork}}
+                    <input class="radio-custom network_radio" type="radio" id="networks"  name="networkList" ng-model="selectedNetwork" value="All" >
+                        <span class="v-align-middle">{{network_name}}</span></label>
+                </div>
+            </li>
+            <li>
+                <button id="nl_active_network" class="btn networkSelectBtn" ng-class="!showAllNetworks ? 'btn-disabled' : 'btn-blue'" ng-disabled="!showAllNetworks ? 'disabled' : '' " type="button" ng-click="getNetworksWithAllFilters(); showAllNetworks = false">Filtered Results</button>
+                <button id="nl_all_network" class="btn networkSelectBtn" ng-class="showAllNetworks ? 'btn-disabled' : 'btn-blue'" type="button" ng-click="getAllActiveInactiveNetworks();  showAllNetworks = true">Show All Networks</button>
+                <button id="network_excel" class="btn networkSelectBtn excel-download" type="button" ng-click="networksExcel();" ng-class="showAllNetworks || (!showAllNetworks && selectedNetwork != 'All') ? 'btn-disabled' : 'btn-blue'" ng-disabled="(!showAllNetworks && selectedNetwork != 'All') ? 'disabled' : '' "><img src="/drmetrix/assets/img/download.svg" alt="Loading icon" > Excel</button>
+                <div id="excel_loader_networks" style="display:none" class="hide m-2"><img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"></div>
+               
+                <div class="search-input">
+                    <span class="search-icon">
+                        <i data-feather="search"></i>
+                    </span>
+                    <input type="search" placeholder="Search a Network" ng-model="searchNet">
+                    <i class="fa fa-times-circle"  ng-hide="searchNet.length == 0" ></i>
+                </div>
+            </li>
+        </ul>
+        <div class="filter-in-letters border-top border-bottom pt-2 pb-2 text-center"  ng-show="networkLists.length > 0">
+            <a ng-repeat="letter in letterLists" ng-class="{'ln-selected' : selectedLetter == letter, 'ln-disabled' : hasLetterDisable(letter)}" ng-disabled ="hasLetterDisable(letter);" ng-click="changeLatter(letter)">{{letter | uppercase}}</a>
+          
+        </div>
+        <ul class="networklist scrollbar">
+            <li class="radio" ng-repeat="network in networkLists | filter:networkSearchBy(searchNet, selectedLetter)">
+                <label class="radio">
+                    <input type="radio" class="radio-custom network_radio" name="networkList" ng-model="selectedNetwork" value="network.network_id" >
+                    <span ng-if="checkLiveDateStatus(network.live_date)" title="Live: {{getLiveDate(network.live_date)}}">{{network.network_alias}}</span>
+                    <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>
+                </label>
+                <span class="dpi-symbol" ng-if="network.dpi == 1"><img src="./assets/images/dpi_symbol.png"></span>
+                <span class="digi-symbol" ng-if="network.diginet == 1"><img src="./assets/images/digi.svg"></span>
+                <span class="new-symbol" ng-if="checkLiveDateStatus(network.live_date)"><img src="./assets/images/new.svg"></span>
+            </li>
+        </ul>
+        <button class="btn btn-blue rate-review-request">Rate Review Request</button>
+        <span class="mt-1 mb-1">for selected network</span>
+        <div class="network-filter-bottom d-flex align-items-center justify-content-between btn-grp  border-top pt-3 mt-2">
+            <div class="d-flex dpi-newnetwork">
+                <a class="dpi-link" href="https://www.drmetrix.com/en/the_drmetrix_difference.html"
+                    target="_blank" title="Learn about DPI">
+                    <span class="dpi-symbol"><img src="./assets/images/dpi_symbol.png"></span>Learn about DPi
+                </a>
+                <div class="d-flex">
+                    <span class="digi-symbol">DIGI</span>
+                    <a class="network-label-container" href="#">
+                        Learn about DIGI
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button id="cancelNet" class="btn btn-black hide-filter-popup" ng-click="closeModal();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+    <button id="applyNet" class="btn btn-blue" ng-click="closeModal();"><i class="fa fa-check" title="apply"></i>Submit</button>
+</div>

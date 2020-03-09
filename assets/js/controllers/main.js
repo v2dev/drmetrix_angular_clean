@@ -380,7 +380,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
 
     $scope.showTab = function(tab) {
-        $scope.type = tab;
+        $rootScope.type = tab;
     }
 
     /** Filters code -- Start */

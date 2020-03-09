@@ -1,33 +1,40 @@
 <div class="modal-header">
         <h5 class="modal-title">TFN / URL</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close"  ng-click="closeModal();">
             <span aria-hidden="true"></span>
         </button>
     </div>
     <div class="modal-body">
             <div class="d-flex flex-wrap">
                     <label class="radio mr-2">
-                        <input type="radio" name="r" value="13">
+                        <input type="radio" ng-model="refineBy" value="800">
                         <span>TFN</span>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="r" value="14">
+                        <input type="radio" ng-model="refineBy" value="url">
                         <span>URL</span>
                     </label>
-                    <div class="search-input disabled-input">
-                        <span class="search-icon">
+                    <div class="search-input" ng-class="{'disabled-input' : refineBy == ''}">
+                        <span class="search-icon" >
                             <i data-feather="search"></i>
                         </span>
-                        <input type="search" placeholder="Search Text" disabled="disabled">
-                        <i class="fa fa-times-circle"></i>
+                        <input type="text" name="searchByTfnUrl" class="searchNet searchRefine ng-pristine ng-valid ng-touched" id="searchByTfnUrl" placeholder="{{  refineBy == '800' ? 'Please enter minimum 3 digits' : refineBy == 'url' ? 'Please enter minimum 3 characters' : 'Search Text'}} " ng-model="search_by_tfn" ng-disabled="refineBy == ''" >
+                        <span class="search-icon" ng-click="search_by_tfn = ''" ng-hide="search_by_tfn.length == 0">
+                            <i class="fa fa-times-circle" title="Clear Search"></i>
+                        </span>
+                        <span id="display_domain_error" class="error-message-inside" ng-show="refineBy == 'url' && (search_by_tfn == '.com' || search_by_tfn == 'com')" >Please enter valid URL.</span>
                     </div>
-                    <ul class="search-tips">
+                    <ul class="search-tips" ng-show="refineBy == '800'">
+                        <li class="mb-2 search-tips-uses">
+                            <b>Search Tips without Dashes</b>
+                            <ul>
+                                <li>3+ characters will show results that 'contain' search string.</li>
+                                <li>Alpha-Numeric Search is supported.</li>
+                            </ul>
+                        </li>
                         <li class="mb-2 search-tips-uses">
                             <b>Search Tips using Dashes</b>
                             <ul>
-                                <li>Search for 3+ characters (without dashes) will show results that 'contain'
-                                    search string.</li>
-                                <li>Alpha-Numeric Search is supported.</li>
                                 <li>XXX- will show all results that match 'area code'</li>
                                 <li>-XXX or XXX- or -XXX- will show all results that match 'prefix'</li>
                                 <li>-XXXX will show all results that match 'line number'</li>
@@ -35,12 +42,11 @@
                             </ul>
                         </li>
                     </ul>
-                    <ul class="search-tips">
+                    <ul class="search-tips" ng-show="refineBy == 'url'">
                         <li class="mb-2 search-tips-uses">
                             <b>Search Tips</b>
                             <ul>
                                 <li>Search for 3+ characters will show results that 'contain' search string.</li>
-                                <li>Alpha-Numeric Search is supported.</li>
                                 <li>Use "www.STRING" to show all URL matches that start with string</li>
                                 <li>Use "STRING.com" to show all URL matches the end with string</li>
                             </ul>
@@ -49,10 +55,10 @@
     </div>
     <div class="modal-footer">
         <div class="btn-grp d-flex justify-content-end border-top pt-3">
-            <button id="cancelNet" class="btn btn-black" data-dismiss="modal" aria-label="Close">
-                <i class="fa fa-times" title="cancel" ng-click="closeModal();"></i>Cancel</button>
-            <button id="applyNet" class="btn btn-blue">
-                <i class="fa fa-check" title="apply" ng-click="closeModal();"></i>Apply</button>
+            <button id="cancelNet" class="btn btn-black" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+                <i class="fa fa-times" title="cancel" ></i>Cancel</button>
+            <button id="applyNet" class="btn btn-blue" ng-click="closeModal();" ng-disabled="((refineBy == 800 ? search_by_tfn.length < 3 : search_by_tfn.length < 3) || (refineBy == 'url' && (search_by_tfn == '.com' || search_by_tfn == 'com')))">
+                <i class="fa fa-check" title="apply"></i>Apply</button>
             <button id="applyNet" class="btn btn-blue"  ng-click="closeModal();"><i class="fa fa-rotate-right"
                     title="reset"></i>Reset</button>
         </div>
