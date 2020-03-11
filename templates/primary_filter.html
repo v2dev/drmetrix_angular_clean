@@ -1,0 +1,200 @@
+<div class="collapse-menu">
+    Primary Filter
+    <a href="#"><i class="fa fa-chevron-down"></i></a>
+</div>
+<ul class="filter-menu hide-filter-menu">
+    <li>
+        <div>
+            Date Range -
+            <span>
+                Media Week 40 - 09/30/2019 thru 10/06/2019
+            </span>
+        </div>
+        <ul class="left-menu" ng-show="editable">
+            <li class="active-alert">
+                <a href="#">
+                    <label>
+                        Last Week
+                    </label>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <label>Current Week</label>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <label>Other</label>
+                </a>
+            </li>
+            <li class="datepicker-li checkbox-radio">
+                <input type="radio" name="date_type" id="datepicker_checkbox"
+                    value="2019-10-12 - 2019-10-12" class="radio-custom-checkbox datepicker_checkbox"
+                    ng-click="changeHiddenVal()">
+                <label for="datepicker_checkbox" class="radio-custom-checkbox-label">
+                    <div class="custom-div" for="datepicker_checkbox">
+                        <span class="v-align-middle">
+                            <i id="datepickeropen" class="fa fa-calendar" aria-hidden="true" \=""></i>
+                        </span></div>
+                </label>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <div>
+            Brand Classification -
+            <span ng-if="shortFormClassification[0].selected == true && creative_type == 'short'" class="text-disabled" id="classfication_filter">
+                    {{shortFormClassification[0].value}}
+            </span>
+            <div class="ml-1 d-flex" ng-if="shortFormClassification[0].selected == false && creative_type == 'short'"  >
+                <span class="d-flex" ng-repeat="item in shortFormClassification | filter: {selected  : true} track by $index">
+                    <span class="text-disabled d-flex" id="classfication_filter">{{item.display_text ? item.display_text : item.value}} 
+                    <span ng-if="!$last">, </span>
+                </span>
+            </div>
+            <div class="ml-1 d-flex" ng-if="creative_type == 'long'" >
+                <span class="d-flex" ng-repeat="item in longFormClassification | filter: {selected  : true} track by $index">
+                    <span class="text-disabled d-flex" id="classfication_filter">{{item.display_text ? item.display_text : item.value}} </span>
+                    <span ng-if="!$last">, </span>
+                </span>
+            </div>
+            <span ng-if="creative_type == 'short'" class="text-disabled" id="classfication_filter">{{creative_type}}
+             {{duration_display_text}}
+            </span>
+        </div>
+        <ul class="left-menu" ng-show="editable"> 
+            <li ng-class="{'active-alert' : creative_type == 'short'} " data-toggle="modal" data-target="#brand-dropdown">
+                <input type="radio" name="brand_class" class="radio-custom" value="short" ng-model="creative_type" id="short-form" ng-click="selectClassification('short');"/>
+                <label for="short-form">Short Form</label>
+            </li>
+            <li ng-class="{'active-alert' : creative_type == 'long'}"  data-toggle="modal" data-target="#brand-dropdown">
+                <input type="radio" name="brand_class" class="radio-custom" value="long" ng-model="creative_type" id="long-form" ng-click="selectClassification('long');"/>
+                <label  for="long-form">Long Form</label>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <div>
+            Creative -
+            <span class="text-disabled" id="language_filter">{{selectLang == 0 ? 'English' : selectLang == 1 ? 'Spanish' : 'All'}}</span>
+        </div>
+        <ul class="left-menu" ng-show="editable">
+            <li class="radio-circular ng-scope" ng-repeat="language in languages" ng-class="{'active-alert' : selectLang == language.value}">
+                <input type="radio" name="lang" value="{{language.value}}"  ng-model="selectLang" ng-click="setLang(language.value)" id="{{language.id}}" class="radio-custom"/>
+                <label for="{{language.id}}">{{language.display_text}}</label>
+            </li>
+        </ul>
+    </li>
+    <li ng-show="page == 'network' ">
+        <div>
+            Break Type -
+            <span class="text-disabled" id="breakType_filter">{{selectBreakType == 'A' ? 'All' : selectBreakType == 'N' ? 'National' : 'DPI'}}</span>
+        </div>
+        <ul class="left-menu" ng-show="editable">
+            <li class="radio-circular" ng-repeat="breaktype in breaktypes" ng-class="{'active-alert' : selectBreakType == breaktype.value}">
+                <input type="radio" name="breaktype" value="{{breaktype.value}}"  ng-model="selectBreakType" ng-click="setBreaktype(breaktype.value)" id="{{breaktype.id}}" class="radio-custom"/>
+                <label for="{{breaktype.id}}">{{breaktype.display_text}}</label>
+            </li>                 
+        </ul>
+    </li>                
+    <li class="response-type" ng-init="setResponseTypes('or');">
+        <div class="response-type-text d-flex align-items-center">
+            Response Type -
+            <span class="text-disabled">{{responseTypeText}}</span>
+            </span>
+            <ul class="left-menu" ng-show="editable">
+                <li class="radio-circular active-alert">
+                    <input type="radio" id="or" name="response_typ" value=" or " ng-model="response_header" class="radio-custom" ng-click="setResponseTypes('or')"/>
+                    <label for="or">
+                        At Least
+                    </label>
+                </li>
+                <li>
+                    <input type="radio" id="and" name="response_typ" value=" and " ng-model="response_header" class="radio-custom" ng-click="setResponseTypes('and')" />
+                    <label for="and">
+                        Only
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <ul class="response-menu" ng-show="editable">
+            <li class="checkbox" ng-repeat="r in responseTypes" >
+                <input type="checkbox" value="{{r.value}}"  id="{{r.value}}" ng-checked="exists(r.value, responseTypeselected)" ng-click="setResponseTypes(response_header, r)"  custom-value="{{r.custom-value}}"  custom-null-value="{{r.custom-null-value}}">
+                <label  for="{{r.value}}" id="{{r.id}}"> {{r.value}}</label>
+                <span class="or_content"  ng-if="!$last">{{response_header}}</span>
+            </li>
+        </ul>
+    </li>
+    <li class="btn-wrapper">
+        <button class="btn btn-blue show-div edit btn-sm" ng-click="editableContent();"><i class="fa fa-pencil" title="edit"></i>Edit</button>
+        <button class="btn btn-blue apply btn-sm"  ng-click="cancelFilter()"><i class="fa fa-check" title="apply"></i>Apply</button>
+        <button class="btn btn-blue reset btn-sm"  ng-click="cancelFilter()"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
+        <button class="btn btn-blue hide-div cancel btn-sm" ng-show="editable" ng-click="cancelFilter()"><i class="fa fa-times" title="cancel"></i>Cancel</button>                            
+    </li>
+</ul>
+
+
+<!--Brand Classification popup-->
+<div class="modal fade network-filter-popup brand-classification-popup lg-popup show" id="brand-dropdown" tabindex="-1" role="dialog" aria-labelledby="brand-dropdown">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-title">Brand Classification</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="save_filter_cancel"  ng-click="save_filter_cancel('ranking')" ng-disabled="checkedShortClassification.length == 0 || selectedDurations.length == 0">
+                 <span aria-hidden="true"></span>
+                 </button>
+              </div>
+              <div class="modal-body">
+                 <div class="short-form-brand-list">
+                    <h5 class="classification-heading" id="header_short" ng-class="{'active-alert' : creative_type == 'short'}">Short Form</h5>
+                    <div id="creative_short_form" ng-class="{'disabled-contents' : creative_type != 'short'}">
+                       <div >
+                          <span class="error-message-inside" id="classification_message" ng-show="checkedShortClassification.length == 0">Please select at least one Short Form</span>  
+                          <ul class="brand-classfication-list">
+                             <li class="checkbox" ng-repeat="shortForm in shortFormClassification">
+                                <input type="checkbox" name="classification"  value="{{shortForm.index}}" id="{{shortForm.id}}" class="checkbox-custom-label" ng-checked="checkedShortClassification.indexOf(shortForm.index) > -1" ng-model="shortForm.selected" ng-change='setClassification(shortForm)'/>
+                                <label for="{{shortForm.id}}">
+                                <img src="./assets/images/asseenontv_logo.png" class="retail_ranking_img" ng-show="shortForm.index==5">{{shortForm.value}}
+                                </label>
+                             </li>
+                          </ul>
+                          <ul class="d-flex align-item-center">
+                             <h5>Creative Duration</h5>
+                             <li class="checkbox ml-4">
+                                <input type="checkbox" id="all_short_duration" name="short_creative_length[]" value="all" ng-Click="selectAllShortCreativeDuration()" ng-checked="isAllDurationChecked()" />
+                                <label for="all_short_duration">All</label>
+                             </li>
+                          </ul>
+                          <span class="error-message-inside" id="duration_message" ng-show="selectedDurations.length == 0">Please select at least one Creative Duration</span>  
+                          <ul class="short-creative-duration" id="short_creative_duration">
+                            <li class="checkbox" ng-repeat="x in creative_short_duration">
+                                <input type="checkbox" name="short_creative_length[]"  value="{{x}}" id="duration_{{x}}" ng-Click="checkCreativeDuration(x, selectedDurations);" ng-checked="exists(x, selectedDurations)"/>
+                                <label for="duration_{{x}}">{{x}}s</label>
+                            </li>
+                          </ul>
+                       </div>
+                    </div>
+                 </div>
+                 <div>
+                    <h5 class="classification-heading"  id="header_long" ng-class="{'active-alert' : creative_type == 'long'}" ng-click="showClassification('long')">Long Form</h5>
+                    <div id="creative_long_form" ng-class="{'disabled-contents' : creative_type != 'long'}">
+                       <ul class="brand-classfication-list">
+                          <li ng-repeat="longForm in longFormClassification">
+                             <label class="checkbox">
+                                <input type="checkbox" name="selectClassfication"  value="{{longForm.index}}" id="{{longForm.id}}" ng-model="longForm.selected" ng-checked="checkedLongClassification.indexOf(longForm.index) > -1" ng-click="setClassification(longForm)"/>
+                                <span class="custom-div">
+                                    <img src="./assets/images/asseenontv_logo.png" class="retail_ranking_img" ng-show="longForm.index==7">
+                                {{longForm.value}}
+                                </span>
+                             </label>
+                          </li>
+                       </ul>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+     
