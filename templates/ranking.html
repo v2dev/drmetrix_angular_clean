@@ -191,8 +191,8 @@
                 <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
                 <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
             </div>
-            <div class="disclaimer-msg d-md-flex justify-content-between align-items-center">
-                <span>Selected Network: <b>AMerican Heroes</b></span>
+            <div class="disclaimer-msg d-md-flex justify-content-between align-items-center" ng-show="networkDisplayName != ''">
+                <span>Selected Network: <b>{{networkDisplayName}}</b></span>
             </div>
             <div class="top-grid-filter">
                 <div class="network">
@@ -203,10 +203,8 @@
                         <input type="search" placeholder="Search Brands">
                         <i class="fa fa-times-circle"></i>
                     </div>
-                    <button class="btn btn-black btn-sm"><i class="fa fa-eye"
-                            title="Track"></i> <span>Track</span></button>
-                    <button class="btn btn-black btn-sm"><i class="fa fa-align-justify"
-                            title="Track"></i> <span>Network Log</span></button>
+                    <button class="btn btn-black btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
+                    <button class="btn btn-black btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-align-justify" title="Track"></i> <span>Network Log</span></button>
                 </div>
                 <div class="filter-refine-by">
                     <span>Refine By</span>

@@ -5,6 +5,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.initialisation = function() {
+        $rootScope.networkDisplayName = '';
         $rootScope.headerDisplay = 1;
         $rootScope.complete_name = localStorage.complete_name;
        
@@ -344,11 +345,25 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
   
 
     $scope.getNetworksWithAllFilters();
-    
-   
 
-   
+    $scope.getSelectedNetworkName = function() {
+        var result;
+        angular.forEach($scope.networkLists, function (item) {
+            if (item.network_id == $scope.selectedNetwork) {
+                result =  item.network_alias;
+            }
+        });
+        return result;
+       
+    }
 
+    $scope.applyNetworkModal = function() {
+        $rootScope.networkDisplayName = $scope.getSelectedNetworkName();
+        $uibModalInstance.dismiss();
+    }
+
+  
+   
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
