@@ -9,7 +9,7 @@
         <ul class="top-filter-bar">
             <li>
                 <h5>Network</h5>
-                <div class="checkbox">{{selectedNetwork}}
+                <div class="checkbox">
                     <input class="radio-custom network_radio" type="radio" id="networks"  name="networkList" ng-model="selectedNetwork" value="All" >
                         <span class="v-align-middle">{{network_name}}</span></label>
                 </div>
@@ -36,7 +36,7 @@
         <ul class="networklist scrollbar">
             <li class="radio" ng-repeat="network in networkLists | filter:networkSearchBy(searchNet, selectedLetter)">
                 <label class="radio">
-                    <input type="radio" class="radio-custom network_radio" name="networkList" ng-model="selectedNetwork" value="network.network_id" >
+                    <input type="radio"  id="networks" class="radio-custom network_radio" name="networkList" ng-model="$parent.selectedNetwork" ng-value="{{network.network_id}}" >
                     <span ng-if="checkLiveDateStatus(network.live_date)" title="Live: {{getLiveDate(network.live_date)}}">{{network.network_alias}}</span>
                     <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>
                 </label>
@@ -65,5 +65,5 @@
 </div>
 <div class="modal-footer">
     <button id="cancelNet" class="btn btn-black hide-filter-popup" ng-click="closeModal();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
-    <button id="applyNet" class="btn btn-blue" ng-click="closeModal();"><i class="fa fa-check" title="apply"></i>Submit</button>
+    <button id="applyNet" class="btn btn-blue" ng-click="applyNetworkModal();" ng-if="networkLists.length > 0"><i class="fa fa-check" title="apply"></i>Submit</button>
 </div>
