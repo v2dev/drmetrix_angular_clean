@@ -56,7 +56,7 @@ angular.
                 apiService.post('/get_cats_list', {})
                     .then(function (data) {
                         localStorage.cachedCategoriesData = JSON.stringify(data);
-                        $scope.setCategoriesHTML();
+                        self.setCategoriesHTML();
                     })
                     ,(function (data, status, headers, config) {
                         console.log('Errooor');
