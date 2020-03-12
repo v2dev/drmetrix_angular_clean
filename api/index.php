@@ -22208,6 +22208,7 @@ function getUserLists(){
     $request                            = Slim::getInstance()->request();
     $query_string   = $request->getBody();
     parse_str($query_string, $requestData);
+    $requestData = (array)json_decode($query_string, TRUE);
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
     $page                               = $requestData['page'];
@@ -22267,9 +22268,15 @@ function getUserLists(){
             $disabled_copy_list_class = 'other-opa';
             $disable_copy_list        = 'disabled = disabled';
         }
-        $shared_list                  = '<span><input type="checkbox"  id="share_list_'.$result['id'].'" name="share_list" class="share_list checkbox-custom" onclick="updateShareListStatus('.$result['id'].');" '.$checked_shared_list.' '.$disabled_shared_list.'><label class="checkbox-custom-label '.$disabled_class.' " for="share_list_'.$result['id'].'"></label></span>';
+        $shared_list                  = '';
+        $nestedData['checked_shared_list']     = $checked_shared_list;
+        $nestedData['disabled_shared_list']     = $disabled_shared_list;
+        $nestedData['disabled_class']     = $disabled_class;
 
-        $copy_list                    = '<span><input type="checkbox"  id="copy_list_'.$result['id'].'" name="copy_list" class="copy_list checkbox-custom" onclick="copySharedList('.$result['id'].');" '.$checked_copy_list.' '.$disable_copy_list.'><label for="copy_list_'.$result['id'].'" class="checkbox-custom-label '.$disabled_copy_list_class.'"></label></span>';
+        $copy_list                    = '';
+        $nestedData['checked_copy_list']     = $checked_copy_list;
+        $nestedData['disable_copy_list']     = $disable_copy_list;
+        $nestedData['disabled_copy_list_class']     = $disabled_copy_list_class;
         
         $requestData['criteria_id']     = $result['criteria_id'];
         $sql                            = __query_get_name_of_criteria($requestData); 
@@ -22279,16 +22286,16 @@ function getUserLists(){
         $nestedData['id']               = $result['id'];
         $nestedData['name']             = urldecode($result['name']);
         $nestedData['criteria_id']     = $result['criteria_id'];
-        $nestedData['criteria_name']    = '<span title="'.$obj[0]->criteria_name.'">'.readMoreHelper($obj[0]->criteria_name, 60).'</span>'; 
+        $nestedData['criteria_name']    = $obj[0]->criteria_name;
         $nestedData['shared_list']      = $shared_list;
         $nestedData['copy_list']        = $copy_list;
         $nestedData['full_name']        = $result['full_name'];
         $nestedData['shared_by']        = $result['shared_by'] != '' ? $result['shared_by'] : ' ';
         $nestedData['created_date']     = standardDateTimeFormat('m-d-Y h:i A', strtotime($result['created_date']));
         $shared_date                    = standardDateTimeFormat('m-d-Y h:i A', strtotime($result['shared_date']));
-        $nestedData['shared_list_date'] = '<span title="'.$shared_date.'">'.readMoreHelper($shared_date, 10).'</span>' ;
-        $nestedData['edit_list']        = '<span class="edit-list_'.$result['id'].' dropdown-list edit-list-icon" id="edit_list_'.$result['id'].'"  onclick="edit_user_filter('.$result['id'].',\''. $edit_ids.'\');"  class="edit-list"><i class="fa fa-pencil" aria-hidden="true"></i></span><span class="edit-list-loader_'.$result['id'].' edit-list-loader" id="excel_loader_'.$result['id'].'"><img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"></span>';
-        $nestedData['apply']            = '<a href="javascript:void(0)" onclick="apply_user_list('.$result['id'].',\''.$requestData['primary_tab'].'\');" id="apply_filter_'.$result['id'].'">Apply</a>';
+        $nestedData['shared_list_date'] = $shared_date;
+        $nestedData['edit_list']        = $edit_ids;
+        $nestedData['apply']            = $requestData['primary_tab'];
         $data[] = $nestedData;
     }
     $json_data              = array();
