@@ -17486,12 +17486,10 @@ function getUserFilterList(){
     $requestData = array();
     $request                            = Slim::getInstance()->request();
     $query_string                       = $request->getBody();
-    $set_one                            = explode('&', $query_string);
-    $raw_data = array();
-     foreach($set_one as $k =>$v){
-        $raw_data                       = explode('=',$v);
-        $requestData[$raw_data[0]]      = $raw_data[1];
-    }
+
+    parse_str($query_string, $output);
+    $requestData = (array)json_decode($query_string, TRUE);
+
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
     $page                               = $requestData['page'];
@@ -17577,12 +17575,22 @@ function getUserFilterList(){
             $disabled_schedule_email_class = 'other-opa';
             $disabled_schedule_email    = 'disabled = disabled';
         }*/
+        $nestedData['checked_shared_filter'] = $checked_shared_filter;
+        $nestedData['disabled_shared_filter'] = $disabled_shared_filter;
+        $nestedData['disabled_class'] = $disabled_class;
+        $nestedData['checked_schedule_email'] = $checked_schedule_email;
+        $nestedData['disabled_schedule_email'] = $disabled_schedule_email;
+        $nestedData['disabled_schedule_email_class'] = $disabled_schedule_email_class;
+        $nestedData['email_schedulable_direct'] = $result['email_schedulable_direct'];
+        $nestedData['checked_copy_filter'] = $checked_copy_filter;
+        $nestedData['disable_copy_filter'] = $disable_copy_filter;
+        $nestedData['disabled_copy_filter_class'] = $disabled_copy_filter_class;
 
-        $shared_filter                  = '<div class="checkbox"><input type="checkbox"  id="share_filter_'.$result['id'].'" name="share_filter" class="share_filter checkbox-custom" onclick="updateShareFilterStatus('.$result['id'].');" '.$checked_shared_filter.' '.$disabled_shared_filter.'><label class="checkbox-custom-label '.$disabled_class.' " for="share_filter_'.$result['id'].'" ></label></div>';
+        $shared_filter                  = $checked_shared_filter;
 
         $schedule_email = '';
         if($result['email_schedulable']) {
-            $schedule_email             = '<div class="checkbox"><input type="checkbox"  id="schedule_email_'.$result['id'].'" name="schedule_email" class="share_filter checkbox-custom" onclick="updateScheduleEmailStatus('.$result['id'].', \''.$result['email_schedulable_direct'].'\');" data-frequency="'.$result['email_schedulable_direct'].'" '.$checked_schedule_email.' '.$disabled_schedule_email.'><label for="schedule_email_'.$result['id'].'" class="checkbox-custom-label '.$disabled_schedule_email_class.' " ></label></div>';
+            $schedule_email             = $disabled_schedule_email_class;
         }
         $copy_filter                    = '<div class="checkbox"><input type="checkbox"  id="copy_filter_'.$result['id'].'" name="copy_filter" class="copy_filter checkbox-custom" onclick="copySharedFilter('.$result['id'].');" '.$checked_copy_filter.''.$disable_copy_filter.'><label class="checkbox-custom-label '.$disabled_copy_filter_class.'" for="copy_filter_'.$result['id'].'"></label></div>';
         $result['query_string']         = $result['query_string'].'&page_call='.$result['page'];
@@ -17590,7 +17598,7 @@ function getUserFilterList(){
         $filter_text                    = str_replace('XxX', '&', $filter_text['display_text']);
         $nestedData['tab']              = $requestData['tab'];
         // $nestedData['query_string']     = substr($filter_text, 0, 100).'...';
-        $nestedData['query_string']     = '<span title="'.$filter_text.'">'.readMoreHelper($filter_text, 60).'</span>';
+        $nestedData['query_string']     = $filter_text;
         $nestedData['schedule_email']   = $schedule_email;
         $nestedData['shared_filter']    = $shared_filter;
         $nestedData['copy_filter']      = $copy_filter;
@@ -17600,7 +17608,7 @@ function getUserFilterList(){
         $nestedData['created_date']     = standardDateTimeFormat('m-d-Y h:i A', strtotime($result['created_date']));
         $shared_date  = standardDateTimeFormat('m-d-Y h:i A', strtotime($result['shared_date']));
         $nestedData['shared_date']      = '<span title="'.$shared_date.'">'.readMoreHelper($shared_date, 10).'</span>' ;
-        $nestedData['apply']            = '<a href="javascript:void(0)" onclick="apply_user_filter('.$result['id'].');" id="apply_filter_'.$result['id'].'">Apply</a>';
+        $nestedData['apply']            = 'Apply';
         $nestedData['json_data']        = query_string_to_json($result);
         $data[] = $nestedData;
     }
