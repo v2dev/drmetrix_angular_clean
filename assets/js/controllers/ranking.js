@@ -4,12 +4,119 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         return;
     }
 
+    
+    $scope.getDisplayDurationText = function () {
+        $scope.duration_display_text = ($scope.selectedDurations.length === $scope.creative_short_duration.length) ? ' (All Duration)' : ($scope.selectedDurations.length == 1) ? ' (' + $scope.selectedDurations[0] + 's)' : $scope.selectedDurations.length > 1 ? ' (Multi Duration)' : '';
+    }
+
     $scope.initialisation = function() {
+        $scope.page = $state.current.name;
         $rootScope.networkDisplayName = '';
+        $scope.editable = 0
         $rootScope.headerDisplay = 1;
         $rootScope.complete_name = localStorage.complete_name;
-       
+
+        //Classification
+        $scope.shortFormClassification = [
+            {
+                "index": 1,
+                "id": "all_short",
+                'selected': true,
+                "value": "All Short form"
+            }, {
+                "index": 2,
+                "id": "sf_products",
+                'selected': true,
+                "value": "Short Form Products"
+            }, {
+                "index": 3,
+                "id": "lead_gen",
+                'selected': true,
+                "value": "Lead Generation"
+            }, {
+                "index": 4,
+                "id": "brand_dr",
+                'selected': true,
+                "value": "Brand/DR",
+            }, {
+                "index": 5,
+                "id": "sf_retail_products",
+                'selected': true,
+                "value": "Retail Rankings",
+                "display_text": "AsOnTV Retail Rankings",
+            }
+        ];
+
+        
+        $scope.longFormClassification = [
+            {
+                "index": 6,
+                "id": "lf_creative1",
+                'selected': true,
+                "value": "28.5m Creative",
+            }, {
+                "index": 7,
+                "id": "lf_retail_products",
+                'selected': false,
+                "value": "Retail Rankings",
+                "display_text": "AsOnTV Retail Rankings (28.5m)",
+            }
+        ];
+
+        $scope.creative_type = 'short';
+        $scope.checkedShortClassification = [1, 2, 3, 4, 5];
+        $scope.checkedLongClassification = [6];
+        $scope.selectedDurations = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
+        $scope.creative_short_duration = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
+        $scope.getDisplayDurationText();
+
+        //Language
+        $scope.selectLang = $rootScope.selectLang ? $rootScope.selectLang : '0,1';
+        $scope.languages = [
+            {
+                "id": "all",
+                "value": "0,1",
+                "display_text": "All"
+            }, {
+                "id": "english",
+                "value": "0",
+                "display_text": "English"
+            }, {
+                "id": "spanish",
+                "value": "1",
+                "display_text": "Spanish"
+            }
+        ];
+
+        //response types
+        $scope.response_header = 'or';
+        $scope.responseTypeselected = ['URL', 'MAR', 'SMS', 'TFN'];
+        $scope.responseTypes = [
+            {
+                "value": "URL",
+                "id": "urlCheckbox",
+                "custom-value": "response_url=1",
+                "custom-null-value": "response_url=0"
+            }, {
+                "value": "SMS",
+                "id": "smsCheckbox",
+                "custom-value": "response_sms=1",
+                "custom-null-value": "response_sms=0"
+            }, {
+                "value": "TFN",
+                "id": "telephoneCheckbox",
+                "custom-value": "response_tfn=1",
+                "custom-null-value": "response_tfn=0"
+            }, {
+                "value": "MAR",
+                "id": "mobRepsonseCheckbox",
+                "custom-value": "response_mar=1",
+                "custom-null-value": "response_mar=0"
+            },
+        ];
+        
     }
+
     $scope.initialisation() ;
 
     feather.replace();
@@ -18,6 +125,140 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     // var formdata = {'sd': data['sd'], 'ed': data['ed'], 'startDate': $scope.ranking.selectDate, 'val': data['selectDateDropDown'], 'c': $scope.ranking.selectClassfication, 'type': data['type'], 'cat': data['cat_id'], 'flag': active_flag, spanish: $scope.ranking.selectLang, responseType: $scope.ranking.returnText,'unchecked_category': data['unchecked_cat'], 'length_unchecked': unchecked_len, 'creative_duration': duration, 'new_filter_opt': new_filter_opt, 'lifetime_flag': lifetime_flag, 'all_ytd_flag': all_ytd_flag, 'refine_filter_opt': refine_filter_opt, 'refine_filter_opt_text': refine_filter_opt_text, 'refine_apply_filter': refine_apply_filter, 'programs_ids': airings_data['all_programs_ids'],'applied_ids' : $scope.ranking.applied_list_ids , 'primary_tab' : $scope.ranking.applied_list_type}; 
 
+    $scope.editableContent = function() {
+        $scope.editable = 1;
+    }
+    
+    $scope.cancelFilter = function() {
+        $scope.editable = 0;
+    }
+
+    //Start - Classification
+
+    $scope.selectClassification = function(creative_type) {
+        $scope.creative_type = creative_type;
+     
+    }
+
+    $scope.selectAllShortCreativeDuration = function() {
+        if ($scope.selectedDurations.length === $scope.creative_short_duration.length) {
+            $scope.selectedDurations = [];
+        } else if ($scope.selectedDurations.length === 0 || $scope.selectedDurations.length > 0) {
+            $scope.selectedDurations = $scope.creative_short_duration.slice(0);
+        }
+    }
+
+    $scope.exists = function (item, list) {
+        return list.indexOf(item) > -1;
+    };
+
+
+    $scope.isAllDurationChecked = function () {
+        $scope.getDisplayDurationText();
+        return $scope.selectedDurations.length === $scope.creative_short_duration.length;
+    }
+
+    $scope.setClassification = function(classification_scope) {
+        var c = classification_scope.index;
+        var selected = classification_scope.selected;
+        if($scope.creative_type == 'short') {
+            if (c == 1) {
+                $scope.checkedShortClassification = [1, 2, 3, 4, 5];
+                if (selected === false) {
+                    angular.forEach($scope.shortFormClassification, function (value, key) {
+                        value.selected = false;
+                    });
+                    $scope.checkedShortClassification = [];
+                } else {
+                    angular.forEach($scope.shortFormClassification, function (value, key) {
+                        value.selected = true;
+                    });
+                }
+            } else {
+                $scope.shortFormClassification[0].selected = false;
+                if (selected === true) {
+                    $scope.checkedShortClassification.push(c);
+                } else {
+                    var i = $scope.checkedShortClassification.indexOf(c);
+                    $scope.checkedShortClassification.splice(i, 1);
+                }
+            }
+        } else {
+            if (selected === true) {
+                $scope.checkedLongClassification.push(c);
+            } else {
+                var i = $scope.checkedLongClassification.indexOf(c);
+                $scope.checkedLongClassification.splice(i, 1);
+            }
+        }
+        
+    }
+    
+
+    $scope.checkCreativeDuration = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+            $scope.selectedDurations.splice(idx, 1);
+        }
+        else {
+            $scope.selectedDurations.push(item);
+        }
+        $scope.creativeSelectDuration = $scope.selectedDurations;
+        $scope.getDisplayDurationText();
+    }
+    //End - Classification
+   
+    $scope.setLang = function(lang) {
+        $rootScope.selectLang = $scope.selectLang = lang;
+    }
+
+    $scope.setBreaktype = function (breaktype) {
+        $rootScope.selectBreakType = $scope.selectBreakType = breaktype;
+    }
+
+    $scope.setResponseTypes = function (header, item) {
+        $scope.response_header = header;
+        $scope.returnText = '';
+        if(item) {
+            var idx = $scope.responseTypeselected.indexOf(item.value);
+            if (idx > -1) {
+                $scope.responseTypeselected.splice(idx, 1);
+            }
+            else {
+                $scope.responseTypeselected.push(item.value);
+            }
+        }
+        
+        angular.forEach($scope.responseTypeselected, function(value, key) {
+            $scope.returnText += 'response_' + angular.$$lowercase(value) + ' = 1 ' + $scope.response_header + ' ';
+        });
+        let lastIndex = $scope.returnText.lastIndexOf($scope.response_header);
+        $scope.returnText = $scope.returnText.substring(0, lastIndex);
+
+        $scope.responseTypeText = $scope.responseTypeselected.join(' '+ $scope.response_header+ ' ');
+        
+        $scope.returnText = '('+$scope.returnText+')';
+        
+    };
+
+    $scope.selectBreakType = 'A';
+    $scope.breaktypes = [
+        {
+            "id": "all_breaktype",
+            "value": "A",
+            "display_text": "All"
+        }, {
+            "id": "national",
+            "value": "N",
+            "display_text": "National"
+        }, {
+            "id": "local",
+            "value": "L",
+            "display_text": "DPI"
+        }
+    ];
+
+   
     $scope.uigridDataBrand = function() {
         var formData = $scope.formdata;
         console.log("in brand");
@@ -28,7 +269,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 'Content-Type': 'application/json; charset=utf-8'
             }
         }
-        // var c_dir = $scope.ranking.creative_type == 'short' ? '6':'1';
         var c_dir = '6';
         var correctTotalPaginationTemplate =
     "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-triangle\"><div class=\"first-bar\"></div></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-triangle prev-triangle\"></div></button> <input type=\"number\" ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\">/</abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"last-triangle next-triangle\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-triangle\"><div class=\"last-bar\"></div></div></button></div></div><div class=\"ui-grid-pager-count-container\"><div class=\"ui-grid-pager-count\"><span ng-show=\"grid.options.totalItems > 0\">{{(((grid.options.paginationCurrentPage-1)*grid.options.paginationPageSize)+1)}} <abbr ui-grid-one-bind-title=\"paginationThrough\">-</abbr> {{(grid.options.paginationCurrentPage*grid.options.paginationPageSize>grid.options.totalItems?grid.options.totalItems:grid.options.paginationCurrentPage*grid.options.paginationPageSize)}} {{paginationOf}} {{grid.options.totalItems}} {{totalItemsLabel}}</span></div></div></div>";
