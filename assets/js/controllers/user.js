@@ -4,6 +4,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         return;
     }
     var usCtrl = this;
+    $scope.admin_user = {};
     $scope.showUsers = function () {
         var config = {
             headers: {
@@ -62,6 +63,75 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     }
     // $scope.showUsers();
 
+    $scope.editUser = function(user_id){
+
+        var mobile =  $('#mobile_edit').val();
+        var country_code =  $('#edit_country_code').val();
+        /*if(mobile.length < 12 && (country_code != 61 && country_code != 64) ){
+            $('#edit_mobile').show();
+            return false;
+        }else if((mobile.length < 11 || mobile.length > 11)  && country_code == 61 ){
+            $('#edit_mobile').show();
+            return false;
+        }else if(mobile.length < 10  && country_code == 64 ){//console.log("64");
+            $('#edit_mobile').show();
+            return false;
+        }*/
+        var assistant_admin = 0;
+        if ($("#assistant_admin_edit").is(":checked")) {
+            assistant_admin = 1;
+        }
+
+        var first_name          = $scope.admin_user.user_result[0].first_name;
+        var last_name           = $scope.admin_user.user_result[0].last_name;
+        var username            = $scope.admin_user.user_result[0].username;
+        var phone_number        = mobile;//$scope.admin_user.user_result[0].phone_number;
+        var position            = $scope.admin_user.user_result[0].position;
+        //var assistant_admin = $scope.admin_user.user_result[0].assistant_admin;
+        var receive_report      = $scope.admin_user.user_result[0].receive_report;
+        var tier                = 1;//$scope.admin_user.user_result[0].tier;
+        var country_code        = $scope.admin_user.user_result[0].country_code;
+        var role                = 'user';
+        var admin_id            = sessionStorage.loggedInUserId;
+        var changed             = $('#tier_change').val(); // added this field for editing value other than tier, allow to edit.
+        var hidden_email        = $scope.admin_user.user_result[0].hidden_email;
+
+        var postEdit = {'first_name':first_name,'last_name':last_name,'username':username,'mobile':phone_number,'position':position,'receive_report':receive_report,'role':role,'user_id':user_id,'admin_id':admin_id,'tier':tier,'changed':changed,'country_code':country_code,'assistant_admin':assistant_admin ,hidden_email : hidden_email }; 
+        $("#edit_user_btn").prop( "disabled", true );
+        // if( $scope.admin_user.user_result[0].admin_skip_authy != '1' ) {
+            // postEdit.skip_authy = $scope.admin.user_result[0].skip_authy;
+            postEdit.skip_authy = $("#skip_authy_edit").is(":checked") ? 1 : 0;
+        // }
+        apiService.post('/edit_user',postEdit)
+        .then(function(data) {
+            $("#edit_user_btn").prop( "disabled", false );
+            if(data.status == 1){
+                if(data.max_limit == 'yes'){
+                    FoundationApi.publish('advancedModalEdit', 'hide');
+                    FoundationApi.publish('advancedModal3', 'show');
+                }else{
+                    FoundationApi.publish('advancedModalEdit', 'hide');
+                    FoundationApi.publish('editMessage', 'show');
+                    //setTimeout(function(){ FoundationApi.publish('editMessage', 'hide'); $scope.showUsers();  } , 1000 );
+                    setTimeout(function(){
+                        FoundationApi.publish('editMessage', 'hide');
+                        window.location.href = '/drmetrix/userAccount';
+                    } , 1000 );
+                }
+            }else if(data.status == 2){
+                $("#domain_msg").html(data.domain_msg);
+                FoundationApi.publish('domainOverrideMessage', 'show');
+            }else if(data.status == 4){
+                $("#domain_msg").html(data.domain_msg);
+                FoundationApi.publish('domainOverrideMessage', 'show');
+            }else{
+                $('#authy_edit_mobile').html(data.error);
+                $('#authy_edit_mobile').show();
+            }
+        });
+
+    }
+
     $scope.getUser = function(user_id){
         $rootScope.mobileValid = 0;
         $rootScope.usernameValidInCompany = 0;
@@ -88,6 +158,22 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
             }, function (response) {
             // this function handles error
             });
+    }
+
+    $scope.getAuthyCountries = function() {
+        apiService.post('/get_authy_countries',{} )
+          .then(function(result){
+            if(result.status){
+                $scope.admin_user.authy_countries = result.data.result;
+            }
+        });
+    }
+
+    if(sessionStorage.role == 'superadmin'){
+        $state.go('adminConsole');
+    }else{
+         $scope.showUsers();
+         $scope.getAuthyCountries();
     }
 
     // Delete Users

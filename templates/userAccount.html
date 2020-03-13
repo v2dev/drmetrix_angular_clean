@@ -89,7 +89,7 @@
                                     <input class="placeholder-italic" maxlength="20" type="text" name="mobile"
                                         placeholder="Please enter mobile # for Authy Authentication"
                                         ng-model="admin_user.user_result[0].phone_number" id="mobile_edit" required
-                                        onkeyup="return validate_mobile(this.id,this.value,event);"
+                                        ng-model-options="{'debounce': 250 }" masked-input
                                         ng-blur="verifyDuplicateMobile(admin_user.user_result[0].phone_number)" />
 
                                     <input maxlength="20" type="hidden" name="hidden_mobile"

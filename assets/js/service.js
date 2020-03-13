@@ -41,5 +41,13 @@ angular.module('starter.services', [])
                 
                 return 0;
             },
+            validate_mobile: function (v) {
+                console.log(v);
+                v = v
+                    .match(/\d*/g).join('')
+                    .match(/(\d{0,3})(\d{0,3})(\d{0,12})/).slice(1).join('-')
+                    .replace(/-*$/g, '');
+                return v;
+            }
         };
     });
