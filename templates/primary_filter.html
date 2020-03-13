@@ -8,7 +8,7 @@
             Date Range -
             <span class="text-disabled" id="ranking_date_range">{{date_range}}</span>
         </div>
-        <ul class="left-menu" ng-show="editable">{{selectDate}}
+        <ul class="left-menu" ng-show="editable">
             <li ng-class="{'active-alert' : selectDate == 1 &&  otherDiv == 0}">
                 <input type="radio" name="date_type" value="1" id="last_date" class="radio-custom" ng-model="selectDate" ng-change="date_filter(1)"/>
                 <label id="display_week"  for="last_date">
@@ -126,7 +126,7 @@
     </li>
     <li class="btn-wrapper">
         <button class="btn btn-blue show-div edit btn-sm" ng-click="editableContent();"><i class="fa fa-pencil" title="edit"></i>Edit</button>
-        <button class="btn btn-blue apply btn-sm"  ng-click="cancelFilter()"><i class="fa fa-check" title="apply"></i>Apply</button>
+        <button class="btn btn-blue apply btn-sm"  ng-click="applyFilter()"><i class="fa fa-check" title="apply"></i>Apply</button>
         <button class="btn btn-blue reset btn-sm"  ng-click="cancelFilter()"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
         <button class="btn btn-blue hide-div cancel btn-sm" ng-show="editable" ng-click="cancelFilter()"><i class="fa fa-times" title="cancel"></i>Cancel</button>                            
     </li>

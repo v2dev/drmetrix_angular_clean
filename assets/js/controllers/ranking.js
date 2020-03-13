@@ -37,8 +37,118 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 $rootScope.displayBtns = 1;
             }
         }
+
+        $scope.getParameters = function () {
+            var selectDateDropDown = $scope.selectDate;
+    
+            if (selectDateDropDown == 1) {
+                sd = $scope.media_start_db;
+                ed = $scope.media_end_db;
+            }
+    
+            if (selectDateDropDown == 2) {
+                sd = $scope.current_start_db;
+                ed = $scope.current_end_db;
+            }
+    
+            if (selectDateDropDown == 3) {
+                sd = $scope.last_quarter_db_start_date;
+                ed = $scope.last_quarter_db_end_date;
+            }
+    
+            if (selectDateDropDown == 4) {
+                sd = $scope.last_year_db_start_date;
+                ed = $scope.last_year_db_end_date;
+            }
+    
+            if (selectDateDropDown == 5) {
+                sd = $scope.lifetime_db_min_sd;
+                ed = $scope.lifetime_db_max_ed;
+            }
+    
+            if (selectDateDropDown == 6) {
+                sd = $scope.media_start_db;
+                ed = $scope.media_end_db;
+            }
+    
+            if (selectDateDropDown == 7) {
+                sd = $scope.media_month_start_db;
+                ed = $scope.media_month_end_db;
+            }
+    
+            if (selectDateDropDown == 8) {
+                sd = $scope.last_quarter_db_start_date;
+                ed = $scope.last_quarter_db_end_date;
+            }
+    
+            if (selectDateDropDown == 9) {
+                sd = $scope.current_start_db;
+                ed = $scope.current_end_db;
+            }
+    
+            if (selectDateDropDown == 10) {
+                sd = $scope.media_currentmonth_start_db;
+                ed = $scope.media_currentmonth_end_db;
+            }
+    
+            if (selectDateDropDown == 11) {
+                sd = $scope.current_quarter_db_start_date;
+                ed = $scope.current_quarter_db_end_date;
+            }
+    
+            if (selectDateDropDown.toString().indexOf('month32_') != -1) {
+                var custom_date = selectDateDropDown.split("_");
+                if (custom_date.length > 1) {
+                    sd = custom_date[2];
+                    ed = custom_date[3];
+                    selectDateDropDown = 2;
+                    data['selectDateDropDown'] = selectDateDropDown;
+                }
+            }
+    
+            if (selectDateDropDown.toString().indexOf('week31_') != -1) {
+                var custom_date = selectDateDropDown.split("_");
+                if (custom_date.length > 1) {
+                    sd = custom_date[2];
+                    ed = custom_date[3];
+                    selectDateDropDown = 1;
+                    data['selectDateDropDown'] = selectDateDropDown;
+                }
+            }
+    
+            if (selectDateDropDown.toString().indexOf('quarter33_') != -1) {
+                var custom_date = selectDateDropDown.split("_");
+                if (custom_date.length > 1) {
+                    sd = custom_date[2];
+                    ed = custom_date[3];
+                    selectDateDropDown = '3_' + custom_date[1] + '_' + ed;
+                    data['selectDateDropDown'] = selectDateDropDown;
+                }
+            }
+    
+            if (selectDateDropDown.toString().indexOf('year34_') != -1) {
+                var custom_date = selectDateDropDown.split("_");
+                if (custom_date.length > 1) {
+                    sd = custom_date[2];
+                    ed = custom_date[3];
+                    selectDateDropDown = '4_' + custom_date[1] + '_' + ed;
+                    data['selectDateDropDown'] = selectDateDropDown;
+                }
+            }
+
+            $scope.sd = sd;
+            $scope.ed = ed;
+            // if (sessionStorage.selectDate == 'calender') {
+            //     data['sd'] = airings_data['sd'] = sessionStorage.start_date;
+            //     data['ed'] = airings_data['ed'] = sessionStorage.end_date;
+            // } else {
+            //     data['sd'] = airings_data['sd'] = sd;
+            //     data['ed'] = airings_data['ed'] = ed;
+            // }
+    
+        }
+
         $scope.date_filter = function (val) {
-            console.log(val);
             if((val >= 6) && (val <= 11)){
                 $scope.ytdOther = false;
                 $scope.allOther = false;
@@ -71,12 +181,12 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                     $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
                 }
             }
-            // val = $scope.selectDate;
+            val = $scope.selectDate;
             $scope.matching_criteria = 0;
             if (val == 1) { // Last Week
                 $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
                 $scope.date_range = 'Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
-                $scope.sd = sessionStorage.media_start_date;
+                $scope.sd = sessionStorage.media_start_db;
             }
             if (val == 2) { // Current Week
                 $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
@@ -195,11 +305,11 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             }
         ];
 
-        $scope.creative_type = 'short';
-        $scope.checkedShortClassification = [1, 2, 3, 4, 5];
-        $scope.checkedLongClassification = [6];
-        $scope.selectedDurations = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
-        $scope.creative_short_duration = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
+        $scope.creative_type                = 'short';
+        $scope.checkedShortClassification   = [1, 2, 3, 4, 5];
+        $scope.checkedLongClassification    = [6];
+        $scope.selectedDurations            = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
+        $scope.creative_short_duration      = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
         $scope.getDisplayDurationText();
 
         //Language
@@ -221,9 +331,9 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         ];
 
         //response types
-        $scope.response_header = 'or';
-        $scope.responseTypeselected = ['URL', 'MAR', 'SMS', 'TFN'];
-        $scope.responseTypes = [
+        $scope.response_header          = 'or';
+        $scope.responseTypeselected     = ['URL', 'MAR', 'SMS', 'TFN'];
+        $scope.responseTypes            = [
             {
                 "value": "URL",
                 "id": "urlCheckbox",
@@ -248,10 +358,9 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         ];
 
         //date filter
-        $scope.otherDiv = 0;
-        $scope.selectDate = sessionStorage.selectDate = 1;
+        $scope.otherDiv         = 0;
+        $scope.selectDate       = sessionStorage.selectDate = 1;
         $scope.date_filter($scope.selectDate);
-        
     }
 
     $scope.initialisation() ;
@@ -266,6 +375,46 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $scope.editable = 1;
     }
     
+    $scope.applyFilter = function() {
+        $scope.getParameters();
+        $scope.categories_selected  = $scope.getSelectedCategories();
+        $scope.classification       = $scope.getSelectedClassification();
+        $scope.tab                  = $scope.type == 'brands' ? 1 : 0; 
+        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.lang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join()}
+
+        // $rootScope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""};
+    }
+
+    $scope.getSelectedClassification = function() {
+        if($scope.creative_type == 'short' && $scope.checkedShortClassification.indexOf(1) >= -1) {
+            $scope.selectClassificationValues = 1;
+        } else {
+            $scope.selectClassificationValues = $scope.creative_type == 'short' ? $scope.checkedShortClassification  : $scope.checkedLongClassification;
+            $scope.selectClassificationValues = $scope.selectClassificationValues.join();
+            
+        }
+       
+        return $scope.selectClassificationValues;
+    }
+
+    $scope.getSelectedCategories = function() {
+        var selected_cateories = [];
+        if($scope.allcategory) {
+            return 'all'
+        } else {
+            angular.forEach($rootScope.category_list , function(categories, cat_key) {
+                angular.forEach(categories.subcategory , function(subCategories, subcat_key) {
+                    if(subCategories.isSelected) {
+                        selected_cateories.push(subCategories.sub_category_id)
+                    }
+                });
+            });
+            return selected_cateories.join();
+        }
+       
+    }
+
+
     $scope.cancelFilter = function() {
         $scope.editable = 0;
     }
@@ -785,7 +934,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.initializeRankingPage = function() {
-    $rootScope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""};
+        $scope.applyFilter();
 
         ($scope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
     }

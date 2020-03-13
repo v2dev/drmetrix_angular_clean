@@ -4364,7 +4364,8 @@ function getLastLogin($redirect = 0)
         return;
     }
 
-    $url = str_replace('/drmetrix/api/index.php/', "", $_SERVER['REQUEST_URI']);
+    $pos = strpos($_SERVER['REQUEST_URI'], 'index.php/');
+    $url = substr($_SERVER['REQUEST_URI'], $pos+10); //index.php/ couting to 10
     $url_arr = explode("?", $url);
     $url = $url_arr[0];
     if ((isset($_SESSION['username']) && $_SESSION['username'] == 'demo.user@drmetrix.com')) {
