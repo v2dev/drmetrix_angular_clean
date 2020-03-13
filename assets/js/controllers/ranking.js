@@ -9,6 +9,23 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $scope.duration_display_text = ($scope.selectedDurations.length === $scope.creative_short_duration.length) ? ' (All Duration)' : ($scope.selectedDurations.length == 1) ? ' (' + $scope.selectedDurations[0] + 's)' : $scope.selectedDurations.length > 1 ? ' (Multi Duration)' : '';
     }
 
+     
+    $scope.mapValueWithSession = function (data) {
+        for (var i in data) {
+            $scope[data[i]] = sessionStorage[data[i]];
+        }
+    }
+
+    var displayDateList = [ 'media_start_date', 'media_end_date', 'media_month_date',
+    'media_monthend_date', 'lifetime_year', 'lifetime_min_sd', 'lifetime_max_ed'];
+    $scope.mapValueWithSession(displayDateList);
+
+    var databaseFormatDate = [ 'media_start_db', 'media_end_db', 'current_start_db',
+    'current_end_db', 'media_month_start_db', 'media_month_end_db', 'last_quarter_db_start_date', 'last_quarter_db_end_date', 'media_currentmonth_start_db',
+    'media_currentmonth_end_db', 'current_quarter_db_start_date', 'current_quarter_db_end_date', 'last_year_db_start_date', 'last_year_db_end_date', 'lifetime_db_min_sd', 'lifetime_db_max_ed'];
+
+    $scope.mapValueWithSession(databaseFormatDate);
+
         //date filter
         $scope.findDiff = function (end_date, val) {
             $rootScope.displayBtns = 0;
@@ -405,7 +422,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     }
     $scope.setOtherDivVariable = function () {
-        debugger;
         $scope.otherDiv = 1;
         $scope.showOtherDiv = !$scope.showOtherDiv;
         $scope.mask = 0;
@@ -441,6 +457,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         if (date != 1) {
             $scope.matching_criteria = 0;
         }
+        console.log($scope.selectDate);
         if($scope.selectDate.indexOf("year34") > -1) {
             $scope.mask = 1;
         }
@@ -464,7 +481,20 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
             $scope.findDiff(sd_2);
             sessionStorage.calender_flag = 0;
-            $scope.checkForLifetimeSelection();
+            // $scope.checkForLifetimeSelection();
+        }
+    }
+
+    $scope.setLifetimeVariables = function() {
+        sessionStorage.lifetime_flag = 0;
+        if($scope.lifetimeOther) {
+            sessionStorage.lifetime_flag = 1;
+        } 
+        // $scope.checkForLifetimeSelection();
+
+        if (sessionStorage.calender_flag == 1) {
+            $scope.apply_filter = 0;
+            $scope.lifetime_error = 1;
         }
     }
 

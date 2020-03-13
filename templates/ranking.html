@@ -9,6 +9,7 @@
             <div class="notify-msg">
                 <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
                 <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
+                <span ng-if="lifetime_error" >For date range > 1 year, you can select up to 5 categories to enable &quot;Apply&quot; button</span>
             </div>
             <div class="disclaimer-msg d-md-flex justify-content-between align-items-center" ng-show="networkDisplayName != ''">
                 <span>Selected Network: <b>{{networkDisplayName}}</b></span>

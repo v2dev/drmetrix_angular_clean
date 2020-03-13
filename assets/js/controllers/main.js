@@ -159,16 +159,26 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         var year = end_date.getUTCFullYear();
         $rootScope.year = year;
         $scope.selectedYear =  $scope.current_year = data.current_year;
-        console.log($scope.selectedYear);
-        console.log($scope.current_year);
+
+        //life time
+        sessionStorage.lifetime_year = data.lifetime.year;
+        sessionStorage.lifetime_min_sd = data.lifetime.start_date;
+        sessionStorage.lifetime_max_ed = data.lifetime.end_date;
+        sessionStorage.lifetime_db_min_sd = data.lifetime.start_date_db;
+        sessionStorage.lifetime_db_max_ed = data.lifetime.end_date_db;
+
         //last week
         sessionStorage.media_start_date = data.last_week.start_date;
         sessionStorage.media_end_date = data.last_week.end_date;
+        sessionStorage.media_start_db = data.last_week.sd;
+        sessionStorage.media_end_db = data.last_week.ed;
         sessionStorage.week_calendar_id = data.last_week.calendar_id;
 
        //last month
         sessionStorage.media_month_date = data.last_month.start_date;
         sessionStorage.media_monthend_date = data.last_month.end_date;
+        sessionStorage.media_month_start_db = data.last_month.sd;
+        sessionStorage.media_month_end_db = data.last_month.ed;
         sessionStorage.month_calendar_id = "(" + data.last_month.calendar_id + ")";
 
         //Current week data
@@ -180,17 +190,27 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         //Current Month Data
         sessionStorage.media_currentmonth_date = data.current_month.start_date;
         sessionStorage.media_currentmonthend_date = data.current_month.end_date;
+        sessionStorage.current_start_db = data.current_week.sd;
+        sessionStorage.current_end_db = data.current_week.ed;
         sessionStorage.currentmonth_calendar_id = "(" + data.current_month.calendar_id + ")";
+        $scope.current_month = data.current_month.media_month_id;
+        sessionStorage.media_currentmonth_start_db = data.current_month.sd;
+        sessionStorage.media_currentmonth_end_db = data.current_month.ed;
 
         //Last Quarter data
         sessionStorage.number_of_quarter = data.lst_quarter_no;
         sessionStorage.last_quarter_start_date = data.last_quarter[1];
         sessionStorage.last_quarter_end_date = data.last_quarter[3];
+        sessionStorage.last_quarter_db_start_date = data.last_quarter[0];
+        sessionStorage.last_quarter_db_end_date = data.last_quarter[2];
 
         //Current quarter data
         sessionStorage.number_of_currentquarter = data.quarter_no;
         sessionStorage.current_quarter_start_date = data.quarter[1];
         sessionStorage.current_quarter_end_date = data.quarter[3];
+        sessionStorage.current_quarter_db_start_date = data.quarter[0];
+        sessionStorage.current_quarter_db_end_date = data.quarter[2];
+        $scope.current_qtr = data.quarter_no;
         $scope.years = data.years;
         $scope.createYearsArray();
      });
