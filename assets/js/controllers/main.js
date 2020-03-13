@@ -571,9 +571,10 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
     
     $scope.show_user_list = function () {
         //ui grid code
+        $scope.uigridBrandListModdal();
     }
 
-    $scope.show_user_list();
+    // $scope.show_user_list();
     
     $scope.showSharedLists = function(item) {
         $scope.sharedList = item;
@@ -633,6 +634,4 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
             // this function handlers error
         });
     }
-
-    $scope.uigridBrandListModdal();
 });
