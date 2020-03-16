@@ -38,7 +38,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                 { name: 'vdate', displayName: 'Verified Date', cellTemplate:'<span>{{row.entity.vdate ? row.entity.vdate : \'-\'}}</span>' },
                 { name: 'assistant_admin', displayName: 'Assistant Admin', width: '90',cellTemplate:'<span>{{row.entity.assistant_admin == 1 ? \'Yes\' : \'No\'}}</span>' },
 
-                { name: 'skip_authy', displayName: 'Skip Authy', width: '70', cellClass:'text-center', cellTemplate:'<nav class="grid-content" id="skip_authy"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="checkbox-custom" id="skip_authy_check_{{row.entity.user_id}}" ng-click="manageSkipAuthy(row.entity.user_id)" ng-checked="row.entity.skip_authy == 1 ? true : false " /><label class="checkbox-custom-label"></label></li></ul></nav>' },
+                { name: 'skip_authy', displayName: 'Skip Authy', width: '70', cellClass:'text-center', cellTemplate:'<nav class="grid-content" id="skip_authy"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="checkbox-custom" id="skip_authy_check_{{row.entity.user_id}}" ng-click="grid.appScope.manageSkipAuthy(row.entity)" ng-checked="row.entity.skip_authy == 1 ? true : false " /><label class="checkbox-custom-label"></label></li></ul></nav>' },
 
                 { name: 'status', displayName: 'Status', width: '80', cellTemplate:'<span>{{row.entity.status == "active" ? "Active" : "Inactive"}}</span>' },
                 { name: 'last_login', displayName: 'Last Login', cellTemplate:'<span>{{row.entity.last_login}}</span>' },
@@ -197,15 +197,20 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         }
     }
 
-    $scope.manageSkipAuthy = function(id) {
+    $scope.manageSkipAuthy = function(rowEntity) {
+        $scope.userRowForAction = rowEntity;
+        let id = $scope.userRowForAction.user_id;
         var skip_authy_checked = $('#skip_authy_check_' + id).is(":checked") ? 1 : 0;
-
-        apiService.post('/drmetrix/api/index.php/manage_skip_authy', { 'user_id': id, 'skip_authy_checked': skip_authy_checked })
+        apiService.post('/manage_skip_authy', { 'user_id': id, 'skip_authy_checked': skip_authy_checked })
         .then(function(response) {
             var data = response.data;
-            var response = jQuery.parseJSON(data);
-            if (response.status == 1) {
-                console.log("done")
+            if (data.status == 1) {
+                $("#editMessage").modal('show');
+                //setTimeout(function(){ FoundationApi.publish('editMessage', 'hide'); $scope.showUsers();  } , 1000 );
+                /*setTimeout(function(){
+                    $("#editMessage").modal('hide');
+                    // $state.go($state.current, {}, {reload: true});
+                } , 1000);*/
             }
         }, function (response){
             // this function handlers error

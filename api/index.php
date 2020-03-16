@@ -152,6 +152,7 @@ $app->post('/get_all_active_networks','getAllActiveNetworks');
 $app->post('/getCreativesForNetworks','getCreativesForNetworks');
 $app->post('/network_excel_export','networkExcelExport');
 $app->post('/manage_network_tab','manageNetworkTab');
+$app->post('/manage_skip_authy','manageSkipAuthy');
 $app->post('/manage_staging_access','manageStagingAccess');
 $app->post('/get_account_owner','getAccountOwner');
 $app->post('/save_user_filter','saveUserFilter');
@@ -17192,6 +17193,42 @@ function manageNetworkTab(){
 
     APIManageZOHOAccount('manageNetworkTab',$company_details);
     echo json_encode(array('status'=>1));
+}
+
+function manageSkipAuthy(){
+    $request = Slim::getInstance()->request();
+    $_REQUEST = (array) json_decode($request->getBody());
+
+    $authy_bypass_until = $_REQUEST['skip_authy_checked'] ? 'now()' : '"0000-00-00"';
+
+    $db  = getConnection();
+    if( isset($_REQUEST['company_id']) ) {
+        $company_id = $_REQUEST['company_id'];
+        /*$sql = 'UPDATE user SET authy_bypass_until = '.$authy_bypass_until.' WHERE company_id = '.$company_id.';';
+         $stmt = $db->prepare($sql);
+         $stmt->execute();*/
+
+        // $authy_bypass_until = $_REQUEST['staging_access_checked'] ? '(now() + INTERVAL 24 HOUR)' : '0000-00-00';
+        // $sql = 'UPDATE user u, admin_user au SET authy_bypass_until = '.$authy_bypass_until.' WHERE au.user_id = u.user_id and au.admin_id = '.$company_id.';';
+        $sql = 'UPDATE user u, user a, admin_user au SET u.authy_bypass_until = '.$authy_bypass_until.', a.authy_bypass_until = '.$authy_bypass_until.'
+                WHERE au.user_id = u.user_id and a.user_id = au.admin_id and a.company_id = '.$company_id.';';
+    } else {
+        $user_id = $_REQUEST['user_id'];
+
+        $sql = 'UPDATE user SET authy_bypass_until = '.$authy_bypass_until.' WHERE user_id = '.$user_id.';';
+    }
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+
+    /*$staging_access = 'false';
+     if($_REQUEST['staging_access_checked'])
+     $staging_access = 'true';
+     $zoho_account_id = getCompanyInfo($company_id[3]);
+     $company_details['zoho_account_id'] = $zoho_account_id[0]->zoho_account_id;
+     $company_details['staging_access'] = $staging_access;
+
+     APIManageZOHOAccount('manageStagingAccess',$company_details);*/
+     echo json_encode(array('status'=>1));
 }
 
 function manageStagingAccess(){
