@@ -3,15 +3,14 @@ var maskedInput = function() {
       restrict: 'EA',
       require: 'ngModel',
       link: function(scope, element, attrs, ngModel) {
-        console.log("In link function");
 
         var addSpaces = function(value) {
           if (typeof(value) == typeof(undefined))
             return value;
-          var x = value.toString()
-          .replace(/\D/g, '')
-          .match(/(\d{3})(\d{3})(\d{4})/);
-          parsedValue = '' + x[1] + '-' + x[2] + '-' + x[3];
+          var x = value
+          .match(/\d*/g).join('')
+          .match(/(\d{0,3})(\d{0,3})(\d{0,12})/);
+          parsedValue = '' + x[1] + (x[2] ? '-' : '') + x[2] + (x[3] ? '-' : '') + x[3];
           return parsedValue;
         }
 
@@ -43,7 +42,6 @@ var maskedInput = function() {
     };
     return directive;
   }
-
 
   maskedInput.$inject = [];
   angular.module("drmApp.directives")

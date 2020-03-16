@@ -4491,16 +4491,16 @@ function deleteUserFromCompany() {
     $params['company_id'] = $company_id = urlDecode($user->company_id);
     
     try {
-        // $user_info                  = getUserInfoById($user->user_id);
-        // $params['role']             = $user_info[0]->role;
-        // $params['email_id']         = $user_info[0]->username;
-        // $params['zoho_contact_id']  = $user_info[0]->zoho_contact_id;
+        $user_info                  = getUserInfoById($user->user_id);
+        $params['role']             = $user_info[0]->role;
+        $params['email_id']         = $user_info[0]->username;
+        $params['zoho_contact_id']  = $user_info[0]->zoho_contact_id;
 
-        // $get_company_info           = getCompanyInfoById($company_id);
-        // $params['zoho_account_id']  = $get_company_info[0]->zoho_account_id;
+        $get_company_info           = getCompanyInfoById($company_id);
+        $params['zoho_account_id']  = $get_company_info[0]->zoho_account_id;
        
-        // deleteUser($params);
-        // APIManageZOHOContact('deleteUser', $params);
+        deleteUser($params);
+        APIManageZOHOContact('deleteUser', $params);
        
         $json_data['status'] = 'true';
 
