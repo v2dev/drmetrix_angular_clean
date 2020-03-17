@@ -1853,7 +1853,7 @@ function brandNetworks($export = 0, $request_arr = NULL){
            $nestedData['id'] = $resultV->network_id;
            array_push($network_array, $resultV->network_id);
           // $airings_count = $resultV->airings;
-           $nestedData['network_code'] = $resultV->network_alias ? '<a href="#"><span id="network_code_plus_'.$resultV->network_id.'" class="toggle-icon-plus"><span class="icon-border icon-border-plus"></span></span></a><a href="#"><span class="toggle-icon-minus" id="network_code_minus_'.$resultV->network_id.'"><span class="icon-border icon-border-minus"></span></span></a><span>'.$resultV->network_alias.'</span>' : '-' ;
+           $nestedData['network_code'] = $resultV->network_alias ? $resultV->network_alias : '-';
            $nestedData['network_alias'] = $resultV->network_alias;
            $exportData['network_alias'] = $resultV->network_alias;
            $exportData['network_id'] = $resultV->network_id;
@@ -1862,10 +1862,10 @@ function brandNetworks($export = 0, $request_arr = NULL){
            $exportData['creatives'] = $nestedData['creatives'];
            if($tab == 'brand'){
                 $exportData['program'] = $resultV->program_count;
-                $nestedData['airings'] = '<a href="#" onclick="showAiringSpendGraph(\'airings\','.$resultV->ID.', \'\', \''.addslashes($resultV->network_alias).'\', \''.number_format($resultV->airings).'\','.$resultV->dpi.', '.$resultV->network_id.')">'.number_format($resultV->airings).'</a>';
+                $nestedData['airings'] = $resultV->airings  ? number_format($resultV->airings) : 0;
                 $exportData['airings'] = $resultV->airings;
-                $nestedData['total_spend'] = '<a href="#" onclick="showAiringSpendGraph(\'spend\','.$resultV->ID.', \'\', \''.addslashes($resultV->network_alias).'\', \''.number_format($resultV->total_spend).'\','.$resultV->dpi.','.$resultV->network_id.')">'.number_format($resultV->total_spend, 0).'</a>';
-                $nestedData['program_count'] =  '<a href="#" onClick="getProgramsByNetwork('.$resultV->network_id.',\'brand\','.$brand_id.',\''.addslashes($resultV->network_alias).'\','. $resultV->program_count.');">'.number_format($resultV->program_count).'</a>';
+                $nestedData['total_spend'] = number_format($resultV->total_spend, 0);
+                $nestedData['program_count'] =  number_format($resultV->program_count);
            }
            if($tab == 'creative'){
                 $exportData['program'] = $resultV->program_count;
@@ -2663,13 +2663,9 @@ function creativesNetworks($export = NULL, $request = NULL){
         $requestData = $request;
     }else{
         $request = Slim::getInstance()->request();
-        $query_string = $request->getBody();    
-        $set_one = explode('&', $query_string);
-        
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
+        $query_string = $request->getBody();
+        parse_str($query_string, $output);
+        $requestData = (array)json_decode($query_string, TRUE);
     }
 
     if(isset($requestData['sidx']) && isset($requestData['sord'])){
@@ -2753,7 +2749,7 @@ function creativesNetworks($export = NULL, $request = NULL){
     $params_network_creatives['responseType']         = $responseType;
     $params_network_creatives['spanish']              = $spanish;
     $params_network_creatives['network_id']           = $requestData['network_id'];
-    $params_network_creatives['network_code']         = $network_info[0]->network_code;
+    $params_network_creatives['network_code']         = (!empty($network_info)) ? $network_info[0]->network_code : $requestData['network_code'];
     $params_network_creatives['classification']       = $classification;
 //    $params_network_creatives['cr_type']              = $conditions['cr_type'];
     $params_network_creatives['tab_condition']        = $tab_condition;
