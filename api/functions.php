@@ -4,7 +4,8 @@ require_once dirname(__FILE__) . '/constants.php';
 require_once dirname(__FILE__) . '/queries.php';
 
 global $skip_urls;
-$skip_urls = array('user_login', 'user_logout', 'number_of_weeks', 'last_media_week', 'last_media_month', 'last_media_quarter', 'current_week', 'current_media_month', 'current_media_quarter', 'verify_authy', 'get_cats_list', 'forgot_password', 'update_password', 'get_video', 'excel_video', 'daily_creative_status_update', 'get_user', 'get_my_reports_data', 'downloadClientFiles', 'current_week', 'ranking_report', 'display_airings_brands_with_networks', 'fetch_creative_short_duration', 'unsubscribe_user', 'get_all_media_data', 'network_list_export_from_grid', 'creative_videos', 'export_refine_log', 'create_network_pdf', '/drmetrix/api/export_to_excel', '/drmetrix/api/refine_excel_export', '/drmetrix/api/filter_results', '/drmetrix/api/network_excel_export', '/drmetrix/api/display_airings_brands_with_networks', '/drmetrix/api/apply_refine_filters','networks_ranking_export','show_users', 'get_user_edit', 'delete_user_from_company','forgot_password', 'deactivate_user', 'contact_us', 'filter_results','brand_networks');
+
+$skip_urls = array('user_login', 'user_logout', 'number_of_weeks', 'last_media_week', 'last_media_month', 'last_media_quarter', 'current_week', 'current_media_month', 'current_media_quarter', 'verify_authy', 'get_cats_list', 'forgot_password', 'update_password', 'get_video', 'excel_video', 'daily_creative_status_update', 'get_user', 'get_my_reports_data', 'downloadClientFiles', 'current_week', 'ranking_report', 'display_airings_brands_with_networks', 'fetch_creative_short_duration', 'unsubscribe_user', 'get_all_media_data', 'network_list_export_from_grid', 'creative_videos', 'export_refine_log', 'create_network_pdf', '/drmetrix/api/export_to_excel', '/drmetrix/api/refine_excel_export', '/drmetrix/api/filter_results', '/drmetrix/api/network_excel_export', '/drmetrix/api/display_airings_brands_with_networks', '/drmetrix/api/apply_refine_filters','networks_ranking_export','export_to_excel','show_users', 'get_user_edit', 'delete_user_from_company','forgot_password', 'deactivate_user', 'contact_us', 'filter_results', 'brand_networks');
 
 function downloadExcel($function_name, $sql, $day_type, $file_name, $user_id, $name, $date_range_str, $excel_values ,$id = '')
 {
@@ -294,7 +295,7 @@ function execQuery($sql)
 
 function getResult($sql, $type = 'FETCH_ASSOC')
 {
-    ini_set('memory_limit', '2192M');
+    ini_set('memory_limit', '8192M');
     $db = getConnection();
     $stmt = $db->prepare($sql);
     $stmt->execute();
@@ -1099,7 +1100,6 @@ function getArrayForNetworkTab(&$requestData, $query_function)
     }
 
     $requestData['total_spend'] = $total_spend;
-
     $brand_array = sortArray($brand_array, '_creatives_', $requestData['networkTab'], $total_spend, 1);
     return $brand_array;
 }
@@ -1197,7 +1197,7 @@ function sortArray($array, $first_level_key, $second_level_key, $total_spend, $r
                 $spendIndexCalculate['projected_score'] = $value;
                 $spendIndexCalculate['classification'] = $return_array[$key][$first_level_key]['classification'];
                 $spendIndexCalculate['sum'] = $total_spend;
-                $return_array[$key][$first_level_key]['Spend Index']        = findSpendIndex($spendIndexCalculate);
+                $return_array[$key][$first_level_key]['Spend Index']        = $spendIndexCalculate['projected_score'];
                 $return_array[$key][$first_level_key]['number_Spend Index'] = $value;
                 // $value = $value / $total_spend * 100;
                 // $return_array[$key][$first_level_key]['Spend Index'] = $value;
@@ -1460,6 +1460,7 @@ function getCurrentMediaMonth()
     $this_month['sd'] = $date_range['min_date'];
     $this_month['ed'] = $date_range['max_date'];
     $this_month['calendar_id'] = date("M", strtotime($date_range['max_date']));
+    $this_month['media_month_id'] = date("m", strtotime($date_range['max_date']));
 
     $this_month['start_date'] = date("m/d/Y", strtotime($date_range['min_date']));
     $this_month['end_date'] = date("m/d/Y", strtotime($date_range['max_date']));
@@ -3368,29 +3369,32 @@ function pad_numbers($number, $no_of_digits, $direction)
     return $number;
 }
 
-function get_all_weeks()
+function get_all_weeks($year)
 {
-    if (!defined('ALL_WEEKS')) {
-        $query = 'SELECT media_week_start , media_week_end, media_week, media_year FROM `media_calendar` group by media_week, media_year order by media_year,media_week';
-        $weeks = execute_query_get_result($query, 'FETCH_ASSOC');
-
-        foreach ($weeks as $key => $value) {
-            $year = $value['media_year'];
-            $week = $value['media_week'];
-            $return[$year][$week] = $value;
-        }
-
-        define('ALL_WEEKS', serialize($return));
+   // if (!defined('ALL_WEEKS')) {
+    $query = 'SELECT media_week_start , media_week_end, media_week, media_year FROM `media_calendar` WHERE media_year = '.$year.' order by media_week';
+    $weeks = execute_query_get_result($query, 'FETCH_ASSOC');
+    foreach ($weeks as $key => $value) {
+        $year = $value['media_year'];
+        $week = ($value['media_week']);
+        $return[$year][$week] = $value;
     }
-
-    return unserialize(ALL_WEEKS);
+    // define('ALL_WEEKS', serialize($return));
+    // }
+    // return unserialize(ALL_WEEKS);
+    return $return;
 }
 
 function get_weeks_by_year($year)
 {
-    $weeks = get_all_weeks();
-
-    return $weeks[$year];
+    // $weeks = get_all_weeks($year);
+    $query = 'SELECT media_week_start , media_week_end, media_week, media_year FROM `media_calendar` WHERE media_year = '.$year.' order by media_week';
+    $weeks = execute_query_get_result($query, 'FETCH_ASSOC');
+    $w = array();
+    foreach ($weeks as $key => $value) {
+        array_push($w, $value);
+    }
+    return $w;
 }
 
 function get_all_months()
@@ -3413,10 +3417,16 @@ function get_all_months()
 
 function get_months_by_year($year)
 {
-    $months = get_all_months();
-
-    return $months[$year];
+    // $months = get_all_months();
+    $query = 'SELECT media_month_start , media_month_end, media_month, media_year FROM `media_calendar` WHERE media_year  = '.$year.'  group by media_month order by media_month';
+    $months = execute_query_get_result($query, 'FETCH_ASSOC');
+    $m = array();
+    foreach ($months as $key => $value) {
+        array_push($m, $value);
+    }
+    return $m;
 }
+
 
 function get_all_qtrs()
 {
@@ -3435,14 +3445,18 @@ function get_all_qtrs()
 
     return unserialize(ALL_QTRS);
 }
-
 function get_qtrs_by_year($year)
 {
-    $qtrs = get_all_qtrs();
-
-    return $qtrs[$year];
+    // $qtrs = get_all_qtrs();
+    $query = 'SELECT media_qtr_start , media_qtr_end, media_qtr, media_year FROM `media_calendar` WHERE media_year =  '.$year.'  group by media_qtr order by media_qtr';
+    $qtrs = execute_query_get_result($query, 'FETCH_ASSOC');
+    $q = array();
+    foreach ($qtrs as $key => $value) {
+        array_push($q, $value);
+    }
+    return $q;
+    // return $qtrs[$year];
 }
-
 function get_all_years()
 {
     if (!defined('ALL_YEARS')) {
@@ -3503,7 +3517,6 @@ function get_rankings_from_cache($requestData, $tab)
 
     $encoded_responsetype = urlencode(" response_url=1  or  response_sms=1  or  response_tfn=1  or  response_mar=1 ");
     $encoded_responsetype = '('.$encoded_responsetype.')';
-
     if ($requestData['sd'] == $last_week_details['sd'] &&
         $requestData['ed'] == $last_week_details['ed'] &&
         $requestData['val'] == 1 &&
@@ -4098,7 +4111,7 @@ function check_base64_encoded($string)
 
 function getVideoStreamingUrl()
 {
-    if ($_SERVER['HTTP_HOST'] == 'localhost') {
+    if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
         $video_api = 'http://video.drmetrix.com/';
     } else {
         $video_api = VIDEO_STREAMING_URL;
@@ -4351,16 +4364,13 @@ function getLastLogin($redirect = 0)
     if (!empty($_SERVER['SHELL'])) {
         return;
     }
-   
-    $pos = strpos($_SERVER['REQUEST_URI'], 'index.php/');
-    // $url = str_replace('drmetrix/api/index.php/', "", $_SERVER['REQUEST_URI']);
-    $url = substr($_SERVER['REQUEST_URI'], $pos+10); //index.php/ couting to 10
+
+    $url = str_replace('/drmetrix/api/index.php/', "", $_SERVER['REQUEST_URI']);
     $url_arr = explode("?", $url);
     $url = $url_arr[0];
     if ((isset($_SESSION['username']) && $_SESSION['username'] == 'demo.user@drmetrix.com')) {
         return;
     }
-    
     if (!in_array($url, $skip_urls)) {
         $db = getConnection();
         // $request    = Slim::getInstance()->request();
@@ -4440,7 +4450,13 @@ function updatePricingCompanyId($params) {
 function updateUserCall($company_details, $user) {
     $db             = getConnection();
     $user_details   = createUserData($company_details, $user);
-    $sql            = "UPDATE user SET client='".$user_details['client']."',zoho_contact_id = '".$user_details['zoho_contact_id']."', first_name = '".addslashes($user_details['first_name'])."',last_name = '".addslashes($user_details['last_name'])."',phone_number = '".$user_details['mobile']."',username = '".addslashes($user_details['username'])."',email = '".addslashes($user_details['username'])."', country_code='".$user_details['country_code']."', account_owner ='".addslashes($user_details['account_owner']) ."',position='".$user_details['position']."',assistant_admin = '".$user_details['assistant_admin']."', status='".$user_details['status']."' ".$user_details['update_authy'].", modified_date='".date("Y-m-d H:i:s")."' WHERE user_id = '".$user_details['ads_record_id']."'";
+
+    $skip_authy_condition = '';
+    if(isset($user->skip_authy) ) {
+        $skip_authy_condition = ', authy_bypass_until = ' . ($user->skip_authy ? 'NOW()' : '"0000-00-00"');
+    }
+
+    $sql            = "UPDATE user SET client='".$user_details['client']."',zoho_contact_id = '".$user_details['zoho_contact_id']."', first_name = '".addslashes($user_details['first_name'])."',last_name = '".addslashes($user_details['last_name'])."',phone_number = '".$user_details['mobile']."',username = '".addslashes($user_details['username'])."',email = '".addslashes($user_details['username'])."', country_code='".$user_details['country_code']."', account_owner ='".addslashes($user_details['account_owner']) ."',position='".$user_details['position']."',assistant_admin = '".$user_details['assistant_admin']."', status='".$user_details['status']."' ".$user_details['update_authy'].", modified_date='".date("Y-m-d H:i:s")."' $skip_authy_condition WHERE user_id = '".$user_details['ads_record_id']."';";
     $stmt           = $db->prepare($sql);
     $stmt->execute();
 

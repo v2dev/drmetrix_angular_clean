@@ -6,32 +6,29 @@
     <li>
         <div>
             Date Range -
-            <span>
-                Media Week 40 - 09/30/2019 thru 10/06/2019
-            </span>
+            <span class="text-disabled" id="ranking_date_range">{{date_range}}</span>
         </div>
-        <ul class="left-menu" ng-show="editable">
-            <li class="active-alert">
-                <a href="#">
-                    <label>
-                        Last Week
-                    </label>
-                </a>
+        <ul class="left-menu" ng-show="editable">{{selectDate}}
+            <li ng-class="{'active-alert' : selectDate == 1 &&  otherDiv == 0}">
+                <input type="radio" name="date_type" value="1" id="last_date" class="radio-custom" ng-model="selectDate" ng-change="date_filter(1)"/>
+                <label id="display_week"  for="last_date">
+                    <div class="custom-div">Last Week</div>
+                </label>
             </li>
-            <li>
-                <a href="#">
-                    <label>Current Week</label>
-                </a>
+            <li ng-class="{'active-alert' : selectDate == 2 &&  otherDiv == 0}">
+                <input type="radio" name="date_type" value="2" id="current_week" class="radio-custom" ng-model="selectDate" ng-change="date_filter(2)"/>
+                <label  for="current_week">
+                    <div class="custom-div">Current Week</div>
+                </label>
             </li>
-            <li>
-                <a href="#">
-                    <label>Other</label>
-                </a>
+            <li ng-class="{'active-alert' : otherDiv == 1}">
+                <input type="radio" name="date_type" value="media_other1" id="media_other" class="radio-custom" ng-click="setOtherDivVariable();"/>
+                <label class="radio-custom-label" for="media_other">
+                    <div class="custom-div">Other</div>
+                </label>
             </li>
             <li class="datepicker-li checkbox-radio">
-                <input type="radio" name="date_type" id="datepicker_checkbox"
-                    value="2019-10-12 - 2019-10-12" class="radio-custom-checkbox datepicker_checkbox"
-                    ng-click="changeHiddenVal()">
+                <input type="radio" name="date_type" id="datepicker_checkbox" value="calender" class="radio-custom-checkbox datepicker_checkbox"  ng-click="changeHiddenVal()"/>
                 <label for="datepicker_checkbox" class="radio-custom-checkbox-label">
                     <div class="custom-div" for="datepicker_checkbox">
                         <span class="v-align-middle">
@@ -104,13 +101,13 @@
             <span class="text-disabled">{{responseTypeText}}</span>
             </span>
             <ul class="left-menu" ng-show="editable">
-                <li class="radio-circular active-alert">
+                <li class="radio-circular"  ng-class="{'active-alert' : response_header == 'or'}">
                     <input type="radio" id="or" name="response_typ" value=" or " ng-model="response_header" class="radio-custom" ng-click="setResponseTypes('or')"/>
                     <label for="or">
                         At Least
                     </label>
                 </li>
-                <li>
+                <li class="radio-circular" ng-class="{'active-alert' : response_header == 'and'}">
                     <input type="radio" id="and" name="response_typ" value=" and " ng-model="response_header" class="radio-custom" ng-click="setResponseTypes('and')" />
                     <label for="and">
                         Only
@@ -134,8 +131,136 @@
         <button class="btn btn-blue hide-div cancel btn-sm" ng-show="editable" ng-click="cancelFilter()"><i class="fa fa-times" title="cancel"></i>Cancel</button>                            
     </li>
 </ul>
-
-
+<!-- Other date range popup -->
+<div class="modal fade network-filter-popup tfn-url sm-popup show" id="othersDiv1" tabindex="-1" role="dialog" aria-labelledby="othersDiv1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title">Media Week List</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="save_filter_cancel"  ng-click="save_filter_cancel('ranking')">
+             <span aria-hidden="true"></span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <ul class="media-yr">
+                <li>
+                   <h6>Media Year</h6>
+                   <div ng-click="showYearDropDownVariable()">
+                      <span class="year-list">{{selectedYear}}</span>
+                      <ul class="year-dropdown" ng-show="showYearDropDown">
+                         <li ng-repeat="y in yearsArray | orderBy:'-key'" ng-click="showMediaCalender(y.media_year);$event.stopPropagation()" >
+                            {{y.media_year}}
+                         </li>
+                      </ul>
+                   </div>
+                </li>
+                <li class="checkbox" ng-if="selectedYear == current_year">
+                   <input type='checkbox' name='others-ytd_checkbox' id='ytd_selectedYear' 
+                      value='year34_{{selectedYear}}_{{years[selectedYear]["media_year_start"]}}_{{years[selectedYear]["media_year_end"]}}'
+                      ng-model='ytdOther' ng-change='date_detail()'>
+                   <label for="ytd_selectedYear" class="checkbox-custom-label">
+                   <span class="radio-custom-checkbox-label">YTD</span>
+                   </label>
+                </li>
+                <li class="checkbox" ng-if="selectedYear != current_year">
+                   <input type='checkbox' name='others-all_checkbox[]' class="radio-custom-checkbox" id='all_selectedYear'
+                      value='year34_{{selectedYear}}_{{years[selectedYear]["media_year_start"]}}_{{years[selectedYear]["media_year_end"]}}' 
+                      ng-model='allOther' ng-change='date_detail()'>
+                   <label for="all_selectedYear" class="checkbox-custom-label">
+                   <span class="radio-custom-checkbox-label">All</span> 
+                   </label>
+                </li>
+                <li class="checkbox">
+                   <input type='checkbox' name='others-lifetime_checkbox' value="5" id="media_lifetime" custom-attr="media_lifetime_checkbox" class="radio-custom-checkbox " 
+                      ng-model="lifetimeOther"  ng-change="date_filter(5)" ng-click="setLifetimeVariables();">
+                   <label for="media_lifetime" class="checkbox-custom-label">
+                   <span class="radio-custom-checkbox-label">Lifetime</span>
+                   </label>
+                </li>
+             </ul>
+             <!-- Date presets -->
+             <div class="date-preset-block">
+                <ul class="media-week-list">
+                   <li class="media_week_cls radio-circular">
+                      <input type="radio" value="9" name='date_presets' id="media_currentweek" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)">
+                      <label class="radio-custom-label" for="media_currentweek">
+                         <div class="custom-div">Current Week</div>
+                      </label>
+                   </li>
+                   <li class="media_week_cls radio-circular">
+                      <input type="radio" value="6" name='date_presets' id="media_lastweek" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)">
+                      <label class="radio-custom-label" for="media_lastweek">
+                         <div class="custom-div">Last Week</div>
+                      </label>
+                   </li>
+                   <li class="media_week_cls radio-circular">
+                      <input type="radio" value="10" name='date_presets' id="media_currentmonth" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
+                      <label class="radio-custom-label mr-0" for="media_currentmonth">
+                         <div class="custom-div">Current Month</div>
+                      </label>
+                   </li>
+                   <li class="media_week_cls radio-circular">
+                      <input type="radio" value="7" name='date_presets' id="media_lastmonth" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
+                      <label class="radio-custom-label" for="media_lastmonth">
+                         <div class="custom-div">Last Month</div>
+                      </label>
+                   </li>
+                   <li class="media_week_cls radio-circular">
+                      <input type="radio" value="11" name='date_presets' id="media_currentqtr" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
+                      <label class="radio-custom-label" for="media_currentqtr">
+                         <div class="custom-div">Current Quarter</div>
+                      </label>
+                   </li>
+                   <li class="media_week_cls radio-circular">
+                      <input type="radio" value="8" name='date_presets' id="media_lastqtr" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
+                      <label class="radio-custom-label mr-0" for="media_lastqtr">
+                         <div class="custom-div">Last Quarter</div>
+                      </label>
+                   </li>
+                </ul>
+             </div>
+             <div ng-repeat="y in yearsArray | orderBy:'-key'" id="othersWrapperDiv{{y.media_year}}>" ng-show="y.media_year == selectedYear" class='position-relative othersWrapperDiv {{y.media_year}}'>
+                <div id="masking" ng-class="{'mask': mask == 1}"></div>
+                <div class='d-flex align-item-center justify-content-between media-year-details mt-2 pl-2 pr-2'>
+                   <div>
+                      <label>Media Week/{{y.media_year}}</label>
+                      <ul class="scrollbar">
+                         <li ng-repeat="(w_key, w) in y.weeks" class="radio" ng-class="{'other-opa': w.media_week > current_week && selectedYear == current_year}">
+                            <label class="radio" for="week_{{y.media_year}}_{{w.media_week}}">
+                            <input type='radio' name='others-select' value='week31_{{w.media_week}}_{{w.media_week_start}}_{{w.media_week_end}}' id='week_{{y.media_year}}_{{w.media_week}}'  class='radio-custom'  ng-disabled="w.media_week > current_week && selectedYear == current_year" ng-model='selectDate' ng-change='date_detail(selectDate)'/>
+                            <span>{{w.media_week}}</span>
+                            </label>
+                         </li>
+                      </ul>
+                   </div>
+                   <div>
+                      <label>Media Month/{{y.media_year}}</label>
+                      <ul class="scrollbar">
+                         <li ng-repeat="w in y.months" class="radio" ng-class="{'other-opa': w.media_month > current_month && selectedYear == current_year}">
+                            <label class="radio"  for="month_{{y.media_year}}_{{w.media_month}}">
+                            <input type='radio' name='others-select' value='week31_{{w.media_month}}_{{w.media_month_start}}_{{w.media_month_end}}' id='month_{{y.media_year}}_{{w.media_month}}'  class='radio-custom ' ng-model='selectDate' ng-change='date_detail(selectDate)' ng-disabled="w.media_month > current_month && selectedYear == current_year " />
+                            <span>{{w.media_month | monthName}}</span>
+                            </label>
+                         </li>
+                      </ul>
+                   </div>
+                   <div>
+                      <label>Media Qtr/{{y.media_year}}</label>
+                      <ul>
+                         <li ng-repeat="w in y.qtrs" class="radio" ng-class="{'other-opa': w.media_qtr > current_qtr && selectedYear == current_year}">
+                            <label class="radio" for="qtr_{{y.media_year}}_{{w.media_qtr}}">
+                            <input type='radio' name='others-select' value='week31_{{w.media_qtr}}_{{w.media_qtr_start}}_{{w.media_qtr_end}}' id='qtr_{{y.media_year}}_{{w.media_qtr}}'  class='radio-custom ' ng-model='selectDate' ng-change='date_detail(selectDate)' ng-disabled="w.media_qtr > current_qtr && selectedYear == current_year"/>
+                            <span>Q{{w.media_qtr}}</span>
+                            </label>
+                         </li>
+                      </ul>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
 <!--Brand Classification popup-->
 <div class="modal fade network-filter-popup brand-classification-popup lg-popup show" id="brand-dropdown" tabindex="-1" role="dialog" aria-labelledby="brand-dropdown">
         <div class="modal-dialog modal-dialog-centered" role="document">
