@@ -1705,17 +1705,15 @@ function brandNetworks($export = 0, $request_arr = NULL){
     }else{
         $request = Slim::getInstance()->request();
         $query_string = $request->getBody();    
-        $set_one = explode('&', $query_string);
-        
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
-
+        parse_str($query_string, $output);
+        $requestData = (array)json_decode($query_string, TRUE);
         $page           = $requestData['page'];
         $limit          = $requestData['rows'];
     }   
-    
+        $sidx       = 'spend_index';
+        $sord       = 'desc';
+        $page       = 1;
+        $limit      = 10;
     $sidx           = $requestData['sidx'];
     $sord           = $requestData['sord'];
     $c              = urldecode($requestData['c']);
