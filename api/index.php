@@ -3723,7 +3723,7 @@ function checkMobile(){
     $hidden_mobile_no = isset($user->hidden_mobile_no) ? $user->hidden_mobile_no : '';
 
     $admin_id = isset($user->admin_id) ? $user->admin_id : $_SESSION['user_id'];
-    $sql= "SELECT phone_number  FROM `user` u INNER JOIN admin_user a ON a.user_id = u.user_id WHERE phone_number = '".$mobile."' and a.admin_id = '".$admin_id."' AND u.user_id <> '".$user->user_id."' /*AND u.status != 'deleted'*/";
+    $sql= "SELECT phone_number  FROM `user` u INNER JOIN admin_user a ON a.user_id = u.user_id WHERE replace(phone_number, '-', '') = '".$mobile."' and a.admin_id = '".$admin_id."' AND u.user_id <> '".$user->user_id."' /*AND u.status != 'deleted'*/";
     //$sql="SELECT phone_number FROM user WHERE phone_number ='".$mobile."'";
     
      try{

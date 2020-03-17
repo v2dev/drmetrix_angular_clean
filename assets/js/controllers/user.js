@@ -31,7 +31,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                 { name: 'position', displayName:'Position', width: '150',cellTemplate:'<span title="{{row.entity.position}}" >{{row.entity.position}}</span>' },
                 { name: 'role', displayName:'role', width: '70',cellTemplate:'<span title="{{row.entity.role}}" >{{row.entity.role}}</span>' },
 
-                { name: 'ads_authenticated', displayName:'Adsphere Authenticated', width: '120',enableColumnMenus: false, cellTemplate:'<span class="{{row.entity.ads_authenticated ? \'user-not-verified\' : \'\'}}"  >{{row.entity.ads_authenticated ? \'No\' : \'\'}}</span><span class="{{row.entity.ads_authenticated ? \'user-not-verified-link\' : \'user-verified\'}}" id ="resend_link_{{row.entity.user_id}}" ng-click="sendPassword(row.entity.passphrase,row.entity.user_id)" >{{row.entity.ads_authenticated ? \'Resend Email\' : \'Yes\'}}</span>' },
+                { name: 'ads_authenticated', displayName:'Adsphere Authenticated', width: '120',enableColumnMenus: false, cellTemplate:'<span class="{{row.entity.ads_authenticated ? \'user-not-verified\' : \'\'}}"  >{{row.entity.ads_authenticated ? \'No\' : \'\'}}</span><span class="{{row.entity.ads_authenticated ? \'user-not-verified-link\' : \'user-verified\'}}" id ="resend_link_{{row.entity.user_id}}" ng-click="grid.appScope.sendPassword(row.entity)" >{{row.entity.ads_authenticated ? \'Resend Email\' : \'Yes\'}}</span>' },
 
                 { name: 'authy_cookie', displayName:'Authy Authenticated', width: '100', cellTemplate:'<span class="{{row.entity.authy_cookie ? \'user-verified\' : \'user-not-verified-authy\'}}">{{row.entity.authy_cookie ? \'Yes\' : \'No\'}}<span>' },
 
@@ -217,6 +217,104 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         });
     }
 
+    $scope.saveUser = function(  active ){
+        if (typeof (active) == 'undefined') {
+            active = false;
+        }
+
+        $("#domain_msg").html('');
+        var mobile =  $('#mobile').val();
+        var country_code =  $('#add_country_code').val();
+        var timeout = 30;
+        var no_of_apps = 1;
+        var first_name = $scope.admin_user.first_name;
+        var last_name = $scope.admin_user.last_name;
+        var username = $scope.admin_user.username;
+        var country_code = $scope.admin_user.country_code;
+        var mobile = mobile;//$scope.admin_user.mobile;
+        var position = $scope.admin_user.position;
+        var role = 'user';
+        var receive_report = $scope.admin_user.receive_report;
+        var admin_id = sessionStorage.loggedInUserId;
+        var assistant_admin = 0;
+        if ($("#assistant_admin").is(":checked")) {
+            assistant_admin = 1;
+        }
+        var tier = 1;//$scope.admin_user.users['tiers'][0].id;//$scope.admin_user.tier;
+
+        var postS = {'first_name':first_name, 'last_name':last_name, 'username':username, 'mobile':mobile,'position':position, 'role':role,'receive_report':receive_report,'admin_id':admin_id,'tier':tier,'country_code':country_code,'timeout':timeout,'no_of_apps':no_of_apps,'assistant_admin':assistant_admin, 'active' :active };
+        if(active != ''){
+            postS.user_id  =  $('.user_ads_id').text() ;
+            postS.zoho_user_id =  $('.user_zoho_id').text();
+        }
+        $("#save_user_btn").prop( "disabled", true );
+        apiService.post('/save_user',postS)
+        .then(function(response) {
+            var data = response.data;
+            $("#save_user_btn").prop( "disabled", false );
+            if(data.status == 1){
+                $('#activateUserExists').modal('hide');
+                $('#inactivateUserExists').modal('hide');
+                if(data.max_limit == 'yes'){
+                    $('#add_user')[0].reset();
+                    $('#advancedModal').modal('hide');
+                    $('#advancedModal3').modal('show');
+                }else{
+                    $('#add_user')[0].reset();
+                    $('#advancedModal').modal('hide');
+                    $('#saveMessage').modal('show');
+                    //$scope.email(username,data.comp_name);
+                    setTimeout(function(){
+                        $('#saveMessage').modal('hide');
+                        // window.location.href = '/drmetrix/userAccount';
+                        $state.go($state.current, {}, {reload: true});
+                    } , 1000 );
+                }
+            }else if(data.status == 4){
+                $("#domain_msg").html(data.domain_msg);
+                $('#domainOverrideMessage').modal('show');
+            }else if(data.status == 2){
+                $("#error_msg_span").html(data.error_msg);
+                $('#errorMsg').modal('show');
+            }else if(data.status == 3){
+                $("#user_zoho_msg").html(data.err_zoho_user_msg);
+                $('#userExistsZohoMsg').modal('show');
+            } else if(data.status == 5) {
+                $(".email_exists_id").html(data.userInfo.ADS_Username);
+                $(".active_user_zoho_id").html(data.userInfo.id);
+                $(".active_user_ads_id").html(data.userInfo.ADS_Record_ID);
+                $('#inactivateUserExists').modal('hide');
+                $('#activateUserExists').modal('show');
+                $("#type_save_active").text(data.type);
+            } else if(data.status == 6) {
+                $(".email_exists_id").html(data.userInfo.ADS_Username);
+                $(".user_zoho_id").html(data.userInfo.id);
+                $(".user_ads_id").html(data.userInfo.ADS_Record_ID);
+
+                $('#inactivateUserExists').modal('show');
+                $("#type_save_deactive").text(data.type);
+            }else if(data.status == 7) {
+                $('#add_user')[0].reset();
+                $('#advancedModal').modal('hide');
+                $('#inactivateUserExists').modal('hide');
+                $('#activateUserExists').modal('hide');
+                $('#editMessage', 'show');
+                setTimeout(function(){
+                    $('#editMessage').modal('hide');
+                    // window.location.href = '/drmetrix/userAccount';
+                    $state.go($state.current, {}, {reload: true});
+                } , 1000 );
+            }else{
+                $('#authy_add_mobile').html(data.error);
+                $('#authy_add_mobile').show();
+            }
+        }, function (response){
+            // this function handlers error
+        });
+
+        //$scope.email(username);
+    }
+
     // Delete Users
     $scope.confirmUserDeletion = function (rowEntity) {
         $scope.userRowForAction = rowEntity;
@@ -325,45 +423,120 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         }, function (response) {
                // this function handlers error
         });
+    }
 
-        $scope.verifyDuplicateMobile = function () {
-            mobile = $scope.admin_user.user_result[0].phone_number;
-            //var admin_id = $('#admin_id').val();
-            var user_id    = $('#edit_data_user_id').val();
-            var admin_id   = sessionStorage.admin_id;
-            var hidden_mobile_no = $("#mobile_edit_hidden").val();
-            if ($('[id="advancedModalEdit"]').hasClass('is-active')) {
-                hidden_mobile_no = $("#mobile_edit_company_hidden").val();
+    $scope.verifyDuplicateMobile = function (mobile) {
+        // mobile = $scope.admin_user.user_result[0].phone_number;
+        //var admin_id = $('#admin_id').val();
+        var user_id    = $('#edit_data_user_id').val();
+        var admin_id   = sessionStorage.admin_id;
+        var hidden_mobile_no = $("#mobile_edit_hidden").val();
+        if ($('[id="advancedModalEdit"]').hasClass('is-active')) {
+            hidden_mobile_no = $("#mobile_edit_company_hidden").val();
+        }
+
+        if(sessionStorage.role == 'superadmin'){
+            admin_id = $('#edit_company_admin_id').val();
+            if(admin_id == ''){
+                admin_id = $('#edit_company_page_admin_id').val();
             }
+            if($('#admin_id').val() != '') {
+                admin_id = $('#admin_id').val();
+            }
+        }
 
-            if(sessionStorage.role == 'superadmin'){
-                admin_id = $('#edit_company_admin_id').val();
-                if(admin_id == ''){
-                    admin_id = $('#edit_company_page_admin_id').val();
-                }
-                if($('#admin_id').val() != '') {
-                    admin_id = $('#admin_id').val();
+        apiService.post('/check_mobile', { 'mobile': mobile , 'admin_id' : admin_id, 'user_id' : user_id, 'hidden_mobile_no' : hidden_mobile_no})
+        .then(function (response) {
+            var data = response.data;
+            if (data.status) {
+                if (data.valid) {
+                    $scope.errors = 1;
+                    $scope.mobileValid = 1; //mobile invalid
+                    $('#duplicate_mobile').css('display', 'block');
+                } else {
+                    $scope.errors = 0;
+                    $scope.mobileValid = 0; //mobile valid
                 }
             }
+        }, function (response){
+            // this function handlers error
+        });
+    }
 
-            apiService.post('/check_mobile', { 'mobile': mobile , 'admin_id' : admin_id, 'user_id' : user_id, 'hidden_mobile_no' : hidden_mobile_no})
+    $scope.verifyDuplicateEmail = function (username, id) {
+        /*let id = $scope.admin_user.user_result[0].user_id;
+        let username = $scope.admin_user.user_result[0].username;*/
+        apiService.post('/check_email', { 'email': username, 'user_id': id })
             .then(function (response) {
                 var data = response.data;
                 if (data.status) {
                     if (data.valid) {
-                        $rootScope.errors = 1;
-                        $rootScope.mobileValid = 1; //mobile invalid
-                        $('#duplicate_mobile').css('display', 'block');
+                        $scope.errors = 1;
+                        if(sessionStorage.company_id == data.result[0].company_id){
+                            $scope.email_user_id = data.user_result[0].user_id;
+                            $scope.usernameValidInCompany = 1;
+                            $scope.usernameValid = 0;
+                            // $('#duplicate_username').css('display', 'block');
+                        } else {
+                            $scope.usernameValid = 1; //username already exists.
+                            $scope.usernameValidInCompany = 0;
+                            $('#duplicate_username').css('display', 'block');
+                        }
                     } else {
-                        $rootScope.errors = 0;
-                        $rootScope.mobileValid = 0; //mobile valid
+                        $scope.errors = 0;
+                        $scope.usernameValid = 0; //username not exists.
+                        $scope.usernameValidInCompany = 0;
                     }
                 }
             }, function (response){
                 // this function handlers error
             });
-        }
     }
+
+    $scope.sendPassword = function(rowEntity){
+        $scope.userRowForAction = rowEntity;
+        let user_id = $scope.userRowForAction.user_id;
+        let passphrase = $scope.userRowForAction.passphrase;
+        if(passphrase ==''){
+            return false;
+        }
+        $('#resend_link_'+user_id).addClass('resend_email');
+        apiService.post('/regenerate_password',{'user_id':user_id,'type':'admin'})
+        .then(function(response) {
+            var data = response.data;
+            if(data.status){
+                $('#regenerate').modal('show');
+                setTimeout(function(){ $('#regenerate').modal('hide'); } , 1000 );
+                setTimeout(function(){ $('#resend_link_'+user_id).removeClass('resend_email');  } , 120000 );
+            }
+        }, function (response) {
+            // this function handlers error
+        });
+    }
+
+    $scope.openAddUser = function(){
+        //  $('#authy-countries').attr('id','authy_country_removed');
+        //  $('select[name=country_code]').attr('id','authy-countries');
+        //  $('.add_authy_country_code').html(add_authy_country_code_html);
+        $rootScope.mobileValid = 0;
+        $rootScope.usernameValidInCompany = 0;
+        $rootScope.usernameValid = 0;
+        $('#authy_add_mobile').hide();
+        $('#authy_edit_mobile').hide();
+        $('#add_mobile').hide();
+        $('#edit_mobile').hide();
+        $('#advancedModal').modal('show');
+        //  $('#admin_id').val(sessionStorage.admin_id);
+        $('#duplicate_mobile').css('display','none');
+        $('#add_user')[0].reset();
+        $scope.admin_user.first_name = '';
+        $scope.admin_user.last_name = '';
+        $scope.admin_user.username = '';
+        $scope.admin_user.mobile = '';
+        $scope.admin_user.admin_id = sessionStorage.admin_id;
+        $scope.admin_user.add_user.$setPristine();
+    }
+
 });
 
 angular.module('drmApp').controller('MaxLimitController', function($scope, $rootScope, $timeout, $uibModalInstance, $state, apiService, modalConfirmService) {
