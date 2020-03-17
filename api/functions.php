@@ -2115,6 +2115,7 @@ function processDate($date_string, $dates)
 function process_dates_for_filter($query_string, $scheduled_email=0)
 {
     parse_str($query_string, $date_details);
+    $date_details['startDate'] = '1';
     $date_string = intval($date_details['startDate']);
     $patterns = array(
         1 => 'Last week',
@@ -4365,7 +4366,7 @@ function getLastLogin($redirect = 0)
         return;
     }
 
-    $url = str_replace('/drmetrix/api/index.php/', "", $_SERVER['REQUEST_URI']);
+    $url = str_replace('/drmetrix_angular_clean/api/index.php/', "", $_SERVER['REQUEST_URI']);
     $url_arr = explode("?", $url);
     $url = $url_arr[0];
     if ((isset($_SESSION['username']) && $_SESSION['username'] == 'demo.user@drmetrix.com')) {

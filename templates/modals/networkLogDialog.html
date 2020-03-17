@@ -17,7 +17,7 @@
             <li>
                 <button id="nl_active_network" class="btn networkSelectBtn" ng-class="!showAllNetworks ? 'btn-disabled' : 'btn-blue'" ng-disabled="!showAllNetworks ? 'disabled' : '' " type="button" ng-click="getNetworksWithAllFilters(); showAllNetworks = false">Filtered Results</button>
                 <button id="nl_all_network" class="btn networkSelectBtn" ng-class="showAllNetworks ? 'btn-disabled' : 'btn-blue'" type="button" ng-click="getAllActiveInactiveNetworks();  showAllNetworks = true">Show All Networks</button>
-                <button id="network_excel" class="btn networkSelectBtn excel-download" type="button" ng-click="networksExcel();" ng-class="showAllNetworks || (!showAllNetworks && selectedNetwork != 'All') ? 'btn-disabled' : 'btn-blue'" ng-disabled="(!showAllNetworks && selectedNetwork != 'All') ? 'disabled' : '' "><img src="/drmetrix/assets/img/download.svg" alt="Loading icon" > Excel</button>
+                <button id="network_excel" class="btn networkSelectBtn excel-download" type="button" ng-click="networksExcel();" ng-class="showAllNetworks || (!showAllNetworks && selectedNetwork != 'All') ? 'btn-disabled' : 'btn-blue'" ng-disabled="(!showAllNetworks && selectedNetwork != 'All') ? 'disabled' : '' "><img src="/drmetrix/assets/images/download.svg" alt="Loading icon" > Excel</button>
                 <div id="excel_loader_networks" style="display:none" class="hide m-2"><img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"></div>
                
                 <div class="search-input">
