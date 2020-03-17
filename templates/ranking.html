@@ -1,5 +1,7 @@
 
  <!-- primary filter -->
+ <div ng-if="page_call == 'ranking'">
+
  <div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
    
 <div class="container-fluid" ng-init="initializeRankingPage();">
@@ -60,4 +62,6 @@
     </div>
     <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div>
 </div>
-   
+</div>
+
+<div class="main-filter" ng-include="'templates/airingDetail.html'"></div>
