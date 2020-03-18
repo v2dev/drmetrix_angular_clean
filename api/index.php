@@ -2317,19 +2317,19 @@ function brandCreatives($export = 0,$request_data = null){
               $creative_ids[] = $resultV->creative_id;
               $ResTypeImg = '<span class="response_img">';
                    if($resultV->response_url == 1){
-                   $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
+                   $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix_angular_clean/assets/images/url-icon.svg" alt="URL" /></a>';
                    $nestedData['response_url'] = $resultV->response_url;
                }
                    if($resultV->response_sms == 1){
-                   $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
+                   $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix_angular_clean/assets/images/sms-icon.svg" alt="SMS" /></a>';
                    $nestedData['response_sms'] = $resultV->response_sms;
                }
                    if($resultV->response_tfn == 1){
-                   $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
+                   $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix_angular_clean/assets/images/telephone-icon.svg" alt="Telephone" /></a>';
                    $nestedData['response_tfn'] = $resultV->response_tfn;
                }
                    if($resultV->response_mar == 1){
-                   $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
+                   $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix_angular_clean/assets/images/mobile-icon.svg" alt="Mobile" /></a>';
                    $nestedData['response_mar'] = $resultV->response_mar;
                }
                   $ResTypeImg .= '</span>';
@@ -2809,15 +2809,19 @@ function creativesNetworks($export = NULL, $request = NULL){
            $ResTypeImg = '<span class="response_img">';
             if($resultV->response_url == 1){
                 $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
+                $nestedData['response_url'] = $nestedData['response_type'] =  $resultV->response_url;
             }
             if($resultV->response_sms == 1){
                 $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
+                $nestedData['response_sms'] = $nestedData['response_type'] =  $resultV->response_sms;
             }
             if($resultV->response_tfn == 1){
                 $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
+                $nestedData['response_tfn'] = $nestedData['response_type'] =  $resultV->response_tfn;
             }
             if($resultV->response_mar == 1){
                 $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
+                $nestedData['response_mar'] = $nestedData['response_type'] =  $resultV->response_mar;
             }
                $ResTypeImg .= '</span>';
            $airings = $resultV->airings;
@@ -2827,17 +2831,18 @@ function creativesNetworks($export = NULL, $request = NULL){
            if($tab == 'adv'){
                 $nestedData['brand_name'] = $exportData['brand_name'] =  $resultV->brand_name;
            }
-           $nestedData['response_type'] =  $ResTypeImg ;
+            //  $nestedData['response_type'] =  $ResTypeImg ;
            $nestedData['creative_name'] = $exportData['creative_name'] =  $resultV->creative_name;
            $exportData['program'] =  $resultV->program_count;
            $nestedData['hidden_airings'] = $exportData['hidden_airings'] =  $resultV->airings;
-           $nestedData['total_spend'] = '<a href="#" onclick="showAiringSpendGraph(\'spend\','.$resultV->brand_id.','.$resultV->creative_id.', \''.addslashes($network_info[0]->network_alias).'\', \''.number_format($resultV->total_spend, 0).'\','.$resultV->dpi.', '.$resultV->network_id.')">'.number_format($resultV->total_spend, 0).'</a>';
+           $nestedData['total_spend'] = number_format($resultV->total_spend, 0);
            $nestedData['hidden_total_spend'] = $resultV->total_spend;
            $nestedData['hidden_national_spend'] = $resultV->national_spend;
            $nestedData['hidden_local_spend'] = $resultV->local_spend;
            $nestedData['national_spend'] = number_format($resultV->national_spend, 0);
            $nestedData['local_spend']    = number_format($resultV->local_spend , 0);
            $nestedData['language']       = $exportData['language'] =  ($resultV->spanish == 0) ? 'EN' : 'ES';
+           $nestedData['dpi']       = $resultV->dpi;
            
            $creative_type = $resultV->type  ;
            $creative_cls =   $creative_type  ?   $creative_type . ' - ' . $resultV->class  :   $resultV->class ;
@@ -2849,14 +2854,14 @@ function creativesNetworks($export = NULL, $request = NULL){
                 $nestedData['duration'] = $exportData['duration'] = $resultV->length ? $resultV->length.' sec' : '-';
            }  
            
-           $nestedData['program_count'] =  '<a href="#" onClick="getProgramsByNetwork('.$resultV->network_id.',\'creative\','.$resultV->creative_id.',\''.addslashes($network_info[0]->network_alias).'\','. $resultV->program_count.');">'.$resultV->program_count.'</a>';
+           $nestedData['program_count'] =  $resultV->program_count;
            $nestedData['hidden_program_count']  = $resultV->program_count;
            $dpi = 0;
            if($export == 0) {
                 if($requestData['dpi'] != '' && $requestData['dpi'] != '-') {
                     $dpi = 1;
                 }
-                $nestedData['airings'] = '<a href="#" onclick="showAiringSpendGraph(\'airings\','.$resultV->brand_id.', '.$resultV->creative_id.', \''.addslashes($network_info[0]->network_alias).'\', \''.number_format($airings).'\','.$resultV->dpi.','.$requestData['network_id'].')">'.number_format($airings).'</a>';
+                $nestedData['airings'] = number_format($airings);
            }
 
            $exportData['airings'] = $airings ? $airings : '-';
