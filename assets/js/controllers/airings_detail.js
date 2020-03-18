@@ -21,7 +21,7 @@ $scope.uigridAiringSpend = function(){
     formData._search = true;
     formData.rows = '10';
     formData.page = '1';
-    formData.sidx = "airings";
+    formData.sidx = $scope.sidx;
     formData.sord = 'desc';
     formData.brand_id = $scope.brand_id;
     formData.brand_name = $scope.brand_name;
@@ -46,8 +46,6 @@ $scope.uigridAiringSpend = function(){
         paginationTemplate: correctTotalPaginationTemplate,
             onRegisterApi: function (gridApi) {
                 gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                    debugger;
-                    console.log("formData.brand_id "+formData.brand_id);
                     formData.tab = 'brand';
                     formData.network_code = 'all_networks';
                     formData.network_id = '29';
@@ -59,7 +57,23 @@ $scope.uigridAiringSpend = function(){
                     if (row.isExpanded) {
                         row.entity.subAiringGridOptions = {
                             columnDefs: [
-                            { name: 'id', displayName:'id', width:'50' },
+                            // { name: 'id', displayName:'id', width:'50' },
+                            { name: 'creative_name', displayName:'Creatives' },
+                            { name: 'language', displayName:'Type' },
+                            { name: 'classification', displayName:'Classification' },
+                            { name: 'duration', displayName:'Length' },
+                            { name: 'program_count', displayName:'Program', cellTemplate: '<a href="#" ng-click="getProgramsByNetwork(\''+formData.network_id+'\',\'creative\',{{row.entity.id}},{{row.entity.creative_name}},{{COL_FIELD}});">{{COL_FIELD}}</a>' },
+                            { name: 'airings', displayName:'Total Airings', cellTemplate:'<a href="#" ng-click="showAiringSpendGraph(\'airings\',\''+$scope.brand_id+'\', {{row.entity.id}}, {{row.entity.creative_name}}, {{row.entity.airings}},{{row.entity.dpi}},\''+formData.network_id+'\')">{{COL_FIELD}}</a>' },
+                            { name: 'total_spend', displayName:'Total Spend ($)',cellTemplate: '<a href="#" ng-click="showAiringSpendGraph(\'spend\',\''+$scope.brand_id+'\',row.entity.id, row.entity.creative_name, row.entity.total_spend,row.entity.dpi, \''+formData.network_id+'\')">{{COL_FIELD}}</a>' },
+                            { name: 'response_type', displayName:'Response Type', cellTemplate:'<span class="response_img"><a href="#" ng-if="(row.entity.response_url==1)" title="URL" ><img src="/drmetrix_angular_clean/assets/images/url-icon.svg" alt="URL" /></a><a href="#" ng-if="(row.entity.response_sms == 1)" title="SMS"><img src="/drmetrix_angular_clean/assets/images/sms-icon.svg" alt="SMS" /></a><a href="#" ng-if="(row.entity.response_tfn == 1)" title="Telephone"><img src="/drmetrix_angular_clean/assets/images/telephone-icon.svg" alt="Telephone" /></a><a href="#" ng-if="(row.entity.response_mar == 1)" title="Mobile"><img src="/drmetrix_angular_clean/assets/images/mobile-icon.svg" alt="Mobile" /></a></span>' },
+                            { name: 'national_count', displayName:'National Airings' },
+                            { name: 'national', displayName:'National %' },
+                            { name: 'national_spend', displayName:'National Spend ($)' },
+                            { name: 'local_count', displayName:'DPI Airings' },
+                            { name: 'local', displayName:'DPI %' },
+                            { name: 'local_spend', displayName:'DPI Spend ($)' },
+                            { name: 'first_aired', displayName:'First Aired' },
+                            { name: 'last_aired', displayName:'Last Aired' },
                         ],enableGridMenu: true,
                           enableSelectAll: true,
                           paginationPageSize: 10,
@@ -72,9 +86,6 @@ $scope.uigridAiringSpend = function(){
 
                         apiService.post('/creatives_networks', formData, config)
                         .then(function (data) {
-                            debugger;
-                            console.log(data);
-                            console.log(data.data);
                             row.entity.subAiringGridOptions.data = data.data.rows;
                         }, function (response) {
                             // this function handlers error
@@ -82,9 +93,6 @@ $scope.uigridAiringSpend = function(){
                     }
                 });
             },
-            // columnDefs: [
-            //     { field: 'spend_index', sort: { direction: 'desc', priority: 0 } }
-            // ]
     };
 
     vm.gridAiringSpend.columnDefs = [

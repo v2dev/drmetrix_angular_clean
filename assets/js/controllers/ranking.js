@@ -512,7 +512,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     formData.network_code = '';
     console.log("formData "+formData.network_code);
         vm.gridOptions = {
-            expandableRowTemplate: '/drmetrix/templates/expandableRowTemplate.html',
+            expandableRowTemplate: '<div ui-grid="row.entity.subBrandGridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination class="grid" style="height:385px;"></div>',
             expandableRowHeight: 385,
             enableGridMenu: true,
             enableSelectAll: true,
@@ -585,16 +585,17 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                     formData.brand_id = row.entity.brand_id;
                     formData.tab = 'brand';
                     if (row.isExpanded) {
-                        row.entity.subGridOptions = {
+                        row.entity.subBrandGridOptions = {
                             columnDefs: [
                             // { name: 'id', displayName:'id', width:'50' },
                             { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="#" ng-click="view_adv_tab({{row.entity.creative_name}},{{row.entity.adv_id}},'+c_dir+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+',\'creatives\',{{row.entity.id}},{{COL_FIELD}},\'ranking\',{{row.entity.need_help}})" >{{COL_FIELD}}</a></span>', width: '280' },
                             { name: 'language', displayName: 'Type', width: '80' },
                             { name: 'classification', displayName: 'Classification', width: '160'},
                             { name: 'duration', displayName: 'Duration', width: '94'},
+
                             { name: 'airings', displayName: 'Airings', cellTemplate:'<a href=""><span ng-if="row.entity.airings!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph({{row.entity.creative_name}},{{row.entity.id}},\'dow\','+formData.network_code+',\'all_day\',\'all_hour\',{{row.entity.networks}},{{row.entity.airings}},'+formData.c+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+','+formData.responseType+','+formData.spanish+',\'creative\',{{row.entity.creative_name}},'+formData.brand_name+','+formData.brand_id+');">{{COL_FIELD}} </span><span ng-if="row.entity.airings==\'\'"> - </span></a>',  width: '110' },
 
-                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="#"><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(\'{{row.entity.creative_name}}\',\'{{row.entity.id}}\',\'dow\','+formData.network_code+',\'all_day\',\'all_hour\',\'{{row.entity.networks}}\',\'{{row.entity.spend_index}}\','+formData.c+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+','+formData.responseType+','+formData.spanish+',\'creative\',\'{{row.entity.creative_name}}\','+formData.brand_name+','+formData.brand_id+');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
+                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="/#!/ranking"><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(\'{{row.entity.creative_name}}\',\'{{row.entity.id}}\',\'dow\','+formData.network_code+',\'all_day\',\'all_hour\',\'{{row.entity.networks}}\',\'{{row.entity.spend_index}}\','+formData.c+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+','+formData.responseType+','+formData.spanish+',\'creative\',\'{{row.entity.creative_name}}\','+formData.brand_name+','+formData.brand_id+');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
 
                             { name: 'response_type', displayName: 'Response Type', enableSorting: false, cellTemplate:'<span class="response_img"><a href="#" ng-if=row.entity.response_url == 1 title="URL" ><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a><a href="#" ng-if=row.entity.response_sms == 1 title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a><a href="#" ng-if=row.entity.response_tfn == 1 title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a><a href="#" ng-if=row.entity.response_mar == 1 title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>'
                             , width: '140'},
@@ -616,9 +617,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
                         apiService.post('/brand_creatives', formData, config)
                         .then(function (data) {
-                            console.log(data);
-                            console.log(data.data);
-                            row.entity.subGridOptions.data = data.data.rows;
+                            row.entity.subBrandGridOptions.data = data.data.rows;
                         }, function (response) {
                             // this function handlers error
                         });
@@ -642,15 +641,15 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 cellTemplate: '<div class="grid-action-cell">'+ '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="#" ng-click="grid.appScope.view_adv_tab({{row.entity.advertiser_name}},{{row.entity.adv_id}},'+c_dir+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+',\'brand\',{{row.entity.id}},{{COL_FIELD}},\'ranking\',{{row.entity.need_help}});" title="{{COL_FIELD}}" href="#">{{COL_FIELD}}</a></span></div>', width: '250'},
 
                 { name: 'creative_count', displayName: 'Creatives',
-                cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>', width: '100' },
+                cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subBrandGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>', width: '100' },
 
                 { name: 'category_name', displayName: 'Category', cellTemplate:'<a href="#"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover" ng-click="grid.appScope.fetchList(\'{{row.entity.id}}\','+formData.type+',{{COL_FIELD}});"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"> - </span></a>', width: '180' },
 
                 { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate:'<a href="#"><span ng-if="row.entity.advertiser_name!=\'\'" class="tooltip-hover" ng-click="grid.appScope.view_adv_tab(\'{{row.entity.advertiser_name}}\',\'{{row.entity.adv_id}}\','+c_dir+','+formData.type+','+formData.val+','+formData.sd+','+formData.ed+',\'adv\',\'\',\'\',\'ranking\',\'{{row.entity.need_help}}\');">{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.advertiser_name==\'\'"> - </span></a>', width: '230' },
 
-                { name: 'airings', displayName: 'Airings', cellTemplate:'<a href=""><span ng-if="row.entity.airings!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(row.entity.brand_name, row.entity.id, \'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '110' },
+                { name: 'airings', displayName: 'Airings', cellTemplate:'<a href=""><span ng-if="row.entity.airings!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(row.entity.brand_name, row.entity.id, \'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\',\'airings\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '110' },
 
-                { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href=""><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(row.entity.brand_name, row.entity.id, \'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '106' },
+                { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href=""><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(row.entity.brand_name, row.entity.id, \'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\',\'total_spend\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '106' },
 
                 { name: 'national', displayName:'National', width: '96', cellTemplate:'<span ng-if="row.entity.national !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.national ==\'\'">0</span>' },
 
@@ -816,13 +815,13 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             backdrop  : false
           });
     }
-
-    $scope.viewAiringSpendGraph = function(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang, area, adv_name, brand_name, brand_id, network_id, network_dpi) {
+    $scope.viewAiringSpendGraph = function(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang,area, adv_name,network_id, network_dpi, sidx) {
         $scope.page_call = 'airings_detail';
         $scope.brand_id = $scope.id = id;
         $scope.brand_name = name;
         $scope.active_tab = active_tab;
         $scope.all_network = all_network;
+        $rootScope.sidx = $scope.sidx = sidx;
         // $scope.uigridAiringSpend(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang, area, adv_name, brand_name, brand_id, network_id, network_dpi);
     }
 
