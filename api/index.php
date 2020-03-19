@@ -20090,6 +20090,7 @@ function getProgramViewByNetwork($export = 0, $request_arr = NULL) {
     $request        = Slim::getInstance()->request();
     $query_string   = $request->getBody();
     parse_str($query_string, $requestData);
+    $requestData = (array)json_decode($query_string, TRUE);
    
     $c_dir                  = urldecode($requestData['c']);
     $spanish                = urldecode($requestData['spanish']);
