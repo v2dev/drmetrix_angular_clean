@@ -2465,13 +2465,13 @@ function __query_get_programs_view($params)
     if(!isset($breaktype)) {
         $breaktype = '';
     }
-    if($days != 'all_day'){
+    if($days != 'all_day' && $days != ''){
         $day_condition = "  AND d.start_weekday IN ($days)";
     }
-    if($hours != 'all_hour'){
+    if($hours != 'all_hour' && $hours != ''){
         $hour_condition = "  AND d.start_hour IN ($hours)";
     }
-    if($dayparts != 'all_dayparts'){
+    if($dayparts != 'all_dayparts' && $dayparts != ''){
         $daypart_condition = "  AND d.gen_daypart_id IN ($dayparts)";
     }
     if($area == 'brand') {
