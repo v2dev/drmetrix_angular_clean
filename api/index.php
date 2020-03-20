@@ -2808,20 +2808,20 @@ function creativesNetworks($export = NULL, $request = NULL){
             $creative_ids[] = $resultV->creative_id;
            $ResTypeImg = '<span class="response_img">';
             if($resultV->response_url == 1){
-                $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
-                $nestedData['response_url'] = $nestedData['response_type'] =  $resultV->response_url;
+                $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix_angular_clean/assets/images/url-icon.svg" alt="URL" /></a>';
+                $nestedData['response_url'] = $resultV->response_url;
             }
             if($resultV->response_sms == 1){
-                $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
-                $nestedData['response_sms'] = $nestedData['response_type'] =  $resultV->response_sms;
+                $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix_angular_clean/assets/images/sms-icon.svg" alt="SMS" /></a>';
+                $nestedData['response_sms'] = $resultV->response_sms;
             }
             if($resultV->response_tfn == 1){
-                $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
-                $nestedData['response_tfn'] = $nestedData['response_type'] =  $resultV->response_tfn;
+                $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix_angular_clean/assets/images/telephone-icon.svg" alt="Telephone" /></a>';
+                $nestedData['response_tfn'] = $resultV->response_tfn;
             }
             if($resultV->response_mar == 1){
-                $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
-                $nestedData['response_mar'] = $nestedData['response_type'] =  $resultV->response_mar;
+                $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix_angular_clean/assets/images/mobile-icon.svg" alt="Mobile" /></a>';
+                $nestedData['response_mar'] = $resultV->response_mar;
             }
                $ResTypeImg .= '</span>';
            $airings = $resultV->airings;
@@ -18327,12 +18327,14 @@ function getGlobalSearchData(){
     $data                               = array();
     $request                            = Slim::getInstance()->request();
     $query_string                       = $request->getBody();
-    $set_one                            = explode('&', $query_string);
-    $raw_data                           = array();
-    foreach($set_one as $k => $v) {
-        $raw_data                       = explode('=',$v);
-        $requestData[$raw_data[0]]      = $raw_data[1];
-    }
+    parse_str($query_string, $output);
+    $requestData = (array)json_decode($query_string, TRUE);
+    // $set_one                            = explode('&', $query_string);
+    // $raw_data                           = array();
+    // foreach($set_one as $k => $v) {
+    //     $raw_data                       = explode('=',$v);
+    //     $requestData[$raw_data[0]]      = $raw_data[1];
+    // }
 
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
@@ -18411,6 +18413,7 @@ function getGlobalSearchData(){
             $nestedData['id']           = $resultV->adv_id;
             //$nestedData['rank']         = $rank;
             $active_class               = ($resultV->is_active_adv == 1) ? 'active_btn' : 'inactive_btn';
+            $nestedData['is_active_adv'] = $resultV->is_active_adv;
             $nestedData['status']       = '<i class="fa fa-circle" id="'.$active_class.'"></i>';
             $nestedData['adv_name']     = '<span><a href="#" style="color: rgb(0, 190, 255);" onclick="view_adv_tab(\''.addslashes($resultV->adv_name).'\','.$resultV->adv_id.',\''.$c.'\',\'\',\'\',\''.$sd.'\',\''.$ed.'\',\'adv\',\'\',\'\',\'global_search\','.$resultV->need_help.')" >'.$resultV->adv_name.'</a></span>';
             $nestedData['adv_name_search'] = $resultV->adv_name;
@@ -18427,6 +18430,7 @@ function getGlobalSearchData(){
             $nestedData['spend_index']  = number_format($resultV->spend_index);
             //$nestedData['rank']         = $rank;
             $active_class               = ($resultV->is_active_brand == 1) ? 'active_btn' : 'inactive_btn';
+            $nestedData['is_active_brand'] = $resultV->is_active_brand;
             $nestedData['status']       = '<i class="fa fa-circle" id="'.$active_class.'"></i>';
             $nestedData['brand_name']   = '<span><a href="#" style="color: rgb(0, 190, 255);" onclick="view_adv_tab(\''.addslashes($resultV->adv_name).'\','.$resultV->adv_id.',\''.$c.'\',\'\',\'\',\''.$sd.'\',\''.$ed.'\',\'brand\','.$resultV->brand_id.',\''.addslashes($resultV->brand_name).'\',\'global_search\','.$resultV->need_help.')" >'.$resultV->brand_name.'</a></span>';
             $nestedData['brand_name_search'] = $resultV->brand_name;
@@ -18445,40 +18449,50 @@ function getGlobalSearchData(){
         if($requestData['grid_type'] == 'creatives'){
             $ResTypeImg = '<span class="response_img">';
             if($resultV->response_url == 1){
-                $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
+                $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix_angular_clean/assets/images/url-icon.svg" alt="URL" /></a>';
+                $nestedData['response_url'] = $resultV->response_url;
             }
             if($resultV->response_sms == 1){
-                $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
+                $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix_angular_clean/assets/images/sms-icon.svg" alt="SMS" /></a>';
+                $nestedData['response_sms'] = $resultV->response_sms;
             }
             if($resultV->response_tfn == 1){
-                $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
+                $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix_angular_clean/assets/images/telephone-icon.svg" alt="Telephone" /></a>';
+                $nestedData['response_tfn'] = $resultV->response_tfn;
             }
             if($resultV->response_mar == 1){
-                $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
+                $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix_angular_clean/assets/images/mobile-icon.svg" alt="Mobile" /></a>';
+                $nestedData['response_mar'] = $resultV->response_mar;
             }
             $ResTypeImg .= '</span>';
 
             $nestedData['id']               = $resultV->creative_id;
+            $nestedData['brand_id'] = $resultV->brand_id;
+            $nestedData['adv_id'] = $resultV->adv_id;
             $nestedData['airings']          = number_format($resultV->airings_count);
             $nestedData['spend_index']      = number_format($resultV->spend_index);
             $active_class                   = ($resultV->is_active_creative == 1) ? 'active_btn' : 'inactive_btn';
+            $nestedData['is_active_creative'] = $resultV->is_active_creative;
             $nestedData['status']           = '<i class="fa fa-circle" id="'.$active_class.'"></i>';
-            $nestedData['creative_name']    = '<span><a href="#" style="color: rgb(0, 190, 255);" onclick="view_adv_tab(\''.addslashes($resultV->adv_name).'\','.$resultV->adv_id.',\''.$c.'\',\'\',\'\',\''.$sd.'\',\''.$ed.'\',\'creatives\','.$resultV->creative_id.',\''.addslashes(htmlspecialchars($resultV->creative_name)).'\',\'global_search\','.$resultV->need_help.')" >'.$resultV->creative_name.'</a></span>';
+            $nestedData['creative_name']    = addslashes(htmlspecialchars($resultV->creative_name));
             $nestedData['creative_name_search'] = $resultV->creative_name;
             $nestedData['duration'] = $resultV->length.' sec';
-            $nestedData['brand_name']       = '<span><a href="#" style="color: rgb(0, 190, 255);" onclick="view_adv_tab(\''.addslashes($resultV->adv_name).'\','.$resultV->adv_id.',\''.$c.'\',\'\',\'\',\''.$sd.'\',\''.$ed.'\',\'brand\','.$resultV->brand_id.',\''.addslashes($resultV->brand_name).'\',\'global_search\','.$resultV->need_help.')" >'.$resultV->brand_name.'</a></span>';
+            $nestedData['brand_name']       = $resultV->brand_name;
             $nestedData['airings_hidden']   = number_format($resultV->airings_count, 0, '', '');
 
-            $nestedData['adv_name']         = '<span><a href="#" style="color: rgb(0, 190, 255);" onclick="view_adv_tab(\''.addslashes($resultV->adv_name).'\','.$resultV->adv_id.',\''.$c.'\',\'\',\'\',\''.$sd.'\',\''.$ed.'\',\'adv\',\'\',\'\',\'global_search\','.$resultV->need_help.')" >'.$resultV->adv_name.'</a></span>';
+            $nestedData['adv_name']         =$resultV->adv_name;
             $nestedData['advertiser_name_hidden'] = $resultV->adv_name;
             $nestedData['hidden_creatives'] = $resultV->creative_name;            $nestedData['brand_name_hidden']= $resultV->brand_name;
             $nestedData['response_type']    = $ResTypeImg;
+            $nestedData['thumbnail'] = $resultV->thumbnail;
+            $nestedData['network_code_grid'] = $network_code_grid;
             if(!$resultV->thumbnail){
-                $nestedData['video'] = '<i class="fa fa-play-circle-o fa-2x" style="color:#cbcccc;"></i>';
+                $nestedData['video'] = '';
             }else{
-                $nestedData['video'] = '<a href="#basicModalCamp"><i class="fa fa-play-circle-o fa-2x" onclick="playvideo('.$resultV->thumbnail.',\''.$sd.'\',\''.$ed.'\',\''.$network_code_grid.'\',\'none\')"></i></a>';
+                $nestedData['video'] = '';
             }
         }
+        $nestedData['need_help'] = $resultV->need_help;
 
         $data[]                     =   $nestedData;
     }

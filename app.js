@@ -43,10 +43,15 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             url: '/network',
             templateUrl: 'templates/network.html',
             controller: 'NetworkController'
-        });
+        })
         // .state('airingDetail', {
         //     url: '/airingDetail',
         //     templateUrl: 'templates/modals/airingDetail.html',
         //     controller: 'RankingController'
         // });
+        .state('globalSearch', {
+            url: '/globalSearch',
+            templateUrl: 'templates/globalSearch.html',
+            controller: 'GlobalSearchController'
+        });
 });
