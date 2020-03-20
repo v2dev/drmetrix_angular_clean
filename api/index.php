@@ -1706,17 +1706,15 @@ function brandNetworks($export = 0, $request_arr = NULL){
     }else{
         $request = Slim::getInstance()->request();
         $query_string = $request->getBody();    
-        $set_one = explode('&', $query_string);
-        
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
-
+        parse_str($query_string, $output);
+        $requestData = (array)json_decode($query_string, TRUE);
         $page           = $requestData['page'];
         $limit          = $requestData['rows'];
     }   
-    
+        $sidx       = 'spend_index';
+        $sord       = 'desc';
+        $page       = 1;
+        $limit      = 10;
     $sidx           = $requestData['sidx'];
     $sord           = $requestData['sord'];
     $c              = urldecode($requestData['c']);
@@ -1856,7 +1854,7 @@ function brandNetworks($export = 0, $request_arr = NULL){
            $nestedData['id'] = $resultV->network_id;
            array_push($network_array, $resultV->network_id);
           // $airings_count = $resultV->airings;
-           $nestedData['network_code'] = $resultV->network_alias ? '<a href="#"><span id="network_code_plus_'.$resultV->network_id.'" class="toggle-icon-plus"><span class="icon-border icon-border-plus"></span></span></a><a href="#"><span class="toggle-icon-minus" id="network_code_minus_'.$resultV->network_id.'"><span class="icon-border icon-border-minus"></span></span></a><span>'.$resultV->network_alias.'</span>' : '-' ;
+           $nestedData['network_code'] = $resultV->network_alias ? $resultV->network_alias : '-';
            $nestedData['network_alias'] = $resultV->network_alias;
            $exportData['network_alias'] = $resultV->network_alias;
            $exportData['network_id'] = $resultV->network_id;
@@ -1865,10 +1863,10 @@ function brandNetworks($export = 0, $request_arr = NULL){
            $exportData['creatives'] = $nestedData['creatives'];
            if($tab == 'brand'){
                 $exportData['program'] = $resultV->program_count;
-                $nestedData['airings'] = '<a href="#" onclick="showAiringSpendGraph(\'airings\','.$resultV->ID.', \'\', \''.addslashes($resultV->network_alias).'\', \''.number_format($resultV->airings).'\','.$resultV->dpi.', '.$resultV->network_id.')">'.number_format($resultV->airings).'</a>';
+                $nestedData['airings'] = $resultV->airings  ? number_format($resultV->airings) : 0;
                 $exportData['airings'] = $resultV->airings;
-                $nestedData['total_spend'] = '<a href="#" onclick="showAiringSpendGraph(\'spend\','.$resultV->ID.', \'\', \''.addslashes($resultV->network_alias).'\', \''.number_format($resultV->total_spend).'\','.$resultV->dpi.','.$resultV->network_id.')">'.number_format($resultV->total_spend, 0).'</a>';
-                $nestedData['program_count'] =  '<a href="#" onClick="getProgramsByNetwork('.$resultV->network_id.',\'brand\','.$brand_id.',\''.addslashes($resultV->network_alias).'\','. $resultV->program_count.');">'.number_format($resultV->program_count).'</a>';
+                $nestedData['total_spend'] = number_format($resultV->total_spend, 0);
+                $nestedData['program_count'] =  number_format($resultV->program_count);
            }
            if($tab == 'creative'){
                 $exportData['program'] = $resultV->program_count;
@@ -2320,19 +2318,19 @@ function brandCreatives($export = 0,$request_data = null){
               $creative_ids[] = $resultV->creative_id;
               $ResTypeImg = '<span class="response_img">';
                    if($resultV->response_url == 1){
-                   $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
+                   $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix_angular_clean/assets/images/url-icon.svg" alt="URL" /></a>';
                    $nestedData['response_url'] = $resultV->response_url;
                }
                    if($resultV->response_sms == 1){
-                   $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
+                   $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix_angular_clean/assets/images/sms-icon.svg" alt="SMS" /></a>';
                    $nestedData['response_sms'] = $resultV->response_sms;
                }
                    if($resultV->response_tfn == 1){
-                   $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
+                   $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix_angular_clean/assets/images/telephone-icon.svg" alt="Telephone" /></a>';
                    $nestedData['response_tfn'] = $resultV->response_tfn;
                }
                    if($resultV->response_mar == 1){
-                   $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
+                   $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix_angular_clean/assets/images/mobile-icon.svg" alt="Mobile" /></a>';
                    $nestedData['response_mar'] = $resultV->response_mar;
                }
                   $ResTypeImg .= '</span>';
@@ -2666,13 +2664,9 @@ function creativesNetworks($export = NULL, $request = NULL){
         $requestData = $request;
     }else{
         $request = Slim::getInstance()->request();
-        $query_string = $request->getBody();    
-        $set_one = explode('&', $query_string);
-        
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
+        $query_string = $request->getBody();
+        parse_str($query_string, $output);
+        $requestData = (array)json_decode($query_string, TRUE);
     }
 
     if(isset($requestData['sidx']) && isset($requestData['sord'])){
@@ -2756,7 +2750,7 @@ function creativesNetworks($export = NULL, $request = NULL){
     $params_network_creatives['responseType']         = $responseType;
     $params_network_creatives['spanish']              = $spanish;
     $params_network_creatives['network_id']           = $requestData['network_id'];
-    $params_network_creatives['network_code']         = $network_info[0]->network_code;
+    $params_network_creatives['network_code']         = (!empty($network_info)) ? $network_info[0]->network_code : $requestData['network_code'];
     $params_network_creatives['classification']       = $classification;
 //    $params_network_creatives['cr_type']              = $conditions['cr_type'];
     $params_network_creatives['tab_condition']        = $tab_condition;
@@ -2816,15 +2810,19 @@ function creativesNetworks($export = NULL, $request = NULL){
            $ResTypeImg = '<span class="response_img">';
             if($resultV->response_url == 1){
                 $ResTypeImg .= '<a href="#" title="URL"><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a>';
+                $nestedData['response_url'] = $nestedData['response_type'] =  $resultV->response_url;
             }
             if($resultV->response_sms == 1){
                 $ResTypeImg .= '<a href="#" title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a>';
+                $nestedData['response_sms'] = $nestedData['response_type'] =  $resultV->response_sms;
             }
             if($resultV->response_tfn == 1){
                 $ResTypeImg .= '<a href="#" title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a>';
+                $nestedData['response_tfn'] = $nestedData['response_type'] =  $resultV->response_tfn;
             }
             if($resultV->response_mar == 1){
                 $ResTypeImg .= '<a href="#" title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>';
+                $nestedData['response_mar'] = $nestedData['response_type'] =  $resultV->response_mar;
             }
                $ResTypeImg .= '</span>';
            $airings = $resultV->airings;
@@ -2834,17 +2832,18 @@ function creativesNetworks($export = NULL, $request = NULL){
            if($tab == 'adv'){
                 $nestedData['brand_name'] = $exportData['brand_name'] =  $resultV->brand_name;
            }
-           $nestedData['response_type'] =  $ResTypeImg ;
+            //  $nestedData['response_type'] =  $ResTypeImg ;
            $nestedData['creative_name'] = $exportData['creative_name'] =  $resultV->creative_name;
            $exportData['program'] =  $resultV->program_count;
            $nestedData['hidden_airings'] = $exportData['hidden_airings'] =  $resultV->airings;
-           $nestedData['total_spend'] = '<a href="#" onclick="showAiringSpendGraph(\'spend\','.$resultV->brand_id.','.$resultV->creative_id.', \''.addslashes($network_info[0]->network_alias).'\', \''.number_format($resultV->total_spend, 0).'\','.$resultV->dpi.', '.$resultV->network_id.')">'.number_format($resultV->total_spend, 0).'</a>';
+           $nestedData['total_spend'] = number_format($resultV->total_spend, 0);
            $nestedData['hidden_total_spend'] = $resultV->total_spend;
            $nestedData['hidden_national_spend'] = $resultV->national_spend;
            $nestedData['hidden_local_spend'] = $resultV->local_spend;
            $nestedData['national_spend'] = number_format($resultV->national_spend, 0);
            $nestedData['local_spend']    = number_format($resultV->local_spend , 0);
            $nestedData['language']       = $exportData['language'] =  ($resultV->spanish == 0) ? 'EN' : 'ES';
+           $nestedData['dpi']       = $resultV->dpi;
            
            $creative_type = $resultV->type  ;
            $creative_cls =   $creative_type  ?   $creative_type . ' - ' . $resultV->class  :   $resultV->class ;
@@ -2856,14 +2855,14 @@ function creativesNetworks($export = NULL, $request = NULL){
                 $nestedData['duration'] = $exportData['duration'] = $resultV->length ? $resultV->length.' sec' : '-';
            }  
            
-           $nestedData['program_count'] =  '<a href="#" onClick="getProgramsByNetwork('.$resultV->network_id.',\'creative\','.$resultV->creative_id.',\''.addslashes($network_info[0]->network_alias).'\','. $resultV->program_count.');">'.$resultV->program_count.'</a>';
+           $nestedData['program_count'] =  $resultV->program_count;
            $nestedData['hidden_program_count']  = $resultV->program_count;
            $dpi = 0;
            if($export == 0) {
                 if($requestData['dpi'] != '' && $requestData['dpi'] != '-') {
                     $dpi = 1;
                 }
-                $nestedData['airings'] = '<a href="#" onclick="showAiringSpendGraph(\'airings\','.$resultV->brand_id.', '.$resultV->creative_id.', \''.addslashes($network_info[0]->network_alias).'\', \''.number_format($airings).'\','.$resultV->dpi.','.$requestData['network_id'].')">'.number_format($airings).'</a>';
+                $nestedData['airings'] = number_format($airings);
            }
 
            $exportData['airings'] = $airings ? $airings : '-';
@@ -20128,6 +20127,7 @@ function getProgramViewByNetwork($export = 0, $request_arr = NULL) {
     $request        = Slim::getInstance()->request();
     $query_string   = $request->getBody();
     parse_str($query_string, $requestData);
+    $requestData = (array)json_decode($query_string, TRUE);
    
     $c_dir                  = urldecode($requestData['c']);
     $spanish                = urldecode($requestData['spanish']);

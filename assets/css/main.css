@@ -4129,6 +4129,10 @@ header.sticky-top {
   height: 550px;
 }
 
+.gridCustHeight{
+  height: 400px;
+}
+
 .ui-grid-viewport .ui-grid-cell-contents {
   word-wrap: break-word;
   white-space: normal !important;
