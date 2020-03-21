@@ -2346,7 +2346,7 @@ function checkDomain($domain_flag, $admin_email, $user_email)
         $flag = false;
     }
     if (!$flag) {
-        echo json_encode(array('status' => 4, 'domain_msg' => 'You are only licensed to add users that have an email addressed associated with your assigned company domain <b>' . $admin_domain[1] . '</b>. If you require assistance, please contact DRMetrix'));
+        echo json_encode(array('status' => 4, 'domain_msg' => 'You are only licensed to add users that have an email addresse associated with your assigned company domain <b>' . $admin_domain[1] . '</b>. If you require assistance, please contact DRMetrix'));
         exit;
     } else {
         return true;

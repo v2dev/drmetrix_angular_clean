@@ -3719,6 +3719,7 @@ function checkMobile(){
     $request = Slim::getInstance()->request();
     $user = json_decode($request->getBody());
     $mobile = isset($user->mobile) ? $user->mobile : '';
+    if(!isset($user->user_id)) $user->user_id = $_SESSION['user_id'];
     $hidden_mobile_no = isset($user->hidden_mobile_no) ? $user->hidden_mobile_no : '';
 
     $admin_id = isset($user->admin_id) ? $user->admin_id : $_SESSION['user_id'];
