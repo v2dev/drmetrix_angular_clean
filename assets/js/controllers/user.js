@@ -1,4 +1,4 @@
-angular.module('drmApp').controller('UserController', function ($scope, $timeout, $state, $stateParams, $http, $interval, uiGridTreeViewConstants, $rootScope, apiService, modalConfirmService,  $uibModal) {
+angular.module('drmApp').controller('UserController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, modalConfirmService, $uibModal) {
     if (!apiService.isUserLogged($scope)) {
         $state.go('home');
         return;
@@ -59,6 +59,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         $scope.gridOptionsUser = {};
         $scope.gridOptionsUser = {
             //Pagination
+            enableSorting: true,
             paginationPageSize: 10,
             rowHeight: 30,
             paginationTemplate: correctTotalPaginationTemplate,
@@ -86,7 +87,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                 { name: 'last_30_days_count', displayName:'Last 30 Days Logins', width: '80',cellTemplate:'<span>{{row.entity.last_30_days_count}}</span>' },
                 { name: 'tracking_alert_subscribed', displayName:'Tracking alert', width: '90',cellTemplate:'<span>{{row.entity.tracking_alert_subscribed == 1 ? \'Yes\' : \'No\'}}</span>' },
 
-                { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown" ng-hide="row.entity.role!=\'user\'"><i class="fa fa-cog fa-2x" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"><li><a ng-click="grid.appScope.getUser(row.entity.user_id)" >Edit User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.confirmUserDeletion(row.entity)">Delete User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.resetPassword(row.entity)" data-toggle="modal">Reset Password</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deactivate(row.entity)">{{row.entity.status == "active" ? "Deactivate" : "Activate"}} User</a></li></ul></div>' }
+                { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown" ng-hide="row.entity.role!=\'user\'"><i class="fa fa-cog fa-2x" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"><li><a ng-click="grid.appScope.getUser(row.entity)" >Edit User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.confirmUserDeletion(row.entity)">Delete User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.resetPassword(row.entity)" data-toggle="modal">Reset Password</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deactivate(row.entity)">{{row.entity.status == "active" ? "Deactivate" : "Activate"}} User</a></li></ul></div>' }
 
                 // { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">D</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div>' }
             ],
@@ -155,10 +156,19 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                     modalConfirmService.hideModal();
                     $scope.openModal('./templates/modals/advancedModal3.html');
                 }else{
-                    modalConfirmService.hideModal();
+                    // modalConfirmService.hideModal();
+                    $scope.modalInstanceMain.close();
                     $scope.showPopup('', 'Record updated successfully.', 'Edit Message', '');
                     //setTimeout(function(){ FoundationApi.publish('editMessage', 'hide'); $scope.showUsers();  } , 1000 );
-                    $state.go($state.current, {}, {reload: true});
+                    let rowEntity = $scope.userRowForAction;
+                    rowEntity.name = first_name + ' ' + last_name;
+                    rowEntity.username = username;
+                    rowEntity.country_code = country_code;
+                    rowEntity.phone_number = '(' + mobile.replace('-', ') ');
+                    rowEntity.position = position;
+                    rowEntity.role = role;
+                    rowEntity.assistant_admin = assistant_admin;
+                    // $state.go($state.current, {}, {reload: true});
                     setTimeout(function(){
                         // modalConfirmService.hideModal();
                         $scope.modalInstance.close();
@@ -179,10 +189,12 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
 
     }
 
-    $scope.getUser = function(user_id){
-        $rootScope.mobileValid = 0;
-        $rootScope.usernameValidInCompany = 0;
-        $rootScope.usernameValid = 0;
+    $scope.getUser = function(rowEntity){
+        $scope.userRowForAction = rowEntity;
+        let user_id = $scope.userRowForAction.user_id;
+        $scope.mobileValid = 0;
+        $scope.usernameValidInCompany = 0;
+        $scope.usernameValid = 0;
         $('#authy_add_mobile').hide();
         $('#authy_edit_mobile').hide();
         $('#add_mobile').hide();
@@ -291,18 +303,40 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
             var data = response.data;
             $("#save_user_btn").prop( "disabled", false );
             // modalConfirmService.hideModal();
+            let rowEntity = {};
+            rowEntity.name = first_name + ' ' + last_name;
+            rowEntity.username = username;
+            rowEntity.country_code = country_code;
+            rowEntity.phone_number = '(' + mobile.replace('-', ') ');
+            rowEntity.position = position;
+            rowEntity.role = role;
+            rowEntity.vdate = '-';
+            rowEntity.ads_authenticated = 1;
+            rowEntity.authy_cookie = rowEntity.last_login = '';
+            rowEntity.login_count = rowEntity.last_30_days_count = 0;
+            rowEntity.tracking_alert_subscribed = 1;
+            rowEntity.status = 'active';
+            rowEntity.skip_authy = 0;
+            rowEntity.assistant_admin = assistant_admin;
+
             if(data.status == 1){
                 $('#add_user').reset();
                 if(data.max_limit == 'yes'){
                     $scope.openModal('./templates/modals/advancedModal3.html');
                 }else{
+                    $scope.modalInstanceMain.close();
                     $scope.showPopup('', 'Record added successfully.', 'Save Message', '');
                     //$scope.email(username,data.comp_name);
-                    $state.go($state.current, {}, {reload: true});
+                    rowEntity.user_id = data.user_id;
+                    $scope.gridOptionsUser.data.push(rowEntity);
+                    $scope.gridOptionsUser.data = $filter('orderBy')($scope.gridOptionsUser.data, "name", false);
+                    $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.EDIT );
+                    // $scope.gridApi.grid.refresh();
+                    // $state.go($state.current, {}, {reload: true});
                     setTimeout(function(){
                         $scope.modalInstance.close();
                         // window.location.href = '/drmetrix/userAccount';
-                    } , 1000 );
+                    } , 1000);
                 }
             }else if(data.status == 4){
                 $scope.openModal('./templates/modals/domainOverrideMessage.html');
@@ -326,9 +360,15 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                 $scope.openModal('./templates/modals/inactivateUserExists.html');
                 $scope.type_save_deactive = data.type;
             }else if(data.status == 7) {
-                $('#add_user')[0].reset();
+                $scope.modalInstanceMain.close();
+                // $('#add_user')[0].reset();
                 $scope.showPopup('', 'Record added successfully.', 'Add Message', '');
-                $state.go($state.current, {}, {reload: true});
+                rowEntity.user_id = data.user_id;
+                $scope.gridOptionsUser.data.push(rowEntity);
+                $scope.gridOptionsUser.data = $filter('orderBy')($scope.gridOptionsUser.data, "name", false);
+                $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.EDIT );
+                // $scope.gridApi.grid.refresh();
+                // $state.go($state.current, {}, {reload: true});
                 setTimeout(function(){
                     $scope.modalInstance.close();
                     // window.location.href = '/drmetrix/userAccount';
@@ -351,7 +391,8 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     }
     $scope.deleteUser = function () {
         let user_id = $scope.userRowForAction.user_id;
-        modalConfirmService.hideModal();
+        // modalConfirmService.hideModal();
+        $scope.modalInstanceMain.close();
         // if(confirm("Are you sure want to delete the record?")) {
             $("#options_div" + user_id ).css("visibility", "hidden");
             apiService.post('/delete_user_from_company', { 'user_id': user_id, 'company_id': sessionStorage.company_id })
@@ -359,7 +400,9 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                 var data = response.data;
                 if (data.status) {
                     $scope.showPopup('', 'Record deleted successfully.', 'Delete Message', '');
-                    $state.go($state.current, {}, {reload: true});
+                    // $state.go($state.current, {}, {reload: true});
+                    var index = $scope.gridOptionsUser.data.indexOf($scope.userRowForAction);
+                    $scope.gridOptionsUser.data.splice(index, 1);
                     setTimeout(function () {
                         $scope.modalInstance.close();
                     }, 1000);
@@ -408,7 +451,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     }
 
     $scope.openModal = function(templateUrl, controller, size, backdrop) {
-        $scope.modalInstance =  modalConfirmService.showModal({
+        $scope.modalInstanceMain =  modalConfirmService.showModal({
             backdrop: true,
             keyboard: true,
             modalFade: true,
@@ -418,11 +461,11 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
             backdrop : backdrop != null ? backdrop : true
           });
 
-          $scope.modalInstance.result.then(function(response){
+          $scope.modalInstanceMain.result.then(function(response){
               $scope.result = `${response} button hitted`;
           });
 
-          $scope.modalInstance.result.catch(function error(error) {
+          $scope.modalInstanceMain.result.catch(function error(error) {
             if(error === "backdrop click") {
               // do nothing
             } else {
@@ -438,18 +481,27 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         }
     });
 
-    $scope.deactivate = function(rowEntity){
-        $scope.userRowForAction = rowEntity;
-        let status = $scope.userRowForAction.status;
-        let user_id = $scope.userRowForAction.user_id;
+    $scope.deactivate = function(rowEntity, status){
+        let user_id = 0;
+        let postData = {};
+        if(status != null) {
+            user_id = rowEntity;
+            postData.reactivate = 1;
+        } else {
+            $scope.userRowForAction = rowEntity;
+            status = $scope.userRowForAction.status;
+            user_id = $scope.userRowForAction.user_id;
+        }
+        postData.user_id = user_id;
+        postData.status = status;
+
         var displaymessage = status == 'active' ? 'deactivated' : 'activated';
 
-        apiService.post('/deactivate_user',{'user_id':user_id,'status':status} )
+        apiService.post('/deactivate_user', postData)
         .then(function(response){
             var data = response.data;
-            modalConfirmService.hideModal();
+            // modalConfirmService.hideModal();
             if(data.status == 1){
-                rowEntity.status = data.user_status;
                 if(data.max_limit == 'yes'){
                     $scope.openModal("./templates/modals/MaxLimitTemplate.html");
 
@@ -457,6 +509,15 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                         $scope.invalidToken = true;
                     }
                 }else{
+                    if(typeof rowEntity == "object") {
+                        rowEntity.status = data.user_status;
+                    } else {
+                        $scope.gridOptionsUser.data.push(data.rowEntity);
+                        $scope.gridOptionsUser.data = $filter('orderBy')($scope.gridOptionsUser.data, "name", false);
+                        $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.EDIT );
+                        displaymessage = 're-' + displaymessage;
+                        $scope.modalInstanceMain.close();
+                    }
                     $scope.showPopup('', 'User '+displaymessage+' successfully.', ' ', '');
                     // $state.go($state.current, {}, {reload: true});
                 }
@@ -560,9 +621,9 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         //  $('#authy-countries').attr('id','authy_country_removed');
         //  $('select[name=country_code]').attr('id','authy-countries');
         //  $('.add_authy_country_code').html(add_authy_country_code_html);
-        $rootScope.mobileValid = 0;
-        $rootScope.usernameValidInCompany = 0;
-        $rootScope.usernameValid = 0;
+        $scope.mobileValid = 0;
+        $scope.usernameValidInCompany = 0;
+        $scope.usernameValid = 0;
         /*$('#authy_add_mobile').hide();
         $('#authy_edit_mobile').hide();
         $('#add_mobile').hide();

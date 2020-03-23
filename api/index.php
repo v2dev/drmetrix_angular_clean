@@ -4602,6 +4602,7 @@ function deactivateUser($user_info = NULL){
         $stmt = $db->prepare($sql);
         $stmt->execute();    
 
+        $userInfo                        = [];
         $user_info                       = getUserInfoById($user->user_id);
         $user_details['zoho_contact_id'] = $user_info[0]->zoho_contact_id; 
         $user_details['status']          = ucfirst($status);
@@ -4644,10 +4645,45 @@ function deactivateUser($user_info = NULL){
             }
             // updateAdminUserStatus($user_details);
         }
-        echo json_encode(array('status'=> 1,'max_limit'=>'no','user_status'=>$status));    
+        if(isset($user->reactivate)){
+            $user_info = getUserInfoById($user->user_id);
+
+            $user_info = $user_info[0];
+            $userInfo['user_id'] = $user_info->user_id;
+            $userInfo['username'] = $user_info->username;
+            $userInfo['phone_number'] = $user_info->phone_number;
+            $mobile = explode("-", $userInfo['phone_number']);
+            if(!isset($mobile[2])){$mobile[2] = '';}
+            if(!isset($mobile[1])){$mobile[1] = '';}
+            $userInfo['phone_number'] = "(".$mobile[0].") ".$mobile[1].'-'.$mobile[2];
+
+            $userInfo['status'] = $user_info->status;
+            $userInfo['name'] = $user_info->first_name . ' ' . $user_info->last_name;
+            $userInfo['position'] = $user_info->position;
+            $userInfo['role'] = $user_info->role;
+            $userInfo['last_login'] = $user_info->last_login;
+            $userInfo['email'] = $user_info->email;
+            $userInfo['passphrase'] = $user_info->passphrase;
+            $userInfo['assistant_admin'] = $user_info->assistant_admin;
+            $userInfo['authy_cookie'] = $user_info->authy_cookie;
+            $userInfo['vdate'] = $user_info->verify_date;
+            $userInfo['country_code'] = $user_info->country_code;
+            $userInfo['login_count'] = $user_info->login_count;
+            $userInfo['last_30_days_count'] = $user_info->last_30_days_count;
+            $userInfo['tracking_alert_subscribed'] = $user_info->tracking_alert_subscribed;
+            $userInfo['skip_authy'] = $user_info->skip_authy;
+            $userInfo['ads_authenticated'] = $user_info->password == '' && $user_info->passphrase != '' ? 1: 0;
+            $userInfo['user_id'] = $user_info->user_id;
+
+        }
+        $return = array('status'=> 1,'max_limit'=>'no','user_status'=>$status);
+        if(isset($user->reactivate)) {
+            $return['rowEntity'] = $userInfo;
+        }
+        echo json_encode($return);
         exit();   
      } catch (Exception $e) {
-            echo '{"status":0,"error":{"text":'. $e->getMessage() .'}}'; 
+        echo '{"status":0,"error":{"text":'. $e->getMessage() .'}}';
     }
     
 }
@@ -5812,7 +5848,7 @@ function saveUser(){
         
             checkDomain($maxLimit[0]->domain_override,$maxLimit[0]->username,$user->username);
             if($user_in_tier >= $max_limit){
-                echo json_encode(array('status'=> 1,'max_limit'=>'yes','limit' => $max_limit ,'user_in_tier' => $user_in_tier));
+                echo json_encode(array('status'=> 1,'max_limit'=>'yes','limit' => $max_limit ,'user_in_tier' => $user_in_tier, 'user_id'=>$user->user_id));
                 exit;
             }
             //we are checking email in checkEmailInZohoSameCompany function. so this is commented as not required right now.
@@ -5920,7 +5956,7 @@ function saveUser(){
                 }
                 
                 $updateContactResponse                  = APIManageZOHOContact('update_account_name',$user_details);
-                echo json_encode(array('status'=> 7,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+                echo json_encode(array('status'=> 7,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>$userNew['userId']));
                 exit;
             }
         
@@ -5950,7 +5986,7 @@ function saveUser(){
                         updateContactInfo($updateContactResponse->data[0]->details->id , $userNew['userId']);
                     }
                     
-                    echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+                    echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>$userNew['userId']));
                     exit;    
                 } else if($condition_contact_ads_found >= 1 && $condition_contact_inactive_ads == 1) {
                     echo json_encode(array('status'=> 6, 'userInfo' => $userInfo, 'type' => 'ADS'));    
@@ -5977,7 +6013,7 @@ function saveUser(){
                         $userNew                          = saveUserCall($company_details, $user);
                         $user_details['ads_record_id']   = $userNew['userId'];
                         $updateContactResponse            = APIManageZOHOContact('add',$user_details);
-                        echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+                        echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>$userNew['userId']));
                         exit;
                      }
             }else if ($email_contact_no_check == 'active'){
@@ -5985,7 +6021,7 @@ function saveUser(){
                 $user_details['ads_record_id']     = $userNew['userId'];
                 $updateContactResponse              = APIManageZOHOContact('add',$user_details);
                 updateContactInfo($_SESSION['zoho_contact_id'] ,$userNew['userId'] );
-                echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+                echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>$userNew['userId']));
                 exit;
             } else if($email_contact_no_check == 'deactive') {
                 $user_details['zoho_contact_id']        = $_SESSION['zoho_contact_id'];
@@ -6009,21 +6045,21 @@ function saveUser(){
             
                 $user_details['zoho_contact_id'] = $user->zoho_user_id;
                 $updateContactResponse           = APIManageZOHOContact('update',$user_details);
-                echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+                echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>$userNew['userId']));
                 exit;
                 
             }    
-            echo json_encode(array('status'=> 7,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+            echo json_encode(array('status'=> 7,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>$userNew['userId']));
             exit;
         } else {
-                $error = '';
-                if(isset($get_authy_detail['error'])){
-                    $error = $get_authy_detail['error'];
-                }
-                echo json_encode(array('status'=> 0,'error'=>$error));
-                exit;
+            $error = '';
+            if(isset($get_authy_detail['error'])){
+                $error = $get_authy_detail['error'];
+            }
+            echo json_encode(array('status'=> 0,'error'=>$error));
+            exit;
         } 
-        echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name']));
+        echo json_encode(array('status'=> 1,'max_limit'=>'no', 'comp_name'=>$validate_result['zoho_account_name'], 'user_id'=>(isset($userNew['userId'])?$userNew['userId']:isset($user->userId)?$user->userId:'')));
     }
     catch (Exception $ex) {
         echo '{"status":0,"error":{"text":'. $ex->getMessage() .'}}'; 
@@ -16342,7 +16378,9 @@ function updateContactInfo($zoho_contact_id,$user_id){
 
 function getUserInfoById($user_id){
     $db = getConnection();
-    $sql = "SELECT zoho_contact_id,status,role,username,first_name,last_name FROM user WHERE user_id = '".$user_id."'"; 
+    $sql = "SELECT u.*, COUNT(ul.user_id) as login_count, if(u.authy_bypass_until > '0000-00-00' and u.authy_bypass_until > (NOW() - INTERVAL 24 HOUR), 1, 0) skip_authy, SUM(CASE WHEN ul.created_at >= '".date('Y-m-d', strtotime('-30 days'))."' THEN 1 ELSE 0 END) as last_30_days_count
+            FROM user u LEFT JOIN user_logs ul on u.user_id = ul.user_id
+            WHERE u.user_id = '".$user_id."' group by u.user_id;";
     $get_result = execute_query_get_result($sql, 'FETCH_OBJ');
     /*$stmt = $db->prepare($sql);
     $stmt->execute();
