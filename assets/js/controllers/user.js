@@ -158,7 +158,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
                 }else{
                     // modalConfirmService.hideModal();
                     $scope.modalInstanceMain.close();
-                    $scope.showPopup('', 'Record updated successfully.', 'Edit Message', '');
+                    $scope.showPopup('', 'User updated successfully.', 'Edit Message', '');
                     //setTimeout(function(){ FoundationApi.publish('editMessage', 'hide'); $scope.showUsers();  } , 1000 );
                     let rowEntity = $scope.userRowForAction;
                     rowEntity.name = first_name + ' ' + last_name;
@@ -255,7 +255,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         .then(function(response) {
             var data = response.data;
             if (data.status == 1) {
-                $scope.showPopup('', 'Record updated successfully.', 'Edit Message', '');
+                $scope.showPopup('', 'User updated successfully.', 'Edit Message', '');
                 //setTimeout(function(){ FoundationApi.publish('editMessage', 'hide'); $scope.showUsers();  } , 1000 );
                 /*setTimeout(function(){
                     $("#editMessage").modal('hide');
@@ -422,7 +422,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
             var data = response.data;
             if(data.status){
                 $scope.showPopup('', 'Email sent successfully.', 'Contact us', '');
-                setTimeout(function(){ $("#emailModal").modal('hide'); } , 1000 );
+                setTimeout(function(){ modalConfirmService.hideModal(); } , 1000 );
             }
         }, function (response){
             // this function handlers error
@@ -456,6 +456,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
             keyboard: true,
             modalFade: true,
             templateUrl: templateUrl,
+            controller: 'UserModalController',
             scope: $scope,
             size: size ? size : 'md modal-dialog-centered',
             backdrop : backdrop != null ? backdrop : true
@@ -652,41 +653,24 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         });
     }
 
-    $scope.dismissModal = function(params) {
-        modalConfirmService.modalOptions.close();
-    }
-
-    $scope.closeModal = function() {
-        modalConfirmService.modalOptions.ok();
-    }
-
 });
 
-/*angular.module('drmApp').controller('MaxLimitController', function($scope, $rootScope, $timeout, $uibModalInstance, $state, apiService, modalConfirmService) {
+angular.module('drmApp').controller('UserModalController', function($scope, $rootScope, $timeout, $uibModalInstance, $state, apiService, modalConfirmService) {
 
-    $scope.sendMail = function(){
-        var defaultOptions = {
-            size: 'md modal-dialog-centered'
-        }
-        var options = {
-                bodyText: 'Email sent successfully.',
-                headerText: ' ',
-                closeReq: 1
-        };
-        var admin_id = sessionStorage.loggedInUserId;
-        apiService.post('/contact_us',{'admin_id' : admin_id })
-        .then(function(response) {
-            var data = response.data;
-            if(data.status){
-                modalConfirmService.showModal(defaultOptions, options).then(function (result) {});
-            }
-        }, function (response) {
-            // this function handlers error
-        });
-    }
-
-    $scope.closeModal = function() {
+    $scope.dismissModal = function(params) {
         $uibModalInstance.dismiss();
     }
 
-});*/
+    $scope.closeModal = function() {
+        $uibModalInstance.close("Ok");
+    }
+
+    $scope.ok = function() {
+        $uibModalInstance.close("Ok");
+    }
+
+    $scope.cancel = function() {
+        $uibModalInstance.dismiss();
+    }
+
+});
