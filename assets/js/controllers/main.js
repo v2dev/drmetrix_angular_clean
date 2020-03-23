@@ -24,9 +24,9 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }, {
         liid: 'my_reports',
         nghide: 'superadmin',
-        href: '#',
+        href: 'reports',
         aclass: 'my_reports',
-        aid: '',
+        aid: 'reports',
         title: 'Reports',
         src: './assets/images/menuiconblue/menuiconset-3.svg',
     }, {
@@ -243,7 +243,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
 
     
     $rootScope.menuItemClick = function (item) {
-        var page = item.aid
+        var page = item.aid;
         if(page == 'network_list'){
             $scope.create_network_pdf_page();
         }
@@ -273,6 +273,11 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         if(page== 'app_theme'){
             $scope.changeThemeStatus(item); // 0 -> Off -> normal mode
         }
+
+        if(page== 'reports'){
+            $scope.call_brand_tab_list('brand'); // 0 -> Off -> normal mode
+        }
+
     }
 
     $scope.create_network_pdf_page = function() {
@@ -433,7 +438,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
 
     $scope.init = function () {
-        $rootScope.catgeorySideBar = 0; // hide category section on load
+        $rootScope.catgeorySidebuar = 0; // hide category section on load
         delete localStorage.notificationNewCount;
         delete localStorage.notificationNewLiClicked;
         delete localStorage.notificationBuildLink;
