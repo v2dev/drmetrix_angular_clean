@@ -27,6 +27,7 @@ angular.module('drmApp').service('modalConfirmService', ['$uibModal',
 
             //Map modal.html $scope custom properties to defaults defined in service
             angular.extend(tempModalOptions, modalOptions, customModalOptions);
+            this.modalOptions = tempModalOptions;
 
             if (!tempModalDefaults.controller) {
                 tempModalDefaults.controller = function ($scope, $uibModalInstance) {
@@ -35,11 +36,12 @@ angular.module('drmApp').service('modalConfirmService', ['$uibModal',
                         $uibModalInstance.close(result);
                     };
                     $scope.modalOptions.close = function (result) {
-                        $uibModalInstance.dismiss('cancel');
+                        // $uibModalInstance.dismiss('cancel');
+                        $uibModalInstance.close(result);
                     };
                 }
             }
-            return $modal.open(tempModalDefaults).result;
+            return $modal.open(tempModalDefaults);
         };
 
         this.hideModal = function() {
@@ -48,8 +50,10 @@ angular.module('drmApp').service('modalConfirmService', ['$uibModal',
             if (!tempModalDefaults.controller) {
                 tempModalDefaults.controller = function ($scope, $uibModalInstance) {
                     $scope.modalOptions = tempModalOptions;
-                        $uibModalInstance.dismiss('cancel');
+                    // $uibModalInstance.dismiss('cancel');
+                    $uibModalInstance.close(result);
                 }
             }
         }
-    }]);
+    }
+]);
