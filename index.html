@@ -67,7 +67,7 @@
 					</a>
 				</li>
 				<li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}" ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
-					<a ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}" class="{{item.aclass}}" id="{{item.aid}}" >
+					<a ng-click="menuItemClick(item, this);" ui-sref="{{item.href}}" class="{{item.aclass}}" id="{{item.aid}}" >
 						<img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
 					</a>
 				</li>
@@ -92,6 +92,7 @@
 								</span>
 								<input type="text" placeholder="Search Advertiser, Brand or Creative" autocomplete="off" ng-model-options="{debounce: 250}" ng-model="globalSearchInputText" id="globalSearchInputText" name="globalSearchInputText" ng-minlength="3" >
 						</span>
+						<span><a href="/drmetrix_angular_clean/#!/globalSearch">Global Search "proactive"</a></span>
 						<span class="inline-label search-text-validation-error" ng-show="frmSearch.globalSearchInputText.$error.minlength">
 								<b>Note:</b> <span>{{searchTextValidation}}</span>
 						</span>

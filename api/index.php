@@ -18329,18 +18329,12 @@ function getGlobalSearchData(){
     $query_string                       = $request->getBody();
     parse_str($query_string, $output);
     $requestData = (array)json_decode($query_string, TRUE);
-    // $set_one                            = explode('&', $query_string);
-    // $raw_data                           = array();
-    // foreach($set_one as $k => $v) {
-    //     $raw_data                       = explode('=',$v);
-    //     $requestData[$raw_data[0]]      = $raw_data[1];
-    // }
 
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
     $page                               = $requestData['page'];
     $limit                              = $requestData['rows'];
-    $c                                  = urldecode($requestData['c']);
+    $c                                  = urldecode($requestData['c_dir']);
     $srch_txt= $requestData['srch_txt'] = urldecode(addslashes(trim(urldecode($requestData['srch_txt']))));
     $creative_durations                 = $requestData['creative_duration'];
     $_resp_type                         = urldecode($requestData['resp_type']);
