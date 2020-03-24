@@ -1145,17 +1145,21 @@ angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, 
         vm.gridOptionsReports.columnDefs = [
             { name: 'file_name', pinnedLeft:true, displayName:'File Name'},
             { name: 'filesize', pinnedLeft:true, displayName:'File Size'},
-            { name: 'download_link', pinnedLeft:true, displayName:'Download Link' },
-            { name: 'email_alert', pinnedLeft:true, displayName:'Email Alert' },
+            // { name: 'download_link', pinnedLeft:true, displayName:'Download Link', cellTemplate: '<span ng-if="(row.entity.status == completed)"></span>' },
+            { name: 'email_alert', pinnedLeft:true, displayName:'Email Alert', cellTemplate:
+            '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" row.entity.disabled class="email_alert checkbox-custom" id=""email_alert_\'{{row.entity.id}}\'" name="email_alert" ng-click="updateEmailAlerts({{row.entity.id}})"  {{row.entity.checked}} /><label for="email_alert_row{{row.entity.id}}" class="checkbox-custom-label row.entity.class"></label></li></ul></nav>'},
 
             { name: 'shared_report', displayName: 'Shared Report', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="share_filter checkbox-custom" id="share_list_\'{{row.entity.id}}\'" name="share_list" ng-click="updateShareListStatus(\'{{row.entity.id}}\')"  \'{{row.entity.checked_shared_list}}\' \'{{row.entity.disabled_shared_list}}\' /><label for="share_filter_\'{{row.entity.id}}\'" class="checkbox-custom-label \'{{row.entity.disabled_class}}\'"></label></li></ul></nav>'},
 
-            { name: 'copy_list', pinnedLeft:true, displayName: 'Copy To My List', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="copy_list checkbox-custom" id="copy_list_\'{{row.entity.id}}\'" name="copy_list" ng-click="copySharedList({{row.entity.id}})"  {{row.entity.checked_copy_list}} {{row.entity.disable_copy_list}} /><label for="copy_filter_{{row.entity.id}}" class="checkbox-custom-label {{row.entity.disabled_copy_list_class}}"></label></li></ul></nav>'},
+            // { name: 'copy_list', pinnedLeft:true, displayName: 'Copy To My List', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="copy_list checkbox-custom" id="copy_list_\'{{row.entity.id}}\'" name="copy_list" ng-click="copySharedList({{row.entity.id}})"  {{row.entity.checked_copy_list}} {{row.entity.disable_copy_list}} /><label for="copy_filter_{{row.entity.id}}" class="checkbox-custom-label {{row.entity.disabled_copy_list_class}}"></label></li></ul></nav>'},
+            { name: 'shared_date', pinnedLeft:true, displayName:'Created' },
+            { name: 'valid_till', pinnedLeft:true, displayName:'Valid Till' },
         ];
         apiService.post('/get_my_reports_data', formData, config)
-        .then(function (data) {
+        .then(function (response) {
+            var data = response.data;
             $scope.PostDataResponse = formData;
-            vm.gridOptionsReports.data = data.data.rows;
+            vm.gridOptionsReports.data = data.rows;
         }, function (response) {
             // this function handlers error
         });

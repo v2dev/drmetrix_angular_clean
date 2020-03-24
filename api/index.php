@@ -14649,6 +14649,7 @@ function getMyReportsData(){
             $valid_til              = date("m/d/Y",strtotime($result['valid_till']));
             $shared_valid_till      = date("m/d/Y",strtotime($result['shared_valid_till']));
             $todays_date                    = date("m/d/Y");
+            $nestedData['status'] = $result['status'];
             if(strtotime($todays_date) <= strtotime($valid_til)){
                 if($result['status'] == 'completed'){
                     $disabled = 'disabled = disabled';
@@ -14656,9 +14657,12 @@ function getMyReportsData(){
 
                     $download_link = 'http://' . str_replace('', '', HOST) . "/drmetrix/api/index.php/downloadClientFiles?code=".base64_encode("email={$result['email']}&id={$result['id']}");
                     $download_link = '<a href="'.$download_link.'" target="_blank">Download</a>';
+                    $nestedData['disabled'] = $disabled;
+                    $nestedData['class'] = $class;
 
                 } else {
                     $percentage = $result['progress'];
+                    $nestedData['percentage'] = $percentage;
                     $download_link = '
                     <div class="c100 p'.$percentage.' small">
                         <span>'.$percentage.'%</span>
@@ -14670,6 +14674,8 @@ function getMyReportsData(){
                     ';       
                     $disabled = '';
                     $class    = '';
+                    $nestedData['disabled'] = $disabled;
+                    $nestedData['class'] = $class;
 
                 }
                 $sharedDate = '';
@@ -14683,8 +14689,10 @@ function getMyReportsData(){
 
                 if($result['email_alert'] == 1){
                     $checked                    =  'checked = checked';
+                    $nestedData['checked'] = $checked;
                 }else{
                     $checked                    =   '';
+                    $nestedData['checked'] = $checked;
                 }
 
                 $delete_file                    = '<div class="header-icons checkbox"><input type="checkbox" id="delete_check_'. $result['id'].'" name="delete_check[]" onClick="checkDelete('.$result['id'].');" class="checkbox-custom"><label class="checkbox-custom-label"></label></div><a title="delete" class="delete_file" id="delete_file_'. $result['id'].'" ><img class="header-img" src="/drmetrix/assets/img/delete-icon-grey.svg" /></a>';
