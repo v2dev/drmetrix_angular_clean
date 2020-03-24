@@ -631,10 +631,9 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             $scope.changeThemeStatus(item); // 0 -> Off -> normal mode
         }
 
-        // if(page== 'reports'){
-        //     $scope.call_brand_tab_list('brand'); // 0 -> Off -> normal mode
-        // }
-
+        if(page== 'reports'){
+            $scope.reportsModal('reports'); // 0 -> Off -> normal mode
+        }
     }
 
     $scope.create_network_pdf_page = function() {
@@ -900,7 +899,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
           }); 
     }
 
-    
     $scope.openListModal = function() {
         $scope.modalInstance =  $uibModal.open({
             templateUrl: "./templates/modals/ListDialog.html",
@@ -908,7 +906,15 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             size: 'lg modal-dialog-centered',
           });
     }
-  
+
+    $scope.reportsModal = function(){
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/reportsdialog.html",
+            controller: "ReportsModalCtrl",
+            size: 'lg modal-dialog-centered',
+        });
+    }
+
     $scope.call_brand_tab_list = function(list_item) {
         // $.ajax({
         //     url: "/drmetrix/assets/js/jquery.dropdown.js?"+Math.random(),
@@ -1086,4 +1092,74 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
             // this function handlers error
         });
     }
+});
+
+angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, $interval, uiGridTreeViewConstants, $uibModal, $rootScope, $uibModalInstance, $state, apiService) {
+    $scope.sharedList = 'My';
+    $scope.selected_user = '';
+
+    var user_id = sessionStorage.loggedInUserId;
+    var sharded_by = sessionStorage.loggedInUserId;
+
+    $scope.show_reports_modal = function () {
+        //ui grid code
+        $scope.uigridReportsModal();
+    }
+
+    $scope.showSharedLists = function(item) {
+        $scope.sharedList = item;
+            //with ui grid code, displayes grid data according to rules set
+    }
+
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+
+    // Call brand List ui Grid
+    $scope.uigridReportsModal = function() {
+        var formData = $rootScope.formdata;
+        var vm = this;
+        var config = {
+            headers : {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }
+        // var c_dir = $scope.ranking.creative_type == 'short' ? '6':'1';
+        var c_dir = '6';
+        formData.primary_tab = $rootScope.my_list;
+        formData.secondary_tab = 'NA';
+        formData._search = true;
+        formData.rows = '10';
+        formData.page = 1;
+        formData.sidx = "created";
+        formData.sord = 'desc';
+
+        vm.gridOptionsReports = {
+            enableGridMenu: true,
+            enableSelectAll: true,
+            enableSorting: true,
+            paginationPageSize: 10,
+            paginationTemplate: $rootScope.correctTotalPaginationTemplate,
+        };
+
+        vm.gridOptionsReports.columnDefs = [
+            { name: 'file_name', pinnedLeft:true, displayName:'File Name'},
+            { name: 'filesize', pinnedLeft:true, displayName:'File Size'},
+            { name: 'download_link', pinnedLeft:true, displayName:'Download Link' },
+            { name: 'email_alert', pinnedLeft:true, displayName:'Email Alert' },
+
+            { name: 'shared_report', displayName: 'Shared Report', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="share_filter checkbox-custom" id="share_list_\'{{row.entity.id}}\'" name="share_list" ng-click="updateShareListStatus(\'{{row.entity.id}}\')"  \'{{row.entity.checked_shared_list}}\' \'{{row.entity.disabled_shared_list}}\' /><label for="share_filter_\'{{row.entity.id}}\'" class="checkbox-custom-label \'{{row.entity.disabled_class}}\'"></label></li></ul></nav>'},
+
+            { name: 'copy_list', pinnedLeft:true, displayName: 'Copy To My List', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="copy_list checkbox-custom" id="copy_list_\'{{row.entity.id}}\'" name="copy_list" ng-click="copySharedList({{row.entity.id}})"  {{row.entity.checked_copy_list}} {{row.entity.disable_copy_list}} /><label for="copy_filter_{{row.entity.id}}" class="checkbox-custom-label {{row.entity.disabled_copy_list_class}}"></label></li></ul></nav>'},
+        ];
+        apiService.post('/get_my_reports_data', formData, config)
+        .then(function (data) {
+            $scope.PostDataResponse = formData;
+            vm.gridOptionsReports.data = data.data.rows;
+        }, function (response) {
+            // this function handlers error
+        });
+    }
+
+    $scope.show_reports_modal(user_id, sharded_by);
 });
