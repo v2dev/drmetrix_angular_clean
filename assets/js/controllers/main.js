@@ -634,7 +634,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         if(page== 'reports'){
             $scope.reportsModal('reports'); // 0 -> Off -> normal mode
         }
-
     }
 
     $scope.create_network_pdf_page = function() {
