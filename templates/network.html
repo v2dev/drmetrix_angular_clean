@@ -1,1 +1,12 @@
-Network called
+<div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
+<div class="container-fluid">
+    <div class="row">
+        <category-part></category-part> 
+            <div class="notify-msg">
+                <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
+                <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
+                <span ng-if="lifetime_error" >For date range > 1 year, you can select up to 5 categories to enable &quot;Apply&quot; button</span>
+            </div>
+    </div>
+    <!-- <div id="grid_network" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div> -->
+</div>
