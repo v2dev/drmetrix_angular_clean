@@ -1,4 +1,4 @@
-angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile){
+angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService){
     if (!apiService.isUserLogged($scope)) {
         $state.go('home');
         return;
@@ -28,128 +28,10 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     // var formdata = {'sd': data['sd'], 'ed': data['ed'], 'startDate': $scope.ranking.selectDate, 'val': data['selectDateDropDown'], 'c': $scope.ranking.selectClassfication, 'type': data['type'], 'cat': data['cat_id'], 'flag': active_flag, spanish: $scope.ranking.selectLang, responseType: $scope.ranking.returnText,'unchecked_category': data['unchecked_cat'], 'length_unchecked': unchecked_len, 'creative_duration': duration, 'new_filter_opt': new_filter_opt, 'lifetime_flag': lifetime_flag, 'all_ytd_flag': all_ytd_flag, 'refine_filter_opt': refine_filter_opt, 'refine_filter_opt_text': refine_filter_opt_text, 'refine_apply_filter': refine_apply_filter, 'programs_ids': airings_data['all_programs_ids'],'applied_ids' : $scope.ranking.applied_list_ids , 'primary_tab' : $scope.ranking.applied_list_type}; 
 
    
-    //Start - Classification
-
-  
-    $scope.selectBreakType = 'A';
-    $scope.breaktypes = [
-        {
-            "id": "all_breaktype",
-            "value": "A",
-            "display_text": "All"
-        }, {
-            "id": "national",
-            "value": "N",
-            "display_text": "National"
-        }, {
-            "id": "local",
-            "value": "L",
-            "display_text": "DPI"
-        }
-    ];
-
-
-    $scope.initializeWeeks = function() {
-        if($scope.selectDate == 1 || $scope.selectDate == 2 ) {
-            angular.forEach($scope.yearsArray, function(y, key) {
-                angular.forEach(y.weeks, function(w, key) {
-                    if(key == 0 && y.media_year == $scope.selectedYear) {
-                        $scope.selectDate = 'week31_'+w.media_week+'_'+w.media_week_start+'_'+w.media_week_end;
-                        console.log($scope.selectDate);
-                    }
-                });
-            });
-        }
-    }
-
-    $scope.showYearDropDownVariable = function () {
-        $scope.showYearDropDown = 1;
-    }
-
-    $scope.showMediaCalender = function (year) {
-        $scope.showYearDropDown = 0;
-        $scope.mask = 0;
-        $scope.selectedYear = year;
-        $scope.selectDate = 1; // initialize to one to display deault 1 media week in all years other dropdwon section
-        $scope.initializeWeeks();
-
-    }
-    $scope.setOtherDivVariable = function () {
-        $scope.otherDiv = 1;
-        $scope.showOtherDiv = !$scope.showOtherDiv;
-        $scope.mask = 0;
-        $scope.initializeWeeks();
-        $('#othersDiv1').modal('show');
-    }
     
-    $scope.date_detail = function (date) {
-        $scope.lifetimeOther = false;
-        $scope.mask  = 0;
-        if($scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') { // ytd checked
-            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
-            date = $scope.selectDate;
-            $scope.allOther = false;
-            sessionStorage.lifetime_flag = 0;
-            sessionStorage.calender_flag = 0;
-        } 
-        if(!$scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') {// ytd unchecked
-            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
-            date = $scope.selectDate;
-        }
-        if($scope.allOther &&  !$scope.ytdOther && typeof(date) == 'undefined') { // all checked
-            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
-            date = $scope.selectDate;
-            $scope.ytdOther = false;
-            sessionStorage.lifetime_flag = 0;
-            sessionStorage.calender_flag = 0;
-        } 
-        if(!$scope.allOther && !$scope.ytdOther && typeof(date) == 'undefined') {// all unchecked
-            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
-            date = $scope.selectDate;
-        }
-        if (date != 1) {
-            $scope.matching_criteria = 0;
-        }
-        console.log($scope.selectDate);
-        if($scope.selectDate.indexOf("year34") > -1) {
-            $scope.mask = 1;
-        }
-        var date_detail = date.split('_');
-        if (date_detail[1] !== undefined) {
-            var week = date_detail[1];
-            var sd_1 = date_detail[2].split('-');
-            var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
-            var ed_1 = date_detail[3].split('-');
-            var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
-            var date_diaply = '';
-            if (date_detail[0] == 'week31') {
-                date_diaply = "Media Week ";
-            } else if (date_detail[0] == 'month32') {
-                date_diaply = "Media Month ";
-                week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
-            } else if (date_detail[0] == 'quarter33') {
-                date_diaply = "Media Quarter ";
-            }
-            $scope.selectDate = sessionStorage.selectDate = $rootScope.selected_date = date;
-            $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
-            $scope.findDiff(sd_2);
-            sessionStorage.calender_flag = 0;
-            // $scope.checkForLifetimeSelection();
-        }
-    }
 
-    $scope.setLifetimeVariables = function() {
-        sessionStorage.lifetime_flag = 0;
-        if($scope.lifetimeOther) {
-            sessionStorage.lifetime_flag = 1;
-        } 
-        // $scope.checkForLifetimeSelection();
 
-        if (sessionStorage.calender_flag == 1) {
-            $scope.apply_filter = 0;
-            $scope.lifetime_error = 1;
-        }
-    }
+    
 
     $scope.uigridDataBrand = function() {
         var formData = $rootScope.formdata;
@@ -437,11 +319,34 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.initializeRankingPage = function() {
-    $rootScope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""};
-
+        $scope.applyFilter();
         ($rootScope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
     }
     // $scope.uigridDataBrand(formdata);
+
+    $scope.openModal = function(templateUrl, controller, size, backdrop) {
+        $scope.modalInstanceMain =  modalConfirmService.showModal({
+            backdrop: false,
+            keyboard: true,
+            modalFade: true,
+            templateUrl: templateUrl,
+            controller: controller,
+            scope: $scope,
+            size: size ? size : 'xl modal-dialog-centered',
+          });
+
+          $scope.modalInstanceMain.result.then(function(response){
+              $scope.result = `${response} button hitted`;
+          });
+
+          $scope.modalInstanceMain.result.catch(function error(error) {
+            if(error === "backdrop click") {
+              // do nothing
+            } else {
+              // throw error;
+            }
+          });
+    };
 
     $scope.openNewTypeModal = function() {
         $scope.modalInstance =  $uibModal.open({
@@ -460,12 +365,13 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.openNetworkLogModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/networkLogDialog.html",
-            controller: "networkLogCtrl",
-            size: 'xl modal-dialog-centered',
-            backdrop  : false
-          });
+        $scope.openModal('./templates/modals/networkLogDialog.html','networkLogCtrl','xl modal-dialog-centered');
+        // $scope.modalInstance =  $uibModal.open({
+        //     templateUrl: "./templates/modals/networkLogDialog.html",
+        //     controller: "networkLogCtrl",
+        //     size: 'xl modal-dialog-centered',
+        //     backdrop  : false
+        //   });
     }
     $scope.viewAiringSpendGraph = function(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang,area, adv_name,network_id, network_dpi, sidx) {
         $scope.page_call = 'airings_detail';
@@ -480,6 +386,8 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     $scope.backToRankingpage = function() {
        $scope.page_call = '/#!/ranking';
     }
+
+    
     
 });
 
@@ -488,7 +396,13 @@ angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uib
         $scope.newType = 'none';
         if($scope.newCheckBox) {
             $scope.newType = ($rootScope.type == 'brands')  ? 'brands' : 'advertisers';
+        } else {
+            
         }
+    }
+
+    $scope.newCheckBox = function() {
+        $scope.newCheckBox = true;
     }
 
     $scope.applyModal = function() {
@@ -575,13 +489,35 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         }
 
         if(call_api) {
+            $scope.networkNotLoaded = 1;
             apiService.post('/get_networks_with_all_filters', params)
             .then(function (response) {
+                $scope.networkNotLoaded = 0;
                 var data = response.data;
                 sessionStorage.setItem('active_networks_data', JSON.stringify(data));
                 $scope.dataOfAllNetworks('ActiveNetwroksFunction');
             }),(function (data, status, headers, config) {
             });
+        }
+    }
+
+    $scope.getAllActiveInactiveNetworks = function () {
+        var new_filter_opt = 'none';
+        if (sessionStorage.all_networks_data != undefined) {
+            $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
+        } else {
+            $scope.networkNotLoaded = 1;
+            apiService.post('/get_all_active_inactive_networks', {})
+            .then(function (response) {
+                var ndata = response.data;
+                $scope.networkNotLoaded = 0;
+                console.log(JSON.stringify(ndata));
+                sessionStorage.setItem('all_networks_data', JSON.stringify(ndata));
+                $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
+            }),(function () {
+                console.log("error in get all networks");
+            });
+
         }
     }
 
@@ -610,7 +546,9 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         }
         return temp.length > 0 ? false : true;
     }
-
+    $scope.changeLatter = function (letter) {
+        $scope.selectedLetter = letter;
+    }
   
 
     $scope.getNetworksWithAllFilters();

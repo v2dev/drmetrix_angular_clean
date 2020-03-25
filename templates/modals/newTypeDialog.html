@@ -13,15 +13,15 @@
     </div>
     <div class="d-flex mt-3 mb-4">
         <label class="radio mr-2" ng-hide="type == 'brands'">
-            <input type="radio" ng-model="newType" value="advertisers" id="advertisers" >
+            <input type="radio" ng-model="newType" value="advertisers" id="advertisers" ng-click="newCheckBox();" >
                 <span>Advertiser</span>
         </label>
         <label class="radio mr-2">
-            <input type="radio" ng-model="newType" value="brands" id="brands">
+            <input type="radio" ng-model="newType" value="brands" id="brands"  ng-click="newCheckBox();">
             <span>Brands</span>
         </label>
         <label class="radio">
-            <input type="radio" ng-model="newType" value="creatives" id="creatives">
+            <input type="radio" ng-model="newType" value="creatives" id="creatives"  ng-click="newCheckBox();">
             <span>Creatives</span>
         </label>
     </div>

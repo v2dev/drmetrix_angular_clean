@@ -1,48 +1,23 @@
-angular.module('drmApp').controller('NetworkController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, modalConfirmService, $uibModal, $cookies) {
+angular.module('drmApp').controller('NetworkController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, $uibModal, $cookies) {
     if (!apiService.isUserLogged($scope)) {
         $state.go('home');
         return;
     }
     $scope.letterLists = ['all', '0-9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     $scope.selectedLetter = 'all';
-    $rootScope.headerDisplay = 1;
+    $rootScope.headerDisplay = 0;
     var today = new Date();
     var prev_date = new Date();
     prev_date.setMonth(today.getMonth() - 6);
     var nCtrl = this;
-    
-    $scope.openModal = function(templateUrl, controller, size, backdrop) {
-        $scope.modalInstanceMain =  modalConfirmService.showModal({
-            backdrop: true,
-            keyboard: true,
-            modalFade: true,
-            templateUrl: templateUrl,
-            controller: 'NetworkModalController',
-            scope: $scope,
-            size: size ? size : 'xl modal-dialog-centered',
-            backdrop : backdrop != null ? backdrop : true
-          });
-
-          $scope.modalInstanceMain.result.then(function(response){
-              $scope.result = `${response} button hitted`;
-          });
-
-          $scope.modalInstanceMain.result.catch(function error(error) {
-            if(error === "backdrop click") {
-              // do nothing
-            } else {
-              // throw error;
-            }
-          });
-    };
 
     $scope.loadNetworks = function() {
-        $scope.openModal('./templates/modals/networkModal.html');
+        $scope.showNetworkModal = 1;
+        $scope.headerDisplay = 0;
         apiService.post('/get_all_active_networks')
         .then(function (response) {
             var data = response.data;
             $scope.networkTabList = data.result;
-            console.log($scope.networkTabList );
         }), (function (response) {
         });
     }
@@ -155,7 +130,8 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
     }
 
     $scope.networkFilterApply = function () {
-        $scope.modalInstanceMain.close();
+        $scope.showNetworkModal = 0;
+        $scope.headerDisplay = 1;
         var checked_count = 0;
         var my_network_called = $rootScope.my_network_called = sessionStorage.my_network_called = 1;
         sessionStorage.selected_arr_networks = [];
@@ -184,32 +160,6 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
 
     $scope.jqgridBrandNetworkAirings = function() {
         console.log('brand grid called');
-    }
-
-    $scope.$on('modal.closing', (event, reason, closed) => {
-        if (!closed) {
-            event.preventDefault();
-            $scope.$close("Closing");
-        }
-    });
-});
-
-angular.module('drmApp').controller('NetworkModalController', function($scope, $rootScope, $timeout, $uibModalInstance, $state, apiService, modalConfirmService) {
-
-    $scope.dismissModal = function(params) {
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.close("Ok");
-    }
-
-    $scope.ok = function() {
-        $uibModalInstance.close("Ok");
-    }
-
-    $scope.cancel = function() {
-        $uibModalInstance.dismiss();
     }
 
 });

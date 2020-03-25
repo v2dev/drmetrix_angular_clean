@@ -3522,7 +3522,7 @@ function get_rankings_from_cache($requestData, $tab)
         $requestData['ed'] == $last_week_details['ed'] &&
         $requestData['val'] == 1 &&
         $requestData['c'] == 1 &&
-        ($requestData['cat'] == "" || $requestData['cat'] == "all" || $requestData['unchecked_category'] == "") &&
+        ($requestData['cat'] == "" || $requestData['cat'] == "all" ) &&
         $requestData['flag'] == 2 &&
         urldecode($requestData['spanish']) == '0,1' &&
         $requestData['responseType'] == $encoded_responsetype &&
@@ -4366,7 +4366,8 @@ function getLastLogin($redirect = 0)
         return;
     }
 
-    $url = str_replace('/drmetrix_angular_clean/api/index.php/', "", $_SERVER['REQUEST_URI']);
+    $pos = strpos($_SERVER['REQUEST_URI'], 'index.php/');
+    $url = substr($_SERVER['REQUEST_URI'], $pos+10); //index.php/ couting to 10
     $url_arr = explode("?", $url);
     $url = $url_arr[0];
     if ((isset($_SESSION['username']) && $_SESSION['username'] == 'demo.user@drmetrix.com')) {
