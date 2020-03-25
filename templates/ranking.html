@@ -6,7 +6,7 @@
    
 <div class="container-fluid" ng-init="initializeRankingPage();">
     <div class="row">
-        <category-part></category-part> 
+        <category-part data="$ctrl.category_list"></category-part> 
         <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
             <div class="notify-msg">
                 <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>

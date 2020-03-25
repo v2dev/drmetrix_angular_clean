@@ -5,6 +5,123 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     $rootScope.headerDisplay = 0;
     /* Primary filter */
     $rootScope.complete_name = localStorage.complete_name;
+    $scope.selectDate = sessionStorage.selectDate = 1;
+    $scope.shortFormClassification = [
+        {
+            "index": 1,
+            "id": "all_short",
+            'selected': true,
+            "value": "All Short form"
+        }, {
+            "index": 2,
+            "id": "sf_products",
+            'selected': true,
+            "value": "Short Form Products"
+        }, {
+            "index": 3,
+            "id": "lead_gen",
+            'selected': true,
+            "value": "Lead Generation"
+        }, {
+            "index": 4,
+            "id": "brand_dr",
+            'selected': true,
+            "value": "Brand/DR",
+        }, {
+            "index": 5,
+            "id": "sf_retail_products",
+            'selected': true,
+            "value": "Retail Rankings",
+            "display_text": "AsOnTV Retail Rankings",
+        }
+    ];
+
+    $scope.longFormClassification = [
+        {
+            "index": 6,
+            "id": "lf_creative1",
+            'selected': true,
+            "value": "28.5m Creative",
+        }, {
+            "index": 7,
+            "id": "lf_retail_products",
+            'selected': false,
+            "value": "Retail Rankings",
+            "display_text": "AsOnTV Retail Rankings (28.5m)",
+        }
+    ];
+
+     //Language
+     $scope.selectLang = $rootScope.selectLang ? $rootScope.selectLang : '0,1';
+     $scope.languages = [
+         {
+             "id": "all",
+             "value": "0,1",
+             "display_text": "All"
+         }, {
+             "id": "english",
+             "value": "0",
+             "display_text": "English"
+         }, {
+             "id": "spanish",
+             "value": "1",
+             "display_text": "Spanish"
+         }
+     ];
+
+     //response types
+     $scope.response_header = 'or';
+     $scope.responseTypeselected = ['URL', 'MAR', 'SMS', 'TFN'];
+     $scope.responseTypes = [
+         {
+             "value": "URL",
+             "id": "urlCheckbox",
+             "custom-value": "response_url=1",
+             "custom-null-value": "response_url=0"
+         }, {
+             "value": "SMS",
+             "id": "smsCheckbox",
+             "custom-value": "response_sms=1",
+             "custom-null-value": "response_sms=0"
+         }, {
+             "value": "TFN",
+             "id": "telephoneCheckbox",
+             "custom-value": "response_tfn=1",
+             "custom-null-value": "response_tfn=0"
+         }, {
+             "value": "MAR",
+             "id": "mobRepsonseCheckbox",
+             "custom-value": "response_mar=1",
+             "custom-null-value": "response_mar=0"
+         },
+     ];
+
+    
+     //breaktypes
+    $scope.selectBreakType = 'A';
+    $scope.breaktypes = [
+        {
+            "id": "all_breaktype",  
+            "value": "A",
+            "display_text": "All"
+        }, {
+            "id": "national",
+            "value": "N",
+            "display_text": "National"
+        }, {
+            "id": "local",
+            "value": "L",
+            "display_text": "DPI"
+        }
+    ];
+    $scope.response_header = 'or';
+    $scope.creative_type = 'short';
+    $scope.checkedShortClassification = [1, 2, 3, 4, 5];
+    $scope.checkedLongClassification = [6];
+    $scope.selectedDurations = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
+    $scope.creative_short_duration = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
+    $rootScope.active_flag = 2 // keep it until not integrated active inactive all
+
     $scope.mapValueWithSession = function (data) {
         for (var i in data) {
             $scope[data[i]] = sessionStorage[data[i]];
@@ -21,330 +138,487 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
 
     $scope.mapValueWithSession(databaseFormatDate);
 
-        //date filter
-        $scope.findDiff = function (end_date, val) {
-            $rootScope.displayBtns = 0;
-            var date1 = new Date(sessionStorage.today_date);
-            var date2 = new Date(end_date);
-            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            if (diffDays >= 30) {
-                $rootScope.displayBtns = 1;
+    //date filter
+    $scope.findDiff = function (end_date, val) {
+        $rootScope.displayBtns = 0;
+        var date1 = new Date(sessionStorage.today_date);
+        var date2 = new Date(end_date);
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        if (diffDays >= 30) {
+            $rootScope.displayBtns = 1;
+        }
+    }
+    $scope.date_filter = function (val) {
+        if((val >= 6) && (val <= 11)){
+            $scope.ytdOther = false;
+            $scope.allOther = false;
+            $scope.lifetimeOther = false;
+        }
+        $scopemask = 0;
+        if($scope.lifetimeOther && typeof(val) != 'undefined') { // lifetime checked
+            $scope.mask = 1;
+            val = $scope.selectDate = 5;
+        }
+        
+        if(!$scope.lifetimeOther && val == 5 && $scope.showOtherDiv) { // lifetime unchecked
+            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
+            var date_detail = $scope.selectDate.split('_');
+            if (date_detail[1] !== undefined) {
+                var week = date_detail[1];
+                var sd_1 = date_detail[2].split('-');
+                var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
+                var ed_1 = date_detail[3].split('-');
+                var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
+                var date_diaply = '';
+                if (date_detail[0] == 'week31') {
+                    date_diaply = "Media Week ";
+                } else if (date_detail[0] == 'month32') {
+                    date_diaply = "Media Month ";
+                    week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
+                } else if (date_detail[0] == 'quarter33') {
+                    date_diaply = "Media Quarter ";
+                }
+                $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
             }
         }
-        $scope.date_filter = function (val) {
-            if((val >= 6) && (val <= 11)){
-                $scope.ytdOther = false;
-                $scope.allOther = false;
-                $scope.lifetimeOther = false;
+        // val = $scope.selectDate;
+        $scope.matching_criteria = 0;
+        if (val == 1) { // Last Week
+            $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
+            $scope.date_range = 'Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
+            $scope.sd = sessionStorage.media_start_db;
+        }
+        if (val == 2) { // Current Week
+            $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
+            $scope.date_range = 'Current Week ' + sessionStorage.current_calendar_id + ' - ' + sessionStorage.current_start_date + ' thru ' + sessionStorage.current_end_date;
+            $scope.sd = sessionStorage.current_start_db;
+        }
+        if (val == 3) {
+            $scope.date_range = 'Quarter ' + sessionStorage.number_of_quarter + ' - ' + sessionStorage.last_quarter_start_date + ' to ' + sessionStorage.last_quarter_end_date;
+            $scope.sd = sessionStorage.last_quarter_start_date;
+        }
+        if (val == 4) {
+            $scope.date_range = 'Year Of ' + sessionStorage.last_media_year;
+        }
+        if (val == 5) {
+            $scope.allOther = false;
+            $scope.ytdOther = false;
+            $scope.matching_criteria = val;
+            $scope.date_range = $scope.lifetime_year + ' - ' + $scope.lifetime_min_sd + ' thru ' + $scope.lifetime_max_ed;
+            $scope.sd = $scope.lifetime_min_sd;
+            $scope.findDiff($scope.sd, val);
+        }
+        if (val == 6) { // Last Week
+            $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
+            $scope.date_range = 'Last Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
+            $scope.sd = sessionStorage.media_start_date;
+        }
+        if (val == 7) { // Last Month
+            $scope.freq_filter_options = { daily: false, weekly: false, monthly: true, quarterly: false };
+            $scope.date_range = 'Last Media Month ' + sessionStorage.month_calendar_id + ' - ' + sessionStorage.media_month_date + ' thru ' + sessionStorage.media_monthend_date;
+            $scope.sd = sessionStorage.media_month_date;
+        }
+        if (val == 8) { // Last Quarter
+            $scope.freq_filter_options = { daily: false, weekly: false, monthly: false, quarterly: true };
+            $scope.date_range = 'Last Media Quarter ' + sessionStorage.number_of_quarter + ' - ' + sessionStorage.last_quarter_start_date + ' thru ' + sessionStorage.last_quarter_end_date;
+            $scope.sd = sessionStorage.last_quarter_start_date;
+        }
+        if (val == 9) { // Current Week
+            $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
+            $scope.date_range = 'Current Media Week ' + sessionStorage.current_calendar_id + ' - ' + sessionStorage.current_start_date + ' thru ' + sessionStorage.current_end_date;
+            $scope.sd = sessionStorage.current_start_date;
+        }
+        if (val == 10) { // Current Month
+            $scope.matching_criteria = val;
+            $scope.date_range = 'Current Media Month ' + sessionStorage.currentmonth_calendar_id + ' - ' + sessionStorage.media_currentmonth_date + ' thru ' + sessionStorage.media_currentmonthend_date;
+            $scope.sd = sessionStorage.media_currentmonth_date;
+        }
+        if (val == 11) { // Current Quarter
+            $scope.matching_criteria = val;
+            $scope.date_range = 'Current Media Quarter ' + sessionStorage.number_of_currentquarter + ' - ' + sessionStorage.current_quarter_start_date + ' thru ' + sessionStorage.current_quarter_end_date;
+            $scope.sd = sessionStorage.current_quarter_db_start_date;
+        }
+
+        if (val == 'calender') {
+            sessionStorage.is_apply_calendar = 1;
+            $scope.findDiff(sessionStorage.start_date);
+            // $('#datepicker_checkbox').attr('checked', 'checked');
+            $scope.date_range = 'Date Range - ' + sessionStorage.disp_start_date + ' thru ' + sessionStorage.disp_end_date;
+            // $rootScope.initialise_datepicker();
+            // $('#datepicker_checkbox').prop('checked', true);
+        }
+        
+        $scope.selectDate = sessionStorage.selectDate = val;
+    }
+    $scope.date_filter($scope.selectDate);
+
+    $scope.getParameters = function () {
+        var selectDateDropDown = $scope.selectDate;
+
+        if (selectDateDropDown == 1) {
+            sd = $scope.media_start_db;
+            ed = $scope.media_end_db;
+        }
+
+        if (selectDateDropDown == 2) {
+            sd = $scope.current_start_db;
+            ed = $scope.current_end_db;
+        }
+
+        if (selectDateDropDown == 3) {
+            sd = $scope.last_quarter_db_start_date;
+            ed = $scope.last_quarter_db_end_date;
+        }
+
+        if (selectDateDropDown == 4) {
+            sd = $scope.last_year_db_start_date;
+            ed = $scope.last_year_db_end_date;
+        }
+
+        if (selectDateDropDown == 5) {
+            sd = $scope.lifetime_db_min_sd;
+            ed = $scope.lifetime_db_max_ed;
+        }
+
+        if (selectDateDropDown == 6) {
+            sd = $scope.media_start_db;
+            ed = $scope.media_end_db;
+        }
+
+        if (selectDateDropDown == 7) {
+            sd = $scope.media_month_start_db;
+            ed = $scope.media_month_end_db;
+        }
+
+        if (selectDateDropDown == 8) {
+            sd = $scope.last_quarter_db_start_date;
+            ed = $scope.last_quarter_db_end_date;
+        }
+
+        if (selectDateDropDown == 9) {
+            sd = $scope.current_start_db;
+            ed = $scope.current_end_db;
+        }
+
+        if (selectDateDropDown == 10) {
+            sd = $scope.media_currentmonth_start_db;
+            ed = $scope.media_currentmonth_end_db;
+        }
+
+        if (selectDateDropDown == 11) {
+            sd = $scope.current_quarter_db_start_date;
+            ed = $scope.current_quarter_db_end_date;
+        }
+
+        if (selectDateDropDown.toString().indexOf('month32_') != -1) {
+            var custom_date = selectDateDropDown.split("_");
+            if (custom_date.length > 1) {
+                sd = custom_date[2];
+                ed = custom_date[3];
+                selectDateDropDown = 2;
+                data['selectDateDropDown'] = selectDateDropDown;
             }
-            $scopemask = 0;
-            if($scope.lifetimeOther && typeof(val) != 'undefined') { // lifetime checked
-                $scope.mask = 1;
-                val = $scope.selectDate = 5;
+        }
+
+        if (selectDateDropDown.toString().indexOf('week31_') != -1) {
+            var custom_date = selectDateDropDown.split("_");
+            if (custom_date.length > 1) {
+                sd = custom_date[2];
+                ed = custom_date[3];
+                selectDateDropDown = 1;
+                data['selectDateDropDown'] = selectDateDropDown;
             }
-            
-            if(!$scope.lifetimeOther && val == 5 && $scope.showOtherDiv) { // lifetime unchecked
-                $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
-                var date_detail = $scope.selectDate.split('_');
-                if (date_detail[1] !== undefined) {
-                    var week = date_detail[1];
-                    var sd_1 = date_detail[2].split('-');
-                    var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
-                    var ed_1 = date_detail[3].split('-');
-                    var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
-                    var date_diaply = '';
-                    if (date_detail[0] == 'week31') {
-                        date_diaply = "Media Week ";
-                    } else if (date_detail[0] == 'month32') {
-                        date_diaply = "Media Month ";
-                        week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
-                    } else if (date_detail[0] == 'quarter33') {
-                        date_diaply = "Media Quarter ";
-                    }
-                    $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
-                }
+        }
+
+        if (selectDateDropDown.toString().indexOf('quarter33_') != -1) {
+            var custom_date = selectDateDropDown.split("_");
+            if (custom_date.length > 1) {
+                sd = custom_date[2];
+                ed = custom_date[3];
+                selectDateDropDown = '3_' + custom_date[1] + '_' + ed;
+                data['selectDateDropDown'] = selectDateDropDown;
             }
-            // val = $scope.selectDate;
-            $scope.matching_criteria = 0;
-            if (val == 1) { // Last Week
-                $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
-                $scope.date_range = 'Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
-                $scope.sd = sessionStorage.media_start_date;
+        }
+
+        if (selectDateDropDown.toString().indexOf('year34_') != -1) {
+            var custom_date = selectDateDropDown.split("_");
+            if (custom_date.length > 1) {
+                sd = custom_date[2];
+                ed = custom_date[3];
+                selectDateDropDown = '4_' + custom_date[1] + '_' + ed;
+                data['selectDateDropDown'] = selectDateDropDown;
             }
-            if (val == 2) { // Current Week
-                $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
-                $scope.date_range = 'Current Week ' + sessionStorage.current_calendar_id + ' - ' + sessionStorage.current_start_date + ' thru ' + sessionStorage.current_end_date;
-                $scope.sd = sessionStorage.current_start_db;
-            }
-            if (val == 3) {
-                $scope.date_range = 'Quarter ' + sessionStorage.number_of_quarter + ' - ' + sessionStorage.last_quarter_start_date + ' to ' + sessionStorage.last_quarter_end_date;
-                $scope.sd = sessionStorage.last_quarter_start_date;
-            }
-            if (val == 4) {
-                $scope.date_range = 'Year Of ' + sessionStorage.last_media_year;
-            }
-            if (val == 5) {
-                $scope.allOther = false;
-                $scope.ytdOther = false;
-                $scope.matching_criteria = val;
-                $scope.date_range = $scope.lifetime_year + ' - ' + $scope.lifetime_min_sd + ' thru ' + $scope.lifetime_max_ed;
-                $scope.sd = $scope.lifetime_min_sd;
-                $scope.findDiff($scope.sd, val);
-            }
-            if (val == 6) { // Last Week
-                $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
-                $scope.date_range = 'Last Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
-                $scope.sd = sessionStorage.media_start_date;
-            }
-            if (val == 7) { // Last Month
-                $scope.freq_filter_options = { daily: false, weekly: false, monthly: true, quarterly: false };
-                $scope.date_range = 'Last Media Month ' + sessionStorage.month_calendar_id + ' - ' + sessionStorage.media_month_date + ' thru ' + sessionStorage.media_monthend_date;
-                $scope.sd = sessionStorage.media_month_date;
-            }
-            if (val == 8) { // Last Quarter
-                $scope.freq_filter_options = { daily: false, weekly: false, monthly: false, quarterly: true };
-                $scope.date_range = 'Last Media Quarter ' + sessionStorage.number_of_quarter + ' - ' + sessionStorage.last_quarter_start_date + ' thru ' + sessionStorage.last_quarter_end_date;
-                $scope.sd = sessionStorage.last_quarter_start_date;
-            }
-            if (val == 9) { // Current Week
-                $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
-                $scope.date_range = 'Current Media Week ' + sessionStorage.current_calendar_id + ' - ' + sessionStorage.current_start_date + ' thru ' + sessionStorage.current_end_date;
-                $scope.sd = sessionStorage.current_start_date;
-            }
-            if (val == 10) { // Current Month
-                $scope.matching_criteria = val;
-                $scope.date_range = 'Current Media Month ' + sessionStorage.currentmonth_calendar_id + ' - ' + sessionStorage.media_currentmonth_date + ' thru ' + sessionStorage.media_currentmonthend_date;
-                $scope.sd = sessionStorage.media_currentmonth_date;
-            }
-            if (val == 11) { // Current Quarter
-                $scope.matching_criteria = val;
-                $scope.date_range = 'Current Media Quarter ' + sessionStorage.number_of_currentquarter + ' - ' + sessionStorage.current_quarter_start_date + ' thru ' + sessionStorage.current_quarter_end_date;
-                $scope.sd = sessionStorage.current_quarter_db_start_date;
-            }
-    
-            if (val == 'calender') {
-                sessionStorage.is_apply_calendar = 1;
-                $scope.findDiff(sessionStorage.start_date);
-                // $('#datepicker_checkbox').attr('checked', 'checked');
-                $scope.date_range = 'Date Range - ' + sessionStorage.disp_start_date + ' thru ' + sessionStorage.disp_end_date;
-                // $rootScope.initialise_datepicker();
-                // $('#datepicker_checkbox').prop('checked', true);
-            }
-          
-            $scope.selectDate = sessionStorage.selectDate = val;
+        }
+
+        $scope.sd = sd;
+        $scope.ed = ed;
+        // if (sessionStorage.selectDate == 'calender') {
+        //     data['sd'] = airings_data['sd'] = sessionStorage.start_date;
+        //     data['ed'] = airings_data['ed'] = sessionStorage.end_date;
+        // } else {
+        //     data['sd'] = airings_data['sd'] = sd;
+        //     data['ed'] = airings_data['ed'] = ed;
+        // }
+
     }
 
-    $scope.selectDate = sessionStorage.selectDate = 1;
-    $scope.date_filter($scope.selectDate);
-        //Classification
-        $scope.selectClassification = function(creative_type) {
-            $scope.creative_type = creative_type;
-         
+    $scope.applyFilter = function() {
+        $scope.getParameters();
+        $scope.categories_selected  = $scope.getSelectedCategories();
+        $scope.classification       = $scope.getSelectedClassification();
+        $scope.tab                  = $scope.type == 'brands' ? 1 : 0; 
+        $scope.newTypeText = $scope.newType
+        if(!$scope.newCheckBox) {
+            $scope.newTypeText = 'none';
         }
-    
-        $scope.selectAllShortCreativeDuration = function() {
-            if ($scope.selectedDurations.length === $scope.creative_short_duration.length) {
-                $scope.selectedDurations = [];
-            } else if ($scope.selectedDurations.length === 0 || $scope.selectedDurations.length > 0) {
-                $scope.selectedDurations = $scope.creative_short_duration.slice(0);
-            }
+        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newTypeText }
+
+        // $rootScope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""};
+    }
+
+    $scope.getSelectedClassification = function() {
+        if($scope.creative_type == 'short' && $scope.checkedShortClassification.indexOf(1) >= -1) {
+            $scope.selectClassificationValues = 1;
+        } else {
+            $scope.selectClassificationValues = $scope.creative_type == 'short' ? $scope.checkedShortClassification  : $scope.checkedLongClassification;
+            $scope.selectClassificationValues = $scope.selectClassificationValues.join();
+
         }
-    
-        $scope.exists = function (item, list) {
-            return list.indexOf(item) > -1;
-        };
-    
-    
-        $scope.isAllDurationChecked = function () {
-            $scope.getDisplayDurationText();
-            return $scope.selectedDurations.length === $scope.creative_short_duration.length;
-        }
-    
-        $scope.setClassification = function(classification_scope) {
-            var c = classification_scope.index;
-            var selected = classification_scope.selected;
-            if($scope.creative_type == 'short') {
-                if (c == 1) {
-                    $scope.checkedShortClassification = [1, 2, 3, 4, 5];
-                    if (selected === false) {
-                        angular.forEach($scope.shortFormClassification, function (value, key) {
-                            value.selected = false;
-                        });
-                        $scope.checkedShortClassification = [];
-                    } else {
-                        angular.forEach($scope.shortFormClassification, function (value, key) {
-                            value.selected = true;
-                        });
+
+        return $scope.selectClassificationValues;
+    }
+
+    $scope.getSelectedCategories = function() {
+        var selected_cateories = [];
+        if($scope.allcategory) {
+            return 'all'
+        } else {
+            angular.forEach($rootScope.category_list , function(categories, cat_key) {
+                angular.forEach(categories.subcategory , function(subCategories, subcat_key) {
+                    if(subCategories.isSelected) {
+                        selected_cateories.push(subCategories.sub_category_id)
                     }
+                });
+            });
+            return selected_cateories.join();
+        }
+
+    }
+   
+    //Start - Classification
+    $scope.selectClassification = function(creative_type) {
+        $scope.creative_type = creative_type;
+        
+    }
+
+    $scope.selectAllShortCreativeDuration = function() {
+        if ($scope.selectedDurations.length === $scope.creative_short_duration.length) {
+            $scope.selectedDurations = [];
+        } else if ($scope.selectedDurations.length === 0 || $scope.selectedDurations.length > 0) {
+            $scope.selectedDurations = $scope.creative_short_duration.slice(0);
+        }
+    }
+
+    $scope.exists = function (item, list) {
+        return list.indexOf(item) > -1;
+    };
+
+    $scope.isAllDurationChecked = function () {
+        $scope.getDisplayDurationText();
+        return $scope.selectedDurations.length === $scope.creative_short_duration.length;
+    }
+
+    $scope.setClassification = function(classification_scope) {
+        var c = classification_scope.index;
+        var selected = classification_scope.selected;
+        if($scope.creative_type == 'short') {
+            if (c == 1) {
+                $scope.checkedShortClassification = [1, 2, 3, 4, 5];
+                if (selected === false) {
+                    angular.forEach($scope.shortFormClassification, function (value, key) {
+                        value.selected = false;
+                    });
+                    $scope.checkedShortClassification = [];
                 } else {
-                    $scope.shortFormClassification[0].selected = false;
-                    if (selected === true) {
-                        $scope.checkedShortClassification.push(c);
-                    } else {
-                        var i = $scope.checkedShortClassification.indexOf(c);
-                        $scope.checkedShortClassification.splice(i, 1);
-                    }
+                    angular.forEach($scope.shortFormClassification, function (value, key) {
+                        value.selected = true;
+                    });
                 }
             } else {
+                $scope.shortFormClassification[0].selected = false;
                 if (selected === true) {
-                    $scope.checkedLongClassification.push(c);
+                    $scope.checkedShortClassification.push(c);
                 } else {
-                    var i = $scope.checkedLongClassification.indexOf(c);
-                    $scope.checkedLongClassification.splice(i, 1);
+                    var i = $scope.checkedShortClassification.indexOf(c);
+                    $scope.checkedShortClassification.splice(i, 1);
                 }
             }
-            
+        } else {
+            if (selected === true) {
+                $scope.checkedLongClassification.push(c);
+            } else {
+                var i = $scope.checkedLongClassification.indexOf(c);
+                $scope.checkedLongClassification.splice(i, 1);
+            }
         }
         
+    }
     
-        $scope.checkCreativeDuration = function (item, list) {
-            var idx = list.indexOf(item);
+    $scope.checkCreativeDuration = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+            $scope.selectedDurations.splice(idx, 1);
+        }
+        else {
+            $scope.selectedDurations.push(item);
+        }
+        $scope.creativeSelectDuration = $scope.selectedDurations;
+        $scope.getDisplayDurationText();
+    }
+    //End - Classification
+       
+    $scope.setLang = function(lang) {
+        $rootScope.selectLang = $scope.selectLang = lang;
+    }
+
+    $scope.setBreaktype = function (breaktype) {
+        $rootScope.selectBreakType = $scope.selectBreakType = breaktype;
+    }
+
+    $scope.setResponseTypes = function (header, item) {
+        $scope.response_header = header;
+        $scope.returnText = '';
+        if(item) {
+            var idx = $scope.responseTypeselected.indexOf(item.value);
             if (idx > -1) {
-                $scope.selectedDurations.splice(idx, 1);
+                $scope.responseTypeselected.splice(idx, 1);
             }
             else {
-                $scope.selectedDurations.push(item);
+                $scope.responseTypeselected.push(item.value);
             }
-            $scope.creativeSelectDuration = $scope.selectedDurations;
-            $scope.getDisplayDurationText();
         }
-        //End - Classification
-       
-        $scope.setLang = function(lang) {
-            $rootScope.selectLang = $scope.selectLang = lang;
-        }
-    
-        $scope.setBreaktype = function (breaktype) {
-            $rootScope.selectBreakType = $scope.selectBreakType = breaktype;
-        }
-    
-        $scope.setResponseTypes = function (header, item) {
-            $scope.response_header = header;
-            $scope.returnText = '';
-            if(item) {
-                var idx = $scope.responseTypeselected.indexOf(item.value);
-                if (idx > -1) {
-                    $scope.responseTypeselected.splice(idx, 1);
-                }
-                else {
-                    $scope.responseTypeselected.push(item.value);
-                }
-            }
-            
-            angular.forEach($scope.responseTypeselected, function(value, key) {
-                $scope.returnText += 'response_' + angular.$$lowercase(value) + ' = 1 ' + $scope.response_header + ' ';
-            });
-            let lastIndex = $scope.returnText.lastIndexOf($scope.response_header);
-            $scope.returnText = $scope.returnText.substring(0, lastIndex);
-    
-            $scope.responseTypeText = $scope.responseTypeselected.join(' '+ $scope.response_header+ ' ');
-            
-            $scope.returnText = '('+$scope.returnText+')';
-            
-        };
-    
-        $scope.shortFormClassification = [
-            {
-                "index": 1,
-                "id": "all_short",
-                'selected': true,
-                "value": "All Short form"
-            }, {
-                "index": 2,
-                "id": "sf_products",
-                'selected': true,
-                "value": "Short Form Products"
-            }, {
-                "index": 3,
-                "id": "lead_gen",
-                'selected': true,
-                "value": "Lead Generation"
-            }, {
-                "index": 4,
-                "id": "brand_dr",
-                'selected': true,
-                "value": "Brand/DR",
-            }, {
-                "index": 5,
-                "id": "sf_retail_products",
-                'selected': true,
-                "value": "Retail Rankings",
-                "display_text": "AsOnTV Retail Rankings",
-            }
-        ];
-
         
-        $scope.longFormClassification = [
-            {
-                "index": 6,
-                "id": "lf_creative1",
-                'selected': true,
-                "value": "28.5m Creative",
-            }, {
-                "index": 7,
-                "id": "lf_retail_products",
-                'selected': false,
-                "value": "Retail Rankings",
-                "display_text": "AsOnTV Retail Rankings (28.5m)",
-            }
-        ];
+        angular.forEach($scope.responseTypeselected, function(value, key) {
+            $scope.returnText += 'response_' + angular.$$lowercase(value) + ' = 1 ' + $scope.response_header + ' ';
+        });
+        let lastIndex = $scope.returnText.lastIndexOf($scope.response_header);
+        $scope.returnText = $scope.returnText.substring(0, lastIndex);
 
-        $scope.creative_type = 'short';
-        $scope.checkedShortClassification = [1, 2, 3, 4, 5];
-        $scope.checkedLongClassification = [6];
-        $scope.selectedDurations = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
-        $scope.creative_short_duration = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
-        $scope.getDisplayDurationText = function () {
-            $scope.duration_display_text = ($scope.selectedDurations.length === $scope.creative_short_duration.length) ? ' (All Duration)' : ($scope.selectedDurations.length == 1) ? ' (' + $scope.selectedDurations[0] + 's)' : $scope.selectedDurations.length > 1 ? ' (Multi Duration)' : '';
+        $scope.responseTypeText = $scope.responseTypeselected.join(' '+ $scope.response_header+ ' ');
+        
+        $scope.returnText = '('+$scope.returnText+')';
+        
+    };
+    $scope.setResponseTypes('or');
+        
+    $scope.getDisplayDurationText = function () {
+        $scope.duration_display_text = ($scope.selectedDurations.length === $scope.creative_short_duration.length) ? ' (All Duration)' : ($scope.selectedDurations.length == 1) ? ' (' + $scope.selectedDurations[0] + 's)' : $scope.selectedDurations.length > 1 ? ' (Multi Duration)' : '';
+    }
+    $scope.getDisplayDurationText();
+
+    $scope.initializeWeeks = function() {
+        if($scope.selectDate == 1 || $scope.selectDate == 2 ) {
+            angular.forEach($scope.yearsArray, function(y, key) {
+                angular.forEach(y.weeks, function(w, key) {
+                    if(key == 0 && y.media_year == $scope.selectedYear) {
+                        $scope.selectDate = 'week31_'+w.media_week+'_'+w.media_week_start+'_'+w.media_week_end;
+                        console.log($scope.selectDate);
+                    }
+                });
+            });
         }
-        $scope.getDisplayDurationText();
+    }
 
-        //Language
-        $scope.selectLang = $rootScope.selectLang ? $rootScope.selectLang : '0,1';
-        $scope.languages = [
-            {
-                "id": "all",
-                "value": "0,1",
-                "display_text": "All"
-            }, {
-                "id": "english",
-                "value": "0",
-                "display_text": "English"
-            }, {
-                "id": "spanish",
-                "value": "1",
-                "display_text": "Spanish"
+    $scope.showYearDropDownVariable = function () {
+        $scope.showYearDropDown = 1;
+    }
+
+    $scope.showMediaCalender = function (year) {
+        $scope.showYearDropDown = 0;
+        $scope.mask = 0;
+        $scope.selectedYear = year;
+        $scope.selectDate = 1; // initialize to one to display deault 1 media week in all years other dropdwon section
+        $scope.initializeWeeks();
+
+    }
+
+    $scope.setOtherDivVariable = function () {
+        $scope.otherDiv = 1;
+        $scope.showOtherDiv = !$scope.showOtherDiv;
+        $scope.mask = 0;
+        $scope.initializeWeeks();
+        $('#othersDiv1').modal('show');
+    }
+    
+    $scope.date_detail = function (date) {
+        $scope.lifetimeOther = false;
+        $scope.mask  = 0;
+        if($scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') { // ytd checked
+            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
+            date = $scope.selectDate;
+            $scope.allOther = false;
+            sessionStorage.lifetime_flag = 0;
+            sessionStorage.calender_flag = 0;
+        } 
+        if(!$scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') {// ytd unchecked
+            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
+            date = $scope.selectDate;
+        }
+        if($scope.allOther &&  !$scope.ytdOther && typeof(date) == 'undefined') { // all checked
+            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
+            date = $scope.selectDate;
+            $scope.ytdOther = false;
+            sessionStorage.lifetime_flag = 0;
+            sessionStorage.calender_flag = 0;
+        } 
+        if(!$scope.allOther && !$scope.ytdOther && typeof(date) == 'undefined') {// all unchecked
+            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
+            date = $scope.selectDate;
+        }
+        if (date != 1) {
+            $scope.matching_criteria = 0;
+        }
+        console.log($scope.selectDate);
+        if($scope.selectDate.indexOf("year34") > -1) {
+            $scope.mask = 1;
+        }
+        var date_detail = date.split('_');
+        if (date_detail[1] !== undefined) {
+            var week = date_detail[1];
+            var sd_1 = date_detail[2].split('-');
+            var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
+            var ed_1 = date_detail[3].split('-');
+            var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
+            var date_diaply = '';
+            if (date_detail[0] == 'week31') {
+                date_diaply = "Media Week ";
+            } else if (date_detail[0] == 'month32') {
+                date_diaply = "Media Month ";
+                week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
+            } else if (date_detail[0] == 'quarter33') {
+                date_diaply = "Media Quarter ";
             }
-        ];
+            $scope.selectDate = sessionStorage.selectDate = $rootScope.selected_date = date;
+            $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
+            $scope.findDiff(sd_2);
+            sessionStorage.calender_flag = 0;
+            // $scope.checkForLifetimeSelection();
+        }
+    }
 
-        //response types
-        $scope.response_header = 'or';
-        $scope.responseTypeselected = ['URL', 'MAR', 'SMS', 'TFN'];
-        $scope.responseTypes = [
-            {
-                "value": "URL",
-                "id": "urlCheckbox",
-                "custom-value": "response_url=1",
-                "custom-null-value": "response_url=0"
-            }, {
-                "value": "SMS",
-                "id": "smsCheckbox",
-                "custom-value": "response_sms=1",
-                "custom-null-value": "response_sms=0"
-            }, {
-                "value": "TFN",
-                "id": "telephoneCheckbox",
-                "custom-value": "response_tfn=1",
-                "custom-null-value": "response_tfn=0"
-            }, {
-                "value": "MAR",
-                "id": "mobRepsonseCheckbox",
-                "custom-value": "response_mar=1",
-                "custom-null-value": "response_mar=0"
-            },
-        ];
-  /* Primary filter */
+    $scope.setLifetimeVariables = function() {
+        sessionStorage.lifetime_flag = 0;
+        if($scope.lifetimeOther) {
+            sessionStorage.lifetime_flag = 1;
+        } 
+
+        if (sessionStorage.calender_flag == 1) {
+            $scope.apply_filter = 0;
+            $scope.lifetime_error = 1;
+        }
+    }
+
     $rootScope.options  = ['My','Shared','All'];
     $rootScope.searchTextValidation = '3 or more characters.';
     $rootScope.main_menu = [{
@@ -560,6 +834,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     $scope.click = function() {
         $scope.showme = true;
     }
+
     $scope.changeThemeStatus = function (item) {
         item.theme_val = item.theme_val == '0' ? '1' : '0'
         $rootScope.theme_val = item.theme_val;
@@ -584,7 +859,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
 
 
-    /* Primary filter*/
     $scope.editableContent = function() {
         $scope.editable = 1;
     }
@@ -593,11 +867,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $scope.editable = 0;
     }
 
-
- 
-     /* Primary filter*/
-
-    
     $rootScope.menuItemClick = function (item) {
         var page = item.aid;
 
@@ -653,7 +922,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         });
     }
 
-    
     $scope.changeSystemStatus = function (orgObj) {
         var notifSystemStatusLink = $rootScope.system_status_url;
         if(notifSystemStatusLink) localStorage.notifSystemStatusLink = notifSystemStatusLink;
@@ -833,6 +1101,8 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     $scope.showTab = function(tab) {
         $rootScope.type = tab;
     }
+
+    
 
     /** Filters code -- Start */
     $scope.call_filter_list = function () {

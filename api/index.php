@@ -7385,11 +7385,7 @@ function filterResults(){
         }else if($raw_data[0] == 'cat'){
             $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
         }
-        
-        if($raw_data[0] == 'unchecked_category'){
-            $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-        }
-
+       
         if($raw_data[0] == 'programs_ids'){
             $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
         }
@@ -7407,7 +7403,7 @@ function filterResults(){
     $cat = rtrim($requestData['cat'],",");
     // $cat = rtrim($cat,"all,");
     $catIn = '('.$cat.')';
-    $uncheckedCatIn = '('.rtrim($requestData['unchecked_category'],",").')';
+    // $uncheckedCatIn = '('.rtrim($requestData['unchecked_category'],",").')';
     $requestData['applied_ids'] = isset($requestData['applied_ids']) ? urldecode($requestData['applied_ids']) : '';
     if(SMI_BUILD == 1) {
         $last_week_data_html  = ($tab == 1) ?  'last_week_data_html_brand_smi' : 'last_week_data_html_advertiser_smi';
@@ -7441,7 +7437,7 @@ function filterResults(){
         $response->session_apply_filter = $session_apply_filter;
         
     } else {
-        $response = custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val,$requestData);
+        $response = custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$val,$requestData);
         
         if ($get_rankings_from_cache['status'] == 2) { //fill cache
             $clause                             = "start_date = {$sd} AND end_date = {$ed}";
@@ -8163,7 +8159,7 @@ function cmp($a, $b)
 }
 
 
-function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $requestData = NULL){
+function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$val, $requestData = NULL){
     $db = getConnection();
 
     $cols = $order_search = $where_flag =  ' ';
@@ -8194,20 +8190,13 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
     $join_condition             = ($tab == 1) ? 'b.brand_id = r.brand_id':'b.adv_id = r.adv_id';
     $active_flag                = isset($requestData['flag']) ? $requestData['flag'] : '2';
     $word                       = ($tab == 1) ? 'brand_name' : 'display_name';
-    $count_unchecked_cat        = $requestData['length_unchecked'];
+    // $count_unchecked_cat        = $requestData['length_unchecked'];
     $creative_durations         = urldecode($requestData['creative_duration']);
     $advOrBrandId               = $tab == 1 ? 'b.brand_id' : 'adv.adv_id';
     $brand_classification       = '';
     $refine_apply_filter        = isset($requestData['refine_apply_filter']) ? $requestData['refine_apply_filter'] : 0;
     $program_ids                = isset($requestData['programs_ids']) ? urldecode($requestData['programs_ids']) : '';
-    //$nullAdvId                  = ($tab == 1) ? '' : ' AND adv.adv_id != 0';
-    $unchecked_categoryArray    = explode(',',$uncheckedCatIn);
-    //$user_access_type           = userAccessInfo("filter");
-    if($count_unchecked_cat <= CATEGORY_UNCHECKED_LIMIT && $count_unchecked_cat != 0){
-        $categories                 = ' AND (b.main_sub_category_id NOT IN '.$uncheckedCatIn .' OR b.alt_sub_category_id NOT IN '.$uncheckedCatIn.') ';
-    }else{
-        $categories                 = !$cat || $cat == 'all' ? '' : ' AND (b.main_sub_category_id IN '.$catIn .' OR b.alt_sub_category_id IN '.$catIn .')';
-    }
+    $categories                 = !$cat || $cat == 'all' ? '' : ' AND (b.main_sub_category_id IN '.$catIn .' OR b.alt_sub_category_id IN '.$catIn .')';
 
     if(DEFAULT_RESPONSE_TYPE == $responseType) {
         $responseType = '';
@@ -8446,7 +8435,7 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$uncheckedCatIn,$val, $reques
             $export['creative_count'] = $resultV->creative_count ?  $resultV->creative_count : 0;
             $nestedData['is_active_brand'] = $resultV->is_active_brand ;
             $export['is_active_brand'] = $resultV->is_active_brand ;
-            if(!in_array($resultV->main_sub_category_id , $unchecked_categoryArray)) {
+            if(isset($resultV->main_sub_category_id)) {
                 $resultV->category = get_category_names_by_ids($resultV->main_sub_category_id, $resultV->alt_sub_category_id);
             } else {
                 $resultV->category = get_category_names_by_ids($resultV->alt_sub_category_id, $resultV->main_sub_category_id);

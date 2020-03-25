@@ -1,6 +1,9 @@
 angular.
   module('drmApp').
   component('categoryPart', { 
+    bindings: {
+        category_list: '<'
+    },
     template:
         `<nav class="sidebar">
         <a  href="" class="open-left-sidebar-nav slideBtn" id="slidebtn" ng-click="catgeorySideBar = !catgeorySideBar;"> 
@@ -49,7 +52,7 @@ angular.
         var self = this;
        
         self.showCategoryList = function () {
-            if (localStorage.cachedCategoriesData != null) {
+            if (localStorage.cachedCategoriesData) {
                 self.setCategoriesHTML();
             } else {
                 self.categories_called = 1;
@@ -74,7 +77,7 @@ angular.
                 }
             }
             self.allcategory = true;
-            self.category_list = cat;
+            self.category_list = $rootScope.category_list = cat;
         }
     
           
