@@ -18677,12 +18677,8 @@ function getAlertsList(){
     $query_string                       = $request->getBody();
     $set_one                            = explode('&', $query_string);
     $raw_data                           = array();
+    $requestData = (array)json_decode($query_string, TRUE);
     $user_id = $requestData['user_id']  = $_SESSION['user_id'];
-    foreach($set_one as $k => $v) {
-        $raw_data                       = explode('=',$v);
-        if(isset($raw_data[1]))
-            $requestData[$raw_data[0]]      = rtrim($raw_data[1]);
-    }
     
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
@@ -18751,18 +18747,20 @@ function getAlertsList(){
         if (empty($source)) {
             continue;
         }
-
+        $nestedData['type_id'] = $resultV->type_id;
         $nestedData['source']           =   $source;
         $nestedData['email_schedulable_direct']     =   $resultV->email_schedulable_direct;
+        $nestedData['classification']           = $resultV->classification;
         if(!empty($resultV->classification)) {
-            $nestedData['classification']           = '<span custom-attr="config_alert_classification_'.$resultV->type_id.'">'.getClassificationData($resultV->classification).'</span>';
+            $nestedData['classification-data']           = getClassificationData($resultV->classification);
             $nestedData['classification_hidden']    = getClassificationData($resultV->classification);
         } else {
-            $nestedData['classification']           = '<span custom-attr="config_alert_classification_'.$resultV->type_id.'">-</span>';
+            $nestedData['classification-data']           = '-';
             $nestedData['classification_hidden']    = '-';
         }
-        $nestedData['frequency']        =   '<span custom-attr="config_alert_frequency_'.$resultV->type_id.'">'.ucfirst($resultV->frequency).'</span>';
+        $nestedData['frequency']        =   ucfirst($resultV->frequency);
         $nestedData['frequency_hidden'] =   ucfirst($resultV->frequency);
+        $nestedData['status'] = $resultV->status;
         $nestedData['tracking_status']  =   $resultV->status == 'active'? '<a href="javascript:" onclick="$(\'#alert_type_val\').val(\''.$resultV->alert_type.'\');$(\'#type_id_val\').val('.$resultV->type_id.');$(\'#tracker_element_name\').html(\''.$source.'\');inactiveTracking($(\'[custom-attr=config_alert_filter_'.$resultV->type_id.']\').hasClass(\'grey-eye\')?\'active\':\'inactive\');"><i class="fa fa-eye blue-eye" custom-attr="config_alert_'.$resultV->alert_type.'_'.$resultV->type_id.'" title="Tracking Active"></i></a>' : '<a href="javascript:" onclick="$(\'#alert_type_val\').val(\''.$resultV->alert_type.'\');$(\'#type_id_val\').val('.$resultV->type_id.');$(\'#tracker_element_name\').html(\''.$source.'\');inactiveTracking($(\'[custom-attr=config_alert_'.$resultV->alert_type.'_'.$resultV->type_id.']\').hasClass(\'grey-eye\')?\'active\':\'inactive\');"><i class="fa grey-eye fa-eye-slash" custom-attr="config_alert_'.$resultV->alert_type.'_'.$resultV->type_id.'" title="Tracking Inactive"></i></a>';
         $nestedData['triggered_on']     =   $resultV->created_date;
         /*if($resultV->email_schedulable_direct) {
@@ -18771,7 +18769,13 @@ function getAlertsList(){
         $showMonthlyOption = strpos(strtolower($resultV->criteria), strtolower('Current Quarter')) !== false
                              || strpos(strtolower($resultV->criteria), strtolower('Current Year - YTD')) !== false
                              || strpos(strtolower($resultV->criteria), strtolower('Lifetime')) !== false;
-        $nestedData['operation']    =   '<a href="#" onclick="viewTrackingDialogue(\''.$resultV->alert_type.'\','.$resultV->type_id.',\''.addslashes($source).'\', \''.($resultV->email_schedulable_direct?$resultV->email_schedulable_direct:'').'\', '.($showMonthlyOption ? 1 : 0).');"><i class="fa fa-pencil edit-icon" title="Edit"></i></a><a href="#" onclick="setDeleteTrackingBtn(\''.($resultV->alert_type=='filter'?$resultV->type_id:$resultV->id).'\', \''.$resultV->alert_type.'\');"><i class="fa fa-trash-o delete-icon" title="Delete"></i></a>';
+        $email_schedulable_direct = $resultV->email_schedulable_direct?$resultV->email_schedulable_direct:'';
+        $nestedData['email_schedulable_direct'] = $email_schedulable_direct;
+        $showMonthlyOption = $showMonthlyOption ? 1 : 0;
+        $nestedData['showMonthlyOption'] = $showMonthlyOption;
+        $nestedData['alert_type_filter'] = $resultV->alert_type=='filter'?$resultV->type_id:$resultV->id;
+        $nestedData['operation']    =   '<a href="#" onclick="viewTrackingDialogue(\''.$resultV->alert_type.'\','.$resultV->type_id.',\''.addslashes($source).'\', \''.($email_schedulable_direct).'\', '.($showMonthlyOption ? 1 : 0).');"><i class="fa fa-pencil edit-icon" title="Edit"></i></a><a href="#" onclick="setDeleteTrackingBtn(\''.($resultV->alert_type=='filter'?$resultV->type_id:$resultV->id).'\', \''.$resultV->alert_type.'\');"><i class="fa fa-trash-o delete-icon" title="Delete"></i></a>';
+        $nestedData['operation']    =   '';
         //}
         $data[]                     =   $nestedData;
     }
