@@ -656,7 +656,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }, {
         liid: 'tracking',
         nghide: 'superadmin',
-        href: 'tracking',
+        href: 'configureEmails',
         aclass: 'tracking',
         aid: 'tracking',
         title: 'Configure Emails',

@@ -105,7 +105,8 @@
                 title="apply"></i>Set</button>
         <button class="btn btn-blue" type="button" id="del_tracking_btn" style="display:none;"><i class="fa fa-trash"
                 title="cancel"></i>Delete</button>
-        <button id="cancel_tracking_btn" class="btn btn-black" data-dismiss="modal" aria-label="Close"><i
-                class="fa fa-times" title="cancel"></i>Cancel</button>
+        <button id="cancel_tracking_btn" class="btn btn-black" data-dismiss="modal" aria-label="Close"
+            ng-click="closeModal();backToAdmin('edit')"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+        <button class="btn btn-black mr-3" id="network_track_btn"><i class="fa fa-eye" title="Track"></i> Track</button>
     </div>
 </div>
