@@ -19180,12 +19180,7 @@ function updateSubscribeStatus(){
 function deleteTrackingAlerts() {
     $request        = Slim::getInstance()->request();
     $query_string   = $request->getBody();
-    $set_one        = explode('&', $query_string);
-    $requestData    = $raw_data = array();
-    foreach($set_one as $k =>$v){
-        $raw_data   = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
+    $requestData = (array)json_decode($query_string, TRUE);
 
     $params['delete_all']       = isset($requestData['delete_all']) ? $requestData['delete_all'] : '';
     $params['tracking_ids']     = isset($requestData['tracking_ids']) ? urldecode($requestData['tracking_ids']) : '';

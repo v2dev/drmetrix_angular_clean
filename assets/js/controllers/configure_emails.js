@@ -64,20 +64,34 @@ angular.module('drmApp').controller('ConfigureEmailsController', function ($scop
     $scope.uigridConfigEmails();
 
     $scope.viewTrackingDialogue = function (alert_type, type_id, name, email_schedulable_direct, show_monthly) {
-        debugger;
-        $scope.userRowForAction = rowEntity;
-        let user_id = $scope.userRowForAction.user_id;
-        $scope.mobileValid = 0;
-        $scope.usernameValidInCompany = 0;
-        $scope.usernameValid = 0;
-        $('#authy_add_mobile').hide();
-        $('#authy_edit_mobile').hide();
-        $('#add_mobile').hide();
-        $('#edit_mobile').hide();
-        $("#options_div" + user_id).css("display", "none");
-        $scope.openModal('./templates/modals/advancedModalEdit.html');
+        $scope.alert_type = alert_type;
+        $scope.type_id = type_id;
+        $scope.name = name;
+        $scope.email_schedulable_direct = email_schedulable_direct;
+        $("#success_alert_setup_msg").hide();
+        $("#error_alert_setup_msg").hide();
+        $("#track_advertiser_input").prop('checked', false);
+        $("#track_brand_input").prop('checked', false);
+        $("#track_creative_input").prop('checked', false);
+        $("input[name=alert-frequency][value='daily']").prop('checked', false);
+        $("input[name=alert-frequency][value='weekly']").prop('checked', false);
+        $scope.openModal('./templates/modals/configEmailModalEdit.html', 'ConfigureEmailsController', 'xl modal-dialog-centered');
+        if (alert_type == 'filter') {
+            $('#following_occurs,#brand_classification_div').hide();
+
+            setAlertClose(1, type_id, email_schedulable_direct);
+
+            if (show_monthly /*filter_criteria.toLowerCase().indexOf('current quarter') != -1*/) {
+                scope.show_monthly = 1;
+            } else {
+                scope.show_monthly = 0;
+            }
+        } else {
+            $('#following_occurs,#brand_classification_div').show();
+        }
+        $scope.showTrackingDialogue(alert_type, type_id, name);
         // Get Users
-        apiService.post('/get_user_edit', { 'user_id': user_id })
+        apiService.post('/get_alerts_list', { 'user_id': user_id })
             .then(function (response) {
                 var data = response.data;
                 if (data.status) {
@@ -96,9 +110,125 @@ angular.module('drmApp').controller('ConfigureEmailsController', function ($scop
     }
 
     $scope.setDeleteTrackingBtn = function (tracking_id, alert_type) {
-        debugger;
-        $("#delete_tracking_btn").html('<button class="applyBtn btn btn-sm btn-success" type="button" onclick="deleteTrackingDetail(' + tracking_id + ', \'' + alert_type + '\')">OK</button>');
-        var scope = angular.element($("#tracking_page")).scope();
-        scope.displayDeleteBox();
+        $scope.tracking_id = tracking_id;
+        $scope.alert_type = alert_type;
+        $scope.openModal('./templates/modals/confirmTrackDelete.html');
+    }
+
+    $scope.deleteTrackUser = function () {
+        let tracking_id = $scope.tracking_id;
+        let alert_type = $scope.alert_type;
+        $scope.modalInstanceMain.close();
+        // if(confirm("Are you sure want to delete the record?")) {
+        $("#options_div" + tracking_id).css("visibility", "hidden");
+        apiService.post('/delete_tracking_alerts', { 'tracking_id': tracking_id, 'alert_type': alert_type })
+            .then(function (response) {
+                var data = response.data;
+                if (data.status) {
+                    $scope.showPopup('', 'Record deleted successfully.', 'Delete Message', '');
+                    // $state.go($state.current, {}, {reload: true});
+                    var index = $scope.gridConfigEmails.data.indexOf($scope.userRowForAction);
+                    $scope.gridConfigEmails.data.splice(index, 1);
+                    setTimeout(function () {
+                        $scope.modalInstance.close();
+                    }, 1000);
+                }
+            }, function (response) {
+                // this function handlers error
+            });
+        // }
+    }
+
+    $scope.applyModal = function () {
+        $scope.modalInstance.dismiss();
+    }
+
+    $scope.closeModal = function () {
+        $scope.modalInstance.dismiss();
+    }
+
+    $scope.openModal = function (templateUrl, controller, size, backdrop) {
+        $scope.modalInstanceMain = modalConfirmService.showModal({
+            backdrop: false,
+            keyboard: true,
+            modalFade: true,
+            templateUrl: templateUrl,
+            controller: controller,
+            scope: $scope,
+            size: size ? size : 'xl modal-dialog-centered',
+        });
+
+        $scope.modalInstanceMain.result.then(function (response) {
+            $scope.result = `${response} button hitted`;
+        });
+
+        $scope.modalInstanceMain.result.catch(function error(error) {
+            if (error === "backdrop click") {
+                // do nothing
+            } else {
+                // throw error;
+            }
+        });
+    };
+
+    $scope.displayDeleteBox = function (delete_all) {
+        if (typeof (delete_all) == 'undefined') {
+            delete_all = false;
+        }
+        for (var i = 0; i < idsOfSelectedTrackingRows.length; i++) {
+            $('#cb_manage_tracking').prop('checked', false);
+            $('#jqg_manage_tracking_' + idsOfSelectedTrackingRows[i]).prop('checked', false);
+        }
+        if (delete_all == 'all') {
+            $('.delete_popup_header').html('Delete All Alerts');
+            $('#tracker_alert_text').html('Are you sure you want to delete <b>everything</b> from tracking alerts?');
+        } else if (delete_all == 'selected') {
+            $('.delete_popup_header').html('Delete Alert');
+            $('#tracker_alert_text').html('Are you sure you want to delete selected tracking alert?');
+        } else {
+            $('.delete_popup_header').html('Delete Alert');
+            $('#tracker_alert_text').html('Are you sure you want to delete this tracking alert?');
+        }
+        // FoundationApi.publish('openDeleteTrackModal', 'show');
+        $('#openDeleteTrackModal').modal('show');
+
+    }
+    $scope.popupDefaultOptions = {
+        size: 'md modal-dialog-centered'
+    };
+    $scope.popupOptions = {
+        closeReq: 1,
+        bodyText: '',
+        headerText: '',
+        closeButtonText: '',
+        actionButtonText: ''
+    };
+
+    $scope.showPopup = function (size, bodyText, headerText, closeReq) {
+        if (size) {
+            $scope.popupDefaultOptions.size = size;
+        }
+        if (bodyText) {
+            $scope.popupOptions.bodyText = bodyText;
+        }
+        if (headerText) {
+            $scope.popupOptions.headerText = headerText;
+        }
+        if (closeReq) {
+            $scope.popupOptions.closeReq = closeReq;
+        }
+        $scope.modalInstance = modalConfirmService.showModal($scope.popupDefaultOptions, $scope.popupOptions); // .then(function (result) {})
+
+        $scope.modalInstance.result.then(function (response) {
+            // $scope.result = `${response} button hitted`;
+        });
+
+        $scope.modalInstance.result.catch(function error(error) {
+            if (error === "backdrop click") {
+                // do nothing
+            } else {
+                // throw error;
+            }
+        });
     }
 });
