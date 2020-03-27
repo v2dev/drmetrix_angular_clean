@@ -7470,11 +7470,9 @@ function getRequestDataForRefineFilters($export = 0, $request_arr = NULL) {
     }else {
         $request = Slim::getInstance()->request();
         $query_string = $request->getBody();
-        parse_str($query_string, $output);
-        $set_one = explode('&', $query_string);
+        $requestData = (array)json_decode($query_string, TRUE);
         $_SESSION['filter_data'] = addslashes($query_string);
         $_SESSION['filter_type'] = 'ranking';	
-        $requestData = $raw_data = array();
         if( isset($_REQUEST) && count($_REQUEST) != 0 ) {
             if( isset($_REQUEST['c']) ) $_REQUEST['c'] = str_replace('+', ' ', $_REQUEST['c']);
             if( isset($_REQUEST['cat']) ) $_REQUEST['cat'] = str_replace('%2C', ',', $_REQUEST['cat']);
@@ -7483,25 +7481,9 @@ function getRequestDataForRefineFilters($export = 0, $request_arr = NULL) {
                 $_REQUEST[$k] = str_replace('+', " ", $v);
                 $_REQUEST[$k] = str_replace('%2C', ",", $v);
             }*/
-            $set_one = $requestData = $_REQUEST;
+            // $set_one = $requestData = $_REQUEST;
         } else {
-            foreach($set_one as $k =>$v){
-                $raw_data  = explode('=',$v);
-                if($raw_data[0] == 'c'){
-                    $raw_data[1] = str_replace('+', " ", $raw_data[1]);
-                }else if($raw_data[0] == 'cat'){
-                    $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-                }
-                if($raw_data[0] == 'unchecked_category'){
-                    $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-                }
-                $requestData[$raw_data[0]] = $raw_data[1];
-            }
-
-            if($raw_data[0] == 'programs_ids'){
-                $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-            }
-            $requestData[$raw_data[0]] = $raw_data[1];
+            $requestData = (array)json_decode($query_string, TRUE);
         }
         $tab                        = $requestData['type'];
         $params['type']             = $requestData['type'];
@@ -7515,8 +7497,8 @@ function getRequestDataForRefineFilters($export = 0, $request_arr = NULL) {
     $sord                       = isset($requestData['sord']) ? $requestData['sord'] : '';
     $page                       = isset($requestData['page']) ? $requestData['page'] : 1;
     $c                          = urldecode($requestData['c']);
-    $sd                          = $requestData['sd'];
-    $ed                          = $requestData['ed'];
+    $sd                          = "2020-02-24";
+    $ed                          = "2020-03-01";
     $limit                      = isset($requestData['rows']) ? $requestData['rows'] : 0;
     $new_filter_opt             = isset($requestData['new_filter_opt']) ? $requestData['new_filter_opt'] : 'none';
     $refine_filter_opt          = isset($requestData['refine_filter_opt']) ? $requestData['refine_filter_opt'] : 'none';
@@ -7739,11 +7721,14 @@ function applyRefineFilters() {
             $nestedData['display_url_column']             =   $nestedData['display_url_column_hidden'] =  !empty($resultV->display_url_column) ? $resultV->display_url_column : '-';
        }
         $nestedData['creative_id']              = $resultV->creative_id;
-        $nestedData['brand_name']               = $active_inactive_brand_class.'<span><a href="#"  title="'.$resultV->brand_name.'" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$params['c_dir'].',\''.$params['tab'].'\',\''.$params['c'].'\',\''.$params['sd'].'\',\''.$params['ed'].'\',\'brand\','.$resultV->ID.',\''.addslashes($resultV->brand_name).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->brand_name.'</a></span>';
+        $nestedData['ID'] =  $resultV->ID;
+        $nestedData['brand_name']               = $resultV->brand_name;
         $export['brand_name']                   = $resultV->brand_name;
         // $nestedData['creative_name'] = '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->display_name).'\','.$resultV->adv_id.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd_dir.'\',\''.$ed_dir.'\',\'creatives\','.$resultV->creative_id.',\''.addslashes(htmlspecialchars($resultV->creative_name)).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->creative_name.'</a></span>';
-        $nestedData['creative_name']            = '<span><a href="#"  title="'.$resultV->creative_name.'" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$params['c_dir'].',\''.$params['tab'].'\',\''.$params['c'].'\',\''.$params['sd'].'\',\''.$params['ed'].'\',\'creatives\','.$resultV->creative_id.',\''.addslashes(htmlspecialchars($resultV->creative_name)).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->creative_name.'</a></span>';
-        $nestedData['advertiser_name']          = !empty($resultV->advertiser_name) ? $active_inactive_adv_class.'<span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$params['c_dir'].',\''.$params['tab'].'\',\''.$params['c'].'\',\''.$params['sd'].'\',\''.$params['ed'].'\',\'adv\',\'\',\'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->advertiser_name.'</a></span>' : '-' ;
+        $nestedData['adv_id'] =  $resultV->adv_id;
+        $nestedData['need_help'] =  $resultV->need_help;
+        $nestedData['creative_name']            = $resultV->creative_name;
+        $nestedData['advertiser_name']          = $resultV->advertiser_name;
         $export['advertiser_name']          = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-' ;
         $nestedData['airings']              = $resultV->airings ? number_format($resultV->airings) : 0 ;
         $export['airings']               =  $nestedData['airings'];  
