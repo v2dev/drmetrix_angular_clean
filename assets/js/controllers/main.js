@@ -3,6 +3,7 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     $rootScope.eulaDisagreeFlag = 0; // this flag will show poup on login page if we disagree eula agreement and redreict to login message with popup message
     $scope.whats_new_toggle = false;
     $rootScope.headerDisplay = 0;
+    $scope.refine_by = '';
     /* Primary filter */
     $rootScope.complete_name = localStorage.complete_name;
     $scope.selectDate = sessionStorage.selectDate = 1;
@@ -363,17 +364,50 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
 
     }
 
+    $rootScope.$on("CallParentMethod", function(evt, data){
+        $rootScope.headerDisplay = 1;
+        $scope.selectedNetwork      = data.network_id;
+        $scope.selectedNetworkAlias = data.network_alias;
+        $scope.newType              = data.newType;
+        $scope.newCheckBox          = data.newCheckBox;
+        $scope.refine_by            = data.refine_by;
+        $scope.search_by_tfn        = data.search_by_tfn;
+        $scope.applyFilter();
+     });
+
     $scope.applyFilter = function() {
         $scope.getParameters();
         $scope.categories_selected  = $scope.getSelectedCategories();
         $scope.classification       = $scope.getSelectedClassification();
         $scope.tab                  = $scope.type == 'brands' ? 1 : 0; 
-        $scope.newTypeText = $scope.newType
-        if(!$scope.newCheckBox) {
-            $scope.newTypeText = 'none';
-        }
-        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newTypeText }
+        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newType ,'network_id' : $scope.selectedNetwork ,'network_alias' : $scope.selectedNetworkAlias, 'refine_by' : $scope.refine_by, 'search_by_tfn' : $scope.search_by_tfn}
 
+        if (!angular.isUndefined($scope.selectedNetwork)) {
+            apiService.post('/get_network_tracking_status', $rootScope.formdata )
+            .then(function (response) {
+                    var response = response.data;
+                    if (response.status) {
+                        $scope.tracking_on = 1;
+                    } else {
+                        $scope.tracking_on = 0;
+                    }
+                }, function (res) {
+
+                });
+        }
+
+        if($state.current.name == 'ranking') {
+            if (angular.isUndefined($scope.refine_by)) {
+                ($rootScope.type == 'brands') ? $rootScope.uigridDataBrand() : $rootScope.uigridDataAdv();
+            } else {
+                console.log('refine');
+                // $rootScope.uigridRefineData();
+            }
+        } else {
+            //network page grid code
+        }
+        
+        // ($rootScope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
         // $rootScope.formdata =  {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":1,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":""};
     }
 
@@ -523,7 +557,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
                 angular.forEach(y.weeks, function(w, key) {
                     if(key == 0 && y.media_year == $scope.selectedYear) {
                         $scope.selectDate = 'week31_'+w.media_week+'_'+w.media_week_start+'_'+w.media_week_end;
-                        console.log($scope.selectDate);
                     }
                 });
             });
@@ -579,7 +612,6 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         if (date != 1) {
             $scope.matching_criteria = 0;
         }
-        console.log($scope.selectDate);
         if($scope.selectDate.indexOf("year34") > -1) {
             $scope.mask = 1;
         }
@@ -829,6 +861,8 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $scope.current_qtr = data.quarter_no;
         $scope.years = data.years;
         $scope.createYearsArray();
+        $scope.mapValueWithSession(displayDateList);
+        $scope.mapValueWithSession(databaseFormatDate);
      });
 
     $scope.click = function() {

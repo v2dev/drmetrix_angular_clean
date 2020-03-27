@@ -4,7 +4,7 @@
 
  <div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
    
-<div class="container-fluid" ng-init="initializeRankingPage();">
+<div class="container-fluid" id="ranking_page" ng-init="initializeRankingPage();">
     <div class="row">
         <category-part data="$ctrl.category_list"></category-part> 
         <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
@@ -25,15 +25,15 @@
                         <input type="search" placeholder="Search Brands">
                         <i class="fa fa-times-circle"></i>
                     </div>
-                    <button class="btn btn-black btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
-                    <button class="btn btn-black btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-align-justify" title="Track"></i> <span>Network Log</span></button>
+                    <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network', '', network_name);"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
+                    <button class="btn btn-blue btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-align-justify" title="Track"></i> <span>Network Log</span></button>
                 </div>
                 <div class="filter-refine-by">
                     <span>Refine By</span>
                     <ul>
                         <li>
                             Network
-                            <div class="open-filter-popup custom-tooltip" ng-click="openNetworkLogModal();">All <i class="fa fa-caret-down fa-lg"></i>
+                            <div class="open-filter-popup custom-tooltip" ng-click="openNetworkLogModal();">{{networkDisplayName ? networkDisplayName : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                                 <div class="top">
                                     <i></i>
                                     All
@@ -42,14 +42,14 @@
                         </li>
                         <li>
                             New
-                            <span class="open-filter-popup" ng-click="openNewTypeModal();">
-                                All <i class="fa fa-caret-down fa-lg"></i>
+                            <span class="open-filter-popup capitalize" ng-click="openNewTypeModal();" >
+                                {{newCheckBox ? newType : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                             </span>
                         </li>
                         <li>
                             TNF/URL
-                            <span class="open-filter-popup" ng-click="openRefineModal();">
-                                All <i class="fa fa-caret-down fa-lg"></i>
+                            <span class="open-filter-popup" ng-click="openRefineModal();">{{refineBy}}
+                                {{refine_by ? refine_by : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                             </span>
                         </li>
                         <li>

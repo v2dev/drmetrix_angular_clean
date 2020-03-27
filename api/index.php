@@ -19130,15 +19130,9 @@ function unsubscribeUser(){
 function getNetworkTrackingStatus(){
     $request        = Slim::getInstance()->request();
     $query_string   = $request->getBody();
-    $set_one        = explode('&', $query_string);
-    $requestData    = $raw_data = array();
-    foreach($set_one as $k =>$v){
-        $raw_data   = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
-    $network_code   =   urldecode($requestData['network_code']);
-    $network_name   =   urldecode($requestData['network_name']);
-    $network_id     =   getNetworkIdByAlias(addslashes($network_name));
+    parse_str($query_string, $requestData);
+    $requestData = (array)json_decode($query_string, TRUE);
+    $network_id   =   $requestData['network_id'];
     $status         =   isTrackingPresent('network', $network_id);
     echo json_encode(array('status'=> $status));
 }

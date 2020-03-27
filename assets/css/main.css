@@ -3494,6 +3494,10 @@ header.sticky-top {
   display: flex;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 @media (max-width: 1024px) {
   .user-contact-block .user-details .user-name {
     display: block;

@@ -3,9 +3,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $state.go('home');
         return;
     }
-    
-  
-     
    
     $scope.initialisation = function() {
         $scope.page_call = 'ranking';
@@ -33,7 +30,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     
 
-    $scope.uigridDataBrand = function() {
+    $rootScope.uigridDataBrand = function() {
         var formData = $rootScope.formdata;
         var vm = this;
         var config = {
@@ -320,7 +317,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     $scope.initializeRankingPage = function() {
         $scope.applyFilter();
-        ($rootScope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
+        // ($rootScope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
     }
     // $scope.uigridDataBrand(formdata);
 
@@ -332,7 +329,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             templateUrl: templateUrl,
             controller: controller,
             scope: $scope,
-            size: size ? size : 'xl modal-dialog-centered',
+            size: size ? size : 'md modal-dialog-centered',
           });
 
           $scope.modalInstanceMain.result.then(function(response){
@@ -349,30 +346,17 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     };
 
     $scope.openNewTypeModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/newTypeDialog.html",
-            controller: "newCtrl",
-            size: 'md modal-dialog-centered',
-          });
+        $scope.openModal('./templates/modals/newTypeDialog.html','newCtrl','md modal-dialog-centered');
     }
 
     $scope.openRefineModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/refineDialog.html",
-            controller: "refineCtrl",
-            size: 'md modal-dialog-centered',
-          });
+        $scope.openModal('./templates/modals/refineDialog.html','refineCtrl','md modal-dialog-centered');
     }
 
     $scope.openNetworkLogModal = function() {
         $scope.openModal('./templates/modals/networkLogDialog.html','networkLogCtrl','xl modal-dialog-centered');
-        // $scope.modalInstance =  $uibModal.open({
-        //     templateUrl: "./templates/modals/networkLogDialog.html",
-        //     controller: "networkLogCtrl",
-        //     size: 'xl modal-dialog-centered',
-        //     backdrop  : false
-        //   });
     }
+
     $scope.viewAiringSpendGraph = function(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang,area, adv_name,network_id, network_dpi, sidx) {
         $scope.page_call = 'airings_detail';
         $scope.brand_id = $scope.id = id;
@@ -409,6 +393,11 @@ angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uib
         $uibModalInstance.dismiss();
     }
 
+    $scope.applyModal = function() {
+        $rootScope.$broadcast("CallParentMethod", {'newType' : $scope.newType, 'newCheckBox' : $scope.newCheckBox });
+        $uibModalInstance.dismiss();
+    }
+
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
@@ -417,6 +406,17 @@ angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uib
 angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
     $scope.refine_by = '';
     $scope.search_by_tfn = '';
+
+    $scope.applyModal = function() {
+        $rootScope.$broadcast("CallParentMethod", {'refine_by' : $scope.refineBy, 'search_by_tfn' : $scope.search_by_tfn });
+        $uibModalInstance.dismiss();
+    }
+
+    $scope.resetModal = function() {
+        $rootScope.$broadcast("CallParentMethod", {'refine_by' : ''});
+        $uibModalInstance.dismiss();
+    }
+
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
@@ -431,6 +431,7 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
     var today = new Date();
     var prev_date = new Date();
     prev_date.setMonth(today.getMonth() - 6);
+
     $scope.dataOfAllNetworks = function (call_from) {
         $scope.searchNet = '';
         var ndata;
@@ -511,7 +512,6 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
             .then(function (response) {
                 var ndata = response.data;
                 $scope.networkNotLoaded = 0;
-                console.log(JSON.stringify(ndata));
                 sessionStorage.setItem('all_networks_data', JSON.stringify(ndata));
                 $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
             }),(function () {
@@ -520,7 +520,6 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
 
         }
     }
-
     
     $scope.hasLetterDisable = function (letter) {
         var temp = [];
@@ -546,10 +545,10 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         }
         return temp.length > 0 ? false : true;
     }
+
     $scope.changeLatter = function (letter) {
         $scope.selectedLetter = letter;
     }
-  
 
     $scope.getNetworksWithAllFilters();
 
@@ -566,8 +565,39 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
 
     $scope.applyNetworkModal = function() {
         $rootScope.networkDisplayName = $scope.getSelectedNetworkName();
+        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork, 'network_alias' : $rootScope.networkDisplayName });
         $uibModalInstance.dismiss();
     }
+
+    $scope.viewTrackingDialogue = function(alert_type, type_id, name, email_schedulable_direct, show_monthly) {
+        // email_schedulable_direct = alert_type == 'filter' && email_schedulable_direct != null && email_schedulable_direct ? email_schedulable_direct : '';
+        // var scope = angular.element($("#main_page")).scope();
+        // $("#alert_type_val").val(alert_type);
+        // $("#type_id_val").val(type_id);
+        // $("#tracker_element_name").html(name);
+        // $("#success_alert_setup_msg").hide();
+        // $("#error_alert_setup_msg").hide();
+        // $("#track_advertiser_input").prop('checked', false);
+        // $("#track_brand_input").prop('checked', false);
+        // $("#track_creative_input").prop('checked', false);
+        // $("input[name=alert-frequency][value='daily']").prop('checked', false);
+        // $("input[name=alert-frequency][value='weekly']").prop('checked', false);
+        // if (alert_type == 'filter') {
+        //     $('#following_occurs,#brand_classification_div').hide();
+    
+        //     setAlertClose(1, type_id, email_schedulable_direct);
+    
+        //     if (show_monthly /*filter_criteria.toLowerCase().indexOf('current quarter') != -1*/) {
+        //         scope.show_monthly = 1;
+        //     } else {
+        //         scope.show_monthly = 0;
+        //     }
+        // } else {
+        //     $('#following_occurs,#brand_classification_div').show();
+        // }
+        // scope.showTrackingDialogue(alert_type, type_id, name);
+    }
+    
 
   
    
