@@ -24,7 +24,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     // var formdata = {'sd': data['sd'], 'ed': data['ed'], 'startDate': $scope.ranking.selectDate, 'val': data['selectDateDropDown'], 'c': $scope.ranking.selectClassfication, 'type': data['type'], 'cat': data['cat_id'], 'flag': active_flag, spanish: $scope.ranking.selectLang, responseType: $scope.ranking.returnText,'unchecked_category': data['unchecked_cat'], 'length_unchecked': unchecked_len, 'creative_duration': duration, 'new_filter_opt': new_filter_opt, 'lifetime_flag': lifetime_flag, 'all_ytd_flag': all_ytd_flag, 'refine_filter_opt': refine_filter_opt, 'refine_filter_opt_text': refine_filter_opt_text, 'refine_apply_filter': refine_apply_filter, 'programs_ids': airings_data['all_programs_ids'],'applied_ids' : $scope.ranking.applied_list_ids , 'primary_tab' : $scope.ranking.applied_list_type}; 
 
-    $scope.uigridDataBrand = function() {
+    $rootScope.uigridDataBrand = function() {
         var formData = $rootScope.formdata;
         var vm = this;
         var config = {
@@ -35,7 +35,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         var c_dir = '6';
         var correctTotalPaginationTemplate =
         "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"prev-page\"></div></button> Page <input ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\"> of </abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"next-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-page\"></div></button></div></div><div class=\"ui-grid-pager-count-container\"></div></div>";
-    formData.network_code = '';
+    // formData.network_code = '';
         vm.gridOptions = {
             expandableRowTemplate: '<div ui-grid="row.entity.subBrandGridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination class="grid" style="height:385px;"></div>',
             expandableRowHeight: 385,
@@ -104,8 +104,8 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             },
             onRegisterApi: function (gridApi) {
                 gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                    formData.network_code = null;
-                    formData.programs_ids = '';
+                    // formData.network_code = null;
+                    // formData.programs_ids = '';
                     formData.is_adv_page  = 0;
                     formData.brand_id = row.entity.brand_id;
                     formData.tab = 'brand';
@@ -155,10 +155,15 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         };
 
         apiService.post('/filter_results', formData, config)
-        .then(function (data) {
+        .then(function (response) {
+            var data = response.data;
             $scope.PostDataResponse = formData;
-            vm.gridOptions.data = data.data.rows;
-
+            vm.gridOptions.data = data.rows;
+            var checkedPrograms = [];
+            if (data.programs.length != 0) {
+                $rootScope.checkedRankingPrograms   =  checkedPrograms;
+                $rootScope.ranking_programs         =  data.programs;
+            }
             vm.gridOptions.columnDefs = [
                 // { name: 'id', pinnedLeft:true, width: '60' },
                 { name: 'rank', displayName: 'Rank', width: '70' },
@@ -370,59 +375,25 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
     $scope.initializeRankingPage = function() {
         $scope.applyFilter();
-        // ($rootScope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
-        $scope.uigridRefineByBrand();
     }
     // $scope.uigridDataBrand(formdata);
 
-    $scope.openModal = function(templateUrl, controller, size, backdrop) {
-        $scope.modalInstanceMain =  modalConfirmService.showModal({
-            backdrop: false,
-            keyboard: true,
-            modalFade: true,
-            templateUrl: templateUrl,
-            controller: controller,
-            scope: $scope,
-            size: size ? size : 'xl modal-dialog-centered',
-          });
-
-          $scope.modalInstanceMain.result.then(function(response){
-              $scope.result = `${response} button hitted`;
-          });
-
-          $scope.modalInstanceMain.result.catch(function error(error) {
-            if(error === "backdrop click") {
-              // do nothing
-            } else {
-              // throw error;
-            }
-          });
-    };
+   
 
     $scope.openNewTypeModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/newTypeDialog.html",
-            controller: "newCtrl",
-            size: 'md modal-dialog-centered',
-          });
+        $scope.openModal('./templates/modals/newTypeDialog.html','newCtrl','md modal-dialog-centered');
     }
 
     $scope.openRefineModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/refineDialog.html",
-            controller: "refineCtrl",
-            size: 'md modal-dialog-centered',
-          });
+        $scope.openModal('./templates/modals/refineDialog.html','refineCtrl','md modal-dialog-centered');
     }
 
     $scope.openNetworkLogModal = function() {
         $scope.openModal('./templates/modals/networkLogDialog.html','networkLogCtrl','xl modal-dialog-centered');
-        // $scope.modalInstance =  $uibModal.open({
-        //     templateUrl: "./templates/modals/networkLogDialog.html",
-        //     controller: "networkLogCtrl",
-        //     size: 'xl modal-dialog-centered',
-        //     backdrop  : false
-        //   });
+    }
+
+    $scope.openProgramModal = function() {
+        $scope.openModal('./templates/modals/programModalDialog.html','programCtrl','md modal-dialog-centered');
     }
     $scope.viewAiringSpendGraph = function(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang,area, adv_name,network_id, network_dpi, sidx) {
         $scope.page_call = 'airings_detail';
@@ -439,7 +410,13 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     
+
     
+    
+});
+
+angular.module('drmApp').controller('trackCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
+   
 });
 
 angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
@@ -460,14 +437,94 @@ angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uib
         $uibModalInstance.dismiss();
     }
 
+    $scope.applyModal = function() {
+        $rootScope.$broadcast("CallParentMethod", {'newType' : $scope.newType, 'newCheckBox' : $scope.newCheckBox });
+        $uibModalInstance.dismiss();
+    }
+
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
 });
 
+angular.module('drmApp').controller('programCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
+    $scope.all_ranking_program  = $scope.programs_ids != '' ? false : true;
+    $scope.checkedPrograms      = angular.copy($rootScope.checkedRankingPrograms);
+
+    $scope.applyModal = function() {
+        $uibModalInstance.dismiss();
+    }
+
+    $scope.getCheckedPrograms = function() {
+        var checked_programs = [];
+        if(!$scope.all_ranking_program) {
+            angular.forEach($rootScope.ranking_programs, function(item, key) {
+                angular.forEach(item, function(v, k) {
+                    if(v.isSelected) {
+                        checked_programs.push(k);
+                    }
+                });
+            });
+            $scope.length_of_programs  = checked_programs.length;
+            $scope.checked_programs_id = checked_programs.join(',');
+        }
+    }
+
+    $scope.selectAllProgram = function() {
+        angular.forEach($rootScope.ranking_programs, function(item, key) {
+            angular.forEach(item, function(v, k) {
+                v.isSelected = $scope.all_ranking_program;
+            });
+        });
+        $scope.getCheckedPrograms();
+    }
+
+    $scope.checkAllProgram = function(program) {
+        $scope.getCheckedPrograms();
+        $scope.all_ranking_program = true;
+       if($scope.length_of_programs != $rootScope.ranking_programs.length ) {
+           $scope.all_ranking_program = false;
+       }
+    }
+
+    $scope.applyModal = function() {
+        console.log($scope.checked_programs_id);
+        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork,'network_alias' : $scope.selectedNetworkAlias,'program_id' : $scope.checked_programs_id});
+        $uibModalInstance.dismiss();
+    }
+
+    $scope.resetPrograms = function() {
+        $scope.all_ranking_program = true;
+        angular.forEach($rootScope.ranking_programs, function(item, key) {
+            angular.forEach(item, function(v, k) {
+                v.isSelected = true;
+            });
+        });
+        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork,'network_alias' : $scope.selectedNetworkAlias});
+        $uibModalInstance.dismiss();
+    }
+
+
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+});
+
+
 angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
     $scope.refine_by = '';
     $scope.search_by_tfn = '';
+
+    $scope.applyModal = function() {
+        $rootScope.$broadcast("CallParentMethod", {'refine_by' : $scope.refineBy, 'search_by_tfn' : $scope.search_by_tfn });
+        $uibModalInstance.dismiss();
+    }
+
+    $scope.resetModal = function() {
+        $rootScope.$broadcast("CallParentMethod", {'refine_by' : ''});
+        $uibModalInstance.dismiss();
+    }
+
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
@@ -495,13 +552,14 @@ angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $
 
 angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
     $scope.selectedLetter = 'all';
-    $scope.selectedNetwork = 'All';
+    $scope.selectedNetwork = '';
     $scope.letterLists    = ['all', '0-9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     var params = {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":0,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":"", };
    
     var today = new Date();
     var prev_date = new Date();
     prev_date.setMonth(today.getMonth() - 6);
+
     $scope.dataOfAllNetworks = function (call_from) {
         $scope.searchNet = '';
         var ndata;
@@ -582,7 +640,6 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
             .then(function (response) {
                 var ndata = response.data;
                 $scope.networkNotLoaded = 0;
-                console.log(JSON.stringify(ndata));
                 sessionStorage.setItem('all_networks_data', JSON.stringify(ndata));
                 $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
             }),(function () {
@@ -591,7 +648,6 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
 
         }
     }
-
     
     $scope.hasLetterDisable = function (letter) {
         var temp = [];
@@ -617,10 +673,10 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         }
         return temp.length > 0 ? false : true;
     }
+
     $scope.changeLatter = function (letter) {
         $scope.selectedLetter = letter;
     }
-  
 
     $scope.getNetworksWithAllFilters();
 
@@ -637,8 +693,39 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
 
     $scope.applyNetworkModal = function() {
         $rootScope.networkDisplayName = $scope.getSelectedNetworkName();
+        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork, 'network_alias' : $rootScope.networkDisplayName });
         $uibModalInstance.dismiss();
     }
+
+    $scope.viewTrackingDialogue = function(alert_type, type_id, name, email_schedulable_direct, show_monthly) {
+        // email_schedulable_direct = alert_type == 'filter' && email_schedulable_direct != null && email_schedulable_direct ? email_schedulable_direct : '';
+        // var scope = angular.element($("#main_page")).scope();
+        // $("#alert_type_val").val(alert_type);
+        // $("#type_id_val").val(type_id);
+        // $("#tracker_element_name").html(name);
+        // $("#success_alert_setup_msg").hide();
+        // $("#error_alert_setup_msg").hide();
+        // $("#track_advertiser_input").prop('checked', false);
+        // $("#track_brand_input").prop('checked', false);
+        // $("#track_creative_input").prop('checked', false);
+        // $("input[name=alert-frequency][value='daily']").prop('checked', false);
+        // $("input[name=alert-frequency][value='weekly']").prop('checked', false);
+        // if (alert_type == 'filter') {
+        //     $('#following_occurs,#brand_classification_div').hide();
+    
+        //     setAlertClose(1, type_id, email_schedulable_direct);
+    
+        //     if (show_monthly /*filter_criteria.toLowerCase().indexOf('current quarter') != -1*/) {
+        //         scope.show_monthly = 1;
+        //     } else {
+        //         scope.show_monthly = 0;
+        //     }
+        // } else {
+        //     $('#following_occurs,#brand_classification_div').show();
+        // }
+        // scope.showTrackingDialogue(alert_type, type_id, name);
+    }
+    
 
   
    

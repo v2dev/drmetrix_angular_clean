@@ -107,7 +107,6 @@ angular.
                 self.changeCategory($scope.category_list, value);
             }
             self.checkCategoryValidation(type, value)
-            
         }
     
         self.checkCategoryValidation = function(type, value) {
