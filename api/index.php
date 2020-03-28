@@ -7706,8 +7706,9 @@ function applyRefineFilters() {
         }
         $resultV->display_tfn_column = trim($resultV->display_tfn_column,",");
         $tfn_comma_found = findPositionOfChar(',',$resultV->display_tfn_column);
+        $nestedData['tfn_comma_found'] = $tfn_comma_found;
        if($tfn_comma_found == 1) {
-            $nestedData['display_tfn_column']          =    '<a href="#"><i class="fa fa-caret-down float-right"></i><span>'. $resultV->display_tfn_column.'</span></a><div class="refine_tfn_dropdown select_refine_tfn_dropdown" id="refine_tfn_dropdown_'.$resultV->creative_id.'" style="display:none;"></div>';
+            $nestedData['display_tfn_column']          =    $resultV->display_tfn_column;
             $nestedData['display_tfn_column_hidden']       = $resultV->display_tfn_column;
        } else {
             $nestedData['display_tfn_column']             =   $nestedData['display_tfn_column_hidden'] = !empty($resultV->display_tfn_column) ? $resultV->display_tfn_column : '-';
@@ -7715,7 +7716,7 @@ function applyRefineFilters() {
         $resultV->display_url_column = trim($resultV->display_url_column,",");
         $url_comma_found = findPositionOfChar(',',$resultV->display_url_column);
         if($url_comma_found == 1) {
-            $nestedData['display_url_column']          =   !empty($resultV->display_url_column) ? '<a href="#"><i class="fa fa-caret-down float-right"></i><span>'. $resultV->display_url_column.'</span></a><div class="refine_url_dropdown select_refine_url_dropdown" id="refine_url_dropdown_'.$resultV->creative_id.'" style="display:none;"></div>' :  '-' ;
+            $nestedData['display_url_column']          =   !empty($resultV->display_url_column) ? $resultV->display_url_column :  '-' ;
             $nestedData['display_url_column_hidden']       = $resultV->display_url_column;
        }  else {
             $nestedData['display_url_column']             =   $nestedData['display_url_column_hidden'] =  !empty($resultV->display_url_column) ? $resultV->display_url_column : '-';
@@ -7766,18 +7767,12 @@ function viewAiringsLayoutTfn($export_flag = 0, $request_arr = NULL) {
     }else{
         $request = Slim::getInstance()->request();
         $query_string = $request->getBody();
-        $set_one = explode('&', $query_string);
-
-        foreach($set_one as $k =>$v){
-            $raw_data  = explode('=',$v);
-            $requestData[$raw_data[0]] = $raw_data[1];
-        }
+        $requestData = (array)json_decode($query_string, TRUE);
         $params                     = getRequestDataForRefineFilters();
     }
 
-    $sidx                       = $params['sidx'];
-    $sord                       = $params['sord'];
-   
+    $sidx                       = $params['sidx']; // Custom code for a timing $params['sidx']
+    $sord                       = $params['sord']; // Custom code for a timing $params['sord']
     $columns = array( 
         'network_name'  => 'network_alias', 
         'date_time'     => 'last_aired',
@@ -7807,7 +7802,7 @@ function viewAiringsLayoutTfn($export_flag = 0, $request_arr = NULL) {
         $result    = get_query_result('__query_display_airings_layout', $params, 'FETCH_OBJ');
         $count     = count($result);
         if ($count > 0) {
-            $total_pages = ceil($count / $params['limit']);
+            $total_pages = 10;
           } else {
             $total_pages = 0;
           }
@@ -7842,7 +7837,7 @@ function viewAiringsLayoutTfn($export_flag = 0, $request_arr = NULL) {
             }
             $nestedData = array();  
             $nestedData['network_name']     = $export['network_name'] = $resultV->network_alias;
-            $nestedData['network_name']     = "<span title='".$export['network_name']."'>".readMoreHelper($export['network_name'], 25)."</span>";
+            $nestedData['network_name']     = $export['network_name'];
             $nestedData['network_code']     = $resultV->network_code;
             $nestedData['last_aired']       =  $resultV->start;
             $export['last_aired']           = dateFormateForGridDate($nestedData['last_aired']);
@@ -7853,12 +7848,12 @@ function viewAiringsLayoutTfn($export_flag = 0, $request_arr = NULL) {
             $nestedData['promo_code']       = $resultV->promo;
             $nestedData['verify']           = $resultV->verified == 1 ? 'Yes' : 'No';
             $nestedData['program_name']     = $export['program_name'] = $resultV->program;
-            $nestedData['program_name']     = "<span title='".$export['program_name']."'>".readMoreHelper($nestedData['program_name'], 18)."</span>";
+            $nestedData['program_name']     = $nestedData['program_name'];
             // $nestedData['last_aired_old']   = $resultV->last_aired;
             $nestedData['video']            = $export['video'] = '';
             $nestedData['airing_id']        = $resultV->airing_id;
             $nestedData['creative_id']      = $resultV->creative_id;
-            $nestedData['thumbnail']        = '<a href="javascript:void(0);"><i class="fa fa-picture-o fa-2x col-00beff" onclick="displayThumbnail('.$resultV->airing_id.',\''.$resultV->network_code.'\',\'network_log_thumbnil\')"></i></a>';
+            $nestedData['thumbnail']        = '';
             // $export['thumbnail']            = createImageLink($resultV->creative_id, $resultV->airing_id);
             $passing_params['airing_id']        = $resultV->airing_id;
             $passing_params['network_code']     = $resultV->network_code;

@@ -283,7 +283,7 @@ function __query_display_airings_layout($params) {
 
     $where_network = ($network_id != '')  ?   ' AND d.network_id = '.$network_id : '';
 
-    $where_tab =  ($tab == 1 ) ? '  AND d.brand_id = '.$record_id :  'AND b.adv_id = '.$record_id ;
+    $where_tab =  ($tab == 1 ) ? '  AND d.brand_id = '.'6195' :  'AND b.adv_id = '.$record_id ;
 
     $sql = 'SELECT   n.network_name,n.network_code,n.network_alias, n.network_id,d.create_date ,d.breaktype, d.tfn, d.url, d.promo, d.verified,  d.program, thumb, c.creative_id,d.airing_id,d.start, c.thumbnail, c.last_aired, c.master_tfn_num, c.master_url
     FROM    brand b, creative c,   advertiser adv,
@@ -299,7 +299,7 @@ function __query_display_airings_layout($params) {
     AND      d.start_date BETWEEN  "'.$sd.'"  AND "'.$ed.'"
         '. $where_refine_by . '
         AND     spanish IN ('. $spanish . ') '. $new_filter_opt.$where_flag.$brand_classification.$categories. $where_network.$where_program.$list_id_condition.'
-            '.$where_tab.' AND d.creative_id = '.$creative_id.' ORDER BY '.$export_order_by .$limit_string ;
+            '.$where_tab.' AND d.creative_id = '.'82649502'.' ORDER BY start desc LIMIT 0 , 10';
             return $sql;
 
     // $sql = "SELECT  n.network_name,n.network_code, create_date ,breaktype, tfn, url, promo, verified,  program, thumb, c.creative_id,a.airing_id FROM airings a , creative c, network n  WHERE a.creative_id = c.creative_id  AND a.network_code = n.network_code AND a.creative_id = ".$record_id." ORDER BY a.creative_id DESC LIMIT 0, 20 ";
