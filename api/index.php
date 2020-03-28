@@ -7470,11 +7470,9 @@ function getRequestDataForRefineFilters($export = 0, $request_arr = NULL) {
     }else {
         $request = Slim::getInstance()->request();
         $query_string = $request->getBody();
-        parse_str($query_string, $output);
-        $set_one = explode('&', $query_string);
+        $requestData = (array)json_decode($query_string, TRUE);
         $_SESSION['filter_data'] = addslashes($query_string);
         $_SESSION['filter_type'] = 'ranking';	
-        $requestData = $raw_data = array();
         if( isset($_REQUEST) && count($_REQUEST) != 0 ) {
             if( isset($_REQUEST['c']) ) $_REQUEST['c'] = str_replace('+', ' ', $_REQUEST['c']);
             if( isset($_REQUEST['cat']) ) $_REQUEST['cat'] = str_replace('%2C', ',', $_REQUEST['cat']);
@@ -7483,25 +7481,9 @@ function getRequestDataForRefineFilters($export = 0, $request_arr = NULL) {
                 $_REQUEST[$k] = str_replace('+', " ", $v);
                 $_REQUEST[$k] = str_replace('%2C', ",", $v);
             }*/
-            $set_one = $requestData = $_REQUEST;
+            // $set_one = $requestData = $_REQUEST;
         } else {
-            foreach($set_one as $k =>$v){
-                $raw_data  = explode('=',$v);
-                if($raw_data[0] == 'c'){
-                    $raw_data[1] = str_replace('+', " ", $raw_data[1]);
-                }else if($raw_data[0] == 'cat'){
-                    $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-                }
-                if($raw_data[0] == 'unchecked_category'){
-                    $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-                }
-                $requestData[$raw_data[0]] = $raw_data[1];
-            }
-
-            if($raw_data[0] == 'programs_ids'){
-                $raw_data[1] = str_replace('%2C', ",", $raw_data[1]);
-            }
-            $requestData[$raw_data[0]] = $raw_data[1];
+            $requestData = (array)json_decode($query_string, TRUE);
         }
         $tab                        = $requestData['type'];
         $params['type']             = $requestData['type'];
@@ -7515,8 +7497,8 @@ function getRequestDataForRefineFilters($export = 0, $request_arr = NULL) {
     $sord                       = isset($requestData['sord']) ? $requestData['sord'] : '';
     $page                       = isset($requestData['page']) ? $requestData['page'] : 1;
     $c                          = urldecode($requestData['c']);
-    $sd                          = $requestData['sd'];
-    $ed                          = $requestData['ed'];
+    $sd                          = "2020-02-24";
+    $ed                          = "2020-03-01";
     $limit                      = isset($requestData['rows']) ? $requestData['rows'] : 0;
     $new_filter_opt             = isset($requestData['new_filter_opt']) ? $requestData['new_filter_opt'] : 'none';
     $refine_filter_opt          = isset($requestData['refine_filter_opt']) ? $requestData['refine_filter_opt'] : 'none';
@@ -7739,11 +7721,14 @@ function applyRefineFilters() {
             $nestedData['display_url_column']             =   $nestedData['display_url_column_hidden'] =  !empty($resultV->display_url_column) ? $resultV->display_url_column : '-';
        }
         $nestedData['creative_id']              = $resultV->creative_id;
-        $nestedData['brand_name']               = $active_inactive_brand_class.'<span><a href="#"  title="'.$resultV->brand_name.'" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$params['c_dir'].',\''.$params['tab'].'\',\''.$params['c'].'\',\''.$params['sd'].'\',\''.$params['ed'].'\',\'brand\','.$resultV->ID.',\''.addslashes($resultV->brand_name).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->brand_name.'</a></span>';
+        $nestedData['ID'] =  $resultV->ID;
+        $nestedData['brand_name']               = $resultV->brand_name;
         $export['brand_name']                   = $resultV->brand_name;
         // $nestedData['creative_name'] = '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->display_name).'\','.$resultV->adv_id.','.$c_dir.',\''.$tab.'\',\''.$val.'\',\''.$sd_dir.'\',\''.$ed_dir.'\',\'creatives\','.$resultV->creative_id.',\''.addslashes(htmlspecialchars($resultV->creative_name)).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->creative_name.'</a></span>';
-        $nestedData['creative_name']            = '<span><a href="#"  title="'.$resultV->creative_name.'" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$params['c_dir'].',\''.$params['tab'].'\',\''.$params['c'].'\',\''.$params['sd'].'\',\''.$params['ed'].'\',\'creatives\','.$resultV->creative_id.',\''.addslashes(htmlspecialchars($resultV->creative_name)).'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->creative_name.'</a></span>';
-        $nestedData['advertiser_name']          = !empty($resultV->advertiser_name) ? $active_inactive_adv_class.'<span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$params['c_dir'].',\''.$params['tab'].'\',\''.$params['c'].'\',\''.$params['sd'].'\',\''.$params['ed'].'\',\'adv\',\'\',\'\',\'ranking\','.$resultV->need_help.')" >'.$resultV->advertiser_name.'</a></span>' : '-' ;
+        $nestedData['adv_id'] =  $resultV->adv_id;
+        $nestedData['need_help'] =  $resultV->need_help;
+        $nestedData['creative_name']            = $resultV->creative_name;
+        $nestedData['advertiser_name']          = $resultV->advertiser_name;
         $export['advertiser_name']          = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-' ;
         $nestedData['airings']              = $resultV->airings ? number_format($resultV->airings) : 0 ;
         $export['airings']               =  $nestedData['airings'];  
@@ -14629,6 +14614,7 @@ function getMyReportsData(){
             $valid_til              = date("m/d/Y",strtotime($result['valid_till']));
             $shared_valid_till      = date("m/d/Y",strtotime($result['shared_valid_till']));
             $todays_date                    = date("m/d/Y");
+            $nestedData['status'] = $result['status'];
             if(strtotime($todays_date) <= strtotime($valid_til)){
                 if($result['status'] == 'completed'){
                     $disabled = 'disabled = disabled';
@@ -14636,9 +14622,12 @@ function getMyReportsData(){
 
                     $download_link = 'http://' . str_replace('', '', HOST) . "/drmetrix/api/index.php/downloadClientFiles?code=".base64_encode("email={$result['email']}&id={$result['id']}");
                     $download_link = '<a href="'.$download_link.'" target="_blank">Download</a>';
+                    $nestedData['disabled'] = $disabled;
+                    $nestedData['class'] = $class;
 
                 } else {
                     $percentage = $result['progress'];
+                    $nestedData['percentage'] = $percentage;
                     $download_link = '
                     <div class="c100 p'.$percentage.' small">
                         <span>'.$percentage.'%</span>
@@ -14650,6 +14639,8 @@ function getMyReportsData(){
                     ';       
                     $disabled = '';
                     $class    = '';
+                    $nestedData['disabled'] = $disabled;
+                    $nestedData['class'] = $class;
 
                 }
                 $sharedDate = '';
@@ -14663,8 +14654,10 @@ function getMyReportsData(){
 
                 if($result['email_alert'] == 1){
                     $checked                    =  'checked = checked';
+                    $nestedData['checked'] = $checked;
                 }else{
                     $checked                    =   '';
+                    $nestedData['checked'] = $checked;
                 }
 
                 $delete_file                    = '<div class="header-icons checkbox"><input type="checkbox" id="delete_check_'. $result['id'].'" name="delete_check[]" onClick="checkDelete('.$result['id'].');" class="checkbox-custom"><label class="checkbox-custom-label"></label></div><a title="delete" class="delete_file" id="delete_file_'. $result['id'].'" ><img class="header-img" src="/drmetrix/assets/img/delete-icon-grey.svg" /></a>';
@@ -18649,12 +18642,8 @@ function getAlertsList(){
     $query_string                       = $request->getBody();
     $set_one                            = explode('&', $query_string);
     $raw_data                           = array();
+    $requestData = (array)json_decode($query_string, TRUE);
     $user_id = $requestData['user_id']  = $_SESSION['user_id'];
-    foreach($set_one as $k => $v) {
-        $raw_data                       = explode('=',$v);
-        if(isset($raw_data[1]))
-            $requestData[$raw_data[0]]      = rtrim($raw_data[1]);
-    }
     
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
@@ -18723,18 +18712,20 @@ function getAlertsList(){
         if (empty($source)) {
             continue;
         }
-
+        $nestedData['type_id'] = $resultV->type_id;
         $nestedData['source']           =   $source;
         $nestedData['email_schedulable_direct']     =   $resultV->email_schedulable_direct;
+        $nestedData['classification']           = $resultV->classification;
         if(!empty($resultV->classification)) {
-            $nestedData['classification']           = '<span custom-attr="config_alert_classification_'.$resultV->type_id.'">'.getClassificationData($resultV->classification).'</span>';
+            $nestedData['classification-data']           = getClassificationData($resultV->classification);
             $nestedData['classification_hidden']    = getClassificationData($resultV->classification);
         } else {
-            $nestedData['classification']           = '<span custom-attr="config_alert_classification_'.$resultV->type_id.'">-</span>';
+            $nestedData['classification-data']           = '-';
             $nestedData['classification_hidden']    = '-';
         }
-        $nestedData['frequency']        =   '<span custom-attr="config_alert_frequency_'.$resultV->type_id.'">'.ucfirst($resultV->frequency).'</span>';
+        $nestedData['frequency']        =   ucfirst($resultV->frequency);
         $nestedData['frequency_hidden'] =   ucfirst($resultV->frequency);
+        $nestedData['status'] = $resultV->status;
         $nestedData['tracking_status']  =   $resultV->status == 'active'? '<a href="javascript:" onclick="$(\'#alert_type_val\').val(\''.$resultV->alert_type.'\');$(\'#type_id_val\').val('.$resultV->type_id.');$(\'#tracker_element_name\').html(\''.$source.'\');inactiveTracking($(\'[custom-attr=config_alert_filter_'.$resultV->type_id.']\').hasClass(\'grey-eye\')?\'active\':\'inactive\');"><i class="fa fa-eye blue-eye" custom-attr="config_alert_'.$resultV->alert_type.'_'.$resultV->type_id.'" title="Tracking Active"></i></a>' : '<a href="javascript:" onclick="$(\'#alert_type_val\').val(\''.$resultV->alert_type.'\');$(\'#type_id_val\').val('.$resultV->type_id.');$(\'#tracker_element_name\').html(\''.$source.'\');inactiveTracking($(\'[custom-attr=config_alert_'.$resultV->alert_type.'_'.$resultV->type_id.']\').hasClass(\'grey-eye\')?\'active\':\'inactive\');"><i class="fa grey-eye fa-eye-slash" custom-attr="config_alert_'.$resultV->alert_type.'_'.$resultV->type_id.'" title="Tracking Inactive"></i></a>';
         $nestedData['triggered_on']     =   $resultV->created_date;
         /*if($resultV->email_schedulable_direct) {
@@ -18743,7 +18734,13 @@ function getAlertsList(){
         $showMonthlyOption = strpos(strtolower($resultV->criteria), strtolower('Current Quarter')) !== false
                              || strpos(strtolower($resultV->criteria), strtolower('Current Year - YTD')) !== false
                              || strpos(strtolower($resultV->criteria), strtolower('Lifetime')) !== false;
-        $nestedData['operation']    =   '<a href="#" onclick="viewTrackingDialogue(\''.$resultV->alert_type.'\','.$resultV->type_id.',\''.addslashes($source).'\', \''.($resultV->email_schedulable_direct?$resultV->email_schedulable_direct:'').'\', '.($showMonthlyOption ? 1 : 0).');"><i class="fa fa-pencil edit-icon" title="Edit"></i></a><a href="#" onclick="setDeleteTrackingBtn(\''.($resultV->alert_type=='filter'?$resultV->type_id:$resultV->id).'\', \''.$resultV->alert_type.'\');"><i class="fa fa-trash-o delete-icon" title="Delete"></i></a>';
+        $email_schedulable_direct = $resultV->email_schedulable_direct?$resultV->email_schedulable_direct:'';
+        $nestedData['email_schedulable_direct'] = $email_schedulable_direct;
+        $showMonthlyOption = $showMonthlyOption ? 1 : 0;
+        $nestedData['showMonthlyOption'] = $showMonthlyOption;
+        $nestedData['alert_type_filter'] = $resultV->alert_type=='filter'?$resultV->type_id:$resultV->id;
+        $nestedData['operation']    =   '<a href="#" onclick="viewTrackingDialogue(\''.$resultV->alert_type.'\','.$resultV->type_id.',\''.addslashes($source).'\', \''.($email_schedulable_direct).'\', '.($showMonthlyOption ? 1 : 0).');"><i class="fa fa-pencil edit-icon" title="Edit"></i></a><a href="#" onclick="setDeleteTrackingBtn(\''.($resultV->alert_type=='filter'?$resultV->type_id:$resultV->id).'\', \''.$resultV->alert_type.'\');"><i class="fa fa-trash-o delete-icon" title="Delete"></i></a>';
+        $nestedData['operation']    =   '';
         //}
         $data[]                     =   $nestedData;
     }
@@ -19142,12 +19139,7 @@ function updateSubscribeStatus(){
 function deleteTrackingAlerts() {
     $request        = Slim::getInstance()->request();
     $query_string   = $request->getBody();
-    $set_one        = explode('&', $query_string);
-    $requestData    = $raw_data = array();
-    foreach($set_one as $k =>$v){
-        $raw_data   = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
+    $requestData = (array)json_decode($query_string, TRUE);
 
     $params['delete_all']       = isset($requestData['delete_all']) ? $requestData['delete_all'] : '';
     $params['tracking_ids']     = isset($requestData['tracking_ids']) ? urldecode($requestData['tracking_ids']) : '';

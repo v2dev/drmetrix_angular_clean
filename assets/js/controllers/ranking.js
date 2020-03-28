@@ -3,7 +3,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $state.go('home');
         return;
     }
-   
+
     $scope.initialisation = function() {
         $scope.page_call = 'ranking';
         $scope.page = $state.current.name;
@@ -23,12 +23,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     /* Ranking Grid Start */
 
     // var formdata = {'sd': data['sd'], 'ed': data['ed'], 'startDate': $scope.ranking.selectDate, 'val': data['selectDateDropDown'], 'c': $scope.ranking.selectClassfication, 'type': data['type'], 'cat': data['cat_id'], 'flag': active_flag, spanish: $scope.ranking.selectLang, responseType: $scope.ranking.returnText,'unchecked_category': data['unchecked_cat'], 'length_unchecked': unchecked_len, 'creative_duration': duration, 'new_filter_opt': new_filter_opt, 'lifetime_flag': lifetime_flag, 'all_ytd_flag': all_ytd_flag, 'refine_filter_opt': refine_filter_opt, 'refine_filter_opt_text': refine_filter_opt_text, 'refine_apply_filter': refine_apply_filter, 'programs_ids': airings_data['all_programs_ids'],'applied_ids' : $scope.ranking.applied_list_ids , 'primary_tab' : $scope.ranking.applied_list_type}; 
-
-   
-    
-
-
-    
 
     $rootScope.uigridDataBrand = function() {
         var formData = $rootScope.formdata;
@@ -320,9 +314,67 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         });
     }
 
+    $scope.uigridRefineByBrand = function() {
+        var formData = $rootScope.formdata;
+        formData.refine_filter_opt = 800;
+        formData.refine_filter_opt_text = 800;
+        formData.refine_apply_filter=1;
+        formData.type = 1;
+        formData.sd = "2020-02-24";
+        formData.ed = "2020-03-01";
+        formData.length_unchecked = 0;
+        formData.primary_tab = "";
+        formData.unchecked_category = "";
+        formData.sidx = "airings";
+        formData.sord = "sord";
+        var vm = this;
+        var config = {
+            headers : {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }
+        var c_dir = '6';
+        var correctTotalPaginationTemplate =
+        "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"prev-page\"></div></button> Page <input ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\"> of </abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"next-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-page\"></div></button></div></div><div class=\"ui-grid-pager-count-container\"></div></div>";
+        formData.network_code = '';
+        vm.gridOptions = {
+            enableGridMenu: true,
+            enableSelectAll: true,
+            enableSorting: true,
+            showTreeExpandNoChildren: false,
+            enableExpandableRowHeader: true,
+            //Pagination
+            paginationPageSizes: [20],
+            paginationPageSize: 20,
+            paginationTemplate: correctTotalPaginationTemplate,
+        };
+
+        apiService.post('/apply_refine_filters', formData, config)
+        .then(function (data) {
+            $scope.PostDataResponse = formData;
+            vm.gridOptions.data = data.data.rows;
+
+            vm.gridOptions.columnDefs = [
+                { name: 'id', pinnedLeft:true, width: '60' },
+                { name: 'creative_name', pinnedLeft:true, displayName: 'Creative', cellTemplate: '<span><a href=""  title="row.entity.creative_name" ng-click="view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'creatives\',row.entity.creative_id,row.entity.creative_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>' },
+                { name: 'brand_name', pinnedLeft:true, displayName: 'Brand', cellTemplate: '<i class="fa fa-circle" ng-if=(row.entity.is_active_brand == 1) id="active_btn"></i><i class="fa fa-circle" ng-if=(row.entity.is_active_brand != 1) id="inactive_btn"></i><span><a href="#"  title="row.entity.brand_name" ng-click="view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'brand\',row.entity.ID,row.entity.brand_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>' },
+
+                { name: 'advertiser_name', pinnedLeft:true, displayName: 'Advertiser', cellTemplate: '<span ng-if=row.entity.advertiser_name!=\'\'><i class="fa fa-circle" ng-if=row.entity.is_active_adv==1 id="active_btn"></i><i class="fa fa-circle" ng-if=row.entity.is_active_brand!= 1 id="inactive_btn"></i><span><a href="#" onclick="view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',\'\',\'\',\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span></span><span ng-if=row.entity.advertiser_name==\'\' >\'-\' <\span>' },
+
+                { name: 'airings', pinnedLeft:true, displayName: 'Airings' },
+                { name: 'display_tfn_column', pinnedLeft:true, displayName: 'TNF' },
+                { name: 'display_url_column', pinnedLeft:true, displayName: 'URL' },
+                { name: 'first_aired', pinnedLeft:true, displayName: 'First Aired' },
+                { name: 'last_aired', pinnedLeft:true, displayName: 'Last_Aired' },
+                { name: 'display_url_column', pinnedLeft:true, displayName: 'URL' },
+            ];
+        }, function (response) {
+            // this function handlers error
+        });
+    }
+
     $scope.initializeRankingPage = function() {
         $scope.applyFilter();
-        // ($rootScope.type == 'brands') ? $scope.uigridDataBrand() : $scope.uigridDataAdv();
     }
     // $scope.uigridDataBrand(formdata);
 
@@ -475,6 +527,26 @@ angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $
 
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
+    }
+
+    $scope.applyRefineByFilter = function () {
+        refine_apply_filter = 1;
+        export_refine_apply_filter = 1;
+        $scope.refine_by = 'All';
+        $scope.search_by_tfn = '';
+        var lbl_name = $scope.refine_by ? $scope.refine_by == '800' ? 'TFN' : $scope.refine_by == 'url' ? 'URL' : 'All' : 'All';
+        // $("#lbl_outter_tfn_url_new").html(lbl_name);
+        // $('#refine_by').html(lbl_name);
+        // $('#refine_by_text').html($scope.search_by_tfn);
+        $scope.filter($scope.type, $rootScope.active_flag);
+        // $("#tnf-url").modal('hide');
+        // $('#uiview').css('overflow', '');
+    }
+
+    $scope.resetRefineFilter = function () {
+        $scope.ranking.refine_by = 'All';
+        $scope.ranking.search_by_tfn = '';
+        $scope.closeModal();
     }
 });
 

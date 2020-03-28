@@ -53,5 +53,10 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             url: '/globalSearch',
             templateUrl: 'templates/globalSearch.html',
             controller: 'GlobalSearchController'
+        })
+        .state('configureEmails', {
+            url: '/configureEmails',
+            templateUrl: 'templates/configureEmails.html',
+            controller: 'ConfigureEmailsController'
         });
 });
