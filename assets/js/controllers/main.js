@@ -1,9 +1,10 @@
-angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location, $uibModal) {
+angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location, $uibModal, modalConfirmService) {
     $scope.date = new Date(); // Footer copyright display year
     $rootScope.eulaDisagreeFlag = 0; // this flag will show poup on login page if we disagree eula agreement and redreict to login message with popup message
     $scope.whats_new_toggle = false;
     $rootScope.headerDisplay = 0;
-    $scope.refine_by = '';
+    $scope.selectedNetwork = '';
+    $scope.programs_id = ''
     /* Primary filter */
     $rootScope.complete_name = localStorage.complete_name;
     $scope.selectDate = sessionStorage.selectDate = 1;
@@ -36,6 +37,33 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
             "display_text": "AsOnTV Retail Rankings",
         }
     ];
+
+
+$scope.shortFormTrackingClassification = [
+        {
+            "index": 1,
+            "id": "sf_products",
+            'selected': false,
+            "value": "Short Form Products"
+        }, {
+            "index": 2,
+            "id": "lead_gen",
+            'selected': false,
+            "value": "Lead Generation"
+        }, {
+            "index": 3,
+            "id": "brand_dr",
+            'selected': false,
+            "value": "Brand/DR",
+        }, {
+            "index": 4,
+            "id": "285_mins",
+            'selected': false,
+            "value": "28.5 Mins",
+            "display_text": "28.5 Mins",
+        }
+    ];
+
 
     $scope.longFormClassification = [
         {
@@ -254,6 +282,30 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
     }
     $scope.date_filter($scope.selectDate);
 
+
+    $scope.openModal = function(templateUrl, controller, size, backdrop) {
+        $scope.modalInstanceMain =  modalConfirmService.showModal({
+            backdrop: false,
+            keyboard: true,
+            modalFade: true,
+            templateUrl: templateUrl,
+            controller: controller,
+            scope: $scope,
+            size: size ? size : 'md modal-dialog-centered',
+          });
+
+          $scope.modalInstanceMain.result.then(function(response){
+              $scope.result = `${response} button hitted`;
+          });
+
+          $scope.modalInstanceMain.result.catch(function error(error) {
+            if(error === "backdrop click") {
+              // do nothing
+            } else {
+              // throw error;
+            }
+          });
+    };
     $scope.getParameters = function () {
         var selectDateDropDown = $scope.selectDate;
 
@@ -372,17 +424,101 @@ angular.module('drmApp').controller('MainController', function ($scope, $http, $
         $scope.newCheckBox          = data.newCheckBox;
         $scope.refine_by            = data.refine_by;
         $scope.search_by_tfn        = data.search_by_tfn;
+        $scope.programs_id          = data.program_id;
         $scope.applyFilter();
      });
+
+     $scope.viewTrackingDialogue = function(alert_type, type_id, name) {
+         var type_id, name;
+         $scope.tracking_action = '';
+         $scope.track_advertiser = $scope.track_brand = $scope.track_creative = 0 
+         if(alert_type == 'network') {
+             type_id = $scope.selectedNetwork;
+             name    = $scope.selectedNetworkAlias
+         }
+        var formData =  {'alert_type' : alert_type, 'type_id' : type_id, 'name' : name }
+        apiService.post('/get_tracking_detail', formData)
+        .then(function (data) {
+            var response = data.data
+            switch (alert_type) {
+                case 'advertiser':
+                    $scope.track_brand = $scope.track_cretive = 1;
+                    break;
+                case 'brand':
+                    $scope.track_creative = 1;
+                    break;
+                case 'category':
+                    $("#track_advertiser_ul").hide();
+                    $scope.track_brand = $scope.track_creative = 1;
+                    break;
+                case 'network':
+                    $scope.track_advertiser = $scope.track_brand = $scope.track_creative=  1;
+                    break;
+            }
+            if (response.status == 1) {
+                if (response.data['frequency'] != "") {
+                    $("input[name=alert-frequency][value='daily']").prop('checked', response.data['frequency'].indexOf("daily") != -1);
+                    $("input[name=alert-frequency][value='weekly']").prop('checked', response.data['frequency'].indexOf("weekly") != -1);
+                    $("input[name=alert-frequency][value='monthly']").prop('checked', response.data['frequency'].indexOf("monthly") != -1);
+                }
+                if (sessionStorage.tracking == 1) {
+                    if (response.data['status'] == 'active') {
+                        $scope.tracking_action = '<a onclick="inactiveTracking(\'inactive\');"><i class="fa fa-eye blue-eye" title="Track"></i></a>';
+                    } else {
+                        $scope.tracking_action = '<a onclick="inactiveTracking(\'active\');"><i class="fa fa-eye slash grey-eye" title="Track"></i></a>';
+                    }
+                } 
+                var elements = response.data['track_elements'].split(",");
+                elements.forEach(function (element) {
+                    if (element == 'advertiser') {
+                        $scope.isAdvSelelected = 1;
+                    }
+                    if (element == 'brand') {
+                        $scope.isBrandSelelected = 1;
+                    }
+                    if (element == 'creative') {
+                        $scope.isCreativeSelected = 1;
+                    }
+                });
+                if (alert_type == 'network' || alert_type == 'category') {
+                    var classification = response.data['classification'];
+                    if (classification != "") {
+                        classification.forEach(function (element) {
+                            switch (element) {
+                                case 'short_form_products':
+                                    let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
+                                    console.log(obj);
+                                    // $("#short_form_products").prop('checked', true);
+                                    break;
+                                case 'lead_generation':
+                                    // $("#lead_generation").prop('checked', true);
+                                    break;
+                                case 'brand_direct':
+                                    // $("#brand_direct").prop('checked', true);
+                                    break;
+                                case '285_mins':
+                                    // $("#285_mins").prop('checked', true);
+                                    break;
+                            }
+                        });
+                    } else {
+                    }
+                }
+            }
+        },function (error) {
+            console.log('Error');
+        });
+        $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+    }
 
     $scope.applyFilter = function() {
         $scope.getParameters();
         $scope.categories_selected  = $scope.getSelectedCategories();
         $scope.classification       = $scope.getSelectedClassification();
         $scope.tab                  = $scope.type == 'brands' ? 1 : 0; 
-        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newType ,'network_id' : $scope.selectedNetwork ,'network_alias' : $scope.selectedNetworkAlias, 'refine_by' : $scope.refine_by, 'search_by_tfn' : $scope.search_by_tfn}
+        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newType ,'network_id' : $scope.selectedNetwork ,'network_alias' : $scope.selectedNetworkAlias, 'refine_by' : $scope.refine_by, 'search_by_tfn' : $scope.search_by_tfn, 'programs_id' : $scope.programs_id}
 
-        if (!angular.isUndefined($scope.selectedNetwork)) {
+        if (!angular.isUndefined($scope.selectedNetwork) && $scope.selectedNetwork != '') {
             apiService.post('/get_network_tracking_status', $rootScope.formdata )
             .then(function (response) {
                     var response = response.data;

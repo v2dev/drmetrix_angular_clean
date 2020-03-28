@@ -1,0 +1,35 @@
+
+<div class="modal-header">
+    <h5 class="modal-title">All Programs</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();" >
+    <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="filter-popup">
+        <span ng-show="length_of_programs == 0" class="error-message-inside pb-2" >Please select at least one Program.</span>
+        <div class="checkbox heading-border pb-2">
+            <input type="checkbox" id="all_program" ng-change="selectAllProgram()" ng-model="all_ranking_program" > 
+            <label for="all_program">
+            All Programs
+            </label>
+    </div>
+    <div class="pt-1">
+        <ul class="" > 
+            <li class="checkbox" ng-repeat="(key , value) in ranking_programs">
+                <div  ng-repeat="(k , v) in value">
+                    <input type="checkbox" class="" id="{{k}}" ng-model="v.isSelected" ng-click="checkAllProgram(k);">
+                    <label for="{{k}}">
+                        {{v.program}}
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="btn-grp d-flex justify-content-end border-top pt-3">
+        <button id="cancelNet" class="btn btn-black hide-filter-popup mr-3" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel" ng-click="closeModal();"></i> Cancel</button>
+        <button id="program_apply" class="btn btn-blue" ng-disabled="length_of_programs == 0" ng-click="applyModal()"><i class="fa fa-check" title="apply"></i>
+        Apply</button>
+        <button id="applyNet" class="btn btn-blue" ng-click="resetprograms();"  ng-disabled="length_of_programs == 0"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
+    </div>
+</div>

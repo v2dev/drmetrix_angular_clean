@@ -8203,15 +8203,6 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$val, $requestData = NULL){
     } else {
         $responseType = ' AND '.$responseType;
     }
-    
-   /* if(isset($search)) { 
-        $search     = urldecode($search);
-        $search     = addslashes($search);
-        $search     = str_replace('%', '\%', $search);
-        $search_arr = fullTextSearch($word,$search,MODE);
-      //  $where_search   = $search_arr['str'];
-       // $cols           .= ','. ltrim($search_arr['search_col'],'(').' as search ';
-    }*/
 
     if($c > 5){
         $active_col = 'long_active';
@@ -8360,11 +8351,11 @@ function custom_filter($sd,$ed,$tab,$c,$cat,$catIn,$val, $requestData = NULL){
             }
             $setAllPrograms = array_unique($all_programs);
         }
-
         foreach($setAllPrograms as $key => $value) {
             $arr = explode('***',$value);
             $newArrayPrograms[$key]['network_id'] = $arr[1];
             $newArrayPrograms[$key]['program']    = $arr[0];
+            $newArrayPrograms[$key]['isSelected']  = true;
             if($apply_filter_called != 1) {
                 array_push($checkedPrograms, $arr[0]);
             }
@@ -18613,21 +18604,10 @@ function sendGlobalSearchFeedback(){
 function getTrackingDetail(){
     $request = Slim::getInstance()->request();
     $query_string = $request->getBody();
-    $set_one = explode('&', $query_string);
-    $requestData = $raw_data = array();
-    foreach($set_one as $k =>$v){
-        $raw_data  = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
-
+    $requestData =(array)json_decode($query_string, TRUE);
     $params['alert_type']   =   $alert_type = $requestData['alert_type'];
     $params['name']         =   $name       = urldecode($requestData['name']);
-
-    if($alert_type == 'network'){
-        $type_id = getNetworkIdByAlias(addslashes($name));
-    }else{
-        $type_id = $requestData['type_id'];
-    }
+    $type_id = $requestData['type_id'];
     $params['type_id']      =   $type_id;
     $params['user_id']      =   $user_id    = $_SESSION['user_id'];
 

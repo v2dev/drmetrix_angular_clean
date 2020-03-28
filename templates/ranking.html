@@ -25,7 +25,7 @@
                         <input type="search" placeholder="Search Brands">
                         <i class="fa fa-times-circle"></i>
                     </div>
-                    <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network', '', network_name);"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
+                    <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network');"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
                     <button class="btn btn-blue btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-align-justify" title="Track"></i> <span>Network Log</span></button>
                 </div>
                 <div class="filter-refine-by">
@@ -47,11 +47,18 @@
                             </span>
                         </li>
                         <li>
-                            TNF/URL
-                            <span class="open-filter-popup" ng-click="openRefineModal();">{{refineBy}}
+                            TFN/URL
+                            <span class="open-filter-popup" ng-click="openRefineModal();">
                                 {{refine_by ? refine_by : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                             </span>
                         </li>
+                        <li ng-show="selectedNetwork != ''">
+                            Programs
+                            <span class="open-filter-popup" ng-click="openProgramModal();">
+                                {{programs_id ? 'Custom' : 'All'}} Programs <i class="fa fa-caret-down fa-lg"></i>
+                            </span>
+                        </li>
+                        
                         <li>
                             <button class="btn btn-blue btn-sm"><i class="fa fa-save"></i> Save Filter</button>
                         </li>
