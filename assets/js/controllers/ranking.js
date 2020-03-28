@@ -292,7 +292,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
             { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_adv == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="#" title="{{row.entity.advertiser_name}}" ng-click="view_adv_tab(row.entity.advertiser_name,row.entity.id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',row.entity.id,row.entity.advertiser_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>', pinnedLeft:true },
 
-            { name: 'hidden_brand', displayName: 'Brand', cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>' },
+            { name: 'hidden_brand', displayName: 'Brand', cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.entity.groupHeader==true || row.entity.subGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>' },
 
             { name: 'airings', displayName: 'Airings', pinnedLeft:true },
             { name: 'spend_index', displayName: 'Spend' },
@@ -350,18 +350,21 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             vm.gridOptions.data = data.data.rows;
 
             vm.gridOptions.columnDefs = [
-                { name: 'id', pinnedLeft:true, width: '60' },
-                { name: 'creative_name', pinnedLeft:true, displayName: 'Creative', cellTemplate: '<span><a href=""  title="row.entity.creative_name" ng-click="view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'creatives\',row.entity.creative_id,row.entity.creative_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>' },
-                { name: 'brand_name', pinnedLeft:true, displayName: 'Brand', cellTemplate: '<i class="fa fa-circle" ng-if=(row.entity.is_active_brand == 1) id="active_btn"></i><i class="fa fa-circle" ng-if=(row.entity.is_active_brand != 1) id="inactive_btn"></i><span><a href="#"  title="row.entity.brand_name" ng-click="view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'brand\',row.entity.ID,row.entity.brand_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>' },
+                // { name: 'id', pinnedLeft:true, width: '60' },
+                { name: 'creative_name', pinnedLeft:true, displayName: 'Creative', cellTemplate: '<span><a href=""  title="row.entity.creative_name" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'creatives\',row.entity.creative_id,row.entity.creative_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD | limitTo: 35}}</a></span>' },
 
-                { name: 'advertiser_name', pinnedLeft:true, displayName: 'Advertiser', cellTemplate: '<span ng-if=row.entity.advertiser_name!=\'\'><i class="fa fa-circle" ng-if=row.entity.is_active_adv==1 id="active_btn"></i><i class="fa fa-circle" ng-if=row.entity.is_active_brand!= 1 id="inactive_btn"></i><span><a href="#" onclick="view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',\'\',\'\',\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span></span><span ng-if=row.entity.advertiser_name==\'\' >\'-\' <\span>' },
+                { name: 'brand_name', pinnedLeft:true, displayName: 'Brand', cellTemplate: '<i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i><span><a href="#"  title="row.entity.brand_name" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'brand\',row.entity.ID,row.entity.brand_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>' },
+
+                { name: 'advertiser_name', pinnedLeft:true, displayName: 'Advertiser', cellTemplate: '<span ng-if=row.entity.advertiser_name!=\'\'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i><span><a href="#" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.c+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',\'\',\'\',\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span></span><span ng-if="row.entity.advertiser_name==\'\'"> - </span>' },
 
                 { name: 'airings', pinnedLeft:true, displayName: 'Airings' },
-                { name: 'display_tfn_column', pinnedLeft:true, displayName: 'TNF' },
+
+                { name: 'display_tfn_column', pinnedLeft:true, displayName: 'TNF', cellTemplate: '<span ng-if=row.entity.tfn_comma_found ==1><a href=""><i class="fa fa-caret-down float-right"></i><span>{{COL_FIELD | limitTo: 12}}</span></a><div class="refine_tfn_dropdown select_refine_tfn_dropdown" id="refine_tfn_dropdown_row.entity.creative_id" style="display:none;"></div></span><span ng-if=row.entity.tfn_comma_found!=1>{{COL_FIELD | limitTo: 12}}</span>' },
+
                 { name: 'display_url_column', pinnedLeft:true, displayName: 'URL' },
                 { name: 'first_aired', pinnedLeft:true, displayName: 'First Aired' },
                 { name: 'last_aired', pinnedLeft:true, displayName: 'Last_Aired' },
-                { name: 'display_url_column', pinnedLeft:true, displayName: 'URL' },
+                { name: 'thumbnail', displayName: 'Report', cellTemplate: '<a href="javascript:void(0);" ><i class="fa fa-file-text-o fa-2x" style="font-size: 1.6em;" ng-click="grid.appScope.overlayForAirings(row.entity.ID,row.entity.creative_id,row.entity.brand_name)"></i></a>' , width: '50'}
             ];
         }, function (response) {
             // this function handlers error
@@ -438,7 +441,16 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
        $scope.page_call = '/#!/ranking';
     }
 
-    
+    $scope.overlayForAirings = function (record_id, creative_id, header_name) {
+        $scope.record_id = record_id;
+        $scope.creative_id = creative_id;
+        $scope.header_name = header_name;
+        $scope.modalInstance =  $uibModal.open({
+            templateUrl: "./templates/modals/RefineByTFNDialog.html",
+            controller: "RefineByTFNModalCtrl",
+            size: 'lg modal-dialog-centered',
+        });
+    }
     
 });
 
@@ -646,4 +658,59 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         $uibModalInstance.dismiss();
     }
 });
-  
+
+angular.module('drmApp').controller('RefineByTFNModalCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService){
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+
+    // Call brand List ui Grid
+    $scope.uigridRefineByTFNModdal = function() {
+        var formData = $rootScope.formdata;
+        var vm = this;
+        var config = {
+            headers : {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }
+        var c_dir = '6';
+        formData.sidx = "last_aired";
+        formData.sord = "desc";
+        formData.network_id = $rootScope.network_id;
+        formData.id = $rootScope.brand_id;
+        formData.area = 'brand';
+        formData.brand_id= $scope.record_id;
+        formData.record_id= $scope.record_id;
+        formData.creative_id = $scope.creative_id;
+        formData.header_name = $scope.header_name;
+
+        vm.gridOptionsRefineModal = {
+            enableGridMenu: true,
+            enableSelectAll: true,
+            enableSorting: true,
+            paginationPageSize: 10,
+            paginationTemplate: $rootScope.correctTotalPaginationTemplate,
+        };
+
+        vm.gridOptionsRefineModal.columnDefs = [
+            { name: 'network_name', pinnedLeft:true, displayName:'Network Name', cellTemplate: "<span title='row.entity.network_name'>{{COL_FIELD | limitTo: 12}}</span>"},
+            { name: 'last_aired', pinnedLeft:true, displayName:'Date/Time'},
+            { name: 'breaktype', pinnedLeft:true, displayName:'Breaktype'},
+            { name: 'phone_number', pinnedLeft:true, displayName:'Phone Number'},
+            { name: 'web_address', pinnedLeft:true, displayName:'Web Address'},
+            { name: 'program_name', pinnedLeft:true, displayName:'Program Name', cellTemplate: "<span title='row.entity.program_name'>{{COL_FIELD | limitTo: 18}}</span>"},
+            { name: 'video', pinnedLeft:true, displayName:'Play', cellTemplate: '<a href="javascript:void(0);"><i class="fa fa-play-circle-o fa-2x" onclick="displayThumbnail(row.entity.airing_id,row.entity.network_code,\'network_log_video\')"></i></a>'},
+            { name: 'thumbnail', pinnedLeft:true, displayName:'View', cellTemplate: '<a href="javascript:void(0);"><i class="fa fa-picture-o fa-2x col-00beff" ng-click="displayThumbnail(row.entity.airing_id,row.entity.network_code,\'network_log_thumbnil\')"></i></a>'},
+        ];
+        apiService.post('/view_airings_layout_tfn', formData, config)
+        .then(function (data) {
+            $scope.PostDataResponse = formData;
+            vm.gridOptionsRefineModal.data = data.data.rows;
+        }, function (response) {
+            // this function handlers error
+            console.log("rejected with", response);
+        });
+    }
+    $scope.uigridRefineByTFNModdal();
+
+});
