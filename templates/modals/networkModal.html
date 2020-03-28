@@ -25,10 +25,10 @@
     <div class="filter-in-letters border-top border-bottom pt-2 pb-2 text-center ln-letters" ng-show="networkTabList.length > 0">
        <a ng-repeat="letter in letterLists" ng-class="{'ln-selected' : selectedLetter == letter, 'ln-disabled' : hasTabLetterDisable(letter)}" ng-disabled ="hasTabLetterDisable(letter);" ng-click="changeLatter(letter)" class="ng-binding ng-scope">{{letter | uppercase}}</a>
     </div>
-    <ul id="networkTabDemoOne" class="networklist scrollbar">
+    <ul class="networklist scrollbar">
         <li ng-repeat="network in networkTabList | filter:networkSearchBy(searchNet, selectedLetter)" ng-init="network.isSelected = network.isSelected ? network.isSelected : false">
             <div class="checkbox">
-               <input type="checkbox" class="checkbox-custom tab_netwrok_list" custom-network-id="{{network.network_id}}" name="networkList" id="{{network.network_code}}" value="{{network.network_alias}}" ng-model="network.isSelected" custom-att="{{network.network_alias}}">
+               <input type="checkbox" class="checkbox-custom tab_netwrok_list" custom-network-id="{{network.network_id}}" name="networkList" id="{{network.network_code}}" value="{{network.network_alias}}" ng-model="network.isSelected" custom-att="{{network.network_alias}}" >
                <label for="{{network.network_code}}">
                     <span ng-if="checkLiveDateStatus(network.live_date)" title="Live: {{getLiveDate(network.live_date)}}">{{network.network_alias}}</span>
                     <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>

@@ -525,20 +525,19 @@ function __query_summary_ranking_report($params)
             $where_refine_by .= ' AND d.verified = 1';
         }
     }
-    if(!empty($network_code)){
+    if(!empty($network_id)){
         $where_network = ' AND d.network_id IN ('.$network_id.')';
         $table          = ' , program_master  p ';
         $table_join     = '  AND if(d.program = "", "Program unknown", d.program_id) = p.program_id';
     }
 
-    if((!empty($network_code) && empty($program_ids)) || ($apply_filter_called == 1)) {
+    if((!empty($network_id) && empty($program_ids)) || ($apply_filter_called == 1)) {
         $column_program = 'GROUP_CONCAT(DISTINCT (if(d.program ="", "Program unknown", d.program)), CONCAT("===", p.program_id ) SEPARATOR "|") as programs, ';
     }
-
     if(!empty($program_ids)){
         $where_program = ' AND p.program_id IN ('.$program_ids.')';
     }
-    if(empty($network_code)) {
+    if(empty($network_id)) {
         // $creative_count = $advOrBrandId == 'adv.adv_id' ? 'creative_count' : 'creative_count';
         $creative_or_brand_id = $advOrBrandId == 'adv.adv_id' ? 'b.brand_id' : 'd.creative_id';
         $brand_or_adv_id = $advOrBrandId == 'adv.adv_id' ? 'adv_id' : 'brand_id';
@@ -604,7 +603,7 @@ function __query_summary_ranking_report($params)
         $sql = "SELECT tbl.*, $no_of_brands as no_of_brands, $creative_count as creative_count  FROM ( ".$sql2.") tbl
         inner join temptable_creative  tc on $join_tbl
         ORDER BY spend_index DESC;";
-    } else if(!empty($network_code)){
+    } else if(!empty($network_id)){
         $sql = 'SELECT  '.$advOrBrandId.' ID,'.$column_program.'
         b.brand_id,
          b.adv_id, 
@@ -670,7 +669,6 @@ function __query_summary_ranking_report($params)
                 GROUP BY '.$advOrBrandId. ' 
                 ORDER BY '.$export_order_by ;
     }
-  
     return $sql;
 }
 

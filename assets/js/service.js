@@ -21,7 +21,6 @@ angular.module('starter.services', [])
                var pdf =  sessionStorage.pdf;
                var username = $cookies.get('loggedIn');
                var user_role = $cookies.get('userrole');
-      
                 if(pdf == 1){
                     username = true;
                 }

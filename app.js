@@ -5,11 +5,9 @@ var drmApp = angular.module('drmApp', ['ui.router', 'starter.services', 'ngCooki
 
 drmApp.config(function ($stateProvider, $urlRouterProvider) {
 
-    // $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/home');
 
     $stateProvider
-
-        // HOME STATES AND NESTED VIEWS ========================================
         .state('home', {
             url: '/home',
             templateUrl: 'templates/home.html',
