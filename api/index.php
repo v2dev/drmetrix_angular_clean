@@ -18757,12 +18757,7 @@ function getAlertsList(){
 function setTrackingDetail(){
     $request = Slim::getInstance()->request();
     $query_string = $request->getBody();
-    $set_one = explode('&', $query_string);
-    $requestData = $raw_data = array();
-    foreach($set_one as $k =>$v){
-        $raw_data  = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
+    $requestData = (array)json_decode($query_string, TRUE);
 
     $params['alert_type']       =   $requestData['alert_type'];
     $params['name']             =   urldecode($requestData['name']);
@@ -18776,11 +18771,9 @@ function setTrackingDetail(){
 
     $params['type_id']          = $type_id;
     $params['frequency']        = $frequency = urldecode($requestData['frequency']);
-    // $params['frequency']        = $frequency = str_replace('%2C', ",", $requestData['frequency']);
     $params['status']           = $requestData['status'];
     $params['tracked_elements'] = rtrim(urldecode($requestData['tracked_elements']),',');
     $params['user_id']          = $_SESSION['user_id'];
-    // $params['alert_type']       ='filter';
     $params['created_date']     = customDate('Y-m-d H:i:s');
     $params['schedule_email']   = $schedule_email_val = $frequency && $frequency != 'none' ? 1 : 0;
 

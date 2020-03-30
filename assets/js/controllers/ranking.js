@@ -426,7 +426,9 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 });
 
 angular.module('drmApp').controller('trackCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
-   
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
 });
 
 angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
@@ -707,38 +709,6 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         $uibModalInstance.dismiss();
     }
 
-    $scope.viewTrackingDialogue = function(alert_type, type_id, name, email_schedulable_direct, show_monthly) {
-        // email_schedulable_direct = alert_type == 'filter' && email_schedulable_direct != null && email_schedulable_direct ? email_schedulable_direct : '';
-        // var scope = angular.element($("#main_page")).scope();
-        // $("#alert_type_val").val(alert_type);
-        // $("#type_id_val").val(type_id);
-        // $("#tracker_element_name").html(name);
-        // $("#success_alert_setup_msg").hide();
-        // $("#error_alert_setup_msg").hide();
-        // $("#track_advertiser_input").prop('checked', false);
-        // $("#track_brand_input").prop('checked', false);
-        // $("#track_creative_input").prop('checked', false);
-        // $("input[name=alert-frequency][value='daily']").prop('checked', false);
-        // $("input[name=alert-frequency][value='weekly']").prop('checked', false);
-        // if (alert_type == 'filter') {
-        //     $('#following_occurs,#brand_classification_div').hide();
-    
-        //     setAlertClose(1, type_id, email_schedulable_direct);
-    
-        //     if (show_monthly /*filter_criteria.toLowerCase().indexOf('current quarter') != -1*/) {
-        //         scope.show_monthly = 1;
-        //     } else {
-        //         scope.show_monthly = 0;
-        //     }
-        // } else {
-        //     $('#following_occurs,#brand_classification_div').show();
-        // }
-        // scope.showTrackingDialogue(alert_type, type_id, name);
-    }
-    
-
-  
-   
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
