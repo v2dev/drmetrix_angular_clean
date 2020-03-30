@@ -2,31 +2,31 @@
 <div class="modal-header">
     <h5 class="modal-title">Set Alert</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true"></span>
+    <span aria-hidden="true" ng-click="closeModal();"></span>
     </button>
 </div>
 <div class="modal-body">
     <div class="d-flex pb-2">
-    <span id="tracker_element_name" class="element_name"></span>
+    <span id="tracker_element_name" class="element_name" ng-model="tracker_element_name"></span>
     </div>
     <div class="edit-parent-container border-top" id="following_occurs">
     <div class="edit-inner-div pt-3 d-flex">
         <p>Alert when the following occurs: </p>
         <ul>
             <li class="text-center checkbox" id="track_advertiser_ul" ng-show="track_advertiser">
-                <input type="checkbox" id="track_advertiser_input" name="track_advertiser_input" ng-checked="isAdvSelected">
+                <input type="checkbox"  ng-model="$parent.isAdvSelected">{{isAdvSelected}}
                 <label for="track_advertiser_input" class="checkbox-custom-label">
                 <span class="v-align-middle">New Advertisers are Detected</span>
                 </label>
             </li>
             <li class="text-center checkbox" id="track_brand_ul" ng-show="track_brand">
-                <input type="checkbox" id="track_brand_input" name="track_brand_input" ng-checked="isBrandSelected">
+                <input type="checkbox"  ng-model="$parent.isBrandSelected">{{isBrandSelected}}
                 <label for="track_brand_input"  class="checkbox-custom-label">
                 <span class="v-align-middle">New Brands are Detected</span>
                 </label>
             </li>
             <li class="text-center checkbox" id="track_creative_ul" ng-show="track_creative" >
-                <input type="checkbox" id="track_creative_input" name="track_creative_input" ng-checked="isCreativeSelected">
+                <input type="checkbox" ng-model="$parent.isCreativeSelected"> {{isCreativeSelected}}
                 <label for="track_creative_input"  class="checkbox-custom-label">
                 <span class="v-align-middle">New Creative are Detected</span>
                 </label>
@@ -53,24 +53,12 @@
                 <label class="m-top5"></label>
                 </div>
             </li>
-            <li class="text-center checkbox">
-                <input type="checkbox" id="alert_frequency_daily" name="alert_frequency_daily" value="daily" >
-                <label for="alert_frequency_daily" class="checkbox-custom-label">
-                <span class="v-align-middle">Daily</span>
+            <li class="text-center checkbox" ng-repeat="frequency in tracking_frequency">
+                <input type="checkbox"  value="{{frequency.value}}" id="{{frequency.id}}" class="checkbox-custom-label" ng-model="frequency.selected" />
+                <label for="{{frequency.id}}">
+                    {{frequency.value}}
                 </label>
-            </li>
-            <li class="text-center checkbox">
-                <input type="checkbox" id="alert_frequency_weekly" name="alert_frequency_weekly" value="weekly" >
-                <label for="alert_frequency_weekly" class="checkbox-custom-label">
-                <span class="v-align-middle">Weekly</span>
-                </label>
-            </li>
-            <li class="text-center checkbox" ng-show="show_monthly">
-                <input type="checkbox" id="alert_frequency_monthly" name="alert_frequency_monthly" value="monthly" >
-                <label for="alert_frequency_monthly" class="checkbox-custom-label">
-                <span class="v-align-middle">monthly</span>
-                </label>
-            </li>
+             </li>
         </ul>
     </div>
     <div class="border-top edit-inner-div pt-2 d-flex">
@@ -78,19 +66,14 @@
         <span class="notice-email">Email</span>
     </div>
     </div>
-    <div class="row pl-3 pr-3" style="display:none;">
-    <input class="col-md-6" type="text" id="alert_type_val" name="alert_type_val" val="" />
-    <input class="col-md-6" type="text" id="type_id_val" name="type_id_val" val="" />
+    <div class="align-center" id="success_alert_setup_msg" ng-bind-html="success_alert_setup_msg | trustAsHtml" ng-show="success_alert_setup_msg != ''" >
     </div>
-    <div class="align-center" id="success_alert_setup_msg" style="display:none;" >
-    </div>
-    <div class="align-center" id="error_alert_setup_msg" style="display:none;" >
-    </div>
+    <div class="align-center" id="error_alert_setup_msg" ng-bind-html="error_alert_setup_msg | trustAsHtml" ng-show="error_alert_setup_msg != ''"></div>
     <div class="btn-grp d-flex justify-content-end pt-3" id="feedback_msg_block_btn">
     <button id="cancel_tracking_btn" class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
-    <button class="btn btn-blue" type="Set" id="set_tracking_btn"><i class="fa fa-check" title="apply"></i>Set</button>
-    <button class="btn btn-blue" type="button" id="del_tracking_btn" style="display:none;"><i class="fa fa-trash" title="cancel"></i>Delete</button>
-    <div id="other_tracking_actions" ng-bind-html="tracking_option | trustAsHtml"></div>
+    <button class="btn btn-blue" type="Set" id="set_tracking_btn" ng-click="setTracking();"><i class="fa fa-check" title="apply"></i>Set</button>
+    <button class="btn btn-blue" type="button" id="del_tracking_btn" style="display:none;"><i class="fa fa-trash" title="cancel"></i>Delete</button>  <!-- displayed in configure emails  -->
+    <div id="other_tracking_actions" ng-bind-html="tracking_action | trustAsHtml"></div>
     </div>
 </div>
        
