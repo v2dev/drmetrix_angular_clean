@@ -1,74 +1,105 @@
-
- <!-- primary filter -->
- <div ng-if="page_call == 'ranking'">
-
- <div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
-   
-<div class="container-fluid" id="ranking_page" ng-init="initializeRankingPage();">
-    <div class="row">
-        <category-part data="$ctrl.category_list"></category-part> 
-        <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
-            <div class="notify-msg">
-                <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
-                <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
-                <span ng-if="lifetime_error" >For date range > 1 year, you can select up to 5 categories to enable &quot;Apply&quot; button</span>
-            </div>
-            <div class="disclaimer-msg d-md-flex justify-content-between align-items-center" ng-show="networkDisplayName != ''">
-                <span>Selected Network: <b>{{networkDisplayName}}</b></span>
-            </div>
-            <div class="top-grid-filter">
-                <div class="network">
-                    <div class="search-input">
-                        <span class="search-icon">
-                            <i data-feather="search"></i>
-                        </span>
-                        <input type="search" placeholder="Search Brands">
-                        <i class="fa fa-times-circle"></i>
-                    </div>
-                    <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network');"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
-                    <button class="btn btn-blue btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-align-justify" title="Track"></i> <span>Network Log</span></button>
-                </div>
-                <div class="filter-refine-by">
-                    <span>Refine By</span>
-                    <ul>
-                        <li>
-                            Network
-                            <div class="open-filter-popup custom-tooltip" ng-click="openNetworkLogModal();">{{networkDisplayName ? networkDisplayName : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
-                                <div class="top">
-                                    <i></i>
-                                    All
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            New
-                            <span class="open-filter-popup capitalize" ng-click="openNewTypeModal();" >
-                                {{newCheckBox ? newType : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
-                            </span>
-                        </li>
-                        <li>
-                            TFN/URL
-                            <span class="open-filter-popup" ng-click="openRefineModal();">
-                                {{refine_by ? refine_by : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
-                            </span>
-                        </li>
-                        <li ng-show="selectedNetwork != ''">
-                            Programs
-                            <span class="open-filter-popup" ng-click="openProgramModal();">
-                                {{programs_id ? 'Custom' : 'All'}} Programs <i class="fa fa-caret-down fa-lg"></i>
-                            </span>
-                        </li>
-                        
-                        <li>
-                            <button class="btn btn-blue btn-sm"><i class="fa fa-save"></i> Save Filter</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </main>
+<div class="common-menu">
+    <!-- black-top menu -->
+    <div class="black-top-menu" ng-init="showTab('brands')" ng-show="headerDisplay == 1">
+        <ul class="left-menu">
+            <li>Welcome {{complete_name}},</li>
+            <li ng-class="{'active-alert' : type == 'brands'}">
+                <a ng-click="showTab('brands')">
+                    <label for="">Brands</label>
+                </a>
+            </li>
+            <li ng-class="{'active-alert' : type == 'advertisers'}">
+                <a ng-click="showTab('advertisers')">
+                    <label for="">Advertisers</label>
+                </a>
+            </li>
+        </ul>
+        <ul class="checkbox-filter">
+            <li class="filter-listing">
+                <a href="" id="chooseList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="dropdown-toggle save-list show-list-option">Choose List</a>
+                <div class="dropdown-menu"  aria-labelledby="chooseList">
+                        <a href="" ng-click="call_brand_tab_list('brand')" class="dropdown-item s">Brands List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+                        <a href="" ng-click="call_brand_tab_list('advertiser')" class="dropdown-item s">Advertisers List <i class="fa fa-caret-down fa-lg downarrow-icon"></i></a>
+                </div> 
+                </li>                
+            <li>
+                <a href="" class="filter-listing"  ng-click="call_filter_list();">
+                    Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
+                </a>
+            </li>
+            <li>
+                <a class="btn btn-blue">
+                    <i class="fa fa-download"></i> Excel
+                </a>
+            </li>
+        </ul>
     </div>
-    <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div>
+    <!-- primary filter -->
+    <div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
 </div>
+   
+<div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">
+    <category-part data="$ctrl.category_list"></category-part> 
+    <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
+        <div class="notify-msg">
+            <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
+            <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
+            <span ng-if="lifetime_error" >For date range > 1 year, you can select up to 5 categories to enable &quot;Apply&quot; button</span>
+        </div>
+        <div class="disclaimer-msg d-md-flex justify-content-between align-items-center" ng-show="networkDisplayName != ''">
+            <span>Selected Network: <b>{{networkDisplayName}}</b></span>
+        </div>
+        <div class="top-grid-filter">
+            <div class="network">
+                <div class="search-input">
+                    <span class="search-icon">
+                        <i data-feather="search"></i>
+                    </span>
+                    <input type="search" placeholder="Search Brands">
+                    <i class="fa fa-times-circle"></i>
+                </div>
+                <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network');"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
+                <button class="btn btn-blue btn-sm" ng-show="networkDisplayName != ''"><i class="fa fa-align-justify" title="Track"></i> <span>Network Log</span></button>
+            </div>
+            <div class="filter-refine-by">
+                <span>Refine By</span>
+                <ul>
+                    <li>
+                        Network
+                        <div class="open-filter-popup custom-tooltip" ng-click="openNetworkLogModal();">{{networkDisplayName ? networkDisplayName : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
+                            <div class="top">
+                                <i></i>
+                                All
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        New
+                        <span class="open-filter-popup capitalize" ng-click="openNewTypeModal();" >
+                            {{newCheckBox ? newType : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
+                        </span>
+                    </li>
+                    <li>
+                        TFN/URL
+                        <span class="open-filter-popup" ng-click="openRefineModal();">
+                            {{refine_by ? refine_by : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
+                        </span>
+                    </li>
+                    <li ng-show="selectedNetwork != ''">
+                        Programs
+                        <span class="open-filter-popup" ng-click="openProgramModal();">
+                            {{programs_id ? 'Custom' : 'All'}} Programs <i class="fa fa-caret-down fa-lg"></i>
+                        </span>
+                    </li>
+                    
+                    <li>
+                        <button class="btn btn-blue btn-sm"><i class="fa fa-save"></i> Save Filter</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div>
+    </main>
 </div>
 
 <div class="" ng-include="'templates/airingDetail.html'"></div>
