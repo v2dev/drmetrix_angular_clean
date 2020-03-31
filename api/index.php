@@ -15466,10 +15466,19 @@ function displayAiringsBrandsWithNetworks($export = 0,$brand_ids = NULL) {
     $export_data = array();
     $request = Slim::getInstance()->request();
     $query_string = $request->getBody();
+    parse_str($query_string, $requestData);
+    $requestData = (array)json_decode($query_string, TRUE);
+    $keys = array_keys($requestData);
+    $query_string_new = '';
 
-    $apply_data_array['query_string']   = $query_string;
-    $query_string                      = $query_string.'&page_call=network';
-    $criteria                           = get_filter_text($query_string);
+    foreach($keys as $key) {
+        $query_string_new .= $key. '='.$requestData[$key].'&';
+    }
+
+    $apply_data_array['query_string']   = $query_string_new;
+    $requestData['page_call']           = 'network';
+    $query_string_new                      = $query_string_new.'&page_call=network';
+    $criteria                           = get_filter_text($query_string_new);
     $_SESSION['apply_filter_criteria']  = addslashes($criteria['save_text']);
     $apply_data_array['criteria']       = $_SESSION['apply_filter_criteria'];
     $apply_data_array['page']                     = 1;

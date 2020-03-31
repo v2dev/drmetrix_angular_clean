@@ -355,11 +355,11 @@ select::-ms-expand {
 /* Checkbox normal*/
 
 input[type="checkbox"].checkbox-custom, input[type="radio"].radio-custom-checkbox, .network-content input[type="radio"].radio-custom {
-  opacity: 0;
+  /* opacity: 0;
   position: absolute;
   left: 0;
   top: 2px;
-  margin: 0;
+  margin: 0; */
 }
 
 
@@ -399,10 +399,10 @@ input[type="checkbox"].checkbox-custom, input[type="radio"].radio-custom-checkbo
 }
 
 input[type="checkbox"].checkbox-custom {
-  opacity: 0;
+  /* opacity: 0;
   position: absolute;
   width: 18px;
-  height: 18px;
+  height: 18px; */
 }
 
 .radio-custom-checkbox+.radio-custom-checkbox-label:before {

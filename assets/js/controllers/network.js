@@ -148,6 +148,9 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
         $scope.selected_network_ids = selected_network_id;
         $cookies.put("selected_network_code",selected_network_code);
         $cookies.put("selected_network_id",selected_network_id);
+
+        $rootScope.selected_network_code = selected_network_code;
+        $rootScope.selected_network_id = selected_network_id;
       
         if ($scope.type) {
             $scope.jqgridBrandNetworkAirings();
@@ -160,6 +163,59 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
 
     $scope.jqgridBrandNetworkAirings = function() {
         console.log('brand grid called');
+
+        /* Network brand grid called */
+        $scope.uigridNetworkAiringBrand();
+    }
+
+    $rootScope.uigridNetworkAiringBrand = function() {
+        var formData = $rootScope.formdata;
+        formData.unchecked_category = '';
+        formData.length_unchecked = 0;
+        // formData.network_code = $rootScope.selected_network_code;
+        // formData.network_id = $rootScope.selected_network_id;
+        formData.networkTab = 'spend_index';
+        formData.lifetime_flag = false;
+        formData.all_ytd_flag = false;
+        formData.breaktype = 'A';
+        formData.sidx = 'Total Dollars_spend_index';
+        var vm = this;
+        var config = {
+            headers : {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }
+        var c_dir = '6';
+        var correctTotalPaginationTemplate =
+        "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"prev-page\"></div></button> Page <input ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\"> of </abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"next-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-page\"></div></button></div></div><div class=\"ui-grid-pager-count-container\"></div></div>";    
+        vm.gridNetworkAiringBrand = {
+            enableGridMenu: true,
+            enableSelectAll: true,
+            enableSorting: true,
+            //Pagination
+            paginationPageSizes: [20],
+            paginationPageSize: 20,
+            paginationTemplate: correctTotalPaginationTemplate,
+        };
+
+        apiService.post('/display_airings_brands_with_networks', formData, config)
+        .then(function (response) {
+            var data = response.data;
+            $scope.PostDataResponse = formData;
+            vm.gridNetworkAiringBrand.data = data.rows;
+            var checkedPrograms = [];
+            if (data.programs.length != 0) {
+                $rootScope.checkedRankingPrograms   =  checkedPrograms;
+                $rootScope.ranking_programs         =  data.programs;
+            }
+            vm.gridNetworkAiringBrand.columnDefs = [
+                { name: 'id', pinnedLeft:true, width: '60' },
+
+            ];
+        }, function (response) {
+            // this function handlers error
+            console.log("rejected with", response);
+        });
     }
 
 });
