@@ -447,9 +447,12 @@ $scope.shortFormTrackingClassification = [
         $scope.applyFilter();
      });
 
-     $scope.hideTrackingModal() {
-        $timeout(function () {  $scope.modalInstanceMain.close(); }, 2000);
-        $scope.success_alert_setup_msg = $scope.error_alert_setup_msg = '';
+     $scope.hideTrackingModal = function() {
+        $timeout(function () {  
+            $scope.success_alert_setup_msg = $scope.error_alert_setup_msg = '';
+            $scope.modalInstanceMain.close(); 
+        }, 2000);
+       
      }
 
      $scope.viewTrackingDialogue = function(alert_type, type_id, name) {
@@ -538,10 +541,6 @@ $scope.shortFormTrackingClassification = [
         var name            = $scope.tracker_element_name;
         var status = "active";
         var elements = frequency = brand_class = "";
-        console.log($scope.isAdvSelected);
-        console.log($scope.isBrandSelected);
-        console.log($scope.isCreativeSelected);
-        debugger;
         if ($scope.isAdvSelected) {
             elements += "advertiser,";
         }
