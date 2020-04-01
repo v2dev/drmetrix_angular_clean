@@ -1,7 +1,7 @@
 angular.module('drmApp.directives', []);
 
 var drmApp = angular.module('drmApp', ['ui.router', 'starter.services', 'ngCookies', 'ui.bootstrap', 'ngTouch', 'ui.grid', 'ui.grid.pagination', 'ui.grid.autoResize', 'ui.grid.expandable',
-    'ui.grid.selection', 'ui.grid.treeView', 'ui.grid.exporter', 'ui.grid.edit', 'ui.bootstrap', 'drmApp.directives']);
+    'ui.grid.selection', 'ui.grid.treeView', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.cellNav', 'ui.bootstrap', 'drmApp.directives']);
 
 drmApp.config(function ($stateProvider, $urlRouterProvider) {
 
