@@ -172,8 +172,11 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
         var formData = $rootScope.formdata;
         formData.unchecked_category = '';
         formData.length_unchecked = 0;
-        // formData.network_code = $rootScope.selected_network_code;
-        // formData.network_id = $rootScope.selected_network_id;
+        var network_code = $rootScope.selected_network_code;
+        formData.network_code = network_code.toString();
+        var network_ids = $rootScope.selected_network_id;
+        formData.network_id = network_ids.toString();
+        formData.page = 1;
         formData.networkTab = 'spend_index';
         formData.lifetime_flag = false;
         formData.all_ytd_flag = false;
@@ -203,11 +206,11 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
             var data = response.data;
             $scope.PostDataResponse = formData;
             vm.gridNetworkAiringBrand.data = data.rows;
-            var checkedPrograms = [];
-            if (data.programs.length != 0) {
-                $rootScope.checkedRankingPrograms   =  checkedPrograms;
-                $rootScope.ranking_programs         =  data.programs;
-            }
+            // var checkedPrograms = [];
+            // if (data.length != 0) {
+            //     $rootScope.checkedRankingPrograms   =  checkedPrograms;
+            //     $rootScope.ranking_programs         =  data.rows;
+            // }
             vm.gridNetworkAiringBrand.columnDefs = [
                 { name: 'id', pinnedLeft:true, width: '60' },
 
