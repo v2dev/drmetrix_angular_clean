@@ -35,7 +35,7 @@
         </ul>
     </div>
     <!-- primary filter -->
-    <div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
+    <div class="main-filter" ng-show="headerDisplay == 1" ng-include="'templates/primary_filter.html'"></div>
 </div>
    
 <div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">

@@ -5,7 +5,7 @@ var drmApp = angular.module('drmApp', ['ui.router', 'starter.services', 'ngCooki
 
 drmApp.config(function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/home');
+    // $urlRouterProvider.otherwise('/home');
 
     $stateProvider
         .state('home', {
@@ -46,9 +46,9 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
         })
         // .state('airingDetail', {
         //     url: '/airingDetail',
-        //     templateUrl: 'templates/modals/airingDetail.html',
-        //     controller: 'RankingController'
-        // });
+        //     templateUrl: 'templates/airingDetail.html',
+        //     controller: 'airingsDetailController'
+        // })
         .state('globalSearch', {
             url: '/globalSearch',
             templateUrl: 'templates/globalSearch.html',
@@ -58,5 +58,11 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             url: '/configureEmails',
             templateUrl: 'templates/configureEmails.html',
             controller: 'ConfigureEmailsController'
-        });
+        })
+        // .state('otherwise', {
+        //     url : '/home',
+        //     templateUrl: 'templates/home.html',
+        //     controller: 'LoginController'
+        // }
+
 });

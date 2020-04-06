@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h5 class="modal-title">All Days of Week</h5>
+    <button type="button" class="close" id="close-dow" ng-click="closeModal();" title="Close" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <ul class="heading-border">
+        <li class="checkbox-radio">
+            <input type="radio" value="all" id="all_dow" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
+            <label for="all_dow" class="radio-custom-checkbox-label ">All Days of Week</label>
+        </li>
+    </ul>
+    <ul class="heading-border">                            
+        <li class="checkbox-radio">
+            <input type="radio"  value="weekday" id="weekday" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
+            <label for="weekday" class="radio-custom-checkbox-label">Weekday</label>
+        </li>
+        <li class="checkbox-radio">
+            <input type="radio" value="weekend" id="weekend" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
+            <label for="weekend" class="radio-custom-checkbox-label">Weekend</label>
+        </li>
+         <li class="checkbox-radio">
+            <input type="radio" value="custom" id="custom" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
+            <label for="custom" class="radio-custom-checkbox-label">Select Custom Day</label>
+        </li>
+    </ul>
+    <ul>
+        <li class="checkbox" ng-repeat="week in weeks" >
+            <input type="checkbox" class="opt_day" ng-value="week.id" id="dow_{{week.id}}" ng-model="week.isSelected" ng-disabled="selectedWeekType != 'custom'"/>
+            <label for="dow_{{week.id}}">{{week.sortName}}</label>
+        </li>
+    </ul>
+</div>
