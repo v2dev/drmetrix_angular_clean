@@ -2963,6 +2963,11 @@ header.sticky-top {
 .user-contact-block .owl-carousel .owl-nav button.disabled {
   color: #ccc;
 }
+.welcome-text {
+  color: #fff;
+  padding-right: 25px;
+  font-size: 0.9rem;
+}
 
 /*mobile primary filter*/
 

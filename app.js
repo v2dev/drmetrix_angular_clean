@@ -5,7 +5,7 @@ var drmApp = angular.module('drmApp', ['ui.router', 'starter.services', 'ngCooki
 
 drmApp.config(function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/home');
+    // $urlRouterProvider.otherwise('/home');
 
     $stateProvider
         .state('home', {
@@ -33,7 +33,11 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/userAccount.html',
             controller: 'UserController'
         })
-
+        .state('adminConsole', {
+            url: '/adminConsole',
+            templateUrl: 'templates/adminConsole.html',
+            controller: 'AdminController'
+        })
         .state('forgotPassword', {
             url: '/forgotPassword',
             templateUrl: 'templates/forgot-password.html',
