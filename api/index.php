@@ -11487,8 +11487,6 @@ function multi_in_array($value, $array)
 }
   
 function getNetworksList(){
-    ini_set('memory_limit','2192M');
-    // show( ini_get('memory_limit'));
     $data = $result = array();
     $network_arr = array();
     $nestedData=array();   
@@ -11497,15 +11495,9 @@ function getNetworksList(){
     $all_programs = $program_brand  = $setUniqueAllPrograms = $checkedPrograms = $setAllPrograms = array();
     
     $db = getConnection();
-    
     $request = Slim::getInstance()->request();
-    $query_string = $request->getBody();       
-    $set_one = explode('&', $query_string);
-    
-    foreach($set_one as $k =>$v){
-        $raw_data  = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
+    $query_string = $request->getBody();
+    $requestData = (array)json_decode($query_string, TRUE);
     $where_category = '';
     $_order_by      = ' n.network_alias ';    
     $c              = urldecode($requestData['c']);  
@@ -11575,6 +11567,7 @@ function getNetworksList(){
         foreach($result2 as $k => $v){
             $setAllPrograms[$v['program_id']]['network_id'] =  $v['network_id'];
             $setAllPrograms[$v['program_id']]['program']    =  $v['program'];
+            $setAllPrograms[$v['program_id']]['isSelected'] = true;
         }
     }
 

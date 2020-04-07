@@ -13,7 +13,7 @@
         <li ng-repeat="time in timeData">
             <span>{{time.type}}</span>
             <ul class="d-flex ml-0">
-                <li class="checkbox"  ng-repeat="item in time.data" ng-init="item.isSelected = true">
+                <li class="checkbox"  ng-repeat="item in time.data">
                     <input type="checkbox" class="ahod_checked" ng-value="{{item.value}}" id="hod_{{item.value}}" ng-model="item.isSelected" ng-click="changeHod(item.isSelected,timeData)"/>
                     <label for="hod_{{item.value}}">{{item.text}}</label>
                 </li>

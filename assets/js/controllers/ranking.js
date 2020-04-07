@@ -408,7 +408,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.backToRankingpage = function() {
-       $scope.page_call = '/#!/ranking';
+       $scope.page_call = 'ranking';
     }
 
     $scope.overlayForAirings = function (record_id, creative_id, header_name) {

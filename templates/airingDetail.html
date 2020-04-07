@@ -7,7 +7,7 @@
                 <li ng-click="openModalDialog('network')" ng-show="selectedNetwork == '' ">
                     {{network_display_text === 0 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Networks<i class="fa fa-caret-down"></i>
                 </li>
-                <li ng-click="openModalDialog('dow')">
+                <li ng-click="openModalDialog('dow')">{{selectedWeekType}}
                     {{dow_display_text === 0 ? 'All' : custom_variable > 1 ? 'Cus.' : 'Custom'}} Days of Week<i class="fa fa-caret-down"></i>
                 </li>
                 <li ng-click="openModalDialog('hod')">
@@ -16,13 +16,13 @@
                 <li ng-click="openModalDialog('dayparts')" >
                     {{daypart_display_text === 0 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Dayparts<i class="fa fa-caret-down"></i>
                 </li>
-                    <li id="programLbl" data-toggle="modal" ng-click="openModalDialog('program')">
+                    <li id="programLbl" ng-click="openModalDialog('programs')">
                     {{all_program_selected == 1 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Programs<i class="fa fa-caret-down"></i>
                 </li>
              </ul>
             <div>
                 <input type="hidden" id="brand_adv_id">
-                <button class="btn btn-blue apply-btn" ng-click="setGraphSessionValue();filter_graph()"><i class="fa fa-check" title="apply"></i>Apply</button>
+                <button class="btn btn-blue apply-btn" ng-click="filter_graph()"><i class="fa fa-check" title="apply"></i>Apply</button>
                 <button class="btn btn-blue ml-2" ng-click="resetFilter('rf')"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
             </div>
         </div>
