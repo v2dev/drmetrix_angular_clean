@@ -1703,10 +1703,18 @@ angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, 
             enableSorting: true,
             paginationPageSize: 10,
             paginationTemplate: $rootScope.correctTotalPaginationTemplate,
+            enableCellEdit: false,
+            enableCellEditOnFocus: true,
+            onRegisterApi: (gridApi) => {
+                gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
+                    console.log('edited row id:' + rowEntity.id + ', Column:' + colDef.name + ', newValue:' + newValue + ', oldValue:' + oldValue);
+                    // Make an API here to update file name on server or to validate invalie/duplicate file name
+                });
+            },
         };
 
         vm.gridOptionsReports.columnDefs = [
-            { name: 'file_name', pinnedLeft:true, displayName:'File Name'},
+            { name: 'file_name', pinnedLeft:true, displayName:'File Name', enableCellEdit: true},
             { name: 'filesize', pinnedLeft:true, displayName:'File Size'},
             // { name: 'download_link', pinnedLeft:true, displayName:'Download Link', cellTemplate: '<span ng-if="(row.entity.status == completed)"></span>' },
             { name: 'email_alert', pinnedLeft:true, displayName:'Email Alert', cellTemplate:
