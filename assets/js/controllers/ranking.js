@@ -15,6 +15,12 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $scope.ranking = {searchText: ''};
     }
 
+    $scope.apiHeaderConfig = {
+        headers : {
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    }
+
     $scope.initialisation() ;
 
     feather.replace();
@@ -174,7 +180,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 { name: 'creative_count', displayName: 'Creatives',
                 cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subBrandGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>', width: '100' },
 
-                { name: 'category_name', displayName: 'Category', cellTemplate:'<a href="#"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover" ng-click="grid.appScope.fetchList(row.entity.id,\''+formData.type+'\',row.entity.category_name);"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"> - </span></a>', width: '180' },
+                { name: 'category_name', displayName: 'Category', cellTemplate:'<div ng-click="grid.appScope.fetchList(row.entity,\''+formData.type+'\');"><a href="javascript://"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} - </span></a><div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_{{row.entity.id}}" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"></div>', width: '180' },
 
                 { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate:'<a href="#"><span ng-if="row.entity.advertiser_name!=\'\'" class="tooltip-hover" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',\'\',\'\',\'ranking\',row.entity.need_help);">{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.advertiser_name==\'\'"> - </span></a>', width: '230' },
 
@@ -192,6 +198,58 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
                 { name: 'tracking', displayName: "Tracking", cellTemplate: '<a href="#"><i custom-attr="brand_\'{{row.entity.id}}\'" class="fa fa-eye-slash grey-eye" title="Track"></i></a>', width: '110' }
             ];
+        }, function (response) {
+            // this function handlers error
+        });
+    }
+
+    $scope.fetchList = function(rowEntity, tab) {
+        let flag = '';
+        let id = row_id = rowEntity.id;
+        let category_name = rowEntity.category_name;
+        var data = {
+            id: id,
+            tab: tab,
+            unchecked_category: '',
+            is_adv_page : sessionStorage.is_adv_page
+        }
+        var html = '';
+        apiService.post('/display_categories', data, $scope.apiHeaderConfig)
+        .then(function (response) {
+            let data = response.data;
+            if (data.status) {
+                if (flag == 'my_report') {
+                    $('#cat_col_dropdown_' + row_id).parent('td').addClass('table-overflow');
+                    $('#cat_col_dropdown_' + row_id).parent('td').find('a').addClass('link-overflow');
+                    global_id = row_id;
+                } else if (sessionStorage.is_adv_page == 1) {
+                    $('#advshort_cat_col_dropdown_' + id).parent('td').addClass('table-overflow');
+                    $('#advshort_cat_col_dropdown_' + id).parent('td').find('a').addClass('link-overflow');
+                    $('#advlong_cat_col_dropdown_' + id).parent('td').addClass('table-overflow');
+                    $('#advlong_cat_col_dropdown_' + id).parent('td').find('a').addClass('link-overflow');
+                } else {
+                    $('#cat_col_dropdown_' + id).parent('td').addClass('table-overflow');
+                    $('#cat_col_dropdown_' + id).parent('td').find('a').addClass('link-overflow');
+                    global_id = id;
+                }
+
+                html = '';
+                $.each(data.result, function (key, value) {
+                    html = html + '<ul class="no-bullet cat_col_subcat" style="display: flex;"><li>' + value.category + '</li><li>' + value.sub_category + '</li></ul>';
+                });
+                if (flag == 'my_report') {
+                    $('#cat_col_dropdown_' + row_id).html(html);
+                    $('#cat_col_dropdown_' + row_id).css('display', 'block');
+                } else if (sessionStorage.is_adv_page == 1) {
+                    $('#advshort_cat_col_dropdown_' + id).html(html);
+                    $('#advshort_cat_col_dropdown_' + id).css('display', 'block');
+                    $('#advlong_cat_col_dropdown_' + id).html(html);
+                    $('#advlong_cat_col_dropdown_' + id).css('display', 'block');
+                } else {
+                    $('#cat_col_dropdown_' + id).html(html);
+                    $('#cat_col_dropdown_' + id).css('display', 'block');
+                }
+            }
         }, function (response) {
             // this function handlers error
         });
