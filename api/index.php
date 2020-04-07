@@ -220,15 +220,16 @@ $app->run();
 function displayCategories(){
     $request = Slim::getInstance()->request();
     $query_string = $request->getBody();
-    $set_one = explode('&', $query_string);
+    $set_one = json_decode($query_string);
+
     $requestData = $raw_data = array();
      foreach($set_one as $k =>$v){
-        $raw_data  = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
+        $requestData[$k] = $v;
     }
     $id     = $requestData['id'];
     $tab    = $requestData['tab'];
-    $subCategory = urldecode($requestData['unchecked_category']);
+    $unchecked_category = isset($requestData['unchecked_category']) ? urldecode($requestData['unchecked_category']) : '';
+    $subCategory = $unchecked_category;
     $subCategoryArray = explode(",",$subCategory);
 
     $where = ($tab == 0) ? $id : '(SELECT brand_id FROM brand WHERE adv_id = '.$id.')';
