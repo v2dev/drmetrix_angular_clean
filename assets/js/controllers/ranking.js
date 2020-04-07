@@ -12,8 +12,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         
         //date filter
         $scope.otherDiv = 0;
-      
-        
+        $scope.ranking = {searchText: ''};
     }
 
     $scope.initialisation() ;
@@ -103,6 +102,9 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 sheet.data.push(cols);
             },
             onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+                $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
+
                 gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
                     // formData.network_code = null;
                     // formData.programs_ids = '';
@@ -389,6 +391,26 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     $scope.openRefineModal = function() {
         $scope.openModal('./templates/modals/refineDialog.html','refineCtrl','md modal-dialog-centered');
     }
+
+    $scope.filterGridWithSearchText = function() {
+        $scope.gridApi.grid.refresh();
+    }
+
+    $scope.singleFilter = function( renderableRows ){
+        var matcher = new RegExp($scope.ranking.searchText);
+        renderableRows.forEach( function( row ) {
+          var match = false;
+          [ $rootScope.type == 'brands' ? "brand_name" : "advertiser_name" ].forEach(function( field ){
+            if ( row.entity[field].match(matcher) ){
+              match = true;
+            }
+          });
+          if ( !match ){
+            row.visible = false;
+          }
+        });
+        return renderableRows;
+      };
 
     $scope.openNetworkLogModal = function() {
         $scope.openModal('./templates/modals/networkLogDialog.html','networkLogCtrl','xl modal-dialog-centered');

@@ -55,7 +55,7 @@
                     <span class="search-icon">
                         <i data-feather="search"></i>
                     </span>
-                    <input type="search" placeholder="Search Brands">
+                    <input type="search" placeholder="Search Brands" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
                     <i class="fa fa-times-circle"></i>
                 </div>
                 <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network');"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
