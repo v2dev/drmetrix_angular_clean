@@ -3,9 +3,11 @@ angular.module("drmApp").controller("airingsDetailController", function($scope, 
         // $state.go('home');
         // return;
     }
+    $scope.dow_display_text = $scope.hod_display_text = $scope.daypart_display_text = 0;
+    $scope.all_day = []; $scope.all_hour = []; $scope.all_dayparts = []; $scope.all_programs = []; $scope.all_networks = [];
+    $rootScope.all_program_selected = true;
     $rootScope.headerDisplay = 0;
     $rootScope.if_creative = 0;
-    $scope.network_display_text = $scope.dow_display_text = $scope.hod_display_text = $scope.daypart_display_text = 0;
     $scope.custom_variable = 0;
     $rootScope.selectedWeekType = 'all'; 
     $rootScope.allHour = true; 
@@ -13,35 +15,35 @@ angular.module("drmApp").controller("airingsDetailController", function($scope, 
         {
             'type': 'AM',
             'data': [
-                { 'text': '12A', 'value': 0 },
-                { 'text': '1A', 'value': 1 },
-                { 'text': '2A', 'value': 2 },
-                { 'text': '3A', 'value': 3 },
-                { 'text': '4A', 'value': 4 },
-                { 'text': '5A', 'value': 5 },
-                { 'text': '6A', 'value': 6 },
-                { 'text': '7A', 'value': 7 },
-                { 'text': '8A', 'value': 8 },
-                { 'text': '9A', 'value': 9 },
-                { 'text': '10A', 'value': 10 },
-                { 'text': '11A', 'value': 11 }
+                { 'text': '12A', 'value': 0 , 'isSelected'  : true},
+                { 'text': '1A', 'value': 1, 'isSelected'  : true },
+                { 'text': '2A', 'value': 2, 'isSelected'  : true },
+                { 'text': '3A', 'value': 3, 'isSelected'  : true},
+                { 'text': '4A', 'value': 4 , 'isSelected'  : true},
+                { 'text': '5A', 'value': 5 , 'isSelected'  : true},
+                { 'text': '6A', 'value': 6 , 'isSelected'  : true},
+                { 'text': '7A', 'value': 7, 'isSelected'  : true },
+                { 'text': '8A', 'value': 8 , 'isSelected'  : true},
+                { 'text': '9A', 'value': 9 , 'isSelected'  : true},
+                { 'text': '10A', 'value': 10 , 'isSelected'  : true},
+                { 'text': '11A', 'value': 11 , 'isSelected'  : true}
             ]
         },
         {
             'type': 'PM',
             'data': [
-                { 'text': '12P', 'value': 12 },
-                { 'text': '1P', 'value': 13 },
-                { 'text': '2P', 'value': 14 },
-                { 'text': '3P', 'value': 15 },
-                { 'text': '4P', 'value': 16 },
-                { 'text': '5P', 'value': 17 },
-                { 'text': '6P', 'value': 18 },
-                { 'text': '7P', 'value': 19 },
-                { 'text': '8P', 'value': 20 },
-                { 'text': '9P', 'value': 21 },
-                { 'text': '10P', 'value': 22 },
-                { 'text': '11P', 'value': 23 }
+                { 'text': '12P', 'value': 12, 'isSelected'  : true },
+                { 'text': '1P', 'value': 13, 'isSelected'  : true },
+                { 'text': '2P', 'value': 14 , 'isSelected'  : true},
+                { 'text': '3P', 'value': 15, 'isSelected'  : true },
+                { 'text': '4P', 'value': 16 , 'isSelected'  : true},
+                { 'text': '5P', 'value': 17, 'isSelected'  : true },
+                { 'text': '6P', 'value': 18, 'isSelected'  : true },
+                { 'text': '7P', 'value': 19, 'isSelected'  : true },
+                { 'text': '8P', 'value': 20, 'isSelected'  : true },
+                { 'text': '9P', 'value': 21, 'isSelected'  : true },
+                { 'text': '10P', 'value': 22 , 'isSelected'  : true},
+                { 'text': '11P', 'value': 23, 'isSelected' : true }
             ]
         }
     ];
@@ -76,6 +78,11 @@ angular.module("drmApp").controller("airingsDetailController", function($scope, 
 
     
 $scope.uigridAiringSpend = function(){
+    $rootScope.formdata.hour = $scope.all_hour.join(',');
+    $rootScope.formdata.day = $scope.all_day.join(',')
+    $rootScope.formdata.dayparts = $scope.all_dayparts.join(',');
+    $rootScope.formdata.network_id = $scope.all_networks.join(',');
+    $rootScope.formdata.programs_ids = $scope.all_programs.join(',');
     var formData = $rootScope.formdata;
     var vm = this;
     var config = {
@@ -93,10 +100,15 @@ $scope.uigridAiringSpend = function(){
     formData.brand_name = $rootScope.brand_name;
     formData.cat_id = $rootScope.formdata.cat;
     formData.breaktype = 'A';
-    formData.network_code = 'all_networks';
-    formData.hour = 'all_hour';
-    formData.day = 'all_day';
-    formData.dayparts = 'all_dayparts';
+  
+
+    // formData.network_code = 'all_networks';
+    // formData.hour = 'all_hour';
+    // formData.day = 'all_day';
+    // formData.dayparts = 'all_dayparts';
+    // formData.network_code = 'all_netsworks';
+    // formData.network_id = '29';
+    // formData.programs_ids = '';
 
     vm.gridAiringSpend = {
         expandableRowTemplate: '/drmetrix_angular_clean/templates/expandableAiringRowtmpt.html',
@@ -112,9 +124,7 @@ $scope.uigridAiringSpend = function(){
         onRegisterApi: function (gridApi) {
             gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
                 formData.tab = 'brand';
-                formData.network_code = 'all_netsworks';
-                formData.network_id = '29';
-                formData.programs_ids = '';
+                
                 formData.dpi = '';
                 formData.is_adv_page  = 0;
                 if (row.isExpanded) {
@@ -192,8 +202,33 @@ $scope.uigridAiringSpend = function(){
     });
 }
 
+$scope.getAllNetworks = function () {
+    apiService.post('/get_networks_list', $rootScope.formdata)
+    .then(function (data) {
+        var response = data.data;
+        $rootScope.networks_loading = false;
+        $rootScope.all_networks_selected = true;
+        $rootScope.all_program_selected = true;
+        if (response.programs != 'undefined') {
+            $rootScope.programs = response.programs
+            $rootScope.checkedPrograms = response.checkedPrograms;
+            $scope.copyCheckedPrograms = angular.copy($rootScope.checkedPrograms);
+        }
+        if (response.resp_code == 1) {
+            $rootScope.network_lists = response.result;
+            angular.forEach($rootScope.network_lists, function(network) {
+                network.isSelected = true;
+            });
+        } else {
+           
+        }
+    });
+}
+
 $scope.defaultPageLoad = function() {
+    $scope.getAllNetworks();
     $scope.uigridAiringSpend();
+    $rootScope.networks_loading = true;
 }
     
 $scope.defaultPageLoad();
@@ -233,7 +268,7 @@ $scope.openModalDialog = function(name) {
 }
 
 $scope.filter_graph = function() {
-    var all_day = []; var all_hour = []; var all_dayparts = []; var all_programs = []; var all_networks = [];
+    $scope.all_day = []; $scope.all_hour = []; $scope.all_dayparts = []; $scope.all_programs = []; $scope.all_networks = [];
     if ($rootScope.selectedWeekType == 'all' ) {
         $scope.dow_display_text = 0;
     } else {
@@ -241,7 +276,7 @@ $scope.filter_graph = function() {
         $scope.custom_variable++;
         angular.forEach($rootScope.weeks, function (week) {
             if(week.isSelected) {
-                all_day.push(week.id);
+                $scope.all_day.push(week.id);
             }
           })
     }
@@ -254,7 +289,7 @@ $scope.filter_graph = function() {
         for (var i in $rootScope.timeData) {
             for(var j in $rootScope.timeData[i].data) {
                 if($rootScope.timeData[i].data[j].isSelected)
-                    all_hour.push($rootScope.timeData[i].data[j].value);
+                    $scope.all_hour.push($rootScope.timeData[i].data[j].value);
             }
         }
     }
@@ -266,30 +301,28 @@ $scope.filter_graph = function() {
         $scope.custom_variable++;
         angular.forEach($rootScope.dayparts, function (daypart) {
             if(daypart.isSelected) {
-                all_dayparts.push(daypart.id);
+                $scope.all_dayparts.push(daypart.id);
             }
           })
     }
     
     for (var i in $rootScope.network_lists) {
         if($rootScope.network_lists[i].isSelected) {
-            all_networks.push($rootScope.network_lists[i].network_id)
+            $scope.all_networks.push($rootScope.network_lists[i].network_id)
         }
     }
   
     angular.forEach($rootScope.programs, function (p) {
         angular.forEach(p, function(prg , prg_id) {
             if(prg.isSelected) {
-                all_programs.push(prg_id);
+                $scope.all_programs.push(prg_id);
             }
         });
         
     });
+    $scope.uigridAiringSpend();
 
-
-console.log(all_hour);
-    console.log(all_day);
-    console.log(all_programs);
+    // $rootScope.formdata.network_code = 'all_networks';
 }
 $scope.getProgramsByNetwork = function(network_id,brand,brand_id,network_alias,program_count) {
     $rootScope.network_id = network_id;
@@ -310,56 +343,25 @@ $scope.openProgramModal = function() {
 
 });
 
-angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService){
-    // $scope.all_networks_selected = true;
-    $scope.networks_loading = false;
-    // $scope.all_program_selected = true;
-    $scope.getAllNetworks = function () {
-        apiService.post('/get_networks_list', $rootScope.formdata)
-        .then(function (data) {
-            var response = data.data;
-            $scope.networks_loading = false;
-            $scope.all_networks_selected = true;
-            $scope.all_program_selected = true;
-            if (response.programs != 'undefined') {
-                $rootScope.programs = response.programs
-                $rootScope.checkedPrograms = response.checkedPrograms;
-                $scope.copyCheckedPrograms = angular.copy($rootScope.checkedPrograms);
-            }
-            if (response.resp_code == 1) {
-                $rootScope.network_lists = response.result;
-                angular.forEach($rootScope.network_lists, function(network) {
-                    network.isSelected = true;
-                });
-            } else {
-               
-            }
-        });
-    }
-
-    if(!$rootScope.network_lists) {
-        $scope.networks_loading = true;
-        $scope.getAllNetworks();
-    }
-   
-
-    $scope.forNetworkList = function () {
+angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, $uibModalInstance){
+    $scope.forNetworkList = function (value) {
+        $rootScope.all_networks_selected = value;
         for (var i in $rootScope.network_lists) {
-            $rootScope.network_lists[i].isSelected = $scope.all_networks_selected;
+            $rootScope.network_lists[i].isSelected = $rootScope.all_networks_selected;
         }
-        $scope.all_program_selected = $scope.all_networks_selected;
+        // $rootScope.all_program_selected = $rootScope.all_networks_selected;
       
         angular.forEach($rootScope.programs, function (p) {
             angular.forEach(p, function(prg) {
-                prg.isSelected = $scope.all_program_selected;
+                prg.isSelected = $rootScope.all_program_selected;
             });
             
         });
     }
 
     $scope.forProgramList = function() {
-        $scope.all_program_selected = !$scope.all_program_selected;
-        if($scope.all_program_selected) {
+        $rootScope.all_program_selected = !$rootScope.all_program_selected;
+        if($rootScope.all_program_selected) {
             $rootScope.checkedPrograms = $rootScope.copyCheckedPrograms;
         } else {
             $rootScope.checkedPrograms = [];
@@ -367,7 +369,7 @@ angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, 
 
         angular.forEach($rootScope.programs, function (p) {
             angular.forEach(p, function(prg) {
-                prg.isSelected = $scope.all_program_selected;
+                prg.isSelected = $rootScope.all_program_selected;
             });
             
         });
@@ -375,19 +377,19 @@ angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, 
 
     $scope.forSingleNetwork = function() {
         var temp = true;
-        var network_selection = [];
+        $rootScope.network_selection = [];
         angular.forEach($rootScope.network_lists, function (network) {
-            if(!network.isSelected) {
-                network_selection.push(network.network_id);
+            if(network.isSelected) {
+                $rootScope.network_selection.push(network.network_id);
                 temp = false;
             }
         });
-        $scope.all_networks_selected = temp;
+        $rootScope.all_networks_selected = temp;
 
         angular.forEach($rootScope.programs, function (p) {
             angular.forEach(p, function(prg) {
-                if(network_selection.indexOf(prg.network_id) !== -1)
-                    prg.isSelected = $scope.all_program_selected;
+                if($rootScope.network_selection.indexOf(prg.network_id) !== -1)
+                    prg.isSelected = $rootScope.all_program_selected;
             });
         });
 
@@ -400,9 +402,14 @@ angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, 
                 temp = false;
             }
         });
-        $scope.all_program_selected = temp;
+        $rootScope.all_program_selected = temp;
     }
 
+    $scope.checkChildIsHide = function(id) {
+        console.log(id);
+        console.log($('#'+id+ ' div ').is(':visible'));
+        return $('#'+id+ ' div ').is(':visible');
+    }
     
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
@@ -411,6 +418,7 @@ angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, 
 
 angular.module('drmApp').controller('DowCtrl', function($scope, $rootScope, $uibModalInstance){
     $scope.adow = function (type, items) {
+        $rootScope.selectedWeekType = type;
         for (var i in items) {
             if ($rootScope.weekType[type].indexOf(items[i].id) != -1) {
                 items[i].isSelected = true;

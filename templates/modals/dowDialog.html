@@ -7,22 +7,18 @@
 <div class="modal-body">
     <ul class="heading-border">
         <li class="checkbox-radio">
-            <input type="radio" value="all" id="all_dow" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
-            <label for="all_dow" class="radio-custom-checkbox-label ">All Days of Week</label>
+            <input type="radio" value="all"  ng-model="selectedWeekType" ng-change="adow(weeks)" class="radio-custom-checkbox">All Days of Week
         </li>
     </ul>
     <ul class="heading-border">                            
         <li class="checkbox-radio">
-            <input type="radio"  value="weekday" id="weekday" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
-            <label for="weekday" class="radio-custom-checkbox-label">Weekday</label>
+            <input type="radio"  value="weekday" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">Weekday
         </li>
         <li class="checkbox-radio">
-            <input type="radio" value="weekend" id="weekend" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
-            <label for="weekend" class="radio-custom-checkbox-label">Weekend</label>
+            <input type="radio" value="weekend"  ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">Weekend
         </li>
          <li class="checkbox-radio">
-            <input type="radio" value="custom" id="custom" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">
-            <label for="custom" class="radio-custom-checkbox-label">Select Custom Day</label>
+            <input type="radio" value="custom" ng-model="selectedWeekType" ng-change="adow(selectedWeekType, weeks)" class="radio-custom-checkbox">Select Custom Day
         </li>
     </ul>
     <ul>

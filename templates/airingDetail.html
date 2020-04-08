@@ -5,9 +5,9 @@
         <div class="network-filters">
             <ul>
                 <li ng-click="openModalDialog('network')" ng-show="selectedNetwork == '' ">
-                    {{network_display_text === 0 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Networks<i class="fa fa-caret-down"></i>
+                    {{all_networks_selected === 1 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Networks<i class="fa fa-caret-down"></i>
                 </li>
-                <li ng-click="openModalDialog('dow')">{{selectedWeekType}}
+                <li ng-click="openModalDialog('dow')">
                     {{dow_display_text === 0 ? 'All' : custom_variable > 1 ? 'Cus.' : 'Custom'}} Days of Week<i class="fa fa-caret-down"></i>
                 </li>
                 <li ng-click="openModalDialog('hod')">

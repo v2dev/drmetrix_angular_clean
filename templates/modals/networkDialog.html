@@ -8,7 +8,7 @@
     <div class="filter-popup">
         <ul class="heading-border pb-1" ng-hide="networks_loading">
             <li class="checkbox">
-                <input type="checkbox" value="all_networks"  id="network_list_cb" ng-model="all_networks_selected" ng-change='forNetworkList()' ng-checked="all_networks_selected"/>
+                <input type="checkbox" value="all_networks"  id="network_list_cb" ng-model="all_networks_selected" ng-change='forNetworkList(all_networks_selected)' ng-checked="all_networks_selected"/>
                 <label for="network_list_cb">All Networks</label>
             </li>
         </ul>
