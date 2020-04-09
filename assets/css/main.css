@@ -753,6 +753,8 @@ header.sticky-top {
 
 .nav-menu {
   display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
   background-color: #e5e5e5;
   border-top: 5px solid;
   width: 100%;
@@ -792,26 +794,18 @@ header.sticky-top {
   margin: 0;
 }
 
-.nav-menu>li:first-child {
-  width: 100%;
-  max-width: 130px;
-  background: #202733;
-  border-right: 1px solid #5c5c5f;
-  align-content: space-between;
-}
-
 .log-out {
   width: 80px;
   max-width: 80px;
 }
 
-.common-menu {
+/* .common-menu {
   position: fixed;
   z-index: 2;
   right: 0;
   width: 100%;
   background-color: #f2f1f1;
-}
+} */
 
 .main-page {
   padding: 0;
@@ -819,14 +813,22 @@ header.sticky-top {
   overflow-x: hidden;
 }
 
-.main-container {
+/* .main-container {
   position: relative;
   top: 88px;
+} */
+
+.nav-menu>li:first-child {
+  border-right: 1px solid #5c5c5f;
+  align-content: space-between;
+  width: 100%;
+  max-width: 150px;
+  background: #202733;
 }
 
 .nav-menu li:first-child img {
+  width: 128px;
   margin: 0 auto;
-  height: 60px;
 }
 
 .nav-menu>li>img {
@@ -3056,6 +3058,56 @@ header.sticky-top {
   color: #fff;
   z-index: 2;
   width: 50%;
+  position: relative;
+}
+
+.layoutleftsecondlink_holiday {
+  height: 6%;
+  width: 14%;
+  position: absolute;
+  bottom: 29%;
+  left: 30%;
+}
+
+.blog-link {
+  height: auto;
+  width: auto;
+  position: absolute;
+  bottom: 55px;
+  left: 30%;
+  background: #f31c1c;
+  color: #fff;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  border: solid 1px #f31c1c;
+  transition: background 0.25s ease-out;
+  transition: all .3s;
+}
+
+.blog-link:hover {
+  color: #fff;
+  text-decoration: underline;
+  background: #dc0808;
+}
+
+.link-for-details {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  color: #fff;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.link-for-details i {
+  font-size: 30px;
+}
+
+.link-for-details:hover, .link-for-details:focus {
+  text-decoration: underline;
+  color: #fff;
 }
 
 .section .build-features {
@@ -3289,7 +3341,7 @@ header.sticky-top {
   height: 37px;
   padding: 0 10px;
   font-size: 13px;
-  z-index: 1;
+  z-index: 9;
 }
 
 .term-conditions span {
@@ -3688,7 +3740,7 @@ header.sticky-top {
 
 /*mobile responsive*/
 
-@media (max-height: 768px) {
+@media (max-height: 800px) {
   .right-nav {
     top: 77px;
   }
@@ -3697,6 +3749,12 @@ header.sticky-top {
     line-height: 22px;
     width: 22px;
     height: 22px;
+  }
+  .nav-menu>li>a {
+    font-size: 12px;
+  }
+  .blog-link {
+    font-size: 12px;
   }
 }
 
@@ -3822,8 +3880,9 @@ header.sticky-top {
     margin-bottom: 15px;
   }
   .section {
-    height: 100%;
     padding: 25px;
+    overflow: hidden;
+    overflow-y: auto;
   }
   .section .left-div {
     width: 100%;
@@ -4000,6 +4059,7 @@ header.sticky-top {
   }
   .section:after, .section:before {
     z-index: 0;
+    height: 130%;
   }
   .section .right-div {
     width: 100%;
@@ -4011,6 +4071,10 @@ header.sticky-top {
   }
   .eula-agreement .agreement-sec .information p {
     font-size: 13px;
+  }
+  .inner-right img {
+    max-width: 50%;
+    margin-top: 60px;
   }
 }
 
@@ -4124,6 +4188,9 @@ header.sticky-top {
 @media (max-width: 480px) {
   .report-tab-section .my-report-select {
     margin: 0;
+  }
+  .section {
+    overflow-y: hidden;
   }
 }
 
