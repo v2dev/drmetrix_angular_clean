@@ -175,7 +175,7 @@
                 <div>
                     <input class="placeholder-italic" maxlength='20' type="text" name="mobile"
                         placeholder="Please enter mobile # for Authy Authentication" ng-model="admin.mobile" id="mobile"
-                        required onkeyup="return validate_mobile(this.id,this.value,event);"
+                        required ng-keyup="validate_mobile(this.id,this.value,event);"
                         ng-blur="verifyDuplicateMobile(admin.mobile)" />
                     <span class="color-red"
                         ng-show="admin.add_company.mobile.$dirty && admin.add_company.mobile.$invalid">
@@ -191,7 +191,7 @@
             </li>
         </ul>
         <h5 class="d-none">Pricing</h5>
-        <div id="pricing_div">
+        <div id="pricing_div" class="d-none">
             <ul ng-repeat="price in pricing track by $index">
                 <li>
                     <label>Billing Frequency
