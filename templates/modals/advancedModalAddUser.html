@@ -86,7 +86,7 @@
                 <div>
                     <input class="placeholder-italic" maxlength='20' type="text" name="mobile_add_user"
                         placeholder="Please enter mobile # for Authy Authentication" ng-model="admin.mobile_add_user"
-                        id="mobile_add_user" required onkeyup="return validate_mobile(this.id,this.value,event);"
+                        id="mobile_add_user" required ng-keyup="validate_mobile(this.id,this.value,event);"
                         ng-blur="verifyDuplicateMobile(admin.mobile_add_user)" />
                     <span class="color-red"
                         ng-show="admin.add_user_under_company.mobile_add_user.$dirty && admin.add_user_under_company.mobile_add_user.$invalid">

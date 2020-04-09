@@ -186,6 +186,33 @@ $scope.shortFormTrackingClassification = [
 
     $scope.mapValueWithSession(databaseFormatDate);
 
+
+    // validate mobile
+    $scope.validate_mobile = function(id, v, e) {
+        $('#add_mobile').hide();
+        $('#edit_mobile').hide();
+        $('#authy_add_mobile').hide();
+        $('#authy_edit_mobile').hide();
+        $('#add_mobile_add_user').hide();
+        $('#authy_add_mobile_add_user').hide();
+
+        v = v
+            .match(/\d*/g).join('')
+            .match(/(\d{0,3})(\d{0,3})(\d{0,12})/).slice(1).join('-')
+            .replace(/-*$/g, '');
+
+        $('#' + id).val(v);
+    }
+
+    $scope.check_owner = function (id) {
+        var account_owner = $('#' + id).val();
+        if (account_owner.length == 0) {
+            $('#err_' + id).show();
+        } else {
+            $('#err_' + id).hide();
+        }
+    }
+
     //date filter
     $scope.findDiff = function (end_date, val) {
         $rootScope.displayBtns = 0;

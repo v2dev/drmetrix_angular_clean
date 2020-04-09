@@ -82,13 +82,13 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
                 { name: 'authy_cookie', displayName: 'Authy Authenticated', width: '170', cellTemplate: '<span class="{{row.entity.authy_cookie ? \'user-verified\' : \'user-not-verified\'}}" >{{row.entity.authy_cookie ? \'Yes\' : \'No\'}}</span>' },
 
                 { name: 'vdate', displayName: 'Verified Date', width: '80', cellTemplate: '<span>{{row.entity.vdate ? row.entity.vdate : \'-\'}}</span>' },
-                { name: 'eula_flag', displayName: 'Eula Overried', width: '60', cellTemplate: '<span><input type="checkbox" class="checkbox-custom" id="{{row.entity.company_id}}" ng-click="eulaOverride(row.entity.company_id)" ng-checked="eula_check(row.entity.eula_flag)" /><label class="checkbox-custom-label"></label></span>' },
-                { name: 'network_tab', displayName: 'Network Tab', width: '60', cellTemplate: '<span><input type="checkbox" class="checkbox-custom" id="network_tab_check_{{row.entity.company_id}}" ng-click="manageNetworkTab(row.entity.company_id)" ng-checked="eula_check(row.entity.network_tab)" /><label class="checkbox-custom-label"></label></span>' },
-                { name: 'staging_access', displayName: 'Staging Access', width: '80', cellTemplate: '<span><input type="checkbox" class="checkbox-custom" id="staging_access_check_{{row.entity.company_id}}" ng-click="manageStagingAccess(row.entity.company_id)" ng-checked="eula_check(row.entity.staging_access)" /><label class="checkbox-custom-label"></span>' },
-                { name: 'skip_authy', displayName: 'Skip Authy', width: '90', cellTemplate: '<span><input type="checkbox" class="checkbox-custom-label" id="skip_authy_check_{{row.entity.company_id}}" ng-click="manageSkipAuthy(row.entity.company_id)" ng-checked="eula_check(row.entity.skip_authy)" /><label class="checkbox-custom-label"></label></span>' },
+                { name: 'eula_flag', displayName: 'Eula Overried', width: '60', cellTemplate: '<nav><ul class="no-bullet"><li class="checkbox-normal"><input type="checkbox" class="checkbox-custom" id="{{row.entity.company_id}}" ng-click="grid.appScope.eulaOverride(row.entity.company_id)" ng-checked="row.entity.eula_flag == 1 ? true : false" /><label class="checkbox-custom-label"></label></li></ul></nav>' },
+                { name: 'network_tab', displayName: 'Network Tab', width: '60', cellTemplate: '<nav><ul class="no-bullet"><li class="checkbox-normal"><input type="checkbox" class="checkbox-custom" id="network_tab_check_{{row.entity.company_id}}" ng-click="manageNetworkTab(row.entity.company_id)" ng-checked="row.entity.network_tab == 1 ? true : false" /><label class="checkbox-custom-label"></label></li></ul></nav>' },
+                { name: 'staging_access', displayName: 'Staging Access', width: '80', cellTemplate: '<nav><ul class="no-bullet"><li class="checkbox-normal"><input type="checkbox" class="checkbox-custom" id="staging_access_check_{{row.entity.company_id}}" ng-click="manageStagingAccess(row.entity.company_id)" ng-checked="row.entity.staging_access == 1 ? true : false" /><label class="checkbox-custom-label"></li></ul></nav>' },
+                { name: 'skip_authy', displayName: 'Skip Authy', width: '90', cellTemplate: '<nav><ul class="no-bullet"><li class="checkbox-normal"><input type="checkbox" class="checkbox-custom-label" id="skip_authy_check_{{row.entity.company_id}}" ng-click="manageSkipAuthy(row.entity.company_id)" ng-checked="row.entity.skip_authy == 1 ? true : false" /><label class="checkbox-custom-label"></label></li></ul></nav>' },
                 { name: 'status', displayName: 'Status', width: '80', cellTemplate: '<span>{{row.entity.status == "active" ? "Active" : "Inactive"}}</span>' },
 
-                { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown"><i class="fa fa-cog fa-2x" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"><li><a ng-click="grid.appScope.getCompany(row.entity)" >Edit Company</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.confirmUserDeletion(row.entity)">Delete Company</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deactivate(row.entity.user_id, row.entity.status)" data-toggle="modal">{{row.entity.status == "active" ? "Deactivate" : "Activate"}} Company</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.assignAdminId(row.entity.user_id, row.entity.company_id)">Add User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.getUsers(row.entity)">Edit/Delete/Deactivate/Activate User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.getUsers(row.entity)">Change Admin Of Company</a></li></ul></div>' }
+                { name: 'user_id', displayName: 'Action', width: '80', cellClass: "overflow-visible setting-icon", cellTemplate: '<div class="dropdown"><i class="fa fa-cog fa-2x" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"><li><a ng-click="grid.appScope.getCompany(row.entity)" >Edit Company</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.confirmUserDeletion(row.entity)">Delete Company</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.deactivate(row.entity.user_id, row.entity.status)" data-toggle="modal">{{row.entity.status == "active" ? "Deactivate" : "Activate"}} Company</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.assignAdminId(row.entity.user_id, row.entity.company_id)">Add User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.getUsers(row.entity)">Edit/Delete/Deactivate/Activate User</a></li><li><a href="javascript:void(0);" ng-click="grid.appScope.getUsersInfo(row.entity)">Change Admin Of Company</a></li></ul></div>' }
             ],
 
             onRegisterApi: function (gridApi) {
@@ -106,6 +106,55 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
 
     }
     $scope.showAdmins();
+
+
+    $scope.manageSkipAuthy = function(id) {
+        var skip_authy_checked = $('#skip_authy_check_' + id).is(":checked") ? 1 : 0;
+
+        $.post('/drmetrix/api/index.php/manage_skip_authy', { 'company_id': id, 'skip_authy_checked': skip_authy_checked },
+            function (data, status) {
+                var response = jQuery.parseJSON(data);
+                if (response.status == 1) {
+                    console.log("done")
+                }
+            }).error(function () {
+                console.log("error");
+            });
+    }
+
+    $scope.getUsersInfo = function (rowEntity) {
+        $scope.admin.selected_users         = '';
+        $scope.admin.selected_company_users = '';
+        $scope.admin.change_users           = '';
+        $scope.admin.company_id             = sessionStorage.company_id = rowEntity.company_id;
+        $scope.admin.delete_user            = '';
+        $scope.openModal('./templates/modals/advancedModalChangeAdmin.html');
+        $("#list_admin").html('Loading Admin...');
+        $("#list_users").html('Loading Users...');
+        $rootScope.usr = rowEntity.user_id;
+        apiService.post('/get_users_of_company', { 'company_id': rowEntity.company_id })
+            .then(function (response) {
+                var data = response.data;
+                if (data.status) {
+                    var html_admin = '<ul name="admin_user" id="admin_user" style="margin-left:0px;">';
+                    var html_users = '<select name="change_users" id="users" ng-model="admin.change_users" required>';
+                    $.each(data.result, function (key, value) {
+                        if (value.role == 'admin') {
+                            html_admin = html_admin + '<input type="hidden" id="hidden_admin_id" ng-model="admin.hidden_admin_id" value="' + value.user_id + '" /></span><li value=' + value.user_id + ' >' + value.first_name + ' ' + value.last_name + '</li>';
+                        } else if (value.role == 'user') {
+                            $scope.admin.selected_users = data.result;
+                            html_users = html_users + '<option custom_attr_status="'+value.status+'" value= ' + value.user_id + ' > ' + value.first_name + ' ' + value.last_name + '</li>';
+                        }
+                    });
+                    html_admin = html_admin + '</ul>';
+                    html_users = html_users + '</select>';
+                    $("#list_admin").html(html_admin);
+                    $("#list_users").html(html_users);
+                }
+            }, function (response){
+                // this function handlers error
+            });
+    }
 
     $scope.getUsers = function (rowEntity) {
         $scope.admin.selected_users         = '';
@@ -150,8 +199,234 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
             });
     }
 
-    $scope.editUserFromCompany = function() {
+    $scope.changeAdminOfCompany = function () {
+        $("#change_admin_ok").prop("disabled", true);
+        var company_id = $scope.admin.company_id;
+        var hidden_admin_id = $("#hidden_admin_id").val();
+        var user_id = $("#users").val();
+        apiService.post('/change_admin', { 'company_id': company_id, 'admin_id': hidden_admin_id, 'user_id': user_id })
+            .then(function (data) {
+                if (data.status) {
+                    $("#change_admin_ok").prop("disabled", false);
+                    $scope.modalInstanceMain.close();
+                    $scope.showPopup('', 'Admin changed for company successfully.', 'Changed Message', '');
+                    setTimeout(function(){
+                        $scope.modalInstance.close();
+                    } , 1000);
+                }
+            }, function (response){
+                // this function handlers error
+            });
+    }
+
+    $scope.editUser = function(user_id){
+        var mobile =  $('#mobile_user_edit').val();
+         var country_code =  $('#edit_country_code').val();
+         var assistant_admin = 0;
+         if ($("#assistant_admin_edit").is(":checked")) {
+             assistant_admin = 1;
+         }
+         var first_name         = $scope.admin.user_result[0].first_name;
+         var last_name          = $scope.admin.user_result[0].last_name;
+         var username           = $scope.admin.user_result[0].username;
+         var phone_number       = mobile;
+         var position           = $scope.admin.user_result[0].position;
+         var receive_report     = $scope.admin.user_result[0].receive_report;
+         var tier               = 1;
+         var country_code       = $scope.admin.user_result[0].country_code;
+         var role               = 'user';
+         var admin_id           = sessionStorage.company_admin_id ;
+         var hidden_email       = $scope.admin.user_result[0].hidden_email;
+         var sendPasswordFlag   = 0;
+         var changed            = $('#tier_change').val(); // added this field for editing value other than tier, allow to edit.
+        if(hidden_email != username &&  $scope.admin.user_result[0].adsphere_authenticate == 0) {
+            sendPasswordFlag = $scope.sendPassword($scope.admin.user_result[0].passphrase , user_id );
+        } else {
+            sendPasswordFlag = 1;
+        }
+        if(sendPasswordFlag) {
+            var postEdit = {'first_name':first_name,'last_name':last_name,'username':username,'mobile':phone_number,'position':position,'receive_report':receive_report,'role':role,'user_id':user_id,'admin_id':admin_id,'tier':tier,'changed':changed,'country_code':country_code,'assistant_admin':assistant_admin , 'hidden_email' : hidden_email}; 
+            $("#edit_user_btn").prop( "disabled", true );
+            if( $scope.admin.user_result[0].admin_skip_authy != '1' ) {
+                // postEdit.skip_authy = $scope.admin.user_result[0].skip_authy;
+                postEdit.skip_authy = $("#skip_authy_edit").is(":checked") ? 1 : 0;
+            }
+            apiService.post('/edit_user',postEdit)
+            .then(function(data) {
+                $("#edit_user_btn").prop( "disabled", false );
+                if(data.status == 1){
+                if(data.max_limit == 'yes'){
+                    $scope.modalInstanceMain.close();
+                    $scope.openModal('./templates/modals/advancedModal3.html');
+                }else{
+                    $scope.modalInstanceMain.close();
+                    $scope.showPopup('', 'Record updated successfully.', 'Edit Message', '');
+                    setTimeout(function(){
+                        $scope.modalInstance.close();
+                        // window.location.href = '/drmetrix/userAccount';
+                    } , 1000 );
+                }
+                }else if(data.status == 2){
+                    $("#domain_msg").html(data.domain_msg);
+                    $scope.openModal('./templates/modals/domainOverrideMessage.html');
+                }else if(data.status == 4){
+                    $("#domain_msg").html(data.domain_msg);
+                    $scope.openModal('./templates/modals/domainOverrideMessage.html');
+                }else{
+                    $('#authy_edit_mobile').html(data.error);
+                    $('#authy_edit_mobile').show();
+                }
+            }, function (response){
+                // this function handlers error
+            });
+        }
+    }
+
+    $scope.saveCompany = function (create ) {
         debugger;
+        if (typeof (create) == 'undefined') {
+            create = false;
+        }
+        var mobile          = $('#mobile').val();
+        var country_code    = $('#add_country_code').val();
+        var a_limit         = '';
+
+        var access_type_p = $("#access_type_p");
+        var account_owner = $('#account_owner').val();
+
+        if (account_owner.length == 0) {
+            $('#err_owner').show();
+            return false;
+        } else {
+            $('#err_owner').hide();
+        }
+
+        var country_code = $scope.admin.country_code;
+        var timeout     = 30;
+        var no_of_apps  = 1;
+        var first_name  = $scope.admin.first_name;
+        var last_name   = $scope.admin.last_name;
+        var company_name = $scope.admin.company_name;
+        var company_type = $scope.admin.company_type;
+        var company_size = $scope.admin.company_size;
+        var revenue      = $('#revenue').val();
+
+        var username = $scope.admin.username;
+        var mobile = mobile;
+        var billing = $scope.admin.billing;
+        var tier = $scope.admin.tier;
+        var users_limit = $scope.admin.users_limit;
+        var download_limit = $scope.admin.download_limit;
+        var amount = $scope.admin.amount;
+        var client = $scope.admin.client;
+        var domain_override = $scope.admin.domain_override;
+        var account_owner_zoho_id = $("#account_owner option:selected").attr("cust-attr-id");
+        var access_type = 'F';
+        var zoho_account_id;
+        var zoho_account_name;
+        var domain_account_name;
+        if (access_type_p.is(':checked') == true) {
+            var access_type = 'P';
+        }
+        if(create == 'use_same') {
+            zoho_account_id     = $('.zoho_account_id').text();
+            zoho_account_name   = $('.zoho_account_name').text();
+        }
+
+        if($('#domainExistsDifferentAccount').hasClass('is-active') && create != 'new_contact_ads'){
+            var span_ele = $.trim($('#page_set').text());
+            if(span_ele == 'ADS') {
+                create = 'use_same_ads';
+                $scope.backToAdmin('domain_found_ADS');
+                return;
+            }
+            if(span_ele == 'ZOHO') {
+                create = 'use_same_zoho';
+            }
+        }
+
+        if(create == 'use_same_ads' ||create == 'use_same_zoho') {
+            domain_account_name     = $('#domain_found_account_add').text();
+        }
+
+        var postS = {'company_name':company_name, 'company_type':company_type, 'company_size':company_size, 'revenue':revenue,'username':username, 'mobile':mobile, 'billing':billing, 'tier':tier,'users_limit':users_limit, 'amount':amount,'country_code':country_code,'timeout':timeout,'no_of_apps':no_of_apps,'first_name':first_name,'last_name':last_name,'access_type':access_type,'monthly_cap':a_limit,'client':client,'account_owner':account_owner,'account_owner_zoho_id':account_owner_zoho_id,'domain_override':domain_override,'download_limit':download_limit,'create' : create, 'zoho_account_id' : zoho_account_id, 'zoho_account_name' : zoho_account_name , 'domain_account_name' : domain_account_name }; 
+
+        $("#save_company_btn").prop( "disabled", true );
+        apiService.post('/save_company',postS)
+        .success(function(data) {
+            $("#save_company_btn").prop( "disabled", false );
+            if(data.status == 1){
+                $('#add_company')[0].reset();
+                $('#contactExistsDifferentAccount').modal('hide');
+                $('#domainExistsDifferentAccount').modal('hide');
+                $('#emailExistsDifferentAccount').modal('hide');
+                $("#advancedModal5").modal('hide');
+                $('#accountNotExistsZoho').modal('hide');
+                $('#saveMessage').modal('show');
+                setTimeout(function(){
+                    $scope.modalInstance.close();
+                } , 1000 );
+            }else if(data.status == 2){
+                $("#error_msg_span").html(data.error_msg);
+                $scope.openModal('./templates/modals/errorMsgModal.html');
+            }else if(data.status == 3){
+                $("#user_zoho_msg").html(data.err_zoho_user_msg);
+                $scope.openModal('./templates/modals/userExistsZohoMsg.html');
+            }else if(data.status == 4) {
+                $scope.openModal('./templates/modals/accountNotExistsZoho.html');
+                $("#advancedModal5").modal('hide');
+            }else if(data.status == 5) {
+                $scope.openModal('./templates/modals/emailExistsDifferentAccount.html');
+                $('.zoho_account_id').text(data.userInfo.data[0].Account_Name.id);
+                $('.zoho_account_name').text(data.userInfo.data[0].Account_Name.name);
+                $("#advancedModal5").modal('hide');
+            }else if(data.status == 6) {
+                $("#advancedModal5").modal('hide');
+                $('#accountNotExistsZoho').modal('hide');
+                $scope.openModal('./templates/modals/domainExistsDifferentAccount.html');
+                $('#domain_found_account_add').text(data.userInfo.account_name);
+                $('#page_set').text('ADS');
+            }else if(data.status == 8) {
+                $("#advancedModal5").modal('hide');
+                $('#domainExistsDifferentAccount').modal('hide');
+                $('#emailExistsDifferentAccount').modal('hide');
+                $('#accountNotExistsZoho').modal('hide');
+                $("#user_zoho_msg").html('Admin is already exists on existing account. Please fix the account in zoho.');
+                $scope.openModal('./templates/modals/userExistsZohoMsg.html');
+            }else if(data.status == 7) {
+                $("#advancedModal5").modal('hide');
+                $('#domainExistsDifferentAccount').modal('hide');
+                $('#emailExistsDifferentAccount').modal('hide');
+                $('#accountNotExistsZoho').modal('hide');
+                $('#editMessage').modal('show');
+                setTimeout(function(){
+                    $('#editMessage').modal('hide');
+                     window.location.href = '/drmetrix/adminConsole';
+                } , 1000 );
+            }else if(data.status == 9) {
+                $("#advancedModal5").modal('hide');
+                $('#accountNotExistsZoho').modal('hide');
+                $scope.openModal('./templates/modals/domainExistsDifferentAccount.html');
+                $('#domain_found_account_add').text(data.userInfo.data[0].Account_Name.name);
+                $('#page_set').text('ZOHO ');
+            }else if(data.status == 10) {
+                $("#advancedModal5").modal('hide');
+                $('#accountNotExistsZoho').modal('hide');
+                $('#domainExistsDifferentAccount').modal('hide');
+                $('#emailExistsDifferentAccount').modal('hide');
+                $scope.openModal('./templates/modals/contactExistsDifferentAccount.html');
+            } else if(data.status == 'domain_yes_admin_role'){
+                $scope.backToAdmin('domain_found_zoho');
+            }else{
+                $('#authy_add_mobile').html(data.error);
+                $('#authy_add_mobile').show();
+            }
+        })
+        .error(function(data, status, headers, config) {
+        });
+    }
+
+    $scope.editUserFromCompany = function() {
         $rootScope.mobileValid = 0;
         $rootScope.usernameValid = 0;
         $rootScope.usernameValidInCompany = 0;
@@ -164,8 +439,8 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
         $('#add_mobile').hide();
         $('#edit_mobile').hide();
         $("#options_div"+user_id).css("display", "none");
-        $("#advancedModalEditUser").modal('show');
-       apiService.post('/get_user_edit',{'user_id':user_id} )
+        $scope.openModal('./templates/modals/advancedModalEditUser.html');
+        apiService.post('/get_user_edit',{'user_id':user_id} )
            .then(function(response){
             let data = response.data;
              if(data.status){
@@ -225,10 +500,10 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
                 } else {
                     $("#save_company_delete_user_btn").prop("disabled", false);
                     $('#delete_user_under_company')[0].reset();
-                    $scope.modalInstance.close();
+                    $scope.modalInstanceMain.close();
                     $scope.showPopup('', 'Record deleted successfully.', 'Delete Message', '');
                     setTimeout(function () {
-                        $scope.showPopup('', 'Record deleted successfully.', 'Delete Message', '');
+                        $scope.modalInstance.close();
                         $state.go($state.current, {}, {reload: true});
                     }, 3000);
                 }
@@ -301,7 +576,8 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
 
     $scope.getRevenue = function () {
         apiService.post('/get_revenue', {})
-            .then(function (data) {
+            .then(function (response) {
+                var data = response.data;
                 if (data.status) {
                     $scope.admin.revenue = data.result;
                 }
@@ -312,7 +588,8 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
 
     $scope.getAccountOwner = function() {
         apiService.post('/get_company_owners', {})
-        .then(function (data) {
+        .then(function (response) {
+            var data = response.data;
             if (data.status) {
                 $scope.admin.account_owners = data.result;
             }
@@ -527,7 +804,7 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
                         $('#accountNameNoMatch').modal('show');
                     } else if (data.warning == 3){
                         $scope.modalInstance.close();
-                        $('#errorMsg').modal('show');
+                        $scope.openModal('./templates/modals/errorMsgModal.html');
                         $('#error_msg_span').text(data.error_msg);
                     }else if (data.warning == 4 ){
                         $('.email_exists_id').text(data.userInfo.username);
@@ -672,7 +949,7 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
         $scope.admin.download_limit = 100;
         $scope.admin.domain_override = false;
         $('#err_owner').hide();
-        $scope.admin.add_company.$setPristine();
+        // $scope.admin.add_company.$setPristine();
     }
 
     $scope.openModal = function(templateUrl, controller, size, backdrop) {

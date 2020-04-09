@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h5 class="modal-title">Change Admin Of Company</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
         <span aria-hidden="true"></span>
     </button>
 </div>
@@ -25,7 +25,7 @@
         </ul>
         <div class="btn-grp d-flex justify-content-end border-top pt-3">
             <button type="button" class="btn btn-black" value="Cancel"
-                ng-click="admin.change_admin.$setPristine();backToAdmin('change_admin')"><i class="fa fa-times"
+                ng-click="closeModal();backToAdmin('change_admin')"><i class="fa fa-times"
                     title="cancel"></i>Cancel</button>
             <button type="submit" class="btn btn-blue" value="OK" id="change_admin_ok"
                 ng-disabled="!admin.selected_users"><i class="fa fa-check" title="Save"></i>OK</button>

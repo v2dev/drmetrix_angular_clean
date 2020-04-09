@@ -186,7 +186,7 @@
                     <input class="placeholder-italic" type="text" maxlength='20' name="mobile"
                         placeholder="Please enter mobile # for Authy Authentication"
                         ng-model="admin.company_result[0].phone_number" id="mobile_edit" required
-                        onkeyup="return validate_mobile(this.id,this.value,event);"
+                        ng-keyup="return validate_mobile(this.id,this.value,event);"
                         ng-blur="verifyDuplicateMobile(admin.company_result[0].phone_number)" />
                     <input maxlength="20" type="hidden" name="hidden_mobile" value="{{admin.company_result[0].mobile}}"
                         id="mobile_edit_company_hidden" />
