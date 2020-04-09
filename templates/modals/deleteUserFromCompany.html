@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h5 class="modal-title">Confirm Delete</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="grid-content" id="confirm_box">
+        <div class="align-center grid-block">
+            <p><span>Are you sure you want to delete?</span></p>
+        </div>
+        <div class="align-center grid-block">
+            <button id="cancelBtn" type="button" class="btn btn-sm btn-warning cancelBtn btn-default btnclose"
+                ng-click="closeModal();" data-dismiss="modal" aria-label="Close">No</button>
+            <button id="applyBtn" type="button" class="btn btn-sm btn-primary applyBtn  btn-success btnapply"
+                ng-click="deleteUserFromCompany('delete');">Yes</button>
+        </div>
+    </div>
+    <div class="grid-content" id="message_box" style="display:none;">
+        <div class="align-center grid-block" style="align-items: center; height: 155px;">
+            <span id="success_msg" ng-model="success_msg"></span>
+            <span id="error_msg" ng-model="error_msg"></span>
+        </div>
+    </div>
+</div>
