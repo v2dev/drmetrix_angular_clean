@@ -8,7 +8,6 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
     $scope.save_clicked = false;
     $scope.userRowForAction = {};
     $scope.ranking = {searchText: ''};
-    $rootScope.type = 'brand';
 
     $scope.popupDefaultOptions = {
         size: 'md modal-dialog-centered'
@@ -1001,6 +1000,25 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
             }
           });
     };
+
+    $scope.sendPassword = function (passphrase, user_id) {
+        if (passphrase == '') {
+            return false;
+        }
+        $('#resend_link_' + user_id).addClass('resend_email');
+        apiService.post('/regenerate_password', { 'user_id': user_id })
+            .then(function (response) {
+                let data = response.data;
+                if (data.status) {
+                    $scope.showPopup('', 'New password link sent successfully.', 'Regenerate Message', '');
+                    setTimeout(function () { $('#regenerate').modal('hide'); }, 1000);
+                    setTimeout(function () { $('#resend_link_' + user_id).removeClass('resend_email'); }, 120000);
+                }
+            }, function (response) {
+                // this function handlers error
+            });
+            return true;
+    }
 
     $scope.getAuthyCountries();
     $scope.getRevenue();
