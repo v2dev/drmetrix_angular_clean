@@ -7,6 +7,8 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
     $scope.admin.complete_name =  sessionStorage.complete_name = $rootScope.complete_name = localStorage.complete_name;
     $scope.save_clicked = false;
     $scope.userRowForAction = {};
+    $scope.ranking = {searchText: ''};
+    $rootScope.type = 'brand';
 
     $scope.popupDefaultOptions = {
         size: 'md modal-dialog-centered'
@@ -59,6 +61,7 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
         $scope.gridOptionsAdmin = {
             //Pagination
             enableSorting: true,
+            enableGridMenu: true,
             paginationPageSize: 10,
             rowHeight: 30,
             paginationTemplate: correctTotalPaginationTemplate,
@@ -93,6 +96,7 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
 
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
+                $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
             }
         };
 
@@ -107,6 +111,25 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
     }
     $scope.showAdmins();
 
+    $scope.filterGridWithSearchText = function() {
+        $scope.gridApi.grid.refresh();
+    }
+
+    $scope.singleFilter = function( renderableRows ){
+        var matcher = new RegExp($scope.ranking.searchText);
+        renderableRows.forEach( function( row ) {
+          var match = false;
+          [ 'company_name', 'name' ].forEach(function( field ){
+            if ( row.entity[field].match(matcher) ){
+              match = true;
+            }
+          });
+          if ( !match ){
+            row.visible = false;
+          }
+        });
+        return renderableRows;
+      };
 
     $scope.manageSkipAuthy = function(id) {
         var skip_authy_checked = $('#skip_authy_check_' + id).is(":checked") ? 1 : 0;
@@ -353,7 +376,8 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
 
         $("#save_company_btn").prop( "disabled", true );
         apiService.post('/save_company',postS)
-        .success(function(data) {
+        .then(function(response) {
+            let data = response.data;
             $("#save_company_btn").prop( "disabled", false );
             if(data.status == 1){
                 $('#add_company')[0].reset();
@@ -362,13 +386,16 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
                 $('#emailExistsDifferentAccount').modal('hide');
                 $("#advancedModal5").modal('hide');
                 $('#accountNotExistsZoho').modal('hide');
-                $('#saveMessage').modal('show');
+                $scope.showPopup('', 'Record added successfully and Email sent successfully.', 'Save Message', '');
                 setTimeout(function(){
                     $scope.modalInstance.close();
                 } , 1000 );
             }else if(data.status == 2){
                 $("#error_msg_span").html(data.error_msg);
                 $scope.openModal('./templates/modals/errorMsgModal.html');
+                setTimeout(function(){
+                    $scope.modalInstance.close();
+                } , 1000 );
             }else if(data.status == 3){
                 $("#user_zoho_msg").html(data.err_zoho_user_msg);
                 $scope.openModal('./templates/modals/userExistsZohoMsg.html');
@@ -421,8 +448,8 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
                 $('#authy_add_mobile').html(data.error);
                 $('#authy_add_mobile').show();
             }
-        })
-        .error(function(data, status, headers, config) {
+        }, function (response){
+            // this function handlers error
         });
     }
 
@@ -469,7 +496,6 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
     }
 
     $scope.deleteUserFromCompany = function (button_click) {
-        debugger;
         var url = '/delete_user_from_company';
         var promptClicked = 'no';
         if (button_click == 'deactivate') {
@@ -614,7 +640,6 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
     }
 
     $scope.addUserInCompany = function(  active ){
-        debugger;
         if (typeof (active) == 'undefined') {
             active = false;
         }
