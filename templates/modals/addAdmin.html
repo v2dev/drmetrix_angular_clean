@@ -72,7 +72,7 @@
                 </label>
                 <div class=" Admin Informationent">
                     <select name="account_owner" id="account_owner" ng-model="admin.account_owner"
-                        onchange="check_owner(this.id);" required>
+                        ng-change="check_owner('account_owner');" required>
                         <option value="" selected>Select Owner</option>
                         <option ng-repeat="values in admin.account_owners" cust-attr-id="{{values.zoho_contact_id}}"
                             value="{{values.email}}">
@@ -173,10 +173,11 @@
                     <sup class="color-red">*</sup>
                 </label>
                 <div>
-                    <input class="placeholder-italic" maxlength='20' type="text" name="mobile"
-                        placeholder="Please enter mobile # for Authy Authentication" ng-model="admin.mobile" id="mobile"
-                        required ng-keyup="validate_mobile(this.id,this.value,event);"
-                        ng-blur="verifyDuplicateMobile(admin.mobile)" />
+                    <input class="placeholder-italic" maxlength="20" type="text" name="mobile"
+                        placeholder="Please enter mobile # for Authy Authentication"
+                        ng-model="admin_user.mobile" id="mobile" required
+                        ng-model-options="{'debounce': 250 }" masked-input
+                        ng-blur="verifyDuplicateMobile(admin_user.mobile)" />
                     <span class="color-red"
                         ng-show="admin.add_company.mobile.$dirty && admin.add_company.mobile.$invalid">
                         <span class="inline-label" ng-show="admin.add_company.mobile.$error.required">Mobile Phone is
@@ -230,7 +231,7 @@
                     <div>
                         <input class="placeholder-italic" type="text" placeholder="Please add Max limit of user"
                             name="max_limit{{$index}}" ng-model="admin.users_limit[$index]" maxlength="3"
-                            onkeypress="return isNumber(event)" required />
+                            onkeypress="return isNumber(event)" value="10" />
                         <span class="color-red"
                             ng-show="admin.add_company.max_limit{{$index}}.$dirty && admin.add_company.max_limit{{$index}}.$invalid">
                             <span class="inline-label"
@@ -248,7 +249,7 @@
                     <div>
                         <input class="placeholder-italic" type="text" placeholder="Please add video download limit"
                             name="download_limit" ng-model="admin.download_limit" maxlength="3"
-                            onkeypress="return isNumber(event)" required />
+                            onkeypress="return isNumber(event)" value="100" />
                         <span class="color-red"
                             ng-show="admin.add_company.download_limit.$dirty && admin.add_company.download_limit.$invalid">
                     </div>
@@ -276,7 +277,7 @@
         <div class="btn-grp d-flex justify-content-end border-top pt-3">
             <button id="cancelNet" class="btn btn-black" value="Cancel" ng-click="closeModal();"><i class="fa fa-times"
                     title="cancel"></i>Cancel</button>
-            <button id="save_company_btn" class="btn btn-blue" type="button"
+            <button id="save_company_btn" class="btn btn-blue" type="submit"
                 ng-disabled="admin.add_company.$invalid || usernameValid || mobileValid || usernameValidInCompany || admin.users_limit[0] == 0"><i
                     class="fa fa-check" title="Save"></i>Save</button>
         </div>

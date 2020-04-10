@@ -186,7 +186,50 @@ $scope.shortFormTrackingClassification = [
 
     $scope.mapValueWithSession(databaseFormatDate);
 
+    $scope.verifyDuplicateMobile = function (mobile) {
+        var user_id = $('#edit_data_user_id').val();
+        var admin_id = sessionStorage.admin_id;
+        var hidden_mobile_no = $("#mobile_edit_hidden").val();
+        if ($('[id="advancedModalEdit"]').hasClass('is-active')) {
+            hidden_mobile_no = $("#mobile_edit_company_hidden").val();
+        }
 
+        if (sessionStorage.role == 'superadmin') {
+            admin_id = $('#edit_company_admin_id').val();
+            if (admin_id == '') {
+                admin_id = $('#edit_company_page_admin_id').val();
+            }
+            if ($('#admin_id').val() != '') {
+                admin_id = $('#admin_id').val();
+            }
+        }
+
+        apiService.post('/check_mobile', { 'mobile': mobile, 'admin_id': admin_id, 'user_id': user_id, 'hidden_mobile_no': hidden_mobile_no })
+            .then(function (response) {
+                let data = response.data;
+                if (data.status) {
+                    if (data.valid) {
+                        $rootScope.errors = 1;
+                        $rootScope.mobileValid = 1; //mobile invalid
+                        $('#duplicate_mobile').css('display', 'block');
+                    } else {
+                        $rootScope.errors = 0;
+                        $rootScope.mobileValid = 0; //mobile valid
+                    }
+                }
+            }, function (response){
+                // this function handlers error
+            });
+    }
+
+    $scope.check_owner = function(id) {
+        var account_owner = $('#' + id).val();
+        if (account_owner.length == 0) {
+            $('#err_' + id).show();
+        } else {
+            $('#err_' + id).hide();
+        }
+    }
     // validate mobile
     $scope.validate_mobile = function(id, v, e) {
         $('#add_mobile').hide();
