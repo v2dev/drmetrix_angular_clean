@@ -2,35 +2,35 @@
     Primary Filter
     <a href="#"><i class="fa fa-chevron-down"></i></a>
 </div>
-<ul class="filter-menu hide-filter-menu">
+<ul class="filter-menu hide-filter-menu"  ng-class="{'edit-filter' : editable}" >
     <li>
         <div>
             Date Range -
             <span class="text-disabled" id="ranking_date_range">{{date_range}}</span>
         </div>
-        <ul class="left-menu" ng-show="editable">
-            <li ng-class="{'active-alert' : selectDate == 1 &&  otherDiv == 0}">
+        <ul ng-show="editable">
+            <li class="radio-circular" ng-class="{'active-alert' : selectDate == 1 &&  otherDiv == 0}">
                 <input type="radio" name="date_type" value="1" id="last_date" class="radio-custom" ng-model="selectDate" ng-change="date_filter(1)"/>
-                <label id="display_week"  for="last_date">
-                    <div class="custom-div">Last Week</div>
+                <label class="radio-custom-label" id="display_week"  for="last_date">
+                    Last Week
                 </label>
             </li>
-            <li ng-class="{'active-alert' : selectDate == 2 &&  otherDiv == 0}">
+            <li class="radio-circular" ng-class="{'active-alert' : selectDate == 2 &&  otherDiv == 0}">
                 <input type="radio" name="date_type" value="2" id="current_week" class="radio-custom" ng-model="selectDate" ng-change="date_filter(2)"/>
-                <label  for="current_week">
-                    <div class="custom-div">Current Week</div>
+                <label class="radio-custom-label" for="current_week">
+                    Current Week
                 </label>
             </li>
-            <li ng-class="{'active-alert' : otherDiv == 1}">
+            <li class="radio-circular" ng-class="{'active-alert' : otherDiv == 1}">
                 <input type="radio" name="date_type" value="media_other1" id="media_other" class="radio-custom" ng-click="setOtherDivVariable();"/>
                 <label class="radio-custom-label" for="media_other">
-                    <div class="custom-div">Other</div>
+                    Other
                 </label>
             </li>
             <li class="datepicker-li checkbox-radio">
                 <input type="radio" name="date_type" id="datepicker_checkbox" value="calender" class="radio-custom-checkbox datepicker_checkbox"  ng-click="changeHiddenVal()"/>
                 <label for="datepicker_checkbox" class="radio-custom-checkbox-label">
-                    <div class="custom-div" for="datepicker_checkbox">
+                    <div for="datepicker_checkbox">
                         <span class="v-align-middle">
                             <i id="datepickeropen" class="fa fa-calendar" aria-hidden="true" \=""></i>
                         </span></div>
@@ -39,7 +39,7 @@
         </ul>
     </li>
     <li>
-        <div>
+        <div class="d-flex">
             Brand Classification -
             <span ng-if="shortFormClassification[0].selected == true && creative_type == 'short'" class="text-disabled" id="classfication_filter">
                     {{shortFormClassification[0].value}}
@@ -60,14 +60,14 @@
              {{duration_display_text}}
             </span>
         </div>
-        <ul class="left-menu" ng-show="editable"> 
-            <li ng-class="{'active-alert' : creative_type == 'short'} " data-toggle="modal" data-target="#brand-dropdown">
+        <ul ng-show="editable"> 
+            <li class="radio-circular" ng-class="{'active-alert' : creative_type == 'short'} " data-toggle="modal" data-target="#brand-dropdown">
                 <input type="radio" name="brand_class" class="radio-custom" value="short" ng-model="creative_type" id="short-form" ng-click="selectClassification('short');"/>
-                <label for="short-form">Short Form</label>
+                <label class="radio-custom-label" for="short-form">Short Form</label>
             </li>
-            <li ng-class="{'active-alert' : creative_type == 'long'}"  data-toggle="modal" data-target="#brand-dropdown">
+            <li class="radio-circular" ng-class="{'active-alert' : creative_type == 'long'}"  data-toggle="modal" data-target="#brand-dropdown">
                 <input type="radio" name="brand_class" class="radio-custom" value="long" ng-model="creative_type" id="long-form" ng-click="selectClassification('long');"/>
-                <label  for="long-form">Long Form</label>
+                <label class="radio-custom-label" for="long-form">Long Form</label>
             </li>
         </ul>
     </li>
@@ -76,40 +76,40 @@
             Creative -
             <span class="text-disabled" id="language_filter">{{selectLang == 0 ? 'English' : selectLang == 1 ? 'Spanish' : 'All'}}</span>
         </div>
-        <ul class="left-menu" ng-show="editable">
+        <ul ng-show="editable">
             <li class="radio-circular ng-scope" ng-repeat="language in languages" ng-class="{'active-alert' : selectLang == language.value}">
                 <input type="radio" name="lang" value="{{language.value}}"  ng-model="selectLang" ng-click="setLang(language.value)" id="{{language.id}}" class="radio-custom"/>
-                <label for="{{language.id}}">{{language.display_text}}</label>
+                <label class="radio-custom-label" for="{{language.id}}">{{language.display_text}}</label>
             </li>
         </ul>
     </li>
-    <li ng-show="page == 'network' ">
+    <!-- <li ng-show="page == 'network' "> -->
+       <li>
         <div>
             Break Type -
-            <span class="text-disabled" id="breakType_filter">{{selectBreakType == 'A' ? 'All' : selectBreakType == 'N' ? 'National' : 'DPI'}}</span>
+            <span class="text-disabled" id="breakType_filter" >{{selectBreakType == 'A' ? 'All' : selectBreakType == 'N' ? 'National' : 'DPI'}}</span>
         </div>
-        <ul class="left-menu" ng-show="editable">
+        <ul ng-show="editable">
             <li class="radio-circular" ng-repeat="breaktype in breaktypes" ng-class="{'active-alert' : selectBreakType == breaktype.value}">
                 <input type="radio" name="breaktype" value="{{breaktype.value}}"  ng-model="selectBreakType" ng-click="setBreaktype(breaktype.value)" id="{{breaktype.id}}" class="radio-custom"/>
-                <label for="{{breaktype.id}}">{{breaktype.display_text}}</label>
+                <label class="radio-custom-label" for="{{breaktype.id}}">{{breaktype.display_text}}</label>
             </li>                 
         </ul>
     </li>                
     <li class="response-type" ng-init="setResponseTypes('or');">
         <div class="response-type-text d-flex align-items-center">
             Response Type -
-            <span class="text-disabled">{{responseTypeText}}</span>
-            </span>
-            <ul class="left-menu" ng-show="editable">
+            <span class="text-disabled" ng-hide="editable">{{responseTypeText}}</span>
+            <ul ng-show="editable">
                 <li class="radio-circular"  ng-class="{'active-alert' : response_header == 'or'}">
                     <input type="radio" id="or" name="response_typ" value=" or " ng-model="response_header" class="radio-custom" ng-click="setResponseTypes('or')"/>
-                    <label for="or">
+                    <label class="radio-custom-label" for="or">
                         At Least
                     </label>
                 </li>
                 <li class="radio-circular" ng-class="{'active-alert' : response_header == 'and'}">
                     <input type="radio" id="and" name="response_typ" value=" and " ng-model="response_header" class="radio-custom" ng-click="setResponseTypes('and')" />
-                    <label for="and">
+                    <label class="radio-custom-label" for="and">
                         Only
                     </label>
                 </li>
