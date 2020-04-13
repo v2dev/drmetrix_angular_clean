@@ -1,0 +1,18 @@
+<div class="modal-header" id="domainFound">
+    <h5 class="modal-title">Domain Found</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <p class="text-left m-0">
+        We found a different account in Zoho that uses this domain<span id="domain_found_account"></span>. Would you
+        like to use this account instead?
+    </p>
+    <div class="btn-grp d-flex justify-content-end border-top pt-3">
+        <button type="button" class="button expand" value="Yes"
+            ng-click="updateAccount(admin.company_result[0].user_id,admin.company_result[0].company_id)"></button>
+        <button type="button" class="button expand pull-right" value="No"
+            ng-click="closeModal();backToAdmin('domain_found_zoho');"></button>
+    </div>
+</div>
