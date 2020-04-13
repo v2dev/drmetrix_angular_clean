@@ -1,6 +1,6 @@
 <div class="modal-header" id="contactExistsDifferentAccount">
     <h5 class="modal-title">Contact Exists In Different Account</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
         <span aria-hidden="true"></span>
     </button>
 </div>
@@ -15,6 +15,6 @@
     <div class="btn-grp d-flex justify-content-end border-top pt-3">
         <button type="button" class="button expand" value="Yes" ng-click="saveCompany('new_contact');"></button>
         <button type="button" class="button expand pull-right" value="No"
-            ng-click="backToAdmin('contact_found_zoho');"></button>
+            ng-click="closeModal();"></button>
     </div>
 </div>

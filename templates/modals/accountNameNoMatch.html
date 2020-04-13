@@ -1,0 +1,19 @@
+<div class="modal-header" id="accountNameNoMatch">
+    <h5 class="modal-title">Edit Company Warning</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <p class="text-left m-0">
+        Warning: You have changed the account name. No matching account name is found in Zoho. Do
+        you really want to create a new account in Zoho and move all current AdSphere users to this
+        new account?
+    </p>
+    <div class="btn-grp d-flex justify-content-end border-top pt-3">
+        <button type="button" class="button expand" value="Yes" id="create_sync_save"
+            ng-click="createAndSyncToNewAccount(admin.company_result[0].user_id,admin.company_result[0].company_id)"></button>
+        <button type="button" class="button expand pull-right" value="No"
+            ng-click="closeModal();backToAdmin('account_name_no_match');"></button>
+    </div>
+</div>
