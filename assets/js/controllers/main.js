@@ -1020,7 +1020,7 @@ $scope.shortFormTrackingClassification = [
 
     $rootScope.whatsNew_menu = [{
         href: 'https://adsphere.drmetrix.com/blog/2020/02/04/new-february-2020-build/',
-        title: 'New October Build',
+        title: 'Latest Feature Updates',
         newBuild: 1
     },
     {
@@ -1093,6 +1093,7 @@ $scope.shortFormTrackingClassification = [
         alt: 'Log Out',
         aid: 'log_out',
         title: 'Log Out',
+        aclass: 'log-out d-block',
         src: './assets/images/menuiconblue/menuiconset-13.svg',
     }]
 
