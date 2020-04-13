@@ -1697,7 +1697,7 @@ header.sticky-top {
 }
 
 .main.paddingLeftabBelow60 {
-  padding-left: 60px;
+  padding-left: 56px;
 }
 
 .sidebar .checkbox-normal .checkbox-custom:checked+.checkbox-custom-label:before {
@@ -1705,7 +1705,7 @@ header.sticky-top {
   color: #fff;
 }
 
-.sidebar .sidebar-sticky label {
+.sidebar .sidebar-sticky label {  
   margin-bottom: 0;
   font-size: 13px;
 }
@@ -1859,12 +1859,15 @@ header.sticky-top {
 /*right side section*/
 
 .main {
-  padding-right: 10px;
-  padding-left: 60px;
+  padding-top: 6px;
+  padding-right: 6px;
+  padding-left: 56px;
   transition: 0.5s;
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  position: relative;
+  z-index: -1;
 }
 
 .main .disclaimer-msg {
@@ -1909,8 +1912,8 @@ header.sticky-top {
 .main .top-grid-filter .filter-refine-by>ul>li {
   background: #ccced1;
   border-left: 1px solid rgba(32, 43, 57, 0.2);
-  padding: 15px 10px;
-  margin-left: 10px;
+  margin-left: 8px;
+  padding-left: 8px;
   flex-flow: wrap row;
   position: relative;
 }
@@ -1922,10 +1925,10 @@ header.sticky-top {
 
 .main .top-grid-filter .filter-refine-by>ul>li i {
   color: #666665;
-  padding-left: 16px;
+  padding-left: 6px;
   font-size: 18px;
   cursor: pointer;
-  vertical-align: baseline;
+  vertical-align: middle;
 }
 
 .main .top-grid-filter .filter-refine-by>ul>li .btn i {
@@ -1943,39 +1946,51 @@ header.sticky-top {
 
 .search-input {
   display: flex;
-  padding: 4px 8px;
+  padding: 2px 8px;
   transition: all 0.3s;
   align-items: center;
   margin: 0;
   width: 200px;
   border: 1px solid #979797;
   background: #fff;
+  height: 30px;
 }
 
 .search-input input {
-  font-size: 14px;
+  margin-bottom: 0;
   padding: 0;
+  font-size: 12px;
   border-radius: 0;
   border: none;
   box-shadow: none;
   width: 100%;
+  height: auto;
+  padding-left: 6px;
 }
 
 .search-input i {
-  color: #ccc;
   font-size: 18px;
-  margin-left: 6px;
+  color: #666665;
+  cursor: pointer;
 }
 
 .search-input .search-icon {
   color: #ccc;
-  width: 30px;
   display: flex;
   align-items: center;
+  width: 22px;
 }
 
 .search-input .search-icon svg {
   height: 18px;
+}
+
+.search-input i.fa-times-circle {
+  margin-left: 6px;
+}
+
+.top-grid-filter .search-input {
+  width: 160px;
 }
 
 /*filter popup*/
@@ -2303,11 +2318,24 @@ header.sticky-top {
 
 .notify-msg {
   color: #dc202a;
-  padding: 0 5px 10px;
-  font-size: 16px;
+  padding: 0 5px;
+  font-size: 14px;
   font-weight: 700;
-  background: #fff;
   text-align: center;
+  position: absolute;
+  left: 16.66%;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  margin-bottom: 0;
+}
+
+.notify-msg span {
+  color: #dc202a;
+  padding: 6px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #fff;
 }
 
 /*filter new popup*/
@@ -3888,7 +3916,7 @@ header.sticky-top {
   .nav-menu>li:first-child {
     max-width: 130px;
   }
-  .main-filter>ul>li.btn-wrapper {
+  .main-filter .edit-filter>li.btn-wrapper {
     margin-top: 4px;
   }
 }
@@ -4269,6 +4297,9 @@ header.sticky-top {
   }
   .network-page .network-filter ul li .search-input {
     width: auto;
+  }
+  .main .top-grid-filter .filter-refine-by>span {
+    display: none;
   }
 }
 
