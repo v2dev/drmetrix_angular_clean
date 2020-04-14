@@ -833,10 +833,9 @@ header.sticky-top {
   overflow-x: hidden;
 }
 
-/* .main-container {
+.main-container {
   position: relative;
-  top: 88px;
-} */
+}
 
 .nav-menu>li:first-child {
   border-right: 1px solid #5c5c5f;
@@ -1893,8 +1892,6 @@ header.sticky-top {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
-  position: relative;
-  z-index: -1;
 }
 
 .main .disclaimer-msg {
@@ -2352,7 +2349,7 @@ header.sticky-top {
   position: absolute;
   left: 16.66%;
   right: 0;
-  top: 0;
+  top: 7px;
   z-index: 1;
   margin-bottom: 0;
 }
@@ -3983,7 +3980,7 @@ header.sticky-top {
 .user-grid-filter .search-icon {
   width: 30px;
 }
-/* 
+
 .grid.user-grid {
   height: calc(100vh - 230px) !important;
   padding-bottom: 30px;
@@ -4005,7 +4002,7 @@ header.sticky-top {
 
 .user-grid .ui-grid-invisible {
   display: none;
-} */
+}
 
 
 /*mobile responsive*/
