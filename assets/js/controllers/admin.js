@@ -277,6 +277,7 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
             .then(function(response) {
                 let data = response.data;
                 $("#edit_user_btn").prop( "disabled", false );
+                $scope.modalInstanceMain.close();
                 if(data.status == 1){
                 if(data.max_limit == 'yes'){
                     $scope.openModal('./templates/modals/advancedModal3.html');
@@ -287,6 +288,7 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
                     $scope.showPopup('', 'Record updated successfully.', 'Edit Message', '');
                     setTimeout(function(){
                         $scope.modalInstance.close();
+                        $scope.modalInstanceMain.close();
                     } , 1000 );
                 }
                 }else if(data.status == 2){
