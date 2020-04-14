@@ -3829,7 +3829,7 @@ header.sticky-top {
   padding-left: 0.5em;
   cursor: pointer;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 11px;
   position: absolute;
 }
 
@@ -3970,6 +3970,15 @@ header.sticky-top {
 
 .user-grid-filter .search-icon {
   width: 30px;
+}
+
+.grid.user-grid {
+  height: calc(100vh - 230px) !important;
+  padding-bottom: 30px;
+}
+
+.grid.user-grid .ui-grid-render-container-body .ui-grid-viewport {
+  height: calc(100vh - 300px);
 }
 
 .user-grid .ui-grid-header-cell .ui-grid-cell-contents .ui-grid-header-cell-label{
