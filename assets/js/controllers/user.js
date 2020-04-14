@@ -7,6 +7,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     $scope.admin_user = {};
     $scope.save_clicked = false;
     $scope.userRowForAction = {};
+    $scope.ranking = {searchText: ''};
 
     $scope.popupDefaultOptions = {
         size: 'md modal-dialog-centered'
@@ -94,6 +95,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
 
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
+                $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
             }
         };
 
@@ -108,6 +110,25 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     }
     // $scope.showUsers();
 
+    $scope.filterGridWithSearchText = function() {
+        $scope.gridApi.grid.refresh();
+    }
+
+    $scope.singleFilter = function( renderableRows ){
+        var matcher = new RegExp($scope.ranking.searchText);
+        renderableRows.forEach( function( row ) {
+            var match = false;
+            [ 'name', 'username' ].forEach(function( field ){
+            if ( row.entity[field].match(matcher) ){
+                match = true;
+            }
+            });
+            if ( !match ){
+            row.visible = false;
+            }
+        });
+        return renderableRows;
+    };
     $scope.editUser = function(user_id){
         $scope.save_clicked = true;
         var mobile =  $('#mobile_edit').val();

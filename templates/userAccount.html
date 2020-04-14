@@ -35,5 +35,15 @@
             </ul>
         </nav>
     </div>
+    <div class="top-grid-filter">
+        <div class="network">
+            <div class="search-input">
+                <span class="search-icon">
+                    <i data-feather="search"></i>
+                </span>
+                <input type="search" placeholder="Search User" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
+            </div>
+        </div>
+    </div>
     <div id="gridUser" ui-grid="gridOptionsUser" ui-grid-exporter ui-grid-pagination class="grid"></div>
 </div>
