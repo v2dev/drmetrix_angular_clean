@@ -3133,7 +3133,7 @@ header.sticky-top {
 .welcome-text {
   color: #fff;
   padding-right: 25px;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 /*mobile primary filter*/
@@ -3943,6 +3943,29 @@ header.sticky-top {
   width: 100%;
 }
 
+.user-grid-filter {
+  margin: 6px 0;
+  background: #ccced1;
+  padding: 4px;
+}
+
+.user-grid-filter .help{
+  margin: 0 5px 0 2px;
+  width: 16px;
+  position: relative;
+  max-width: 16px;
+  top: -2px;
+}
+
+.user-grid-filter ul {
+  display: flex;
+  justify-content: flex-end;
+
+}
+
+.user-grid {
+
+}
 
 /*mobile responsive*/
 
