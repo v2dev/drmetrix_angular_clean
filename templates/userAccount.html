@@ -1,4 +1,35 @@
 <div class="user-addmin-wrapper" ng-init="showUsers();">
+    <div class="black-top-menu">
+        <nav class="user-menu-icons d-flex justify-content-between align-items-center w-100">
+            <span class="welcome-text">Welcome, {{complete_name}}</span>
+            <ul>
+                <li>
+                    <button class="btn btn-blue" ng-click="export()"><img class="help"
+                            src="./assets/images/download.svg">Excel</button>
+                </li>
+            </ul>
+        </nav>
+    </div>  
+    <div class="user-grid-filter" >
+        <ul>
+            <li class="mr-2">
+                <button class="btn btn-blue" ng-click="openAddUser()">
+                    <img class="help" src="./assets/images/add-user.svg">Add New User
+                </button>
+            </li>
+            <li>
+                <div class="search-input">
+                    <span class="search-icon">
+                        <img src="./assets/images/search-icon-10.svg" id="magnifying_glass">
+                    </span>
+                    <input type="text" placeholder="Search User" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
+                    <span class="search-icon clear-search-icon" ng-click="clearFilterInput('ranking')" ng-hide="ranking.searchText.length == 0">
+                        <i class="fa fa-times-circle" title="Clear Search"></i>
+                    </span>                        
+                </div>
+            </li>
+        </ul>
+     </div>      
     <div class="modal fade filter-data md-popup super-admin-popup" id="error_msg_anchor" tabindex="-1" role="dialog"
         aria-labelledby="error_msg_anchor">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -15,27 +46,5 @@
             </div>
         </div>
     </div>
-
-    <div class="black-top-menu">
-        <nav class="user-menu-icons d-flex justify-content-between align-items-center">
-            <span class="welcome-text">Welcome, {{complete_name}}</span>
-            <ul class="d-flex justify-content-between align-items-center">
-                <li class="mr-3">
-                    <button class="btn btn-blue" ng-click="openAddUser()"><img class="help"
-                            src="./assets/images/add-user.svg">Add New User</button>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <div class="top-grid-filter">
-        <div class="network">
-            <div class="search-input">
-                <span class="search-icon">
-                    <i data-feather="search"></i>
-                </span>
-                <input type="search" placeholder="Search User" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
-            </div>
-        </div>
-    </div>
-    <div id="gridUser" ui-grid="gridOptionsUser" ui-grid-exporter ui-grid-pagination class="grid"></div>
+    <div id="gridUser" ui-grid="gridOptionsUser" ui-grid-exporter ui-grid-pagination class="grid user-grid"></div>
 </div>
