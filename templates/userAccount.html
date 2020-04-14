@@ -1,7 +1,7 @@
 <div class="user-addmin-wrapper" ng-init="showUsers();">
     <div class="black-top-menu">
         <nav class="user-menu-icons d-flex justify-content-between align-items-center w-100">
-            <span class="welcome-text">Welcome ,</span>
+            <span class="welcome-text">Welcome, {{complete_name}}</span>
             <ul>
                 <li>
                     <button class="btn btn-blue" ng-click="export()"><img class="help"
@@ -18,9 +18,15 @@
                 </button>
             </li>
             <li>
-                <button class="btn btn-blue" ng-click="toggle_search()">
-                    <img class="help" src="./assets/images/search-white.svg">Search
-                </button>
+                <div class="search-input">
+                    <span class="search-icon">
+                        <img src="./assets/images/search-icon-10.svg" id="magnifying_glass">
+                    </span>
+                    <input type="text" placeholder="Search User" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
+                    <span class="search-icon clear-search-icon" ng-click="clearFilterInput('ranking')" ng-hide="ranking.searchText.length == 0">
+                        <i class="fa fa-times-circle" title="Clear Search"></i>
+                    </span>                        
+                </div>
             </li>
         </ul>
      </div>      

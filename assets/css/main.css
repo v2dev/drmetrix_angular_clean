@@ -3943,6 +3943,7 @@ header.sticky-top {
   width: 100%;
 }
 
+
 .user-grid-filter {
   margin: 6px 0;
   background: #ccced1;
@@ -3960,12 +3961,31 @@ header.sticky-top {
 .user-grid-filter ul {
   display: flex;
   justify-content: flex-end;
-
+  align-items: center;
 }
 
-.user-grid {
-
+.user-grid-filter .search-input {
+  width: 150px;
 }
+
+.user-grid-filter .search-icon {
+  width: 30px;
+}
+
+.user-grid .ui-grid-header-cell .ui-grid-cell-contents .ui-grid-header-cell-label{
+  color: #202b39;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.user-grid .ui-grid-header-cell .ui-grid-cell-contents {
+  height: auto;
+}
+
+.user-grid .ui-grid-invisible {
+  display: none;
+}
+
 
 /*mobile responsive*/
 
