@@ -61,6 +61,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         $scope.gridOptionsUser = {
             //Pagination
             enableSorting: true,
+            enableGridMenu: true,
             paginationPageSize: 10,
             rowHeight: 30,
             paginationTemplate: correctTotalPaginationTemplate,
@@ -77,14 +78,14 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
 
                 { name: 'authy_cookie', displayName:'Authy Authenticated', width: '100', cellTemplate:'<span class="{{row.entity.authy_cookie ? \'user-verified\' : \'user-not-verified-authy\'}}">{{row.entity.authy_cookie ? \'Yes\' : \'No\'}}<span>' },
 
-                { name: 'vdate', displayName: 'Verified Date', cellTemplate:'<span>{{row.entity.vdate ? row.entity.vdate : \'-\'}}</span>' },
+                { name: 'vdate', displayName: 'Verified Date', width: '90', cellTemplate:'<span>{{row.entity.vdate ? row.entity.vdate : \'-\'}}</span>' },
                 { name: 'assistant_admin', displayName: 'Assistant Admin', width: '90',cellTemplate:'<span>{{row.entity.assistant_admin == 1 ? \'Yes\' : \'No\'}}</span>' },
 
                 { name: 'skip_authy', displayName: 'Skip Authy', width: '70', cellClass:'text-center', cellTemplate:'<nav class="grid-content" id="skip_authy"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="checkbox-custom" id="skip_authy_check_{{row.entity.user_id}}" ng-click="grid.appScope.manageSkipAuthy(row.entity)" ng-checked="row.entity.skip_authy == 1 ? true : false " /><label class="checkbox-custom-label"></label></li></ul></nav>' },
 
                 { name: 'status', displayName: 'Status', width: '80', cellTemplate:'<span>{{row.entity.status == "active" ? "Active" : "Inactive"}}</span>' },
-                { name: 'last_login', displayName: 'Last Login', cellTemplate:'<span>{{row.entity.last_login}}</span>' },
-                { name: 'login_count', displayName:'Total Logins', cellTemplate:'<span>{{row.entity.login_count}}</span>' },
+                { name: 'last_login', displayName: 'Last Login', width: '90', cellTemplate:'<span>{{row.entity.last_login}}</span>' },
+                { name: 'login_count', displayName:'Total Logins', width: '90', cellTemplate:'<span>{{row.entity.login_count}}</span>' },
                 { name: 'last_30_days_count', displayName:'Last 30 Days Logins', width: '80',cellTemplate:'<span>{{row.entity.last_30_days_count}}</span>' },
                 { name: 'tracking_alert_subscribed', displayName:'Tracking alert', width: '90',cellTemplate:'<span>{{row.entity.tracking_alert_subscribed == 1 ? \'Yes\' : \'No\'}}</span>' },
 
