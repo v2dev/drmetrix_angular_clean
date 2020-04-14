@@ -2,15 +2,16 @@ angular.
   module('drmApp').
   component('categoryPart', { 
     bindings: {
-        category_list: '<'
+        category_list: '<',
+        // catgeorySideBar: '<',
     },
     template:
         `<nav class="sidebar">
-        <a  href="" class="open-left-sidebar-nav slideBtn" id="slidebtn" ng-click="catgeorySideBar = !catgeorySideBar;"> 
+        <a  href="" class="open-left-sidebar-nav slideBtn" id="slidebtn" ng-click="$ctrl.changeCategorySideBarValue();"> 
             <i data-feather="align-justify"></i>
             <span>Categories</span>
         </a>
-        <div class="sidebar-sticky sidenav scrollbar" id="sidenav"  ng-class="catgeorySideBar == 1 ? 'addWidthAndLeft' : 'minusWidthAndLeft'">
+        <div class="sidebar-sticky sidenav scrollbar" id="sidenav"  ng-class="$root.catgeorySideBar == 1 ? 'addWidthAndLeft' : 'minusWidthAndLeft'">
             <div class="d-flex justify-content-between align-items-center position-relative pb-1">
                 <div class="checkbox-normal">
                     <input class="checkbox-custom cat_all"  type="checkbox" id="checkbox5_all"  ng-click="$ctrl.allcategory = !$ctrl.allcategory;$ctrl.selectCategory($ctrl.category_list, $ctrl.allcategory, 'all')" ng-model="$ctrl.allcategory" />
@@ -20,7 +21,7 @@ angular.
                 <a class="btn btn-black category-track-btn"  id="category_track_btn" ng-class="category_data_flag ? 'btn-black': ''"><i class="fa fa-eye" title="Track"></i>
                     <span>Track</span>
                 </a>
-                <a href="" class="close-left-sidebar-nav slideBtn" id="slidebtn" ng-click="catgeorySideBar = !catgeorySideBar;">
+                <a href="" class="close-left-sidebar-nav slideBtn" id="slidebtn" ng-click="$ctrl.changeCategorySideBarValue();">
                     <i data-feather="align-justify"></i>
                 </a>
             </div>
@@ -50,7 +51,11 @@ angular.
     </nav>`,
     controller: function CategoryController($scope, $rootScope, apiService) {
         var self = this;
-       
+        $rootScope.catgeorySideBar = false;
+
+       self.changeCategorySideBarValue = function() {
+           $rootScope.catgeorySideBar = !$rootScope.catgeorySideBar;
+       }
         self.showCategoryList = function () {
             if (localStorage.cachedCategoriesData) {
                 self.setCategoriesHTML();
@@ -104,7 +109,7 @@ angular.
                 angular.forEach(item.subcategory, function (data) {
                     data.isSelected = value;
                 });
-                self.changeCategory($scope.category_list, value);
+                self.changeCategory($rootScope.category_list, value);
             }
             self.checkCategoryValidation(type, value)
         }
@@ -115,17 +120,8 @@ angular.
             $rootScope.no_category_error = false;
             if(type == 'all' && !value) {
                 $rootScope.no_category_error = true;
-                // $scope.disableApplyButton();
             } else {
-                // if($scope.ranking.main_categories.length > sessionStorage.lifetime_cat_restrict_count ) {
-                //     $scope.disableApplyButton();
-                //     $scope.lifetime_error = 1;
-                // } else {
-                //     $scope.enableApplyButton();
-                //     $scope.lifetime_error = 0; 
                 $rootScope.category_error = true;
-                // }
-                   
             }
         }
     
@@ -144,9 +140,6 @@ angular.
             }
         }
         self.showCategoryList(); 
-        // if ((typeof($rootScope.category_list) == 'undefined' || $rootScope.category_list.length == 0)) { }
-        
-
         feather.replace();
     }
   });
