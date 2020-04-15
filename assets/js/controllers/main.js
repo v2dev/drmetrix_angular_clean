@@ -1462,9 +1462,8 @@ $scope.shortFormTrackingClassification = [
 
     $scope.showTab = function(tab) {
         $rootScope.type = tab;
+        $scope.applyFilter();
     }
-
-    
 
     /** Filters code -- Start */
     $scope.call_filter_list = function () {
