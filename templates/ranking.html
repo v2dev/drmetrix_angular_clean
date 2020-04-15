@@ -40,7 +40,7 @@
    
 <div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">
     <category-part data="$ctrl.category_list"></category-part> 
-    <main class="main" id="main" ng-class="!catgeorySideBar  ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
+    <main class="main" id="main" ng-class="!catgeorySideBar  ? '' : 'push-left'">
         <div class="notify-msg"> 
             <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
             <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>

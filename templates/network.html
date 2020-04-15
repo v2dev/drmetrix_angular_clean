@@ -1,86 +1,71 @@
-
-<div id="choose-networks-modal" class="filter-popup network-filter" ng-show="showNetworkModal">
-    Choose atlease 2 networks
-    <ul>
-       <li>
-          <h5 class="">Networks |</h5>
-          <b id="nwcount">{{networkSelectCount()}}</b> Selected
-       </li>
-       <li>
-          <h5 class="network-warning" id="nselect_err" ng-show="networkSelectCount() > 8">You can select maximum of 8 networks</h5>
-       </li>
-       <li>
-          <div class="network-search-container">
-             <span class="open-filter-popup"  data-toggle="modal" data-target="#my-filter-modal" href="#" ng-click="call_filter_list('filter_list_network');">
-             Filter <i class="fa fa-caret-down fa-lg"></i>
-             </span>
-             <div class="search-input">
-                <span class="search-icon"><img src="./assets/images/search-icon-10.svg" id="magnifying_glass" ></span>
-                <input type="text" name="searchNet" id="network_search" ng-change="changeSearchNet()" placeholder="Search a Network" ng-model="searchNet">
-                <span class="search-icon ng-hide" id="cancelSearchNet" ng-click="searchNet = ''" ng-hide="searchNet.length == 0">
-                <i class="fa fa-times-circle" title="Clear Search"></i>
-                </span>
-             </div>
-          </div>
-       </li>
-    </ul>
-    <div class="filter-in-letters border-top border-bottom pt-2 pb-2 text-center ln-letters" ng-show="networkTabList.length > 0">
-       <a ng-repeat="letter in letterLists" ng-class="{'ln-selected' : selectedLetter == letter, 'ln-disabled' : hasTabLetterDisable(letter)}" ng-disabled ="hasTabLetterDisable(letter);" ng-click="changeLatter(letter)" class="ng-binding ng-scope">{{letter | uppercase}}</a>
-    </div>
-    <ul id="networkTabDemoOne" class="networklist scrollbar">
-        <li ng-repeat="network in networkTabList | filter:networkSearchBy(searchNet, selectedLetter)" ng-init="network.isSelected = network.isSelected ? network.isSelected : false">
-            <div class="checkbox">
-               <input type="checkbox" class="checkbox-custom tab_netwrok_list" custom-network-id="{{network.network_id}}" name="networkList" id="{{network.network_code}}" value="{{network.network_alias}}" ng-model="network.isSelected" custom-att="{{network.network_alias}}">
-               <label for="{{network.network_code}}">
-                    <span ng-if="checkLiveDateStatus(network.live_date)" title="Live: {{getLiveDate(network.live_date)}}">{{network.network_alias}}</span>
-                    <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>
-                </label>
-            </div>
-            <span class="dpi-symbol" ng-if="network.dpi == 1"><img src="./assets/images/dpi_symbol.png"></span>
-            <span class="digi-symbol ota" ng-if="network.diginet == 1">OTA</span>
-            <span class="new-symbol" ng-if="checkLiveDateStatus(network.live_date)"><img src="./assets/images/new.svg"></span>
+<div class="network-page network-filter-popup" >
+   <h4 class="text-center">Choose at least <b>two networks</b> to see how they compare by market dollars ($) & Airings. You can select a maximum of 8 networks.</h4>
+   <div id="choose-networks-modal" class="filter-popup network-filter" ng-show="showNetworkModal">
+      <ul>
+         <li>
+            <h5 class="">Networks |</h5>
+            <b id="nwcount">{{networkSelectCount()}}</b> Selected
          </li>
-    </ul>
-    <div class="network-filter-bottom d-flex align-items-center justify-content-between">
-       <div class="d-flex dpi-newnetwork">
-          <a class="dpi-link" href="https://www.drmetrix.com/en/the_drmetrix_difference.html" target="_blank" title="Learn about DPI">
-          <span class="dpi-symbol">
-          <img src="./assets/images/dpi_symbol.png">
-          </span>Learn about DPi
-          </a>
-          <div class="d-flex">
-             <a class="digi-link" ng-click="displayDigiPopup = true;"  title="Learn about OTA">
-             <span class="dpi-symbol ota">OTA</span>Learn about OTA
-             </a>
-          </div>
-          <div ng-show="displayDigiPopup" class="digi-network-page digi-popup ng-hide">
-                 <a class="close_filter digi-close" ng-click="displayDigiPopup = 0;"><img src="./assets/images/menuiconblue/VC002-closebutton-03.svg"></a>
-                 <p class="digi_text">OTA is short for Over the Air. For these networks, DRMetrix monitors over-the-air signals from two different market affiliates. Any ad that is seen at the same time in both markets is reported as a national airing.</p>
-             </div>
-          <div class="d-flex">
-             <a class="new-link" href="javascript:void();" title="New" style="text-decoration:none;">
-             <span class="new-symbol">
-             <img src="./assets/images/new.svg">
-             </span>New</a>
-          </div>
-       </div>
-       <div class="btn-grp d-flex">
-        <button class="resetAllBtn btn btn-black btnapply btnclose cancelBtn" type="button" ng-click="closeModal();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
-          <button class="resetAllBtn btn btn-black btnapply btnclose cancelBtn" type="button" ng-click="clearNetworkList();"><i class="fa fa-times" title="cancel"></i>Clear All</button>
-          <button class="applyBtn btn btn-blue mr-3 btnapply btnclose" disabled type="button" ng-click="networkFilterApply();" id="myNetApply" ng-disabled="networkApply">
-          <i class="fa fa-check" title="apply"></i>Apply</button>
-       </div>
-    </div>
- </div>
-<div class="main-filter" ng-include="'templates/primary_filter.html'" ng-hide="showNetworkModal" ></div>
-<div class="container-fluid" ng-hide="showNetworkModal">
-    <div class="row">
-        <category-part data="$ctrl.category_list"></category-part> 
-            <div class="notify-msg">
-                <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
-                <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
-                <span ng-if="lifetime_error" >For date range > 1 year, you can select up to 5 categories to enable &quot;Apply&quot; button</span>
+         <li>
+            <h5 class="network-warning" id="nselect_err" ng-show="networkSelectCount() > 8">You can select maximum of 8 networks</h5>
+         </li>
+         <li>
+            <div class="network-search-container">
+               <span class="open-filter-popup"  data-toggle="modal" data-target="#my-filter-modal" href="#" ng-click="call_filter_list('filter_list_network');">
+               Filter <i class="fa fa-caret-down fa-lg"></i>
+               </span>
+               <div class="search-input">
+                  <span class="search-icon"><img src="./assets/images/search-icon-10.svg" id="magnifying_glass" ></span>
+                  <input type="text" name="searchNet" id="network_search" ng-change="changeSearchNet()" placeholder="Search a Network" ng-model="searchNet">
+                  <span class="search-icon ng-hide" id="cancelSearchNet" ng-click="searchNet = ''" ng-hide="searchNet.length == 0">
+                  <i class="fa fa-times-circle" title="Clear Search"></i>
+                  </span>
+               </div>
             </div>
-    </div>
-    <div id="grid_network" ui-grid="gridNetworkAiringBrand" ui-grid-selection ui-grid-pagination class="grid"></div>
+         </li>
+      </ul>
+      <div class="filter-in-letters border-top border-bottom pt-2 pb-2 text-center ln-letters" ng-show="networkTabList.length > 0">
+         <a ng-repeat="letter in letterLists" ng-class="{'ln-selected' : selectedLetter == letter, 'ln-disabled' : hasTabLetterDisable(letter)}" ng-disabled ="hasTabLetterDisable(letter);" ng-click="changeLatter(letter)" class="ng-binding ng-scope">{{letter | uppercase}}</a>
+      </div>
+      <ul id="networkTabDemoOne" class="networklist scrollbar">
+         <li ng-repeat="network in networkTabList | filter:networkSearchBy(searchNet, selectedLetter)" ng-init="network.isSelected = network.isSelected ? network.isSelected : false">
+               <div class="checkbox">
+                  <input type="checkbox" class="checkbox-custom tab_netwrok_list" custom-network-id="{{network.network_id}}" name="networkList" id="{{network.network_code}}" value="{{network.network_alias}}" ng-model="network.isSelected" custom-att="{{network.network_alias}}">
+                  <label for="{{network.network_code}}">
+                     <span ng-if="checkLiveDateStatus(network.live_date)" title="Live: {{getLiveDate(network.live_date)}}">{{network.network_alias}}</span>
+                     <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>
+                  </label>
+               </div>
+               <span class="dpi-symbol" ng-if="network.dpi == 1"><img src="./assets/images/dpi_symbol.png"></span>
+               <span class="digi-symbol ota" ng-if="network.diginet == 1">OTA</span>
+               <span class="new-symbol" ng-if="checkLiveDateStatus(network.live_date)"><img src="./assets/images/new.svg"></span>
+            </li>
+      </ul>
+      <div class="network-filter-bottom d-flex align-items-center justify-content-between">
+         <div class="dpi-newnetwork">
+            <a class="dpi-link" href="https://www.drmetrix.com/en/the_drmetrix_difference.html" target="_blank" title="Learn about DPI">
+               <span class="dpi-symbol">
+               <img src="./assets/images/dpi_symbol.png">
+               </span>Learn about DPi
+            </a>
+            <a class="digi-link" ng-click="displayDigiPopup = true;"  title="Learn about OTA">
+               <span class="dpi-symbol ota">OTA</span>Learn about OTA
+            </a>
+            <div ng-show="displayDigiPopup" class="digi-network-page digi-popup ng-hide">
+                  <a class="close_filter digi-close" ng-click="displayDigiPopup = 0;"><img src="./assets/images/menuiconblue/VC002-closebutton-03.svg"></a>
+                  <p class="digi_text">OTA is short for Over the Air. For these networks, DRMetrix monitors over-the-air signals from two different market affiliates. Any ad that is seen at the same time in both markets is reported as a national airing.</p>
+            </div>
+            <a class="new-link" href="javascript:void();" title="New">
+               <span class="new-symbol">
+               <img src="./assets/images/new.svg">
+               </span>New
+            </a>
+         </div>
+         <div class="btn-grp d-flex">
+            <button class="resetAllBtn btn btn-black btnapply btnclose cancelBtn mr-1" type="button" ng-click="clearNetworkList();"><i class="fa fa-times" title="cancel"></i>Clear All</button>
+            <button class="applyBtn btn btn-blue mr-3 btnapply btnclose" disabled type="button" ng-click="networkFilterApply();" id="myNetApply" ng-disabled="networkApply">
+            <i class="fa fa-check" title="apply"></i>Apply</button>
+         </div>
+      </div>
+   </div>
 </div>
