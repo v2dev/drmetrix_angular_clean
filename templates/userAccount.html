@@ -12,11 +12,6 @@
     </div>  
     <div class="user-grid-filter" >
         <ul>
-            <li class="mr-2">
-                <button class="btn btn-blue" ng-click="openAddUser()">
-                    <img class="help" src="./assets/images/add-user.svg">Add New User
-                </button>
-            </li>
             <li>
                 <div class="search-input">
                     <span class="search-icon">
@@ -28,6 +23,11 @@
                     </span>                        
                 </div>
             </li>
+            <li>
+                <button class="btn btn-blue" ng-click="openAddUser()">
+                    <img class="help" src="./assets/images/add-user.svg">Add New User
+                </button>
+            </li>            
         </ul>
      </div>      
     <div class="modal fade filter-data md-popup super-admin-popup" id="error_msg_anchor" tabindex="-1" role="dialog"
@@ -41,7 +41,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center"><span id="error_msg_span"></span></p>
+                    <p class="text-center mb-0"><span id="error_msg_span"></span></p>
                 </div>
             </div>
         </div>

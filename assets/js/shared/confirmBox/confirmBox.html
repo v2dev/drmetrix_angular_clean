@@ -1,11 +1,11 @@
 <div class="modal-header" ng-show="modalOptions.headerText != ''">
-    <h3 >{{modalOptions.headerText}}</h3>
+    <h5>{{modalOptions.headerText}}</h5>
     <button type="button" class="close" data-ng-click="modalOptions.close()" aria-label="Close" ng-show="modalOptions.closeReq == 1">
         <span aria-hidden="true"></span>
     </button>
 </div>
-  <div class="modal-body">
-    <p ng-bind-html="modalOptions.bodyText | trustAsHtml"></p>
+  <div class="modal-body text-center">
+    <p class="mb-0" ng-bind-html="modalOptions.bodyText | trustAsHtml"></p>
   </div>
   <div class="modal-footer" ng-show="modalOptions.actionButtonText != ''">
     <button type="button" class="btn btn-primary" ng-show="modalOptions.closeButtonText != ''">{{modalOptions.closeButtonText | trustAsHtml}}</button>
