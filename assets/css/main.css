@@ -249,7 +249,7 @@ select::-ms-expand {
   border: none;
   color: #fff;
   border: 1px solid #5cccf5;
-  padding: 4px 8px;
+  padding: 2px 8px;
   font-size: 13px;
   border-radius: 4px;
   margin-bottom: 0;
@@ -1257,7 +1257,6 @@ header.sticky-top {
   border: 0;
   background-color: #f2f1f1;
   border-radius: 0;
-  margin-left: 10px;
 }
 
 .report-tab-section .refresh-report {
@@ -3924,6 +3923,20 @@ header.sticky-top {
   display: flex;
   align-items: center;
 }
+
+/*drop arrow*/
+.dropdown-arrow:after {
+  content: "";
+  border-top: 6px solid;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  border-bottom: 0;
+  display: inline-block;
+  position: relative;
+  top: 1px;
+  margin-left: 8px;
+}
+
 
 /*user admin*/
 .super-admin-popup h5 {
