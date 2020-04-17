@@ -17743,12 +17743,8 @@ function getAdvpageBrands(){
     $requestData = array();
     $request                            = Slim::getInstance()->request();
     $query_string                       = $request->getBody();
-    $set_one                            = explode('&', $query_string);
-    $raw_data = array();
-     foreach($set_one as $k =>$v){
-        $raw_data                       = explode('=',$v);
-        $requestData[$raw_data[0]]      = $raw_data[1];
-    }
+    parse_str($query_string, $output);
+    $requestData = (array)json_decode($query_string, TRUE);
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
     $page                               = $requestData['page'];

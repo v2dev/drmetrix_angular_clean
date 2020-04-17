@@ -50,6 +50,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             enableGridMenu: true,
             enableSelectAll: true,
             enableSorting: true,
+            enableColumnMenus: false,
             showTreeExpandNoChildren: true,
             exporterCsvFilename: 'myFile.csv',
             exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
@@ -284,6 +285,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             enableSorting: true,
             showTreeExpandNoChildren: true,
             enableExpandableRowHeader: false,
+            enableColumnMenus: false,
             //Pagination
             paginationPageSizes: [20],
             paginationPageSize: 10,
@@ -304,8 +306,8 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                             { name: 'creatives_count', displayName: 'Creatives', cellTemplate:'<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subGridOptions2.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>' },
 
                             { name: 'category_name', displayName:'Category', cellTemplate:'<a href="#"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover" ng-click="grid.appScope.fetchList(row.entity.id,\''+formData.type+'\',row.entity.category_name);"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"> - </span></a>' },
-                            { name: 'airings', displayName:'Airings', cellTemplate:'<a href="#"><span ng-if="row.entity.airings!=\'\'" class="ranking_airings" ng-click="viewAiringGraph(row.entity.brand_name,row.entity.id,\'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.airings,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\');">{{COL_FIELD}} </span><span ng-if="row.entity.airings==\'\'"> - </span></a>'  },
-                            { name: 'spend_index', displayName: 'Spend',  cellTemplate: '<a href=""><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="viewAiringSpendGraph(row.entity.brand_name,row.entity.id,\'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>' },
+                            { name: 'airings', displayName:'Airings', cellTemplate:'<span ng-if="row.entity.airings!=\'\'" class="ranking_airings">{{COL_FIELD}} </span><span ng-if="row.entity.airings==\'\'"> - </span>'  },
+                            { name: 'spend_index', displayName: 'Spend',  cellTemplate: '<span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" >{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span>' },
                             { name: 'national', displayName: 'National %'},
                             { name: 'local', displayName:'DPI %'},
                             { name: 'asd', displayName:'ADS'},
@@ -361,7 +363,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             // { name: 'id', displayName: 'AVD_ID' },
             { name: 'rank', displayName: 'Rank' },
 
-            { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_adv == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="#" title="{{row.entity.advertiser_name}}" ng-click="view_adv_tab(row.entity.advertiser_name,row.entity.id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',row.entity.id,row.entity.advertiser_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>', pinnedLeft:true },
+            { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate: '<a href=""><span title="{{row.entity.advertiser_name}}" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',row.entity.id,row.entity.advertiser_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</span></a>', pinnedLeft:true },
 
             { name: 'hidden_brand', displayName: 'Brand', cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.entity.groupHeader==true || row.entity.subGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>' },
 
@@ -492,6 +494,19 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $scope.all_network = all_network;
         $rootScope.sidx = $scope.sidx = sidx;
         // $scope.uigridAiringSpend(name, id, active_tab, all_network, all_day, all_hour, network_cnt, spend, c, tab, val, sd, ed, returnText, lang, area, adv_name, brand_name, brand_id, network_id, network_dpi);
+    }
+
+    $scope.view_adv_tab = function(adv_name, adv_id, c, tab, val, sd, ed, call_from, call_id, call_name, call_page, need_help) {
+        debugger;
+        $scope.adv_id = adv_id;
+        $scope.adv_name = adv_name;
+        $scope.call_from = call_from;
+        $scope.call_id = call_id;
+        $scope.call_name = call_name;
+        $scope.othr_grid_for = 'adv';
+        $scope.active_tab = tab;
+        $scope.sidx = "airings";
+        $scope.page_call = 'advertiser_detail';
     }
 
     $scope.backToRankingpage = function() {
