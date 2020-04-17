@@ -2265,10 +2265,7 @@ function __queries_display_brand_networks($params)
     $nw_condition  = $day_condition = $hour_condition = $daypart_condition = '';
 
     $new_filter_opt = newFilter($new_filter_opt, $start_date, $end_date);
-    if (!empty($network_id) && $network != "''" && $network != 'all_networks') {
-        if(is_array($network_id)) {
-            $network_id = implode(",",$network_id);
-        }
+    if (!empty($network_id)) {
         $nw_condition = "  AND d.network_id IN ($network_id)";
     }
 

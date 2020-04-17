@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h5 class="modal-title">All Programs</h5>
+    <button type="button" class="close" ng-click="closeModal();" aria-label="Close">
+    <span aria-hidden="true"></span>
+    </button>
+ </div>
+ <div class="modal-body">
+    <div class="filter-popup">
+        <div class="checkbox heading-border pb-2" ng-hide="networks_loading">
+            <input type="checkbox" id="all_program_airings_details" ng-click="forProgramList()"  ng-model="all_program_selected">
+            <label for="all_program_airings_details"  id="for_program_filter">All Programs</label>
+        </div>
+        <div ng-show="networks_loading">Loading....</div>
+        <div ng-hide="networks_loading" id="program_list_div" class="pt-1">
+            <ul class="networklist scrollbar">
+                <li class="checkbox " ng-repeat="(key , value) in programs" id="{{key}}" >
+                    <div ng-repeat="(k , v) in value track by $index" class="network_id_{{v.network_id}} prog_network_id {{v.class}} {{v.same_class}}" ng-if="network_selection.indexOf(v.network_id)!=-1" >
+                        <input type="checkbox" id="airings_{{k}}" name="airings_programs[]" value="{{v.program}}" ng-click="forSingleProgram(v.isSelected)"  ng-model="v.isSelected" class="opt_airing_filter_program"  cust-attr="network_id_{{v.network_id}}">{{v.program}}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

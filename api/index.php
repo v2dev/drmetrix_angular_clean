@@ -1731,12 +1731,12 @@ function brandNetworks($export = 0, $request_arr = NULL){
     $cat            = rtrim(urldecode($requestData['cat_id']),",");
     $cat            = rtrim($cat,"all,");
     $catIn          = '('.$cat.')';
-    $networks       = isset($requestData['network_code%5B%5D'])? $requestData['network_code%5B%5D'] : $requestData['network_code'] ;
-    $network_id     =  isset($_POST['network_id']) ? $_POST['network_id'] : array();
+    // $networks       = isset($requestData['network_code%5B%5D'])? $requestData['network_code%5B%5D'] : $requestData['network_code'] ;
+    $network_id     =  isset($requestData['network_id']) ? urldecode($requestData['network_id']) : '';
     $program_ids            = isset($requestData['programs_ids']) ? urldecode($requestData['programs_ids']) : '';
-    $hours                  = isset($_POST['hour']) ? $_POST['hour']   : '';
-    $dayparts               = isset($_POST['dayparts']) ? $_POST['dayparts'] :  '';
-    $days                   = isset($_POST['day']) ? $_POST['day'] : '';
+    $hours                  = isset($requestData['hour']) ? $requestData['hour']   : '';
+    $dayparts               = isset($requestData['dayparts']) ? $requestData['dayparts'] :  '';
+    $days                   = isset($requestData['day']) ? $requestData['day'] : '';
     if($export == 1){
         $hours                  = isset($requestData['hour']) ? $requestData['hour']   : '';
         $dayparts               = isset($requestData['daypart']) ? $requestData['daypart'] :  '';
@@ -1746,11 +1746,11 @@ function brandNetworks($export = 0, $request_arr = NULL){
     $day_string             = is_array($days) ? implode_call($days)     : $days;
     $hours_string           = is_array($hours) ? implode_call($hours)    : $hours;
     $dayparts_string        = is_array($dayparts) ? implode_call($dayparts)    : $dayparts;
-    if($networks == 'all_networks'){
-        $network_string = $networks;
-    }else{
-        $network_string = is_array($networks) ? implode_call($networks, true) : "'".$networks."'";
-    }    
+    // if($networks == 'all_networks'){
+    //     $network_string = $networks;
+    // }else{
+    //     $network_string = is_array($networks) ? implode_call($networks, true) : "'".$networks."'";
+    // }    
     $new_filter_opt = isset($requestData['new_filter_opt']) ? $requestData['new_filter_opt'] : 'none';
     $join_category  = 'INNER JOIN categories cat ON (b.main_sub_category_id = cat.sub_category_id OR b.alt_sub_category_id = cat.sub_category_id)';
     $creative_durations         = urldecode($requestData['creative_duration']);
@@ -1799,7 +1799,7 @@ function brandNetworks($export = 0, $request_arr = NULL){
     $params_brand_networks['end_date']                = $ed;
     $params_brand_networks['id']                      = $id;
     $params_brand_networks['tab']                     = $tab;
-    $params_brand_networks['network']                 = $network_string;
+    // $params_brand_networks['network']                 = $network_string;
     $params_brand_networks['network_id']              = $network_id;
     $params_brand_networks['new_filter_opt']          = $new_filter_opt;
     $params_brand_networks['brand_classification']    = $brand_classification['brand_classification'];
@@ -11488,8 +11488,6 @@ function multi_in_array($value, $array)
 }
   
 function getNetworksList(){
-    ini_set('memory_limit','2192M');
-    // show( ini_get('memory_limit'));
     $data = $result = array();
     $network_arr = array();
     $nestedData=array();   
@@ -11498,15 +11496,9 @@ function getNetworksList(){
     $all_programs = $program_brand  = $setUniqueAllPrograms = $checkedPrograms = $setAllPrograms = array();
     
     $db = getConnection();
-    
     $request = Slim::getInstance()->request();
-    $query_string = $request->getBody();       
-    $set_one = explode('&', $query_string);
-    
-    foreach($set_one as $k =>$v){
-        $raw_data  = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
+    $query_string = $request->getBody();
+    $requestData = (array)json_decode($query_string, TRUE);
     $where_category = '';
     $_order_by      = ' n.network_alias ';    
     $c              = urldecode($requestData['c']);  
@@ -11576,6 +11568,7 @@ function getNetworksList(){
         foreach($result2 as $k => $v){
             $setAllPrograms[$v['program_id']]['network_id'] =  $v['network_id'];
             $setAllPrograms[$v['program_id']]['program']    =  $v['program'];
+            $setAllPrograms[$v['program_id']]['isSelected'] = true;
         }
     }
 

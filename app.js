@@ -50,9 +50,9 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
         })
         // .state('airingDetail', {
         //     url: '/airingDetail',
-        //     templateUrl: 'templates/modals/airingDetail.html',
-        //     controller: 'RankingController'
-        // });
+        //     templateUrl: 'templates/airingDetail.html',
+        //     controller: 'airingsDetailController'
+        // })
         .state('globalSearch', {
             url: '/globalSearch',
             templateUrl: 'templates/globalSearch.html',
@@ -62,5 +62,5 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             url: '/configureEmails',
             templateUrl: 'templates/configureEmails.html',
             controller: 'ConfigureEmailsController'
-        });
+        })
 });
