@@ -44,6 +44,7 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+  overflow: hidden;
 }
 
 img {
@@ -218,6 +219,21 @@ select {
 
 select::-ms-expand {
   display: none;
+}
+
+/*common classes*/
+.d-none {
+  display: none;
+}
+
+.error~span, .error-msg {
+  border: none;
+  color: #ffb644;
+  font-size: 13px;
+}
+
+.color-red {
+  color: #dc202a;
 }
 
 /*button*/
@@ -412,16 +428,6 @@ input[type="checkbox"].checkbox-custom {
   border-radius: 5px;
   margin-right: 0.5em;
   text-align: center;
-}
-
-.error~span, .error-msg {
-  border: none;
-  color: #ffb644;
-  font-size: 13px;
-}
-
-.color-red {
-  color: #dc202a;
 }
 
 /*long text*/
@@ -981,6 +987,8 @@ header.sticky-top {
   text-align: center;
 }
 
+/*top black filter*/
+
 .black-top-menu {
   display: flex;
   justify-content: space-between;
@@ -1114,18 +1122,19 @@ header.sticky-top {
 }
 
 .modal .modal-dialog .btn-grp {
-  padding: 12px 15px 0;
+  padding: 12px 12px 0;
   border-top: 1px solid #dee2e6;
-  margin: 10px -15px 0;
+  margin: 10px -12px 0;
   text-align: right;
   font-size: 0;
 }
 
 .modal .modal-header {
-  background: #202b39;
   color: #fff;
-  padding: 10px 15px 4px;
+  background: #202b39;
+  padding: 4px 12px 4px;
   border-radius: 0;
+  border: none;
 }
 
 .modal .modal-header h5 {
@@ -1139,8 +1148,29 @@ header.sticky-top {
   color: #fff;
 }
 
-.modal .modal-body {
-  padding: 15px;
+.modal-body {
+  position: relative;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 12px;
+}
+
+.modal-content {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
+  outline: 0;
 }
 
 .modal .close {
@@ -1204,55 +1234,49 @@ header.sticky-top {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 15px;
-}
-
-.report-tab-section a {
-  padding: 13px;
-  float: left;
-  color: #000;
+  padding-bottom: 12px;
 }
 
 .report-tab-section .my-report-select {
   display: flex;
   align-items: center;
-  padding: 5px;
-  margin: 0 20px;
-}
-
-.report-tab-section .my-report-select label {
-  font-size: 14px;
-  font-weight: 400;
-  margin-bottom: 0;
+  background: #f2f1f1;
   margin-right: 10px;
 }
 
+.report-tab-section .my-report-select label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0;
+  margin-left: 10px;
+}
+
 .report-tab-section .my-report-select select {
-  width: 70%;
-  min-width: 200px;
+  min-width: 160px;
   display: inline-block;
   border: 0;
   background-color: #f2f1f1;
   border-radius: 0;
+  margin-left: 10px;
 }
 
 .report-tab-section .refresh-report {
-  background: url("../images/refresh.svg") no-repeat;
-  background-size: 20px;
-  background-position: center right;
-  padding: 0 30px 0 0;
-  font-size: 14px;
-  font-weight: 400;
-  margin-right: 20px;
+  margin-right: 15px;
+  float: left;
+  color: #000;
+}
+
+.report-tab-section .refresh-report i {
+  margin-left: 4px;
+  font-size: 16px;
 }
 
 .report-tab-section .left-menu li {
   background-color: #f2f1f1;
-  margin: 0 3px;
-  border-radius: 20px;
-  margin-left: 15px;
+  margin-left: 8px;
+  margin-right: 0;
   border: none;
-  padding: 6px 8px 6px 3px;
+  padding: 4px 8px;
 }
 
 .report-tab-section .left-menu li a {
@@ -1796,6 +1820,7 @@ header.sticky-top {
   border: none;
 }
 
+/*mob right menu*/
 .right-nav {
   background: #fff;
   border-bottom: 1px solid #f5f5f5;
@@ -3709,13 +3734,13 @@ header.sticky-top {
 
 /*grid*/
 
-.grid {
+/* .grid {
   height: 550px;
 }
 
 .gridCustHeight {
   height: 400px;
-}
+} */
 
 .ui-grid-viewport .ui-grid-cell-contents {
   word-wrap: break-word;
@@ -3859,42 +3884,6 @@ header.sticky-top {
   position: absolute;
 }
 
-.modal .modal-header {
-  background: #202b39;
-  padding: 4px 12px 4px;
-  border-radius: 0;
-  border: none;
-}
-.modal .modal-body {
-  padding: 15px;
-}
-.modal-body {
-  position: relative;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  padding: 1rem;
-}
-.modal-content {
-  position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0,0,0,.2);
-  border-radius: .3rem;
-  outline: 0;
-}
-
-.d-none {
-  display: none;
-}
 /*common dropdown*/
 
 .common-dropdown {
@@ -4301,9 +4290,6 @@ header.sticky-top {
   .network-outer li.network-outer-last ul {
     flex-flow: wrap row;
   }
-  .report-tab-section .my-report-select {
-    margin: 0 0 0 20px;
-  }
   .report-tab-section .left-menu {
     margin: 10px 0 0;
     flex-flow: wrap row;
@@ -4538,9 +4524,6 @@ header.sticky-top {
 }
 
 @media (max-width: 480px) {
-  .report-tab-section .my-report-select {
-    margin: 0;
-  }
   .section {
     overflow-y: hidden;
   }
