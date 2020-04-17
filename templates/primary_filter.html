@@ -306,11 +306,11 @@
                     <div id="creative_long_form" ng-class="{'disabled-contents' : creative_type != 'long'}">
                        <ul class="brand-classfication-list">
                           <li ng-repeat="longForm in longFormClassification">
-                             <label class="checkbox">
-                                <input type="checkbox" name="selectClassfication"  value="{{longForm.index}}" id="{{longForm.id}}" ng-model="longForm.selected" ng-checked="checkedLongClassification.indexOf(longForm.index) > -1" ng-click="setClassification(longForm)"/>
+                             <label class="radio">
+                                <input type="radio" name="selectClassfication"  value="{{longForm.index}}" id="{{longForm.id}}" ng-model="longForm.selected" ng-checked="checkedLongClassification.indexOf(longForm.index) > -1" ng-click="setClassification(longForm)"/>
                                 <span class="custom-div">
                                     <img src="./assets/images/asseenontv_logo.png" class="retail_ranking_img" ng-show="longForm.index==7">
-                                {{longForm.value}}
+                                    {{longForm.value}}
                                 </span>
                              </label>
                           </li>
