@@ -1,0 +1,55 @@
+<div class="modal-header is-active" id="advancedModalDeleteUser">
+    <h5 class="modal-title">User Information</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <form name="admin.delete_user_under_company" id="delete_user_under_company" novalidate="">
+        <span class="color-red mb-3 d-block">Note: Fields marked as * are mandatory.</span>
+        <h5>User Information</h5>
+        <input type="hidden" id="company_admin_id" name="company_admin_id" ng-model="admin.company_admin_id" />
+        <input type="hidden" id="company_id" name="company_id" ng-model="admin.company_id" />
+        <ul>
+            <li>
+                <label>Select User
+                    <sup class="color-red">*</sup>
+                </label>
+                <div class="Admin Informationent">
+                    <select name="loading" ng-if="!admin.selected_company_users">
+                        <option value="">Loading ...</option>
+                    </select>
+                    <select name="delete_user" id="delete_user" ng-model="admin.delete_user" required
+                        ng-if="admin.selected_company_users" ng-click="setButtonText()">
+                        <option value="">Select User</option>
+                        <option ng-repeat="values in admin.selected_company_users"
+                            custom-attr-status="{{values.status}}" custom-attr-role="{{values.role}}"
+                            value="{{values.user_id}}">{{values.first_name}} {{values.last_name}}
+                        </option>
+                    </select>
+                    <span class="color-red"
+                        ng-show="admin.delete_user_under_company.delete_user.$dirty && admin.delete_user_under_company.delete_user.$invalid">
+                        <span class="inline-label"
+                            ng-show="admin.delete_user_under_company.delete_user.$error.required">User
+                            is required.</span>
+                    </span>
+                </div>
+            </li>
+        </ul>
+        <div class="btn-grp d-flex justify-content-end border-top pt-3">
+            <button class="btn btn-black" value="Cancel" ng-click="closeModal();backToAdmin('delete_user')"><i
+                    class="fa fa-times" title="cancel"></i>Cancel </button>
+            <button class="btn btn-blue" value="Edit"
+                ng-disabled="admin.delete_user_under_company.$invalid || admin.delete_user == '' || admin.select_user_disable"
+                id="save_company_edit_user_btn" ng-click="editUserFromCompany()"><i class="fa fa-pencil"
+                    aria-hidden="true"></i>Edit</button>
+            <button class="btn btn-blue" value="Delete"
+                ng-disabled="admin.delete_user_under_company.$invalid || !admin.selected_company_users || admin.select_user_disable"
+                id="save_company_delete_user_btn" ng-click="deleteUserFromCompanyModal('delete')"><i class="fa fa-trash"
+                    aria-hidden="true"></i>Delete</button>
+            <button class="btn btn-blue" value="Deactivate" id="user_active_deactive"
+                ng-disabled="admin.delete_user_under_company.$invalid || !admin.selected_company_users"
+                id="save_company_deactivate_user_btn" ng-click="deleteUserFromCompany('deactivate')">Deactivate</button>
+        </div>
+    </form>
+</div>

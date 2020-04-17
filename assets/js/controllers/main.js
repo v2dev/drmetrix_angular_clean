@@ -186,6 +186,76 @@ $scope.shortFormTrackingClassification = [
 
     $scope.mapValueWithSession(databaseFormatDate);
 
+    $scope.verifyDuplicateMobile = function (mobile) {
+        var user_id = $('#edit_data_user_id').val();
+        var admin_id = sessionStorage.admin_id;
+        var hidden_mobile_no = $("#mobile_edit_hidden").val();
+        if ($('[id="advancedModalEdit"]').hasClass('is-active')) {
+            hidden_mobile_no = $("#mobile_edit_company_hidden").val();
+        }
+
+        if (sessionStorage.role == 'superadmin') {
+            admin_id = $('#edit_company_admin_id').val();
+            if (admin_id == '') {
+                admin_id = $('#edit_company_page_admin_id').val();
+            }
+            if ($('#admin_id').val() != '') {
+                admin_id = $('#admin_id').val();
+            }
+        }
+
+        apiService.post('/check_mobile', { 'mobile': mobile, 'admin_id': admin_id, 'user_id': user_id, 'hidden_mobile_no': hidden_mobile_no })
+            .then(function (response) {
+                let data = response.data;
+                if (data.status) {
+                    if (data.valid) {
+                        $rootScope.errors = 1;
+                        $rootScope.mobileValid = 1; //mobile invalid
+                        $('#duplicate_mobile').css('display', 'block');
+                    } else {
+                        $rootScope.errors = 0;
+                        $rootScope.mobileValid = 0; //mobile valid
+                    }
+                }
+            }, function (response){
+                // this function handlers error
+            });
+    }
+
+    $scope.check_owner = function(id) {
+        var account_owner = $('#' + id).val();
+        if (account_owner.length == 0) {
+            $('#err_' + id).show();
+        } else {
+            $('#err_' + id).hide();
+        }
+    }
+    // validate mobile
+    $scope.validate_mobile = function(id, v, e) {
+        $('#add_mobile').hide();
+        $('#edit_mobile').hide();
+        $('#authy_add_mobile').hide();
+        $('#authy_edit_mobile').hide();
+        $('#add_mobile_add_user').hide();
+        $('#authy_add_mobile_add_user').hide();
+
+        v = v
+            .match(/\d*/g).join('')
+            .match(/(\d{0,3})(\d{0,3})(\d{0,12})/).slice(1).join('-')
+            .replace(/-*$/g, '');
+
+        $('#' + id).val(v);
+    }
+
+    $scope.check_owner = function (id) {
+        var account_owner = $('#' + id).val();
+        if (account_owner.length == 0) {
+            $('#err_' + id).show();
+        } else {
+            $('#err_' + id).hide();
+        }
+    }
+
     //date filter
     $scope.findDiff = function (end_date, val) {
         $rootScope.displayBtns = 0;
@@ -950,7 +1020,7 @@ $scope.shortFormTrackingClassification = [
 
     $rootScope.whatsNew_menu = [{
         href: 'https://adsphere.drmetrix.com/blog/2020/02/04/new-february-2020-build/',
-        title: 'New October Build',
+        title: 'Latest Feature Updates',
         newBuild: 1
     },
     {
@@ -1023,6 +1093,7 @@ $scope.shortFormTrackingClassification = [
         alt: 'Log Out',
         aid: 'log_out',
         title: 'Log Out',
+        aclass: 'log-out d-block',
         src: './assets/images/menuiconblue/menuiconset-13.svg',
     }]
 
@@ -1391,9 +1462,8 @@ $scope.shortFormTrackingClassification = [
 
     $scope.showTab = function(tab) {
         $rootScope.type = tab;
+        $scope.applyFilter();
     }
-
-    
 
     /** Filters code -- Start */
     $scope.call_filter_list = function () {
@@ -1703,10 +1773,18 @@ angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, 
             enableSorting: true,
             paginationPageSize: 10,
             paginationTemplate: $rootScope.correctTotalPaginationTemplate,
+            enableCellEdit: false,
+            enableCellEditOnFocus: true,
+            onRegisterApi: (gridApi) => {
+                gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
+                    console.log('edited row id:' + rowEntity.id + ', Column:' + colDef.name + ', newValue:' + newValue + ', oldValue:' + oldValue);
+                    // Make an API here to update file name on server or to validate invalie/duplicate file name
+                });
+            },
         };
 
         vm.gridOptionsReports.columnDefs = [
-            { name: 'file_name', pinnedLeft:true, displayName:'File Name'},
+            { name: 'file_name', pinnedLeft:true, displayName:'File Name', enableCellEdit: true},
             { name: 'filesize', pinnedLeft:true, displayName:'File Size'},
             // { name: 'download_link', pinnedLeft:true, displayName:'Download Link', cellTemplate: '<span ng-if="(row.entity.status == completed)"></span>' },
             { name: 'email_alert', pinnedLeft:true, displayName:'Email Alert', cellTemplate:

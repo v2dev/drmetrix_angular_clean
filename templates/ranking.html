@@ -23,8 +23,8 @@
                 </div> 
                 </li>                
             <li>
-                <a href="" class="filter-listing"  ng-click="call_filter_list();">
-                    Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
+                <a href="" class="filter-listing dropdown-arrow"  ng-click="call_filter_list();">
+                    Filters
                 </a>
             </li>
             <li>
@@ -40,8 +40,8 @@
    
 <div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">
     <category-part data="$ctrl.category_list"></category-part> 
-    <main class="main" id="main" ng-class="cateorySideBar == 1 ? 'paddingLeftabAbov60' : 'paddingLeftabBelow60'">
-        <div class="notify-msg">
+    <main class="main" id="main" ng-class="!catgeorySideBar  ? '' : 'push-left'">
+        <div class="notify-msg"> 
             <span ng-if="no_category_error">Please select at least one category to enable "Apply" button</span>
             <span ng-if="category_error">Click on the "Apply" button for the changes to take affect</span>
             <span ng-if="lifetime_error" >For date range > 1 year, you can select up to 5 categories to enable &quot;Apply&quot; button</span>
@@ -55,7 +55,7 @@
                     <span class="search-icon">
                         <i data-feather="search"></i>
                     </span>
-                    <input type="search" placeholder="Search Brands">
+                    <input type="search" placeholder="Search Brands" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
                     <i class="fa fa-times-circle"></i>
                 </div>
                 <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network');"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
@@ -98,6 +98,7 @@
                 </ul>
             </div>
         </div>
+        <button ng-click="downloadCSV()">Download CSV</button>
         <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div>
     </main>
 </div>

@@ -1,0 +1,17 @@
+<div class="modal-header" id="domainExistsDifferentAccount">
+    <h5 class="modal-title">Domain Exists On Different Account</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <p class="text-left m-0">
+        We found a different account in <span id="page_set"></span> that uses this domain <span
+            id="domain_found_account_add"></span>. Would you like to use this account instead?
+    </p>
+    <div class="btn-grp d-flex justify-content-end border-top pt-3">
+        <button type="button" class="button expand" value="Yes" ng-click="saveCompany();"></button>
+        <button type="button" class="button expand pull-right" value="No"
+            ng-click="saveCompany('new_contact_ads');"></button>
+    </div>
+</div>

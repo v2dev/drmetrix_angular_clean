@@ -1,0 +1,311 @@
+<div class="modal-header">
+    <h5 class="modal-title">Edit Company</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <form name="edit_company" id="edit_company" novalidate="">
+        <span class="color-red mb-3 d-block">Note: Fields marked as * are mandatory.</span>
+        <h5>Company Information</h5>
+        <ul>
+            <li>
+                <label>Company Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="hidden" id="edit_company_page_admin_id" name="company_admin_id"
+                        value="{{admin.company_result[0].user_id}}" />
+                    <input type="hidden" id="edit_company_page_zoho_id" name="company_zoho_id"
+                        value="{{admin.company_result[0].zoho_account_id}}" />
+                    <input name="company_name" type="text" ng-model="admin.company_result[0].company_name" required />
+                    <input name="hidden_company_name" id="hidden_company_name" type="hidden"
+                        value="{{admin.company_result[0].old_company_name}}" required />
+                </div>
+            </li>
+            <li>
+                <label>Company Type</label>
+                <div class="Admin Informationent">
+                    <select name="company_type" ng-model="admin.company_result[0].company_type">
+                        <option value="">Select</option>
+                        <option>Agency</option>
+                        <option>Marketer</option>
+                        <option>Network / Broadcaster</option>
+                        <option>Production</option>
+                        <option>Retailer</option>
+                        <option>Product Distributor</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Company Size</label>
+                <div>
+                    <select name="company_size" ng-model="admin.company_result[0].company_size">
+                        <option value="">Select</option>
+                        <option>Self</option>
+                        <option>1-10 Employees</option>
+                        <option>11-50 Employees</option>
+                        <option>51-200 Employees</option>
+                        <option>201-500 Employees</option>
+                        <option>501-1000 Employees</option>
+                        <option>1001-5000 Employees</option>
+                        <option>5001-10,000 Employees</option>
+                        <option>10,000+ Employees</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Revenue</label>
+                <div>
+                    <select name="revenue" ng-model="admin.company_result[0].revenue">
+                        <option ng-repeat="values in admin.revenue" value="{{values}}">{{values}}
+                        </option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+        <h5>Admin Information</h5>
+        <ul>
+            <li>
+                <label>Account Owner
+                    <sup class="color-red">*</sup>
+                </label>
+                <div class="Admin Informationent">
+                    <select name="account_owner" id="account_owner_edit"
+                        ng-model="admin.company_result[0].account_owner" onchange="check_owner(this.id);" required>
+                        <option value="" selected>Select Owner</option>
+                        <option ng-repeat="values in admin.account_owners" cust-attr-id="{{values.zoho_contact_id}}"
+                            value="{{values.email}}">
+                            {{values.name}}</option>
+                    </select>
+                    <span class="color-red"
+                        ng-show="edit_company.account_owner.$dirty && edit_company.account_owner.$invalid">
+                        <span class="inline-label" ng-show="edit_company.account_owner.$error.required">Please select
+                            Account
+                            Owner</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Domain Override</label>
+                <div class="Admin Informationent">
+                    <ul class="no-bullet" style="background:none;">
+                        <li>
+                            <input type="checkbox" class="checkbox-custom" name="domain_override"
+                                id="domain_override_edit" ng-model='admin.company_result[0].domain_override'
+                                ng-checked='checkDomainOverride(admin.company_result[0].domain_override)' />
+                            <label class="checkbox-custom-label">
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <label>Client</label>
+                <div class="Admin Informationent">
+                    <select name="client" id="edit_client" ng-model="admin.company_result[0].client">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>First Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="text" ng-model="admin.company_result[0].first_name" name="first_name" required />
+                    <input type="hidden" ng-model="admin.company_result[0].old_firstname" name="old_firstname" />
+                    <span class="color-red"
+                        ng-show="edit_company.first_name.$dirty && edit_company.first_name.$invalid">
+                        <span class="inline-label" ng-show="edit_company.first_name.$error.required">First
+                            Name is required.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Last Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="text" ng-model="admin.company_result[0].last_name" name="last_name" required />
+                    <input type="hidden" ng-model="admin.company_result[0].old_lastname" name="old_lastname" />
+                    <span class="color-red" ng-show="edit_company.last_name.$dirty && edit_company.last_name.$invalid">
+                        <span class="inline-label" ng-show="edit_company.last_name.$error.required">Last
+                            Name is required.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Email
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input class="placeholder-italic" type="email" name="username" id="username"
+                        placeholder="Please enter email address" ng-model="admin.company_result[0].username" required
+                        ng-blur="verifyDuplicateEmail(admin.company_result[0].username,admin.company_result[0].user_id)"
+                        ng-pattern="/\S+@\S+\.\S+/" />
+                    <input class="placeholder-italic" type="hidden" name="username" id="hidden_username"
+                        value="{{admin.company_result[0].old_username}}" />
+                    <span class="color-red"
+                        ng-show="edit_company.username.$dirty  && edit_company.username.$invalid || usernameValid || usernameValidInCompany">
+                        <span class="inline-label" ng-show="edit_company.username.$error.required">Email
+                            is
+                            required.</span>
+                        <span class="inline-verifyDuplicateMobilelabel"
+                            ng-show="edit_company.username.$error.email">Email Address not valid.</span>
+                        <span class="inline-label" style="color:red" ng-show='usernameValid'>Email
+                            already
+                            exists.</span>
+                        <span class="inline-label" style="color:red" id="duplicate_username"
+                            ng-show='usernameValidInCompany'>User with this email already exists. Do you
+                            want to reactivate?&nbsp;&nbsp;
+                            <input class="button pull-right" style="height: 30px;" type="button"
+                                ng-click="deactivate(email_user_id, 'inactive')" value="Reactivate">
+                        </span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Country Code
+                    <sup class="color-red">*</sup>
+                </label>
+                <div class="Admin Informationent">
+                    <select name="country_code" id="edit_country_code" ng-model="admin.company_result[0].country_code">
+                        <option ng-repeat="values in admin.authy_countries" value="{{values.country_code}}">
+                            +{{values.country_code}}</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Mobile Phone
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input class="placeholder-italic" type="text" maxlength='20' name="mobile"
+                        placeholder="Please enter mobile # for Authy Authentication"
+                        ng-model="admin.company_result[0].phone_number" id="mobile_edit" required
+                        ng-keyup="return validate_mobile(this.id,this.value,event);"
+                        ng-blur="verifyDuplicateMobile(admin.company_result[0].phone_number)" />
+                    <input maxlength="20" type="hidden" name="hidden_mobile" value="{{admin.company_result[0].mobile}}"
+                        id="mobile_edit_company_hidden" />
+                    <span style="color:red" ng-show="edit_company.mobile.$dirty && edit_company.mobile.$invalid">
+                        <span class="inline-label" ng-show="edit_company.mobile.$error.required">Mobile
+                            Phone is required.</span>
+                    </span>
+                    <span class="inline-label" style="color:red" ng-show='mobileValid' style="display:none;">Mobile
+                        Phone already exists.</span>
+                    <span class="inline-label" style="color:red;display:none;" id="edit_mobile">Please
+                        enter
+                        valid mobile phone.</span>
+                    <span class="inline-label" style="color:red;display:none;" id="authy_edit_mobile"></span>
+                </div>
+            </li>
+        </ul>
+        <h5 class="d-none">Pricing</h5>
+        <div id="pricing_div" class="d-none">
+            <ul ng-repeat="price in admin.pricing_result track by $index">
+                <input type="hidden" ng-model="price.id" value="{{price.id}}">
+                <li>
+                    <label>Billing Frequency
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div ng-init="price.frequency = 'monthly'">
+                        <label class="radio">
+                            <input type="radio" name="billing_frequency{{$index}}" ng-model="price.frequency"
+                                value="monthly" checked='checked' id="monthly4" />
+                            <span>Monthly</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="billing_frequency{{$index}}" ng-model="price.frequency"
+                                value="annually" id="annually4" />
+                            <span>Annually</span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <label>Tier
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div>
+                        <input class="placeholder-italic" type="text" name="tier{{$index}}"
+                            placeholder="Please add title to the tier" ng-model="price.tier" required />
+                        <span class="color-red"
+                            ng-show="edit_company.tier{{$index}}.$dirty && edit_company.tier{{$index}}.$invalid">
+                            <span class="inline-label" ng-show="edit_company.tier{{$index}}.$error.required">Tier is
+                                required.</span>
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <label>Max. Users Allowed
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div>
+                        <input class="placeholder-italic" type="text" placeholder="Please add Max limit of user"
+                            name="max_limit{{$index}}" ng-model="price.users_limit" maxlength="3"
+                            onkeypress="return isNumber(event)" required />
+                        <span class="color-red"
+                            ng-show="edit_company.max_limit{{$index}}.$dirty && edit_company.max_limit{{$index}}.$invalid">
+                            <span class="inline-label"
+                                ng-show="edit_company.max_limit{{$index}}.$error.required">Maximum
+                                Users
+                                Allowed is required.</span>
+                        </span>
+                        <span class="inline-label color-red" ng-show="price.users_limit == 0">Minimum
+                            Users Allowed is 1.</span>
+                    </div>
+                </li>
+                <li>
+                    <label>Download Limit
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div>
+                        <input class="placeholder-italic" type="text" placeholder="Please add download Limit"
+                            name="video_download_limit" ng-model="admin.company_result[0].video_download_limit"
+                            id="video_download_limit_edit" maxlength="3" onkeypress="return isNumber(event)" required />
+                        <span class="color-red"
+                            ng-show="edit_company.video_download_limit.$dirty && edit_company.video_download_limit.$invalid">
+                            <span class="inline-label" ng-show="edit_company.video_download_limit.$error.required">Video
+                                Download Limit is required.</span>
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <div id="authy_error" class="color-red"></div>
+                </li>
+                <li class="mb-0">
+                    <label>Amount
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div>
+                        <input type="text" name="amount{{$index}}" id="edit_amount{{$index}}" placeholder="$"
+                            ng-model="price.amount" required onkeyup="return format(this.value,event,this.id);" />
+                        <span class="color-red"
+                            ng-show="edit_company.amount{{$index}}.$dirty && edit_company.amount{{$index}}.$invalid">
+                            <span ng-show="edit_company.amount{{$index}}.$error.required">Amount is
+                                required.</span>
+                            <br>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="align-right" ng-hide="{{$index != 0}}">
+            <span class="btn-grp d-flex justify-content-end">
+                <button type="button" class="btn btn-blue" ng-click="update_removePricing($index)" value="Remove"><i
+                        class="fa fa-trash" aria-hidden="true"></i>Remove</button>
+            </span>
+        </div>
+        <div class="btn-grp d-flex justify-content-end border-top pt-3">
+            <button class="btn btn-black" data-dismiss="modal" aria-label="Close" type="button" value="Cancel"
+                ng-click="closeModal();backToAdmin('edit')"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+            <button class="btn btn-blue" data-dismiss="modal" aria-label="save" type="submit" value="Save"
+                ng-disabled="edit_company.$invalid || usernameValid ||usernameValidInCompany ||  mobileValid || price.users_limit == 0"
+                ng-click="editCompany(admin.company_result[0].user_id,admin.company_result[0].company_id)"
+                id="edit_company_btn">
+                <i class="fa fa-check" title="Save"></i>Save</button>
+        </div>
+    </form>
+</div>

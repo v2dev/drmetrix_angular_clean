@@ -1,0 +1,47 @@
+<div class="user-addmin-wrapper user-super-admin" ng-init="showUsers();">
+    <div class="modal fade filter-data md-popup super-admin-popup" id="error_msg_anchor" tabindex="-1" role="dialog"
+        aria-labelledby="error_msg_anchor">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center mb-0"><span id="error_msg_span"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="black-top-menu">
+        <nav class="user-menu-icons d-flex justify-content-between align-items-center">
+            <span class="welcome-text">Welcome, {{admin.complete_name}}</span>
+            <ul class="d-flex justify-content-between align-items-center">
+                <li class="mr-3">
+                    <button class="btn btn-blue" ng-click="openAddCompany()"><img class="help"
+                            src="./assets/images/add-user.svg">Add New Company</button>
+                </li>
+                <li class="mr-2 export-link-list">
+                    <button class="btn btn-blue" ng-click="retailReportBox();">
+                        <img class="help" src="assets/images/download.svg">Retail Report
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="top-grid-filter">
+        <div class="network">
+            <div class="search-input">
+                <span class="search-icon">
+                    <i data-feather="search"></i>
+                </span>
+                <input type="search" placeholder="Search Company" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
+            </div>
+        </div>
+    </div>
+    <div id="gridAdmin" ui-grid="gridOptionsAdmin" ui-grid-exporter ui-grid-pagination ui-grid-resize-columns
+        ui-grid-move-columns class="grid"></div>
+</div>

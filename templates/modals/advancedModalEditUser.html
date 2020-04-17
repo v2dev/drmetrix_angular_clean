@@ -1,0 +1,189 @@
+<div class="modal-header">
+    <h5 class="modal-title">Add New User</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="grid-content" style="padding: 1em;">
+        <form name="edit_user" id="edit_user" novalidate="">
+            <span class="grid-block modal-info-text"><strong>Note:</strong> Fields marked as * are mandatory.</span>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>First Name
+                    </label>
+                </div>
+                <div class="medium-7">
+                    <label>{{admin.user_result[0].first_name}}</label>
+                    <input type="hidden" id="edit_company_admin_id" name="company_admin_id"
+                        value="{{admin.company_admin_id}}" />
+                    <input type="hidden" value="{{admin.user_result[0].user_id}}" name="user_id"
+                        id="edit_data_user_id" />
+                    <input type="hidden" ng-model="admin.user_result[0].first_name" name="first_name" required />
+                    <span class="error-text" ng-show="edit_user.first_name.$dirty && edit_user.first_name.$invalid">
+                        <span class="inline-label" ng-show="edit_user.first_name.$error.required">First Name is
+                            required.</span>
+                    </span>
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Last Name
+                    </label>
+                </div>
+                <div class="medium-7">
+                    <label>{{admin.user_result[0].last_name}}</label>
+                    <input type="hidden" ng-model="admin.user_result[0].last_name" name="last_name" required />
+                    <span class="error-text" ng-show="edit_user.last_name.$dirty && edit_user.last_name.$invalid">
+                        <span class="inline-label" ng-show="edit_user.last_name.$error.required">Last Name is
+                            required.</span>
+                    </span>
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Email
+                        <sup class="error-text"> * </sup>
+                    </label>
+                </div>
+                <div class="medium-7">
+                    <input class="placeholder-italic" type="email" name="username_edit"
+                        placeholder="Please enter email address" ng-model="admin.user_result[0].username" required
+                        ng-blur="verifyDuplicateEmail(admin.user_result[0].username,admin.user_result[0].user_id)"
+                        ng-pattern="/\S+@\S+\.\S+/" />
+                    <input class="placeholder-italic" type="hidden" name="hidden_email"
+                        value="{{admin.user_result[0].hidden_email}}" />
+                    <span class="error-text"
+                        ng-show="edit_user.username_edit.$dirty && edit_user.username_edit.$invalid || usernameValid || usernameValidInCompany">
+                        <span ng-show="edit_user.username_edit.$error.required">Email is required.</span>
+                        <span class="inline-label error-text" ng-show="edit_user.username_edit.$error.pattern">Email
+                            Address not valid.</span>
+                        <span class="inline-label error-text" ng-show='usernameValidInCompany'>User with this email
+                            already exists. Do you want to reactivate?&nbsp;&nbsp;
+                            <input class="button pull-right" style="height: 30px;" type="button"
+                                ng-click="deactivate(email_user_id, 'inactive')" value="Reactivate">
+                        </span>
+                        <span class="inline-label error-text" ng-show="usernameValid">Email already exists.</span>
+                    </span>
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Country Code</label>
+                </div>
+                <div class="medium-7 Admin Informationent">
+                    <select name="country_code" id="edit_country_code" ng-model="admin.user_result[0].country_code">
+                        <option ng-repeat="values in admin.authy_countries" value="{{values.country_code}}">
+                            +{{values.country_code}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Mobile Phone
+                        <sup class="error-text">*</sup>
+                    </label>
+                </div>
+                <div class="medium-7">
+                    <input class="placeholder-italic" maxlength="20" type="text" name="mobile"
+                        placeholder="Please enter mobile # for Authy Authentication"
+                        ng-model="admin.user_result[0].phone_number" id="mobile_user_edit" required
+                        ng-keyup="validate_mobile(this.id,this.value,event);"
+                        ng-change="verifyDuplicateMobile(admin.user_result[0].phone_number)" />
+                    <input maxlength="20" type="hidden" name="hidden_mobile" value="{{admin.user_result[0].mobile}}"
+                        id="mobile_edit_hidden" />
+                    <span class="error-text"
+                        ng-show="edit_user.mobile.$dirty || edit_user.mobile.$invalid && edit_user.mobile.$pristine">
+                        <span class="inline-label" ng-show="edit_user.mobile.$error.required">Mobile Phone is
+                            required.</span>
+                    </span>
+                    <span class="inline-label error-text d-none" id="edit_mobile">Please enter valid mobile.</span>
+                    <span class="inline-label error-text" ng-show='mobileValid'>Mobile already exists.</span>
+                    <span class="inline-label error-text d-none" id="authy_edit_mobile"></span>
+
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Assistant Admin</label>
+                </div>
+                <div class="medium-7">
+                    <input type="checkbox" class="checkbox-custom" name="assistant_admin"
+                        ng-model="admin.user_result[0].assistant_admin" id="assistant_admin_edit"
+                        ng-checked="assistant_admin_check(admin.user_result[0].assistant_admin)" />
+                    <label class="checkbox-custom-label">
+                    </label>
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Position</label>
+                </div>
+                <div class="medium-7">
+                    <input type="text" ng-model="admin.user_result[0].position" name="position" />
+                </div>
+            </div>
+            <div class="grid-block d-none">
+                <div class="medium-5">
+                    <label>Tier
+                    </label>
+                </div>
+                <div class="medium-7">
+                    <select name="tier_name" ng-model="admin.user_result[0].tier">
+                        <option ng-repeat="tier in admin.users.tiers track by $index" value="{{tier.id}}">{{tier.tier}}
+                        </option>
+                    </select>
+                    <input type="hidden" value="{{edit_user.tier_name.$dirty}}" name="tier_change" id="tier_change">
+                    <span class="error-text" ng-show="edit_user.tier_name.$dirty && edit_user.tier_name.$invalid">
+                        <span class="inline-label" ng-show="edit_user.tier_name.$error.required">Tier is
+                            required.</span>
+                    </span>
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Role</label>
+                </div>
+                <div class="medium-7">
+                    User
+                </div>
+            </div>
+            <div class="grid-block">
+                <div class="medium-5">
+                    <label>Skip Authy</label>
+                </div>
+                <div class="medium-7">
+                    <input type="checkbox" class="checkbox-custom" name="skip_authy"
+                        ng-model="admin.user_result[0].skip_authy" id="skip_authy_edit"
+                        ng-checked="assistant_admin_check(admin.user_result[0].skip_authy)"
+                        ng-disabled="assistant_admin_check(admin.user_result[0].admin_skip_authy)" />
+                    <label class="checkbox-custom-label">
+                    </label>
+                </div>
+            </div>
+            <div id="authy_error" class="error-text"></div>
+            <div class="grid-block d-none">
+                <div class="medium-5">
+                    <label>Receive Weekly Retail Report</label>
+                </div>
+                <div class="medium-7">
+                    <div class="grid-block" ng-init="admin.user_result[0].receive_report = 1">
+                        <input type="radio" ng-model="admin.user_result[0].receive_report" name="receive_report"
+                            value="1" id="yes2" />
+                        <label for="yes2">Yes</label>
+                        <input type="radio" ng-model="admin.user_result[0].receive_report" name="receive_report"
+                            value="0" id="no2" />
+                        <label for="no2">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-grp">
+                <button class="cancelBtn btn btn-sm btn-default btnclose btn-change"
+                    ng-click="closeModal();backToAdmin('edit_user')">Cancel</button>
+                <button id="edit_user_btn" class="applyBtn btn btn-sm btn-success btn-change"
+                    ng-disabled="edit_user.$invalid || usernameValid || mobileValid"
+                    ng-click="editUser(admin.user_result[0].user_id)">Update</button>
+            </div>
+        </form>
+    </div>
+</div>

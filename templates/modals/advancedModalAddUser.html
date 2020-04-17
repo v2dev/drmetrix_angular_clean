@@ -1,0 +1,127 @@
+<div class="modal-header">
+    <h5 class="modal-title">Add User</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <form name="admin.add_user_under_company" id="add_user_under_company" novalidate="" ng-submit="addUserInCompany()">
+        <span class="color-red mb-3 d-block">Note: Fields marked as * are mandatory.</span>
+        <ul>
+            <li>
+                <label>First Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="text" ng-model="admin.first_name_add_user" name="first_name_add_user" required />
+                    <span class="color-red"
+                        ng-show="admin.add_user_under_company.first_name_add_user.$dirty && admin.add_user_under_company.first_name_add_user.$invalid">
+                        <span class="inline-label"
+                            ng-show="admin.add_user_under_company.first_name_add_user.$error.required">First
+                            Name is required.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Last Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="text" ng-model="admin.last_name_add_user" name="last_name_add_user" required />
+                    <span class="color-red"
+                        ng-show="admin.add_user_under_company.last_name_add_user.$dirty && admin.add_user_under_company.last_name_add_user.$invalid">
+                        <span class="inline-label"
+                            ng-show="admin.add_user_under_company.last_name_add_user.$error.required">Last
+                            Name is required.</span>
+                    </span>
+                </div>
+            </li>
+            <li class="d-none">
+                <label>Admin Id</label>
+                <div>
+                    <input type="text" ng-model="admin.admin_id" name="admin_id" id="admin_id" />
+                    <input type="text" ng-model="admin.company_id" name="company_id" id="company_id" />
+                </div>
+            </li>
+            <li>
+                <label>Email
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input class="placeholder-italic" type="email" name="username_add_user"
+                        placeholder="Please enter email address" ng-model="admin.username_add_user" required
+                        ng-blur="verifyDuplicateEmail(admin.username_add_user)" ng-pattern="/\S+@\S+\.\S+/" />
+                    <span class="color-red"
+                        ng-show="admin.add_user_under_company.username_add_user.$dirty && admin.add_user_under_company.username_add_user.$invalid">
+                        <span ng-show="admin.add_user_under_company.username_add_user.$error.required">Email
+                            is required.</span>
+                        <span class="inline-label"
+                            ng-show="admin.add_user_under_company.username_add_user.$error.pattern">Email
+                            Address not valid.</span>
+                    </span>
+                    <span class="inline-label color-red" id="duplicate_username" ng-show='usernameValid'>Email already
+                        exists.</span>
+                    <span class="inline-label color-red" id="duplicate_username" ng-show='usernameValidInCompany'>User
+                        with this email already exists. Do you
+                        want to reactivate?&nbsp;&nbsp;
+                        <button type="button" class="btn btn-blue" ng-click="deactivate(email_user_id, 'inactive')"
+                            value="Reactivate">Reactivate</button>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Country Code</label>
+                <div class="Admin Informationent">
+                    <select name="add_country_code_add_user" id="add_country_code_add_user"
+                        ng-model="admin.add_country_code_add_user" ng-init="admin.add_country_code_add_user = '1'">
+                        <option ng-repeat="values in admin.authy_countries" value="{{values.country_code}}">
+                            +{{values.country_code}}</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Mobile Phone
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input class="placeholder-italic" maxlength='20' type="text" name="mobile_add_user"
+                        placeholder="Please enter mobile # for Authy Authentication" ng-model="admin.mobile_add_user"
+                        id="mobile_add_user" required ng-model-options="{'debounce': 250 }" masked-input
+                        ng-blur="verifyDuplicateMobile(admin.mobile_add_user)" />
+                    <span class="color-red"
+                        ng-show="admin.add_user_under_company.mobile_add_user.$dirty && admin.add_user_under_company.mobile_add_user.$invalid">
+                        <span class="inline-label"
+                            ng-show="admin.add_user_under_company.mobile_add_user.$error.required">Mobile
+                            Phone is required.</span>
+                    </span>
+                    <span class="inline-label color-red" id="duplicate_mobile" ng-show='mobileValid'>Mobile
+                        Phone already exists.</span>
+                    <span class="inline-label color-red d-none" id="authy_add_mobile_add_user"></span>
+                </div>
+            </li>
+            <li>
+                <label>Assistant Admin</label>
+                <div>
+                    <input type="checkbox" class="checkbox-custom" name="assistant_admin"
+                        ng-model="admin.assistant_admin" id="assistant_admin" />
+                    <label class="checkbox-custom-label">
+                    </label>
+                </div>
+            </li>
+            <li>
+                <label>Position</label>
+                <div>
+                    <input type="text" ng-model="admin.position_add_user" name="position_add_user" />
+                </div>
+            </li>
+        </ul>
+        <div class="btn-grp d-flex justify-content-end border-top pt-3">
+            <button type="button" class="btn btn-black" value="Cancel"
+                ng-click="closeModal();backToAdmin('add_user')"><i class="fa fa-times"
+                    title="cancel"></i>Cancel</button>
+            <button type="submit" class="btn btn-blue" value="Save"
+                ng-disabled="admin.add_user_under_company.$invalid || usernameValid || mobileValid || usernameValidInCompany"
+                id="save_company_add_user_btn"><i class="fa fa-check" title="save"></i>Save</button>
+        </div>
+    </form>
+</div>

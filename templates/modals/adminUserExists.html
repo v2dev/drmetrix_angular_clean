@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h5 class="modal-title">Duplicate User Alert</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <p class="text-left m-0">You have a user account with this same name and an email address of <span
+            class="email_exists_id">name@domain.com</span>. Are you sure you want to update the
+        admin user, please click YES to continue. Otherwise, click NO to cancel</p>
+    <span class="user_zoho_id" style="display:none;"></span>
+    <span class="user_ads_id" style="display:none;"></span>
+    <div class="btn-grp d-flex justify-content-end border-top pt-3">
+        <button type="button" class="button expand" value="Yes" ng-click="editCompany(admin.company_result[0].user_id,admin.company_result[0].company_id, 1)"></button>
+        <button type="button" class="button expand pull-right" value="No" ng-click="closeModal();backToAdmin('inactive');"></button>
+    </div>
+</div>

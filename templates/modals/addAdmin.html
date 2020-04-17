@@ -1,0 +1,285 @@
+<div class="modal-header">
+    <h5 class="modal-title">Add New Company</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal();">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <form name="admin.add_company" id="add_company" novalidate="" ng-submit="saveCompany()">
+        <span class="color-red mb-3 d-block">Note: Fields marked as * are mandatory.</span>
+        <h5>Company Information</h5>
+        <ul>
+            <li>
+                <label>Company Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input name="company_name" type="text" ng-model="admin.company_name" required />
+                    <span class="color-red"
+                        ng-show="admin.add_company.company_name.$dirty && admin.add_company.company_name.$invalid">
+                        <span class="inline-label" ng-show="admin.add_company.company_name.$error.required">Company Name
+                            is
+                            required.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Company Type</label>
+                <div class="Admin Informationent">
+                    <select name="company_type" ng-model="admin.company_type" ng-init="admin.company_type = ''">
+                        <option value="">Select</option>
+                        <option>Agency</option>
+                        <option>Marketer</option>
+                        <option>Network / Broadcaster</option>
+                        <option>Production</option>
+                        <option>Retailer</option>
+                        <option>Product Distributor</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Company Size</label>
+                <div>
+                    <select name="company_size" ng-model="admin.company_size" ng-init="admin.company_size = ''">
+                        <option value="">Select</option>
+                        <option>Self</option>
+                        <option>1-10 Employees</option>
+                        <option>11-50 Employees</option>
+                        <option>51-200 Employees</option>
+                        <option>201-500 Employees</option>
+                        <option>501-1000 Employees</option>
+                        <option>1001-5000 Employees</option>
+                        <option>5001-10,000 Employees</option>
+                        <option>10,000+ Employees</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Revenue</label>
+                <div>
+                    <select name="revenue" id="revenue">
+                        <option ng-repeat="values in admin.revenue">{{values}}</option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+        <h5>Admin Information</h5>
+        <ul>
+            <li>
+                <label>Account Owner
+                    <sup class="color-red">*</sup>
+                </label>
+                <div class=" Admin Informationent">
+                    <select name="account_owner" id="account_owner" ng-model="admin.account_owner"
+                        ng-change="check_owner('account_owner');" required>
+                        <option value="" selected>Select Owner</option>
+                        <option ng-repeat="values in admin.account_owners" cust-attr-id="{{values.zoho_contact_id}}"
+                            value="{{values.email}}">
+                            {{values.name}}</option>
+                    </select>
+                    <span class="color-red"
+                        ng-show="admin.add_company.account_owner.$dirty && admin.add_company.account_owner.$invalid">
+                        <span class="inline-label" ng-show="admin.add_company.account_owner.$error.required">Please
+                            select
+                            Account Owner.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Domain Override</label>
+                <div class=" Admin Informationent">
+                    <ul class="no-bullet" style="background:none;">
+                        <li>
+                            <input type="checkbox" class="checkbox-custom" ng-model="admin.domain_override"
+                                name="domain_override" value="1" />
+                            <label class="checkbox-custom-label">
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <label>Client</label>
+                <div class=" Admin Informationent">
+                    <select name="client" ng-init="admin.client='No'" ng-model="admin.client">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>First Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="text" ng-model="admin.first_name" name="first_name" required />
+                    <span class="color-red"
+                        ng-show="admin.add_company.first_name.$dirty && admin.add_company.first_name.$invalid">
+                        <span class="inline-label" ng-show="admin.add_company.first_name.$error.required">First Name is
+                            required.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Last Name
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input type="text" ng-model="admin.last_name" name="last_name" required />
+                    <span class="color-red"
+                        ng-show="admin.add_company.last_name.$dirty && admin.add_company.last_name.$invalid">
+                        <span class="inline-label" ng-show="admin.add_company.last_name.$error.required">Last Name is
+                            required.</span>
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Email
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input class="placeholder-italic" type="email" name="username"
+                        placeholder="Please enter email address" ng-model="admin.username" required
+                        ng-blur="verifyDuplicateEmail(admin.username)" ng-pattern="/\S+@\S+\.\S+/" />
+                    <span class="color-red"
+                        ng-show="admin.add_company.username.$dirty && admin.add_company.username.$invalid">
+                        <span ng-show="admin.add_company.username.$error.required">Email is
+                            required.</span>
+                        <span class="inline-label" ng-show="admin.add_company.username.$error.pattern">Email Address not
+                            valid.</span>
+                    </span>
+                    <span class="inline-label color-red" id="duplicate_username" ng-show='usernameValid'>Email already
+                        exists.</span>
+                    <span class="inline-label color-red" ng-show='usernameValidInCompany'>User
+                        with this email already exists. Do you want to reactivate?&nbsp;&nbsp;<input type="button"
+                            class="button pull-right" style="height: 30px;"
+                            ng-click="deactivate(email_user_id, 'inactive')" value="Reactivate">
+                    </span>
+                </div>
+            </li>
+            <li>
+                <label>Country Code</label>
+                <div class=" Admin Informationent">
+                    <select name="country_code" id="add_country_code" ng-model="admin.country_code"
+                        ng-init="admin.country_code = '1'">
+                        <option ng-repeat="values in admin.authy_countries" value="{{values.country_code}}">
+                            +{{values.country_code}}</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label>Mobile Phone
+                    <sup class="color-red">*</sup>
+                </label>
+                <div>
+                    <input class="placeholder-italic" maxlength="20" type="text" name="mobile"
+                        placeholder="Please enter mobile # for Authy Authentication"
+                        ng-model="admin_user.mobile" id="mobile" required
+                        ng-model-options="{'debounce': 250 }" masked-input
+                        ng-blur="verifyDuplicateMobile(admin_user.mobile)" />
+                    <span class="color-red"
+                        ng-show="admin.add_company.mobile.$dirty && admin.add_company.mobile.$invalid">
+                        <span class="inline-label" ng-show="admin.add_company.mobile.$error.required">Mobile Phone is
+                            required.</span>
+                    </span>
+                    <span class="inline-label color-red" id="duplicate_mobile" ng-show='mobileValid'>Mobile Phone
+                        already exists.</span>
+                    <span class="inline-label color-red" id="add_mobile">Please
+                        enter valid mobile phone.</span>
+                    <span class="inline-label color-red" id="authy_add_mobile"></span>
+                </div>
+            </li>
+        </ul>
+        <h5 class="d-none">Pricing</h5>
+        <div id="pricing_div" class="d-none">
+            <ul ng-repeat="price in pricing track by $index">
+                <li>
+                    <label>Billing Frequency
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div ng-init="admin.billing[$index] = 'monthly'">
+                        <label class="radio">
+                            <input type="radio" name="billing_frequency{{$index}}" ng-model="admin.billing[$index]"
+                                value="monthly" class="radio-custom" checked="checked" id="monthly3">
+                            <span>Monthly</span>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="billing_frequency{{$index}}" ng-model="admin.billing[$index]"
+                                value="annually" class="radio-custom" id="annually3">
+                            <span>Annually</span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <label>Tier</label>
+                    <div>
+                        <input class="placeholder-italic" type="text" name="tier{{$index}}"
+                            placeholder="Please add title to the tier" ng-model="admin.tier[$index]" value="Default" />
+                        <span class="color-red"
+                            ng-show="admin.add_company.tier{{$index}}.$dirty && admin.add_company.tier{{$index}}.$invalid">
+                            <span class="inline-label" ng-show="admin.add_company.tier{{$index}}.$error.required">Tier
+                                is
+                                required.</span>
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <label>Max. Users Allowed
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div>
+                        <input class="placeholder-italic" type="text" placeholder="Please add Max limit of user"
+                            name="max_limit{{$index}}" ng-model="admin.users_limit[$index]" maxlength="3"
+                            onkeypress="return isNumber(event)" value="10" />
+                        <span class="color-red"
+                            ng-show="admin.add_company.max_limit{{$index}}.$dirty && admin.add_company.max_limit{{$index}}.$invalid">
+                            <span class="inline-label"
+                                ng-show="admin.add_company.max_limit{{$index}}.$error.required">Maximum
+                                Users Allowed is required.</span>
+                        </span>
+                        <span class="inline-label color-red" ng-show="admin.users_limit[$index] == 0">Minimum Users
+                            Allowed is 1.</span>
+                    </div>
+                </li>
+                <li>
+                    <label>Download Limit
+                        <sup class="color-red">*</sup>
+                    </label>
+                    <div>
+                        <input class="placeholder-italic" type="text" placeholder="Please add video download limit"
+                            name="download_limit" ng-model="admin.download_limit" maxlength="3"
+                            onkeypress="return isNumber(event)" value="100" />
+                        <span class="color-red"
+                            ng-show="admin.add_company.download_limit.$dirty && admin.add_company.download_limit.$invalid">
+                    </div>
+                </li>
+                <li class="mb-0">
+                    <label>Amount
+                    </label>
+                    <div>
+                        <input type="text" name="amount{{$index}}" id="amount{{$index}}" placeholder="$"
+                            ng-model="admin.amount[$index]" value='10'
+                            onkeyup="return format(this.value,event,this.id);" />
+                        <span class="color-red"
+                            ng-show="admin.add_company.amount{{$index}}.$dirty  && admin.add_company.amount{{$index}}.$invalid">
+                            <span class="inline-label"
+                                ng-show="admin.add_company.amount{{$index}}.$error.required">Amount is
+                                required.</span>
+                        </span>
+                    </div>
+                    <div class="align-right" ng-hide="{{$index == 0}}">
+                        <input type="button" class="button" ng-click="removePricing($index)" value="Remove" />
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-grp d-flex justify-content-end border-top pt-3">
+            <button id="cancelNet" class="btn btn-black" value="Cancel" ng-click="closeModal();"><i class="fa fa-times"
+                    title="cancel"></i>Cancel</button>
+            <button id="save_company_btn" class="btn btn-blue" type="submit"
+                ng-disabled="admin.add_company.$invalid || usernameValid || mobileValid || usernameValidInCompany || admin.users_limit[0] == 0"><i
+                    class="fa fa-check" title="Save"></i>Save</button>
+        </div>
+    </form>
+</div>

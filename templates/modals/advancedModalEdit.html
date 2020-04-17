@@ -5,7 +5,7 @@
     </button>
 </div>
 <div class="modal-body">
-    <form name="edit_user" id="edit_user" novalidate="">
+    <form name="edit_user" id="edit_user" novalidate="" class="super-admin-popup">
         <span class="color-red mb-3 d-block">Note: Fields marked as * are mandatory.</span>
         <ul>
             <li>
@@ -99,11 +99,11 @@
             </li>
             <li>
                 <label>Assistant Admin</label>
-                <div>
-                    <input type="checkbox" class="checkbox-assistant_admin" name="assistant_admin"
-                        ng-model="admin_user.user_result[0].assistant_admin" id="assistant_admin_edit"
-                        ng-checked="assistant_admin_check(admin_user.user_result[0].assistant_admin)" />
-                    <label class="checkbox-assistant_admin-label">
+                <div class="checkbox-normal">
+                    <input type="checkbox" class="checkbox-assistant_admin  checkbox-custom" name="assistant_admin"
+                    ng-model="admin_user.user_result[0].assistant_admin" id="assistant_admin_edit"
+                    ng-checked="assistant_admin_check(admin_user.user_result[0].assistant_admin)" />
+                    <label class="checkbox-assistant_admin-label checkbox-custom-label">
                     </label>
                 </div>
             </li>
