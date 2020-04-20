@@ -17736,12 +17736,8 @@ function getAdvpageBrands(){
     $requestData = array();
     $request                            = Slim::getInstance()->request();
     $query_string                       = $request->getBody();
-    $set_one                            = explode('&', $query_string);
-    $raw_data = array();
-     foreach($set_one as $k =>$v){
-        $raw_data                       = explode('=',$v);
-        $requestData[$raw_data[0]]      = $raw_data[1];
-    }
+    parse_str($query_string, $output);
+    $requestData = (array)json_decode($query_string, TRUE);
     $sidx                               = $requestData['sidx'];
     $sord                               = $requestData['sord'];
     $page                               = $requestData['page'];
@@ -17873,9 +17869,9 @@ function getAdvpageBrands(){
         //$nestedData['brand_name'] = '<i class="fa fa-circle" id="'.$active_class.'"></i><span><a href="#" onclick="view_adv_tab(\''.addslashes($resultV->advertiser_name).'\','.$resultV->adv_id.','.$c.',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\'brand\','.$resultV->ID.')" >'.$resultV->brand_name.'</a></span>';
 
         $nestedData['status']           = '<i class="fa fa-circle" id="'.$active_class.'"></i>';
-        $nestedData['brand_name']       = '<span>'.$resultV->brand_name.'</span>';
+        $nestedData['brand_name']       = $resultV->brand_name;
         $export['brand_name']           = $resultV->brand_name;
-        $nestedData['creative_count']   = $resultV->creative_count ? '<a href="#"><span id="brand_plus_'.$resultV->ID.'" style="display:inline;padding-right: 0.5em;"><span class="icon-border icon-border-plus"></span></span></a><a href="#"><span style="display:none;padding-right: 0.5em;" id="brand_minus_'.$resultV->ID.'"><span class="icon-border icon-border-minus"></span></span></a>'.$resultV->creative_count : 0;
+        $nestedData['creative_count']   = $resultV->creative_count ? $resultV->creative_count : 0;
         $export['creative_count']       = $resultV->creative_count ?  $resultV->creative_count : 0;
         $nestedData['is_active_brand']  = $resultV->is_active_brand ;
         $export['is_active_brand']      = $resultV->is_active_brand ;
@@ -17883,7 +17879,8 @@ function getAdvpageBrands(){
         if(strlen($resultV->category) > STRING_LENGTH){
             $string = substr($resultV->category, 0, 23).'...';
         }
-        $nestedData['category_name']    = isset($resultV->category) ? '<span class="tooltip-hover" onclick="fetchList('.$resultV->ID.',\''.$tab.'\',\''.addslashes($resultV->category).'\');"><i class="fa fa-caret-down float-right"></i>'. $resultV->category.'</span><div class="cat_col_dropdown select_cat_dropdown" id="'.$cat_drop.$resultV->ID.'" style="display:none;"></div>' :  '-' ;
+        $nestedData['category_name']    = isset($resultV->category) ? $resultV->category :  '-' ;
+        $nestedData['category']         = isset($resultV->category) ? $resultV->category : '-';
         $export['category']             = isset($resultV->category) ? $resultV->category : '-';
         $nestedData['first_aired']      = $resultV->first_aired ? $resultV->first_aired : '-' ;
         $export['first_aired']          = $resultV->first_aired ? $resultV->first_aired : '-' ;
@@ -17891,15 +17888,17 @@ function getAdvpageBrands(){
         $export['last_aired']           = $resultV->last_aired ? $resultV->last_aired : '-' ;
         $nestedData['price']            = $resultV->price ? $resultV->price : '-' ;
         $export['price']                = $resultV->price ? $resultV->price : '-' ;
-        $nestedData['advertiser_name']  = !empty($resultV->advertiser_name) ? '<span>'.$resultV->advertiser_name.'</span>' : '-' ;
+        $nestedData['advertiser_name']  = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-' ;
         $export['advertiser_name']      = !empty($resultV->advertiser_name) ? $resultV->advertiser_name : '-' ;
         $nestedData['hidden_creatives'] = $resultV->creative_count;
         $nestedData['hidden_category']  = $resultV->category;
         $nestedData['hidden_airings']   = $resultV->airings;
         $nestedData['hidden_spend_index']   = $resultV->hidden_spend_index;
+        $nestedData['network_code'] = $network_code;
+        $nestedData['networks'] = $resultV->networks;
         
         
-        $nestedData['airings']          = $resultV->airings ? '<a href="#" onclick="viewAiringGraph(\''.addslashes($resultV->brand_name).'\','.$resultV->ID.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\','.$resultV->networks.','.$resultV->airings.',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$_resp_type.'\',\''.$spanish.'\',\'brand\',\'\',\'\',\'\')" >'.number_format($resultV->airings).'</a>' : 0 ;
+        $nestedData['airings']          = $resultV->airings ? number_format($resultV->airings) : 0 ;
         $export['airings']              = $resultV->airings ? $resultV->airings : 0;
         if($_SESSION['max_spend_adv'] <= 0) {
             $max_spend = 1;
@@ -17908,7 +17907,7 @@ function getAdvpageBrands(){
         }
 
         
-            $nestedData['spend_index']          = $resultV->spend_index ? '<a href="#" onclick="viewAiringSpendGraph(\''.addslashes($resultV->brand_name).'\','.$resultV->ID.',\'dow\',\''.$network_code.'\',\'all_day\',\'all_hour\','.$resultV->networks.',\''.$resultV->spend_index.'\',\''.$c.'\',\''.$tab.'\',\''.$val.'\',\''.$sd.'\',\''.$ed.'\',\''.$_resp_type.'\',\''.$spanish.'\',\'brand\',\'\',\'\',\'\')" >'.$resultV->spend_index.'</a>' : 0 ;
+            $nestedData['spend_index']          = $resultV->spend_index ? $resultV->spend_index : 0 ;
        
     //    
         $nestedData['national']         = $resultV->national ? $resultV->national : 0;
