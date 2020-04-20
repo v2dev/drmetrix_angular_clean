@@ -163,9 +163,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                     }
                 });
             },
-            columnDefs: [
-                { field: 'spend_index', sort: { direction: 'desc', priority: 0 } }
-            ]
         };
 
         apiService.post('/filter_results', formData, config)
