@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h5 class="modal-title">All Dayparts</h5>
+    <button type="button" class="close" ng-click="closeModal()" title="Close" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <ul>
+        <li class="checkbox">
+            <input type="checkbox" value="All"  ng-model="allDayparts" id="all_dayparts_checkbox" checked ng-change="adayparts(allDayparts, dayparts);" />
+            <label for="all_dayparts_checkbox">
+                All Dayparts
+            </label>
+        </li>
+        <li>
+            <ul class="d-flex ml-0">
+                <li class="checkbox" ng-repeat="daypart in dayparts" ng-init="daypart.isSelected = true">
+                        <input type="checkbox" id="daypart_checkbox_s{{daypart.id}}" class="opt_day adayparts  adayparts_checked" ng-value="daypart.id"  ng-model="daypart.isSelected" ng-click="changedaypart(daypart.isSelected,dayparts)"/>
+                        <label for="daypart_checkbox_{{daypart.id}}">{{daypart.fullName}}</label>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

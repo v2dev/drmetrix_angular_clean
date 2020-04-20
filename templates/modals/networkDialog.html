@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="networkFilter">All Networks</h5>
+    <button type="button" class="close" ng-click="closeModal()" title="Close" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="filter-popup">
+        <ul class="heading-border pb-1" ng-hide="networks_loading">
+            <li class="checkbox">
+                <input type="checkbox" value="all_networks"  id="network_list_cb" ng-model="all_networks_selected" ng-change='forNetworkList(all_networks_selected)' ng-checked="all_networks_selected"/>
+                <label for="network_list_cb">All Networks</label>
+            </li>
+        </ul>
+        <div ng-show="networks_loading">Loading....</div>
+        <div ng-hide="networks_loading" id="network_list_div" class="pt-1">
+            <ul class="networklist scrollbar">
+                <li class="checkbox" ng-repeat="network in network_lists">
+                    <input type="checkbox" class="net_list" id="{{network.network_code}}" name="networks[]" custom-network-id="{{network.network_id}}" value="{{network.network_code}}" ng-model="network.isSelected" ng-click="network.isSelected = !network.isSelected;forSingleNetwork(network, network.isSelected)">
+                    <label for="{{network.network_code}}">{{network.network_alias}}</label>
+                    <span ng-if="network.dpi == '1'" class="dpi-symbol">
+                        <img src="./assets/images/dpi_symbol.png">
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

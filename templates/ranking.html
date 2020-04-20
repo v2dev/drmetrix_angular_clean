@@ -23,8 +23,8 @@
                 </div> 
                 </li>                
             <li>
-                <a href="" class="filter-listing"  ng-click="call_filter_list();">
-                    Filters <i class="fa fa-caret-down fa-lg downarrow-icon"></i>
+                <a href="" class="filter-listing dropdown-arrow"  ng-click="call_filter_list();">
+                    Filters
                 </a>
             </li>
             <li>
@@ -35,7 +35,7 @@
         </ul>
     </div>
     <!-- primary filter -->
-    <div class="main-filter" ng-include="'templates/primary_filter.html'"></div>
+    <div class="main-filter" ng-show="headerDisplay == 1" ng-include="'templates/primary_filter.html'"></div>
 </div>
    
 <div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">

@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h5 class="modal-title">All Hour of Day</h5>
+    <button type="button" class="close"  title="Close" ng-click="closeModal();" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <ul>
+        <li class="checkbox">
+            <input type="checkbox" id="allHour" value="All" ng-model="allHour" ng-change="forHod(allHour, timeData)" />
+            <label for="allHour">All Hour of Day</label>
+        </li>
+        <li ng-repeat="time in timeData">
+            <span>{{time.type}}</span>
+            <ul class="d-flex ml-0">
+                <li class="checkbox"  ng-repeat="item in time.data">
+                    <input type="checkbox" class="ahod_checked" ng-value="{{item.value}}" id="hod_{{item.value}}" ng-model="item.isSelected" ng-click="changeHod(item.isSelected,timeData)"/>
+                    <label for="hod_{{item.value}}">{{item.text}}</label>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
