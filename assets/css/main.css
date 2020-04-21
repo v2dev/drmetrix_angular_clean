@@ -1936,6 +1936,7 @@ header.sticky-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-bottom: 10px;
   background: #ccced1;
   padding: 4px 10px;
@@ -1958,6 +1959,7 @@ header.sticky-top {
 }
 
 .main .top-grid-filter .filter-refine-by>ul>li {
+  font-size: 12px;
   background: #ccced1;
   border-left: 1px solid rgba(32, 43, 57, 0.2);
   margin-left: 8px;
@@ -3004,16 +3006,22 @@ header.sticky-top {
   text-align: left;
 }
 
-.edit-parent-container .edit-inner-div p {
-  margin: 0;
-  width: 30%;
+/*set alert*/
+.set-alert-modal {
+  max-width: 600px;
+}
+
+.edit-parent-container .edit-inner-div > label {
+  font-size: 14px;
+  max-width: 220px;
+  width: 100%;
   padding: 0 0 10px 0;
 }
 
 .edit-parent-container .edit-inner-div ul li {
   display: flex;
   align-items: center;
-  padding: 5px 0;
+  margin-bottom: 10px;
 }
 
 .edit-parent-container .edit-inner-div ul li label {
@@ -3022,12 +3030,17 @@ header.sticky-top {
 
 .edit-parent-container .edit-inner-div .middle-child {
   flex-wrap: wrap;
-  margin-left: 65px;
 }
 
 .edit-parent-container .edit-inner-div select {
   background: #fff;
   color: #000;
+}
+
+.alert-brand-classification li {
+  width: 100%;
+  padding-right: 0;
+  max-width: 175px;
 }
 
 /*directories*/
@@ -3473,6 +3486,7 @@ header.sticky-top {
   height: 48px;
   border: none;
   font-size: 20px;
+  line-height: 19px;
   padding: 12px 10px;
 }
 

@@ -65,7 +65,7 @@
                 <span>Refine By</span>
                 <ul>
                     <li>
-                        Network
+                       <b>Network</b>
                         <div class="open-filter-popup custom-tooltip" ng-click="openNetworkLogModal();">{{networkDisplayName ? networkDisplayName : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                             <div class="top">
                                 <i></i>
@@ -74,19 +74,19 @@
                         </div>
                     </li>
                     <li>
-                        New
+                        <b>New</b>
                         <span class="open-filter-popup capitalize" ng-click="openNewTypeModal();" >
                             {{newCheckBox ? newType : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                         </span>
                     </li>
                     <li>
-                        TFN/URL
+                        <b>TFN/URL</b>
                         <span class="open-filter-popup" ng-click="openRefineModal();">
                             {{refine_by ? refine_by : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                         </span>
                     </li>
                     <li ng-show="selectedNetwork != ''">
-                        Programs
+                        <b>Programs</b>
                         <span class="open-filter-popup" ng-click="openProgramModal();">
                             {{programs_id ? 'Custom' : 'All'}} Programs <i class="fa fa-caret-down fa-lg"></i>
                         </span>

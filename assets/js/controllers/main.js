@@ -589,7 +589,7 @@ $scope.shortFormTrackingClassification = [
                     }
                 }
             }
-            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered set-alert-modal');
         },function (error) {
             console.log('Error');
         });
