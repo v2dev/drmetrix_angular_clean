@@ -11,30 +11,30 @@
     </div>
     <div class="edit-parent-container border-top" id="following_occurs">
     <div class="edit-inner-div pt-3 d-flex">
-        <p>Alert when the following occurs: </p>
+        <label>Alert when the following occurs: </label>
         <ul>
             <li class="text-center checkbox" id="track_advertiser_ul" ng-show="track_advertiser">
-                <input type="checkbox"  ng-model="$parent.isAdvSelected">
+                <input type="checkbox"  ng-model="$parent.isAdvSelected" id="track_advertiser_input">
                 <label for="track_advertiser_input" class="checkbox-custom-label">
-                <span class="v-align-middle">New Advertisers are Detected</span>
+                New Advertisers are Detected
                 </label>
             </li>
             <li class="text-center checkbox" id="track_brand_ul" ng-show="track_brand">
-                <input type="checkbox"  ng-model="$parent.isBrandSelected">
+                <input type="checkbox"  ng-model="$parent.isBrandSelected" id="track_brand_input">
                 <label for="track_brand_input"  class="checkbox-custom-label">
-                <span class="v-align-middle">New Brands are Detected</span>
+                New Brands are Detected
                 </label>
             </li>
             <li class="text-center checkbox" id="track_creative_ul" ng-show="track_creative" >
-                <input type="checkbox" ng-model="$parent.isCreativeSelected">
+                <input type="checkbox" ng-model="$parent.isCreativeSelected" id="track_creative_input">
                 <label for="track_creative_input"  class="checkbox-custom-label">
-                <span class="v-align-middle">New Creative are Detected</span>
+                New Creative are Detected
                 </label>
             </li>
         </ul>
     </div>
     <div class="edit-inner-div pt-3 d-flex" id="brand_classification_div">
-        <p>Brand Classification: </p>
+        <label>Brand Classification: </label>
         <div class="d-flex alert-brand-classification">
             <ul class="d-flex middle-child">
                 <li class="text-center checkbox" ng-repeat="shortForm in shortFormTrackingClassification">
@@ -45,15 +45,15 @@
                  </li>
         </div>
     </div>
-    <div class="edit-inner-div edit-inner-div d-flex pt-3 pb-3">
-        <p>Alert frequency:</p>
+    <div class="edit-inner-div d-flex pt-3 pb-3">
+        <label>Alert frequency:</label>
         <ul class="d-flex" id="AlertfrequencyUL">
-            <li ng-show="notClosing != null && notClosing && email_schedulable_direct">
+            <li class="mr-3" ng-show="notClosing != null && notClosing && email_schedulable_direct">
                 <div id="AlertfrequencyLabel">
                 <label class="m-top5"></label>
                 </div>
             </li>
-            <li class="text-center checkbox" ng-repeat="frequency in tracking_frequency">
+            <li class="text-center checkbox mr-3" ng-repeat="frequency in tracking_frequency">
                 <input type="checkbox"  value="{{frequency.value}}" id="{{frequency.id}}" class="checkbox-custom-label" ng-model="frequency.selected" />
                 <label for="{{frequency.id}}">
                     {{frequency.value}}
@@ -62,7 +62,7 @@
         </ul>
     </div>
     <div class="border-top edit-inner-div pt-2 d-flex">
-        <p>Notification Type: </p>
+        <label class="pb-0 mb-0">Notification Type: </label>
         <span class="notice-email">Email</span>
     </div>
     </div>
