@@ -25,7 +25,10 @@
             </div>
             <span id="duplicate-filter-error" class="duplicate-filter-error" ng-show="list_error">List name already exists.</span>
             <!-- <div class="grid-content" id='filter_list_network'></div> -->
-            <div id="brandAvd_list_network" ui-grid="gridOptionsList" ui-grid-selection class="grid grid-content"></div>
+            <div id="brandAvd_list_network" ui-grid="gridOptionsList" ui-grid-selection class="grid grid-content">
+                    <div class="watermark" ng-show="!gridOptionsList.data.length && !loading">No Records Founds</div>
+                    <div class="watermark"  ng-show="loading">loading ...</div>
+            </div>
         </div>
     </div>
     

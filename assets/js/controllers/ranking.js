@@ -114,7 +114,15 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 sheet.data.push(cols);
             },
             onRegisterApi: function (gridApi) {
-                $scope.gridApi = gridApi;
+                $scope.gridApi =  gridApi;
+                gridApi.selection.on.rowSelectionChanged($scope, function(row){ 
+                    $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
+                });
+        
+                gridApi.selection.on.rowSelectionChangedBatch($scope, function(row){ 
+                    $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
+                });
+                // $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows()
                 $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
 
                 gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
