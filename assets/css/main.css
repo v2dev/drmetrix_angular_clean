@@ -2159,6 +2159,13 @@ header.sticky-top {
   padding-top: 15px;
 }
 
+.networkSelectBtn.btn-disabled {
+  background: #0287b5;
+  cursor: default;
+  pointer-events: none;
+  opacity: 1;
+}
+
 .filter-popup ul {
   display: flex;
   align-items: center;
