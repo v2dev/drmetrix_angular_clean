@@ -1597,6 +1597,8 @@ angular.module('drmApp').controller('FiltersCtrl', function($scope, $http, $inte
         $uibModalInstance.dismiss();
     }
 
+   
+
     // Call filter ui Grid
     $scope.uigridFilterModal = function() {
         var formData = $rootScope.formdata;
@@ -1621,8 +1623,16 @@ angular.module('drmApp').controller('FiltersCtrl', function($scope, $http, $inte
             enableGridMenu: true,
             enableSelectAll: true,
             enableSorting: true,
+            //Pagination
+            paginationPageSizes: [20],
+            paginationPageSize: 20,
+            paginationTemplate: $rootScope.correctTotalPaginationTemplate,
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+                // $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
+            }
         };
-
+        $scope.loading = true;
         vm.gridOptions.columnDefs = [
             // { name: 'row.entity.checked_schedule_email', pinnedLeft:true, displayName:'ID' },
             // { name: 'row.entity.disabled_schedule_email', pinnedLeft:true, displayName:'ID' },
@@ -1642,10 +1652,11 @@ angular.module('drmApp').controller('FiltersCtrl', function($scope, $http, $inte
         ];
         apiService.post('/get_user_filter_list', formData, config)
         .then(function (data) {
+            $scope.loading = false;
             $scope.PostDataResponse = formData;
             vm.gridOptions.data = data.data.rows;
         }, function (response) {
-            // this function handlers error
+            // this function handlers error 
         });
     }
 
