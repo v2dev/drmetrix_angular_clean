@@ -9,6 +9,8 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $scope.page = $state.current.name;
         $rootScope.networkDisplayName = '';
         $rootScope.headerDisplay = 1;
+        $scope.idsOfSelectedRows = 0;
+        $scope.applied_list_ids = '';
         
         //date filter
         $scope.otherDiv = 0;
@@ -503,7 +505,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
 
     $scope.view_adv_tab = function(adv_name, adv_id, c, tab, val, sd, ed, call_from, call_id, call_name, call_page, need_help) {
-        debugger;
         $scope.adv_id = adv_id;
         $scope.adv_name = adv_name;
         $scope.call_from = call_from;
