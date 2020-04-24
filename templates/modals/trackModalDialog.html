@@ -70,10 +70,10 @@
     </div>
     <div class="align-center" id="error_alert_setup_msg" ng-bind-html="error_alert_setup_msg | trustAsHtml" ng-show="error_alert_setup_msg != ''"></div>
     <div class="btn-grp d-flex justify-content-end pt-3" id="feedback_msg_block_btn">
-    <button id="cancel_tracking_btn" class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
-    <button class="btn btn-blue" type="Set" id="set_tracking_btn" ng-click="setTracking();"><i class="fa fa-check" title="apply"></i>Set</button>
-    <button class="btn btn-blue" type="button" id="del_tracking_btn" style="display:none;"><i class="fa fa-trash" title="cancel"></i>Delete</button>  <!-- displayed in configure emails  -->
-    <div id="other_tracking_actions" ng-bind-html="tracking_action | trustAsHtml"></div>
+        <button id="cancel_tracking_btn" class="btn btn-black" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+        <button class="btn btn-blue" type="Set" id="set_tracking_btn" ng-click="setTracking();"><i class="fa fa-check" title="apply"></i>Set</button>
+        <button class="btn btn-blue" type="button" id="del_tracking_btn" style="display:none;"><i class="fa fa-trash" title="cancel"></i>Delete</button>  <!-- displayed in configure emails  -->
+        <div id="other_tracking_actions" ng-bind-html="tracking_action | trustAsHtml"></div>
     </div>
 </div>
        

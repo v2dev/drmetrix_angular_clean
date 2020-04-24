@@ -51,12 +51,6 @@ $scope.tracking_frequency = [
         'selected': false,
         "value": "Wekly"
     }, 
-    // {
-    //     "index": 3,
-    //     "id": "monthly",
-    //     'selected': false,
-    //     "value": "Monthly"
-    // }
 ]
 $scope.shortFormTrackingClassification = [
         {
@@ -395,6 +389,34 @@ $scope.shortFormTrackingClassification = [
             }
           });
     };
+
+    $rootScope.openCategoryTrackModal = function() {
+        $scope.openModal('./templates/modals/categoryTrackModal.html','trackCtrl','md modal-dialog-centered');
+    }
+
+    $scope.selectCategory = function (item, value, type ,tabName) {
+        value = !value;
+        if (type == 'all') {
+            angular.forEach(item, function (data) {
+                tabName == 'brand' ? data.isBrandSelected = value : data.isCreativeSelected = value;
+                angular.forEach(data.subcategory, function (cat) {
+                    tabName == 'brand' ? cat.isBrandSelected = value : cat.isCreativeSelected = value;
+                });
+            })
+        } else if (type == 'subcategory') {
+            tabName == 'brand' ? $scope.all_brand_cat = value : $scope.all_creative_cat = value;
+                var count = 0;
+                angular.forEach(item, function (subcats) {
+                    tabName == 'brand' ? subcats.isBrandSelected = value : subcats.isCreativeSelected = value;
+                });
+        } else {
+            angular.forEach(item.subcategory, function (data) {
+                tabName == 'brand' ? data.isBrandSelected = value : data.isCreativeSelected = value;
+            });
+            tabName == 'brand' ? $scope.all_brand_cat = value : $scope.all_creative_cat = value;
+        }
+    }
+
     $scope.getParameters = function () {
         var selectDateDropDown = $scope.selectDate;
 
@@ -525,76 +547,164 @@ $scope.shortFormTrackingClassification = [
        
      }
 
-     $scope.viewTrackingDialogue = function(alert_type, type_id, name) {
-         $scope.alert_type = alert_type;
-         var type_id, name;
-         $scope.tracking_action = '';
-         $scope.isAdvSelected = $scope.isBrandSelected = $scope.isCreativeSelected = false;
-         $scope.track_advertiser = $scope.track_brand = $scope.track_creative = 0 
-         if(alert_type == 'network') {
-             type_id = $scope.selectedNetwork;
-             name    = $scope.selectedNetworkAlias
-         }
-        $scope.type_id               = type_id;
-        $scope.tracker_element_name  = name;
-        var formData =  {'alert_type' : alert_type, 'type_id' : type_id, 'name' : name }
-        apiService.post('/get_tracking_detail', formData)
+  
+     $rootScope.openCategoryTrack = function(alert_type) {
+        $scope.alert_type = alert_type;
+        var formData =  {'alert_type' : alert_type }
+        apiService.post('/get_categorylist_with_categorytracking', formData)
         .then(function (data) {
-            var response = data.data
-            switch (alert_type) {
-                case 'advertiser':
-                    $scope.track_brand = $scope.track_cretive = 1;
-                    break;
-                case 'brand':
-                    $scope.track_creative = 1;
-                    break;
-                case 'category':
-                    $scope.track_brand = $scope.track_creative = 1;
-                    break;
-                case 'network':
-                    $scope.track_advertiser = $scope.track_brand = $scope.track_creative=  1;
-                    break;
-            }
-            if (response.status == 1) {
-                if (response.data['frequency'] != "") {
+            var response = data.data;
+            var cat_length = 0
+            var brandSelectedIdArray = response.brand_data.split(',');
+            var creativeSelectedIdArray = response.creative_data.split(',');
+            if (response.status) {
+                $scope.category_result = response.result;
+                $scope.all_brand_cat  = false;
+                $scope.all_creative_cat = false;
+                angular.forEach($scope.category_result, function(cats) {
+                    cats.isBrandSelected = false;
+                    cats.isCreativeSelected = false;
+                    var subCatBrand_length = subCatCreative_length = 0;
+                    angular.forEach(cats.subcategory, function(subcats, key) {
+                        cat_length++;
+                        subcats.isBrandSelected = false;
+                        subcats.isCreativeSelected = false;
+                        if(brandSelectedIdArray.indexOf(subcats.sub_category_id) !== -1) {
+                            subCatBrand_length++;
+                            subcats.isBrandSelected = true;
+                        }
+                        if(creativeSelectedIdArray.indexOf(subcats.sub_category_id) !== -1) {
+                            subCatCreative_length++;
+                            subcats.isCreativeSelected = true;
+                        }
+                        console.log(subCatBrand_length+'****'+cats.subcategory.length);
+                        if(subCatBrand_length == cats.subcategory.length) {
+                            cats.isBrandSelected = true;
+                        }
+
+                        if(subCatCreative_length == cats.subcategory.length) {
+                            cats.isCreativeSelected = true;
+                        }
+                        
+                    });
+                });
+
+                if(brandSelectedIdArray.length == cat_length) {
+                    $scope.all_brand_cat = true;
+                }
+
+                if(creativeSelectedIdArray.length == cat_length) {
+                    $scope.all_creative_cat = true;
+                }
+                if (response.frequency != "") {
                     angular.forEach($scope.tracking_frequency, function(tracking) {
-                        if(response.data['frequency'].includes(tracking.id)) {
+                        if(response.frequency.includes(tracking.id)) {
                             tracking.selected = true;
                         }
                     });
                 }
-                if ($state.current.name == 'tracking') { // configure email page
-                    $scope.status           = response.data['status'] == 'active' ? 'inactive' : 'active';
-                    $scope.tracking_action  = '<a ng-click="inactiveTracking();"><i ng-class="{status == "inactive" ?"blue-eye" : "slash grey-eye"}" class="fa fa-eye" title="Track"></i></a>';
-                } 
-                var elements = response.data['track_elements'].split(",");
-                elements.forEach(function (element) {
-                    if (element == 'advertiser') {
-                        $scope.isAdvSelected = true;
-                    }
-                    if (element == 'brand') {
-                        $scope.isBrandSelected = true;
-                    }
-                    if (element == 'creative') {
-                        $scope.isCreativeSelected = true;
-                    }
-                });
-                if (alert_type == 'network' || alert_type == 'category') {
-                    var classification = response.data['classification'];
-                    if (classification != "") {
-                        angular.forEach(classification, function (element) {
-                            let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
-                            obj.selected = true;
-                        }); 
-                    }
+               
+                var classification = response.classification;
+                if (classification != "") {
+                    angular.forEach(classification, function (element) {
+                        let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
+                        obj.selected = true;
+                    }); 
                 }
             }
-            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+            $scope.openModal('./templates/modals/categoryTrackModal.html','trackCtrl','md modal-dialog-centered');
         },function (error) {
             console.log('Error');
         });
-       
     }
+
+    $scope.show_subcategories = function(parent_id) {
+        var parent_id = $(this).attr("custom-self-id");
+        if ($('tr[custom-parent-id="' + parent_id + '"]').is(':visible')) {
+            $('tr[custom-parent-id="' + parent_id + '"]').slideUp("fast");
+            $(this).removeClass("fa-caret-right");
+            $(this).removeClass("fa-caret-down");
+            $(this).addClass("fa-caret-right");
+        } else {
+            $(this).removeClass("fa-caret-right");
+            $(this).removeClass("fa-caret-down");
+            $(this).addClass("fa-caret-down");
+            $('tr[custom-parent-id="' + parent_id + '"]').slideDown("slow");
+        }
+    }
+    $rootScope.viewTrackingDialogue = function(alert_type, type_id, name) {
+        $scope.alert_type = alert_type;
+        var type_id, name;
+        $scope.tracking_action = '';
+        $scope.isAdvSelected = $scope.isBrandSelected = $scope.isCreativeSelected = false;
+        $scope.track_advertiser = $scope.track_brand = $scope.track_creative = 0 
+        if(alert_type == 'network') {
+            type_id = $scope.selectedNetwork;
+            name    = $scope.selectedNetworkAlias
+        }
+       $scope.type_id               = type_id;
+       $scope.tracker_element_name  = name;
+       var formData =  {'alert_type' : alert_type, 'type_id' : type_id, 'name' : name }
+       apiService.post('/get_tracking_detail', formData)
+       .then(function (data) {
+           var response = data.data
+
+           if (response.status) {
+               $scope.result = response.result;
+               switch (alert_type) {
+                   case 'advertiser':
+                       $scope.track_brand = $scope.track_cretive = 1;
+                       break;
+                   case 'brand':
+                       $scope.track_creative = 1;
+                       break;
+                   case 'category':
+                       $scope.track_brand = $scope.track_creative = 1;
+                       break;
+                   case 'network':
+                       $scope.track_advertiser = $scope.track_brand = $scope.track_creative=  1;
+                       break;
+               }
+          
+               if (response.data['frequency'] != "") {
+                   angular.forEach($scope.tracking_frequency, function(tracking) {
+                       if(response.data['frequency'].includes(tracking.id)) {
+                           tracking.selected = true;
+                       }
+                   });
+               }
+               if ($state.current.name == 'tracking') { // configure email page
+                   $scope.status           = response.data['status'] == 'active' ? 'inactive' : 'active';
+                   $scope.tracking_action  = '<a ng-click="inactiveTracking();"><i ng-class="{status == "inactive" ?"blue-eye" : "slash grey-eye"}" class="fa fa-eye" title="Track"></i></a>';
+               } 
+               var elements = response.data['track_elements'].split(",");
+               elements.forEach(function (element) {
+                   if (element == 'advertiser') {
+                       $scope.isAdvSelected = true;
+                   }
+                   if (element == 'brand') {
+                       $scope.isBrandSelected = true;
+                   }
+                   if (element == 'creative') {
+                       $scope.isCreativeSelected = true;
+                   }
+               });
+               if (alert_type == 'network' || alert_type == 'category') {
+                   var classification = response.data['classification'];
+                   if (classification != "") {
+                       angular.forEach(classification, function (element) {
+                           let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
+                           obj.selected = true;
+                       }); 
+                   }
+               }
+           }
+            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+       },function (error) {
+           console.log('Error');
+       });
+      
+   }
 
     $scope.removeLastCommaFromString = function(text) {
         var lastChar = text.slice(-1);
@@ -604,7 +714,7 @@ $scope.shortFormTrackingClassification = [
          return text;
     }
 
-    $scope.setTracking = function() {
+    $rootScope.setTracking = function() {
         // setAlertClose(); // to hide or show mesage depends on email schedualabel. Do it later
         var alert_type      = $scope.alert_type;
         var type_id         = $scope.type_id;
@@ -623,7 +733,7 @@ $scope.shortFormTrackingClassification = [
 
         elements = $scope.removeLastCommaFromString(elements);
 
-        if (alert_type != 'filter' && elements == "") {
+        if (alert_type != 'filter' && alert_type != 'category' && elements == "") {
             $scope.error_alert_setup_msg = '<span>At least one type should be tracked.</span>';
             $timeout(function () { $scope.error_alert_setup_msg = ''; }, 2000);
             return false;
@@ -642,6 +752,31 @@ $scope.shortFormTrackingClassification = [
             $timeout(function () { $scope.error_alert_setup_msg = ''; }, 2000);
             return false;
         }
+        var type_id = {};
+        var length_of_elements = 0;
+        angular.forEach($scope.category_result, function(cats) {
+            angular.forEach(cats.subcategory, function(subcats) {
+                if(subcats.isBrandSelected == true) {
+                    length_of_elements++;
+                    type_id[subcats.sub_category_id] = 'brand';
+                    if(subcats.isCreativeSelected == true) {
+                        length_of_elements++;
+                        type_id[subcats.sub_category_id] = 'brand,creative';
+                    }
+                } else {
+                    if(subcats.isCreativeSelected == true) {
+                        length_of_elements++;
+                        type_id[subcats.sub_category_id] = 'creative';
+                    }
+                }
+            });
+        });
+     
+        if(length_of_elements == 0) {
+            $scope.cat_error_alert_setup_msg = '<span>Please select at least one category either for brand or creative.</span>';
+            $timeout(function () { $scope.cat_error_alert_setup_msg = ''; }, 2000);
+            return false;
+        }
 
         if (alert_type == 'network' || alert_type == 'category') {
             angular.forEach($scope.shortFormTrackingClassification, function(element) {
@@ -655,13 +790,19 @@ $scope.shortFormTrackingClassification = [
 
         brand_class = $scope.removeLastCommaFromString(brand_class);
 
-        var formData = { "alert_type": alert_type, "type_id": type_id, "frequency": frequency, "tracked_elements": elements, "name": name, "status": status, "brand_class": brand_class
+        var formData = { "alert_type": alert_type, "type_id": JSON.stringify(type_id),"frequency": frequency, "status": status, "brand_class": brand_class
         }
-        apiService.post('/set_tracking_detail', formData)
+        var url = 'set_cat_tracking_detail';
+        if(alert_type!= 'category') {
+            formData.tracked_elements = elements;
+            formData.name = name;
+            url = 'set_tracking_detail';
+        }
+        apiService.post('/'+url, formData)
             .then(function (data) {
                 var response = data.data
                 if (response.status == true) {
-                   $scope.success_alert_setup_msg ='<span>Alert tracking is set up successfully.</span>';
+                   $scope.success_alert_setup_msg = '<span>Alert tracking is set up successfully.</span>';
                     // var custom_attr_id = alert_type + "_" + type_id;
                     // $('[custom-attr="' + custom_attr_id + '"]').addClass("fa-eye");
                     // $('[custom-attr="' + custom_attr_id + '"]').addClass("blue-eye");
@@ -679,13 +820,13 @@ $scope.shortFormTrackingClassification = [
                     }
                     $scope.hideTrackingModal();
                     if ($state.current.name == 'tracking') {
-                        if (status == 'active') {
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("fa-eye blue-eye");
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("grey-eye fa-eye-slash");
-                        } else {
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("fa-eye blue-eye");
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("grey-eye fa-eye-slash");
-                        }
+                        // if (status == 'active') {
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("fa-eye blue-eye");
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("grey-eye fa-eye-slash");
+                        // } else {
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("fa-eye blue-eye");
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("grey-eye fa-eye-slash");
+                        // }
                     }
                     // if (alert_type == 'network' || alert_type == 'category') {
                     //     updated_class = updated_class.replace(/,\s*$/, "");
@@ -1839,6 +1980,14 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
     //ui grid code
     $scope.uigridListModal();
 });
+
+
+angular.module('drmApp').controller('trackCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+});
+
 
 angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, $interval, uiGridTreeViewConstants, $uibModal, $rootScope, $uibModalInstance, $state, apiService) {
     $scope.sharedList = 'My';

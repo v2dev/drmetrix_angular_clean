@@ -532,12 +532,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     
 });
 
-angular.module('drmApp').controller('trackCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-});
-
 angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
     $scope.checkRadioButton = function() {
         $scope.newType = 'none';

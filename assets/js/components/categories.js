@@ -18,7 +18,7 @@ angular.
                     <label for="checkbox5_all" class="checkbox-custom-label">
                         All Categories</label>
                 </div>
-                <a class="btn btn-black category-track-btn"  id="category_track_btn" ng-class="category_data_flag ? 'btn-black': ''"><i class="fa fa-eye" title="Track"></i>
+                <a class="btn btn-black category-track-btn"  id="category_track_btn" ng-class="category_data_flag ? 'btn-black': ''" ng-click="$root.openCategoryTrack('category');"><i class="fa fa-eye" title="Track"></i>
                     <span>Track</span>
                 </a>
                 <a href="" class="close-left-sidebar-nav slideBtn" id="slidebtn" ng-click="$ctrl.changeCategorySideBarValue();">
@@ -30,7 +30,7 @@ angular.
                     <div class="checkbox-normal" data-toggle="collapse" href="#collapseExample" role="button"
                         aria-expanded="false" aria-controls="collapseExample">
                         <input class="checkbox-custom" custom-attr="subcat_cust_attr" type="checkbox" id="checkbox_{{item.category_id}}" ng-click="item.isSelected = !item.isSelected;$ctrl.selectCategory(item, item.isSelected)" ng-model="item.isSelected">
-                        <label for="checkbox_{{item.category_id}}" class="checkbox-custom-label" ng-class="$ctrl.selectedValue(item)">
+                        <label for="checkbox_{{item.category_id}}" class="checkbox-custom-label" ng-class="$root.selectedValue(item)">
                             <a href="" ng-click="$ctrl.subCategory = !$ctrl.subCategory" class="toggle-arrow">
                                 <i class="fa fa-lg" ng-class="$ctrl.subCategory ? 'fa-caret-down' : 'fa-caret-right'"></i>
                             </a>
@@ -84,7 +84,6 @@ angular.
             self.allcategory = true;
             self.category_list = $rootScope.category_list = cat;
         }
-    
           
         self.selectedValue = function (item) {
             var count = 0;
@@ -94,7 +93,7 @@ angular.
             });
             return count > 0 ? count == item.subcategory.length ? 'empty' : 'half-filled' : 'full-filled';
         }
-        
+            
         self.selectCategory = function (item, value, type) {
             if (type == 'all') {
                 angular.forEach(item, function (data) {
@@ -104,14 +103,14 @@ angular.
                     });
                 })
             } else if (type == 'subCategory') {
-                self.changeCategory(item, value);
+                $rootScope.changeCategory(item, value);
             } else {
                 angular.forEach(item.subcategory, function (data) {
                     data.isSelected = value;
                 });
-                self.changeCategory($rootScope.category_list, value);
+                $rootScope.changeCategory($rootScope.category_list, value);
             }
-            self.checkCategoryValidation(type, value)
+            $rootScope.checkCategoryValidation(type, value)
         }
     
         self.checkCategoryValidation = function(type, value) {
@@ -139,6 +138,8 @@ angular.
                 $scope.allcategory = count == 0 ? true : false;
             }
         }
+    
+        
         self.showCategoryList(); 
         feather.replace();
     }
