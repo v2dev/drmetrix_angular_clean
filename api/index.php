@@ -18952,15 +18952,9 @@ function deleteTrackingDetails(){
 }
 
 function getCategorylistWithCategorytracking(){
-    $request                            = Slim::getInstance()->request();
-    $query_string                       = $request->getBody();
-    $set_one                            = explode('&', $query_string);
-    $requestData                        = $raw_data = array();
-
-    foreach($set_one as $k =>$v){
-        $raw_data                       = explode('=',$v);
-        $requestData[$raw_data[0]]      = $raw_data[1];
-    }
+    $request = Slim::getInstance()->request();
+    $query_string = $request->getBody();
+    $requestData =(array)json_decode($query_string, TRUE);
 
     $params['alert_type']               = $requestData['alert_type'];
     $params['user_id']                  = $_SESSION['user_id'];
@@ -19019,14 +19013,9 @@ function getCategorylistWithCategorytracking(){
 }
 
 function setCategoryTrackingDetail(){
-    $request        = Slim::getInstance()->request();
-    $query_string   = $request->getBody();
-    $set_one        = explode('&', $query_string);
-    $requestData    = $raw_data = array();
-    foreach($set_one as $k =>$v){
-        $raw_data   = explode('=',$v);
-        $requestData[$raw_data[0]] = $raw_data[1];
-    }
+    $request = Slim::getInstance()->request();
+    $query_string = $request->getBody();
+    $requestData = (array)json_decode($query_string, TRUE);
 
     $params['alert_type']       =   $requestData['alert_type'];
     $params['frequency']        =   urldecode($requestData['frequency']);

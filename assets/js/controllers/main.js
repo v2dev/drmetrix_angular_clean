@@ -51,12 +51,6 @@ $scope.tracking_frequency = [
         'selected': false,
         "value": "Wekly"
     }, 
-    // {
-    //     "index": 3,
-    //     "id": "monthly",
-    //     'selected': false,
-    //     "value": "Monthly"
-    // }
 ]
 $scope.shortFormTrackingClassification = [
         {
@@ -395,6 +389,34 @@ $scope.shortFormTrackingClassification = [
             }
           });
     };
+
+    $rootScope.openCategoryTrackModal = function() {
+        $scope.openModal('./templates/modals/categoryTrackModal.html','trackCtrl','md modal-dialog-centered');
+    }
+
+    $scope.selectCategory = function (item, value, type ,tabName) {
+        value = !value;
+        if (type == 'all') {
+            angular.forEach(item, function (data) {
+                tabName == 'brand' ? data.isBrandSelected = value : data.isCreativeSelected = value;
+                angular.forEach(data.subcategory, function (cat) {
+                    tabName == 'brand' ? cat.isBrandSelected = value : cat.isCreativeSelected = value;
+                });
+            })
+        } else if (type == 'subcategory') {
+            tabName == 'brand' ? $scope.all_brand_cat = value : $scope.all_creative_cat = value;
+                var count = 0;
+                angular.forEach(item, function (subcats) {
+                    tabName == 'brand' ? subcats.isBrandSelected = value : subcats.isCreativeSelected = value;
+                });
+        } else {
+            angular.forEach(item.subcategory, function (data) {
+                tabName == 'brand' ? data.isBrandSelected = value : data.isCreativeSelected = value;
+            });
+            tabName == 'brand' ? $scope.all_brand_cat = value : $scope.all_creative_cat = value;
+        }
+    }
+
     $scope.getParameters = function () {
         var selectDateDropDown = $scope.selectDate;
 
@@ -514,6 +536,10 @@ $scope.shortFormTrackingClassification = [
         $scope.refine_by            = data.refine_by;
         $scope.search_by_tfn        = data.search_by_tfn;
         $scope.programs_id          = data.program_id;
+        $scope.applied_list_type    = data.applied_list_type;
+        $scope.applied_list_ids     = data.applied_list_ids;
+        $scope.list_id              = data.list_id;
+        $scope.display_list_name    = data.display_list_name;
         $scope.applyFilter();
      });
 
@@ -525,76 +551,164 @@ $scope.shortFormTrackingClassification = [
        
      }
 
-     $scope.viewTrackingDialogue = function(alert_type, type_id, name) {
-         $scope.alert_type = alert_type;
-         var type_id, name;
-         $scope.tracking_action = '';
-         $scope.isAdvSelected = $scope.isBrandSelected = $scope.isCreativeSelected = false;
-         $scope.track_advertiser = $scope.track_brand = $scope.track_creative = 0 
-         if(alert_type == 'network') {
-             type_id = $scope.selectedNetwork;
-             name    = $scope.selectedNetworkAlias
-         }
-        $scope.type_id               = type_id;
-        $scope.tracker_element_name  = name;
-        var formData =  {'alert_type' : alert_type, 'type_id' : type_id, 'name' : name }
-        apiService.post('/get_tracking_detail', formData)
+  
+     $rootScope.openCategoryTrack = function(alert_type) {
+        $scope.alert_type = alert_type;
+        var formData =  {'alert_type' : alert_type }
+        apiService.post('/get_categorylist_with_categorytracking', formData)
         .then(function (data) {
-            var response = data.data
-            switch (alert_type) {
-                case 'advertiser':
-                    $scope.track_brand = $scope.track_cretive = 1;
-                    break;
-                case 'brand':
-                    $scope.track_creative = 1;
-                    break;
-                case 'category':
-                    $scope.track_brand = $scope.track_creative = 1;
-                    break;
-                case 'network':
-                    $scope.track_advertiser = $scope.track_brand = $scope.track_creative=  1;
-                    break;
-            }
-            if (response.status == 1) {
-                if (response.data['frequency'] != "") {
+            var response = data.data;
+            var cat_length = 0
+            var brandSelectedIdArray = response.brand_data.split(',');
+            var creativeSelectedIdArray = response.creative_data.split(',');
+            if (response.status) {
+                $scope.category_result = response.result;
+                $scope.all_brand_cat  = false;
+                $scope.all_creative_cat = false;
+                angular.forEach($scope.category_result, function(cats) {
+                    cats.isBrandSelected = false;
+                    cats.isCreativeSelected = false;
+                    var subCatBrand_length = subCatCreative_length = 0;
+                    angular.forEach(cats.subcategory, function(subcats, key) {
+                        cat_length++;
+                        subcats.isBrandSelected = false;
+                        subcats.isCreativeSelected = false;
+                        if(brandSelectedIdArray.indexOf(subcats.sub_category_id) !== -1) {
+                            subCatBrand_length++;
+                            subcats.isBrandSelected = true;
+                        }
+                        if(creativeSelectedIdArray.indexOf(subcats.sub_category_id) !== -1) {
+                            subCatCreative_length++;
+                            subcats.isCreativeSelected = true;
+                        }
+                        console.log(subCatBrand_length+'****'+cats.subcategory.length);
+                        if(subCatBrand_length == cats.subcategory.length) {
+                            cats.isBrandSelected = true;
+                        }
+
+                        if(subCatCreative_length == cats.subcategory.length) {
+                            cats.isCreativeSelected = true;
+                        }
+                        
+                    });
+                });
+
+                if(brandSelectedIdArray.length == cat_length) {
+                    $scope.all_brand_cat = true;
+                }
+
+                if(creativeSelectedIdArray.length == cat_length) {
+                    $scope.all_creative_cat = true;
+                }
+                if (response.frequency != "") {
                     angular.forEach($scope.tracking_frequency, function(tracking) {
-                        if(response.data['frequency'].includes(tracking.id)) {
+                        if(response.frequency.includes(tracking.id)) {
                             tracking.selected = true;
                         }
                     });
                 }
-                if ($state.current.name == 'tracking') { // configure email page
-                    $scope.status           = response.data['status'] == 'active' ? 'inactive' : 'active';
-                    $scope.tracking_action  = '<a ng-click="inactiveTracking();"><i ng-class="{status == "inactive" ?"blue-eye" : "slash grey-eye"}" class="fa fa-eye" title="Track"></i></a>';
-                } 
-                var elements = response.data['track_elements'].split(",");
-                elements.forEach(function (element) {
-                    if (element == 'advertiser') {
-                        $scope.isAdvSelected = true;
-                    }
-                    if (element == 'brand') {
-                        $scope.isBrandSelected = true;
-                    }
-                    if (element == 'creative') {
-                        $scope.isCreativeSelected = true;
-                    }
-                });
-                if (alert_type == 'network' || alert_type == 'category') {
-                    var classification = response.data['classification'];
-                    if (classification != "") {
-                        angular.forEach(classification, function (element) {
-                            let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
-                            obj.selected = true;
-                        }); 
-                    }
+               
+                var classification = response.classification;
+                if (classification != "") {
+                    angular.forEach(classification, function (element) {
+                        let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
+                        obj.selected = true;
+                    }); 
                 }
             }
-            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+            $scope.openModal('./templates/modals/categoryTrackModal.html','trackCtrl','md modal-dialog-centered');
         },function (error) {
             console.log('Error');
         });
-       
     }
+
+    $scope.show_subcategories = function(parent_id) {
+        var parent_id = $(this).attr("custom-self-id");
+        if ($('tr[custom-parent-id="' + parent_id + '"]').is(':visible')) {
+            $('tr[custom-parent-id="' + parent_id + '"]').slideUp("fast");
+            $(this).removeClass("fa-caret-right");
+            $(this).removeClass("fa-caret-down");
+            $(this).addClass("fa-caret-right");
+        } else {
+            $(this).removeClass("fa-caret-right");
+            $(this).removeClass("fa-caret-down");
+            $(this).addClass("fa-caret-down");
+            $('tr[custom-parent-id="' + parent_id + '"]').slideDown("slow");
+        }
+    }
+    $rootScope.viewTrackingDialogue = function(alert_type, type_id, name) {
+        $scope.alert_type = alert_type;
+        var type_id, name;
+        $scope.tracking_action = '';
+        $scope.isAdvSelected = $scope.isBrandSelected = $scope.isCreativeSelected = false;
+        $scope.track_advertiser = $scope.track_brand = $scope.track_creative = 0 
+        if(alert_type == 'network') {
+            type_id = $scope.selectedNetwork;
+            name    = $scope.selectedNetworkAlias
+        }
+       $scope.type_id               = type_id;
+       $scope.tracker_element_name  = name;
+       var formData =  {'alert_type' : alert_type, 'type_id' : type_id, 'name' : name }
+       apiService.post('/get_tracking_detail', formData)
+       .then(function (data) {
+           var response = data.data
+
+           if (response.status) {
+               $scope.result = response.result;
+               switch (alert_type) {
+                   case 'advertiser':
+                       $scope.track_brand = $scope.track_cretive = 1;
+                       break;
+                   case 'brand':
+                       $scope.track_creative = 1;
+                       break;
+                   case 'category':
+                       $scope.track_brand = $scope.track_creative = 1;
+                       break;
+                   case 'network':
+                       $scope.track_advertiser = $scope.track_brand = $scope.track_creative=  1;
+                       break;
+               }
+          
+               if (response.data['frequency'] != "") {
+                   angular.forEach($scope.tracking_frequency, function(tracking) {
+                       if(response.data['frequency'].includes(tracking.id)) {
+                           tracking.selected = true;
+                       }
+                   });
+               }
+               if ($state.current.name == 'tracking') { // configure email page
+                   $scope.status           = response.data['status'] == 'active' ? 'inactive' : 'active';
+                   $scope.tracking_action  = '<a ng-click="inactiveTracking();"><i ng-class="{status == "inactive" ?"blue-eye" : "slash grey-eye"}" class="fa fa-eye" title="Track"></i></a>';
+               } 
+               var elements = response.data['track_elements'].split(",");
+               elements.forEach(function (element) {
+                   if (element == 'advertiser') {
+                       $scope.isAdvSelected = true;
+                   }
+                   if (element == 'brand') {
+                       $scope.isBrandSelected = true;
+                   }
+                   if (element == 'creative') {
+                       $scope.isCreativeSelected = true;
+                   }
+               });
+               if (alert_type == 'network' || alert_type == 'category') {
+                   var classification = response.data['classification'];
+                   if (classification != "") {
+                       angular.forEach(classification, function (element) {
+                           let obj = $scope.shortFormTrackingClassification.find(obj => obj.id == element);
+                           obj.selected = true;
+                       }); 
+                   }
+               }
+           }
+            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+       },function (error) {
+           console.log('Error');
+       });
+      
+   }
 
     $scope.removeLastCommaFromString = function(text) {
         var lastChar = text.slice(-1);
@@ -604,7 +718,7 @@ $scope.shortFormTrackingClassification = [
          return text;
     }
 
-    $scope.setTracking = function() {
+    $rootScope.setTracking = function() {
         // setAlertClose(); // to hide or show mesage depends on email schedualabel. Do it later
         var alert_type      = $scope.alert_type;
         var type_id         = $scope.type_id;
@@ -623,7 +737,7 @@ $scope.shortFormTrackingClassification = [
 
         elements = $scope.removeLastCommaFromString(elements);
 
-        if (alert_type != 'filter' && elements == "") {
+        if (alert_type != 'filter' && alert_type != 'category' && elements == "") {
             $scope.error_alert_setup_msg = '<span>At least one type should be tracked.</span>';
             $timeout(function () { $scope.error_alert_setup_msg = ''; }, 2000);
             return false;
@@ -642,6 +756,31 @@ $scope.shortFormTrackingClassification = [
             $timeout(function () { $scope.error_alert_setup_msg = ''; }, 2000);
             return false;
         }
+        var type_id = {};
+        var length_of_elements = 0;
+        angular.forEach($scope.category_result, function(cats) {
+            angular.forEach(cats.subcategory, function(subcats) {
+                if(subcats.isBrandSelected == true) {
+                    length_of_elements++;
+                    type_id[subcats.sub_category_id] = 'brand';
+                    if(subcats.isCreativeSelected == true) {
+                        length_of_elements++;
+                        type_id[subcats.sub_category_id] = 'brand,creative';
+                    }
+                } else {
+                    if(subcats.isCreativeSelected == true) {
+                        length_of_elements++;
+                        type_id[subcats.sub_category_id] = 'creative';
+                    }
+                }
+            });
+        });
+     
+        if(length_of_elements == 0) {
+            $scope.cat_error_alert_setup_msg = '<span>Please select at least one category either for brand or creative.</span>';
+            $timeout(function () { $scope.cat_error_alert_setup_msg = ''; }, 2000);
+            return false;
+        }
 
         if (alert_type == 'network' || alert_type == 'category') {
             angular.forEach($scope.shortFormTrackingClassification, function(element) {
@@ -655,13 +794,19 @@ $scope.shortFormTrackingClassification = [
 
         brand_class = $scope.removeLastCommaFromString(brand_class);
 
-        var formData = { "alert_type": alert_type, "type_id": type_id, "frequency": frequency, "tracked_elements": elements, "name": name, "status": status, "brand_class": brand_class
+        var formData = { "alert_type": alert_type, "type_id": JSON.stringify(type_id),"frequency": frequency, "status": status, "brand_class": brand_class
         }
-        apiService.post('/set_tracking_detail', formData)
+        var url = 'set_cat_tracking_detail';
+        if(alert_type!= 'category') {
+            formData.tracked_elements = elements;
+            formData.name = name;
+            url = 'set_tracking_detail';
+        }
+        apiService.post('/'+url, formData)
             .then(function (data) {
                 var response = data.data
                 if (response.status == true) {
-                   $scope.success_alert_setup_msg ='<span>Alert tracking is set up successfully.</span>';
+                   $scope.success_alert_setup_msg = '<span>Alert tracking is set up successfully.</span>';
                     // var custom_attr_id = alert_type + "_" + type_id;
                     // $('[custom-attr="' + custom_attr_id + '"]').addClass("fa-eye");
                     // $('[custom-attr="' + custom_attr_id + '"]').addClass("blue-eye");
@@ -679,13 +824,13 @@ $scope.shortFormTrackingClassification = [
                     }
                     $scope.hideTrackingModal();
                     if ($state.current.name == 'tracking') {
-                        if (status == 'active') {
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("fa-eye blue-eye");
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("grey-eye fa-eye-slash");
-                        } else {
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("fa-eye blue-eye");
-                            $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("grey-eye fa-eye-slash");
-                        }
+                        // if (status == 'active') {
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("fa-eye blue-eye");
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("grey-eye fa-eye-slash");
+                        // } else {
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').removeClass("fa-eye blue-eye");
+                        //     $('[custom-attr="config_alert_' + custom_attr_id + '"]').addClass("grey-eye fa-eye-slash");
+                        // }
                     }
                     // if (alert_type == 'network' || alert_type == 'category') {
                     //     updated_class = updated_class.replace(/,\s*$/, "");
@@ -703,7 +848,7 @@ $scope.shortFormTrackingClassification = [
         $scope.categories_selected  = $scope.getSelectedCategories();
         $scope.classification       = $scope.getSelectedClassification();
         $scope.tab                  = $scope.type == 'brands' ? 1 : 0; 
-        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newType ,'network_id' : $scope.selectedNetwork ,'network_alias' : $scope.selectedNetworkAlias, 'refine_by' : $scope.refine_by, 'search_by_tfn' : $scope.search_by_tfn, 'programs_id' : $scope.programs_id}
+        $rootScope.formdata         = {'cat' : $scope.categories_selected , 'startDate' : $scope.selectDate,  'val' : $scope.selectDate,  'sd' : $scope.sd, 'ed' : $scope.ed, 'c' : $scope.selectClassificationValues , 'spanish' : $scope.selectLang, 'responseType': $scope.returnText , 'type' : $scope.tab , 'creative_duration' : $scope.selectedDurations.join(), 'flag': $rootScope.active_flag,"refine_filter_opt": $scope.refineBy,"refine_filter_opt_text":$scope.search_by_tfn,"refine_apply_filter":0,"new_filter_opt":$scope.newType ,'network_id' : $scope.selectedNetwork ,'network_alias' : $scope.selectedNetworkAlias, 'refine_by' : $scope.refine_by, 'search_by_tfn' : $scope.search_by_tfn, 'programs_id' : $scope.programs_id,'list_id': $scope.list_id,'applied_ids' :$scope.applied_list_ids , 'primary_tab' :$scope.applied_list_type,  list_ranking_id : $scope.list_id}
 
         if (!angular.isUndefined($scope.selectedNetwork) && $scope.selectedNetwork != '') {
             apiService.post('/get_network_tracking_status', $rootScope.formdata )
@@ -1684,113 +1829,132 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
     $scope.closeModal = function() {
         $uibModalInstance.dismiss();
     }
-    
-    $scope.createDropdown = function(id) {
-        if($scope.lists) {
-            angular.forEach($scope.lists, function(value, key) {
-                if(jQuery.inArray( value.id, $scope.list_id_array) > -1) {
-                    value.selected = true;
-                } else {
-                    value.selected = false;
-                }
-            });
-            $dropdown = $('.dropdown-mul-1').dropdown({
-                data: $scope.lists,
-                multipleMode: 'label',
-                searchTextLengthErrorMessage: '',
-                limitCount: 100,
-                limitCountErrorMessage: 'There is a 100 limit for '+$scope.ranking.list_tab+'s chosen. You have reached the limit for this list.',
-                choice: function () {
-                  console.log(arguments);
-                },
-                input: '<div class="search-input"> <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span><input type="text"  id="search_searchable_dropdown" placeholder="Please enter minimum 3 characters" onKeyUp="removeDisabled()"/><span id="clearIconList" class="search-icon cross-icon" style="display:none;"><i class="fa fa-times-circle" title="Clear Search"></i></span></span></div><button type="button" class="btn btn-blue applyBtn" id="search_list" disabled="disabled"><i class="fa fa-search"></i>Search</button>',
-                // <span class="inline-label search-text-tip">Search tip: <span> Enter minimum 3 characters</span></span>
-              });
-        }
-        setTimeout(function () {
-            $('#edit_list_'+id).show();
-            $('span#excel_loader_'+id).hide();  
-        }, 100);
-        // $('#edit-list-modal').show();
-        $('#edit-list-modal').modal('show');
-        $('#edit-list-modal').css("display","flex");
-        var scroll=$('.dropdown-mul-1');
-        scroll.animate({scrollTop: scroll.prop("scrollHeight")});
-    }
+
+    // $scope.createDropdown = function(id) {
+    //     if($scope.lists) {
+    //         angular.forEach($scope.lists, function(value, key) {
+    //             if(jQuery.inArray( value.id, $scope.list_id_array) > -1) {
+    //                 value.selected = true;
+    //             } else {
+    //                 value.selected = false;
+    //             }
+    //         });
+    //         $dropdown = $('.dropdown-mul-1').dropdown({
+    //             data: $scope.lists,
+    //             multipleMode: 'label',
+    //             searchTextLengthErrorMessage: '',
+    //             limitCount: 100,
+    //             limitCountErrorMessage: 'There is a 100 limit for '+$scope.ranking.list_tab+'s chosen. You have reached the limit for this list.',
+    //             choice: function () {
+    //               console.log(arguments);
+    //             },
+    //             input: '<div class="search-input"> <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span><input type="text"  id="search_searchable_dropdown" placeholder="Please enter minimum 3 characters" onKeyUp="removeDisabled()"/><span id="clearIconList" class="search-icon cross-icon" style="display:none;"><i class="fa fa-times-circle" title="Clear Search"></i></span></span></div><button type="button" class="btn btn-blue applyBtn" id="search_list" disabled="disabled"><i class="fa fa-search"></i>Search</button>',
+    //             // <span class="inline-label search-text-tip">Search tip: <span> Enter minimum 3 characters</span></span>
+    //           });
+    //     }
+    //     setTimeout(function () {
+    //         $('#edit_list_'+id).show();
+    //         $('span#excel_loader_'+id).hide();  
+    //     }, 100);
+    //     // $('#edit-list-modal').show();
+    //     $('#edit-list-modal').modal('show');
+    //     $('#edit-list-modal').css("display","flex");
+    //     var scroll=$('.dropdown-mul-1');
+    //     scroll.animate({scrollTop: scroll.prop("scrollHeight")});
+    // }
         
-    $scope.edit_user_filter = function(id, list_ids) {
-        console.log($scope.listGridApi.selection.getSelectedRows());
-        // angular.forEach(data, function(data, index) {
-        //     data["index"] = index+1;
-        //     //data.push({"index":index+1})
-        // })
-        var p = $("#tab_list").jqGrid("getGridParam");
-        var iCol = p.iColByName["name"];
-        $scope.headerListName =  $("#" + id).find('td').eq(iCol).text();
+    // $scope.edit_user_filter = function(id, list_ids) {
+    //     console.log($scope.listGridApi.selection.getSelectedRows());
+    //     // angular.forEach(data, function(data, index) {
+    //     //     data["index"] = index+1;
+    //     //     //data.push({"index":index+1})
+    //     // })
+    //     var p = $("#tab_list").jqGrid("getGridParam");
+    //     var iCol = p.iColByName["name"];
+    //     $scope.headerListName =  $("#" + id).find('td').eq(iCol).text();
 
-        if($dropdown)  $dropdown.data('dropdown').destroy();
-        $scope.edit_list_id = id; // the list in edit mode
-        let list_id_array = list_ids.split(',');
-        $scope.list_id_array = list_id_array;
-        if($scope.ranking.list_tab == 'brand') {
-            list_brand_api = cachedBrandListsData.length == 0 ? 1 : 0;
-        }
+    //     if($dropdown)  $dropdown.data('dropdown').destroy();
+    //     $scope.edit_list_id = id; // the list in edit mode
+    //     let list_id_array = list_ids.split(',');
+    //     $scope.list_id_array = list_id_array;
+    //     if($scope.ranking.list_tab == 'brand') {
+    //         list_brand_api = cachedBrandListsData.length == 0 ? 1 : 0;
+    //     }
 
-        if($scope.ranking.list_tab == 'advertiser') {
-            list_adv_api = cachedAdvListsData.length == 0 ? 1 : 0;
-        }
+    //     if($scope.ranking.list_tab == 'advertiser') {
+    //         list_adv_api = cachedAdvListsData.length == 0 ? 1 : 0;
+    //     }
 
-        if((list_brand_api == 1 || list_adv_api == 1)) {
-            setTimeout(function () {
-                $('#edit_list_'+id).hide();
-                $('#excel_loader_'+id).show();
-            }, 0);
-            $.ajax({
-                type: 'POST',
-                url: '/drmetrix/api/index.php/get_all_brands_advertisers',
-                // async: false,
-                data: {
-                    tab : $scope.ranking.list_tab == 'brand' ? 1 : 0
-                }, success: function (data) {
-                    let response = jQuery.parseJSON(data);
-                    let items = [];
-                    var selectedEle ;
-                    angular.forEach(response.result, function(value, key) {
-                        selectedEle = false;
-                        if(jQuery.inArray( value.brand_id, list_id_array )) {
-                            selectedEle = true;
-                        }
-                        items.push({
-                            'id': value.id, 
-                            'disabled': false,
-                            'selected':false,
-                            'name':  value.name,
+    //     if((list_brand_api == 1 || list_adv_api == 1)) {
+    //         setTimeout(function () {
+    //             $('#edit_list_'+id).hide();
+    //             $('#excel_loader_'+id).show();
+    //         }, 0);
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: '/drmetrix/api/index.php/get_all_brands_advertisers',
+    //             // async: false,
+    //             data: {
+    //                 tab : $scope.ranking.list_tab == 'brand' ? 1 : 0
+    //             }, success: function (data) {
+    //                 let response = jQuery.parseJSON(data);
+    //                 let items = [];
+    //                 var selectedEle ;
+    //                 angular.forEach(response.result, function(value, key) {
+    //                     selectedEle = false;
+    //                     if(jQuery.inArray( value.brand_id, list_id_array )) {
+    //                         selectedEle = true;
+    //                     }
+    //                     items.push({
+    //                         'id': value.id, 
+    //                         'disabled': false,
+    //                         'selected':false,
+    //                         'name':  value.name,
                             
-                        });
-                    });
-                    if($scope.ranking.list_tab == 'brand') {
-                        cachedBrandListsData = items;
-                    } else {
-                        cachedAdvListsData = items;
-                    }
-                    $scope.lists = items;
-                    $scope.createDropdown(id);
-                }, error: function (xhr, status, error) {
+    //                     });
+    //                 });
+    //                 if($scope.ranking.list_tab == 'brand') {
+    //                     cachedBrandListsData = items;
+    //                 } else {
+    //                     cachedAdvListsData = items;
+    //                 }
+    //                 $scope.lists = items;
+    //                 $scope.createDropdown(id);
+    //             }, error: function (xhr, status, error) {
 
-                }
-            });
-        } else {
-            // $.ajax({
-            //     type: 'POST',
-            // });
-            // setTimeout(function () {
-                $('#edit_list_'+id).hide();
-                $('span#excel_loader_'+id).show();
-            // }, 0);
-            setTimeout(function () {
-                $scope.createDropdown(id);
-            }, 100);
-        }
+    //             }
+    //         });
+    //     } else {
+    //         // $.ajax({
+    //         //     type: 'POST',
+    //         // });
+    //         // setTimeout(function () {
+    //             $('#edit_list_'+id).hide();
+    //             $('span#excel_loader_'+id).show();
+    //         // }, 0);
+    //         setTimeout(function () {
+    //             $scope.createDropdown(id);
+    //         }, 100);
+    //     }
+    // }
+
+    $scope.apply_user_list = function(row) {
+        console.log(row);
+        $scope.applied_list_ids = row.criteria_id;
+        $scope.display_list_name = row.name;
+        $scope.applied_list_type = $rootScope.my_list;
+        $scope.list_id   = row.id;
+        $rootScope.$broadcast("CallParentMethod", {'applied_list_ids' : $scope.applied_list_ids, 'applied_list_type' : $scope.applied_list_type , list_id : $scope.list_id , 'display_list_name' : $scope.display_list_name });
+        $scope.apply_user_list = 1;
+        
+        if($scope.reset_list == 1) {
+            $scope.applied_list_type = '';
+            $scope.applied_list_ids = '';
+        } 
+        
+        $scope.reset_list = 0;
+        $uibModalInstance.dismiss();
+            // $('#listModal').modal('hide');
     }
     // Call brand List ui Grid
     $scope.uigridListModal = function() {
@@ -1835,7 +1999,7 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
 
             { name: 'edit_list', pinnedLeft:true, displayName:'Edit', cellTemplate: '<span class="edit-list_\'{{row.entity.id}}\' dropdown-list edit-list-icon" id="edit_list_\'{{row.entity.id}}\'"  ng-click="grid.appScope.edit_user_filter(\'{{row.entity.id}}\',\'{{row.entity.edit_list}}\');"  class="edit-list"><i class="fa fa-pencil" aria-hidden="true"></i></span><span class="edit-list-loader_\'{{row.entity.id}}\' edit-list-loader" id="excel_loader_\'{{row.entity.id}}\'"><img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"></span>' },
 
-            { name: 'apply', pinnedLeft:true, displayName:'Apply', cellTemplate: '<a href="javascript:void(0)" ng-click="apply_user_list(\'{{row.entity.id}}\', \'{{row.entity.apply}}\');" id="apply_filter_{{row.entity.id}}">Apply</a>' },
+            { name: 'apply', pinnedLeft:true, displayName:'Apply', cellTemplate: '<a href="javascript:void(0)" ng-click="grid.appScope.apply_user_list(row.entity);" id="apply_filter_{{row.entity.id}}">Apply</a>' },
         ];
         apiService.post('/get_user_lists', formData, config)
         .then(function (data) {
@@ -1847,9 +2011,20 @@ angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interv
         });
     }
 
+   
+        
+
     //ui grid code
     $scope.uigridListModal();
 });
+
+
+angular.module('drmApp').controller('trackCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss();
+    }
+});
+
 
 angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, $interval, uiGridTreeViewConstants, $uibModal, $rootScope, $uibModalInstance, $state, apiService) {
     $scope.sharedList = 'My';

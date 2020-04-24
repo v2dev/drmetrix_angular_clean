@@ -99,8 +99,8 @@
             </div>
         </div>
         <div class="menu-bar new-filter save-list-btns" ng-show="(idsOfSelectedRows > 0 || applied_list_ids != '')">
-            <span class="selected-list" >Selected List: <b>List name work on</b></span>
-            <button href="javascript:void(0)" class="btn btn-blue save-filter-btn mr-2 ml-2 " id="reset_list_ranking" ng-click="reset_list();" ><i class="fa fa-rotate-right" title="Reset List"></i>Reset List</button> 
+            <span class="selected-list" ng-if="applied_list_ids != ''">Selected List: <b>{{display_list_name}}</b></span>
+            <button href="javascript:void(0)" class="btn btn-blue save-filter-btn mr-2 ml-2 " id="reset_list_ranking" ng-click="reset_list();" ng-if="applied_list_ids != ''"><i class="fa fa-rotate-right" title="Reset List"></i>Reset List</button> 
            <button ng-show="idsOfSelectedRows > 0" ng-class="{'disabled' : idsOfSelectedRows > 100}" class="btn btn-blue save-filter-btn mr-" ng-click="open_list_popup();" id="save_list_ranking" ng-class="{'disabled' : idsOfSelectedRows > 100}"><i class="fa fa-save" title="Save"></i>Save List</button>
            <span class="selected-list" style="font-size: 12px;" ng-if="idsOfSelectedRows > 0">{{type | ucfirst}} | <b>{{idsOfSelectedRows}}</b> selected</span>
             <span class="error-text" style="font-size: 12px;" ng-if="idsOfSelectedRows > 100">There is a 100 limit for {{type}} choosen</span>
