@@ -96,7 +96,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $cooki
 
   $scope.relogin = function() {
       $rootScope.eulaDisagreeFlag = 0;
-      $state.go('home');
+      $state.go('login');
       return false;
   }
 
@@ -120,7 +120,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $cooki
         .then(function (response) {
           var data = response.data;
           if (data.status) {
-            $state.go('home');
+            $state.go('login');
             $scope.showModal();
           } else {
             $scope.user.invalid = true;

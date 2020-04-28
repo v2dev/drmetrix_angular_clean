@@ -5,10 +5,10 @@ var drmApp = angular.module('drmApp', ['ui.router', 'starter.services', 'ngCooki
 
 drmApp.config(function ($stateProvider, $urlRouterProvider) {
     // states.forEach((state) => $stateProvider.state(state)); // for dyncamic routes
-        $urlRouterProvider.otherwise('/home');
-        $stateProvider.state('home',{
-            url: '/home',
-            templateUrl: 'templates/home.html',
+        $urlRouterProvider.otherwise('/login');
+        $stateProvider.state('login',{
+            url: '/login',
+            templateUrl: 'templates/login.html',
             controller: 'LoginController', 
           })
           .state('ranking', {
@@ -17,6 +17,12 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
               controller: 'RankingController',
               resolve: { authenticate: authenticate}
           })
+          .state('airing_detail', {
+            url: '/airing_detail/:id/:area/:tab',
+            templateUrl: 'templates/airingDetail.html',
+            controller: 'AiringsDetailController',
+            resolve: { authenticate: authenticate}
+        })
           .state('network',{
               url: '/network',
               templateUrl: 'templates/network.html',
@@ -57,12 +63,12 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
               templateUrl: 'templates/globalSearch.html',
               controller: 'GlobalSearchController',
               resolve: { authenticate: authenticate }
-          }),
+          })
           .state('configureEmails', {
               url: '/configureEmails',
               templateUrl: 'templates/configureEmails.html',
               controller: 'ConfigureEmailsController',
-              resolve: { authenticate: authenticate }
+               resolve: { authenticate: authenticate }
           })
           
         function authenticate($q, apiService, $state, $timeout) {
@@ -75,7 +81,7 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
               $timeout(function() {
                 // This code runs after the authentication promise has been rejected.
                 // Go to the log-in page
-                $state.go('home')
+                $state.go('login')
               })
       
               // Reject the authentication promise to prevent the state from loading

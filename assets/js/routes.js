@@ -1,9 +1,9 @@
 states =
 [
     {
-        name: 'home',
-        url: '/home',
-        templateUrl: 'templates/home.html',
+        name: 'login',
+        url: '/login',
+        templateUrl: 'templates/login.html',
         controller: 'LoginController',
         data: {
           roles: []

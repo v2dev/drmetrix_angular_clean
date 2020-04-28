@@ -1427,9 +1427,8 @@ $scope.shortFormTrackingClassification = [
                 if (data.status) {
                     sessionStorage.clear();
                     localStorage.clear();
-                    $state.go('home');
                 }
-                $state.go('home');
+                $state.go('login');
             })
             ,(function (data, status, headers, config) {
             })

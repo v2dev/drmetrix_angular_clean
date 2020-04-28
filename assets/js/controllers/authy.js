@@ -57,7 +57,7 @@ angular.module('drmApp').controller('AuthyModalCtrl', function($scope, $rootScop
       }
     }), function() {
         $uibModalInstance.dismiss();
-        tate.go('home');
+        $state.go('login');
           
     }
   }

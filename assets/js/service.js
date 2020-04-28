@@ -26,7 +26,7 @@ angular.module('starter.services', [])
                   $timeout(function() {
                     // This code runs after the authentication promise has been rejected.
                     // Go to the log-in page
-                    $state.go('home')
+                    $state.go('login')
                   })
           
                   // Reject the authentication promise to prevent the state from loading
@@ -47,7 +47,6 @@ angular.module('starter.services', [])
                     }
                     return 1;
                 }
-                
                 return 0;
             },
             validate_mobile: function (v) {

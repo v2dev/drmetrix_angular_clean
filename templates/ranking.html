@@ -38,7 +38,7 @@
     <div class="main-filter" ng-show="headerDisplay == 1" ng-include="'templates/primary_filter.html'"></div>
 </div>
    
-<div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">
+<div class="main-container" id="ranking_page" ng-init="initializeRankingPage();" >
     <category-part data="$ctrl.category_list"></category-part> 
     <main class="main" id="main" ng-class="!catgeorySideBar  ? '' : 'push-left'">
         <div class="notify-msg"> 
@@ -110,6 +110,3 @@
         <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div>
     </main>
 </div>
-
-<div class="" ng-include="'templates/airingDetail.html'"></div>
-<div class="" ng-include="'templates/advertiserDetail.html'"></div>

@@ -1,4 +1,4 @@
-angular.module("drmApp").controller("airingsDetailController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal){
+angular.module("drmApp").controller("AiringsDetailController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $stateParams){
     $scope.dow_display_text = $scope.hod_display_text = $scope.daypart_display_text = 0;
     $scope.all_day = []; $scope.all_hour = []; $scope.all_dayparts = []; $scope.all_programs = []; $scope.all_networks = [];
     $rootScope.all_program_selected = true;
@@ -43,13 +43,13 @@ angular.module("drmApp").controller("airingsDetailController", function($scope, 
             ]
         }
     ];
-    $rootScope.weekType = {
+    $scope.weekType = {
         "all": [1, 2, 3, 4, 5, 6, 7],
         "weekday": [1, 2, 3, 4, 5],
         "weekend": [6, 7],
         "custom": []
     };
-    $rootScope.weeks = [
+    $scope.weeks = [
         { 'id': 1, 'sortName': 'Mon', 'fullName': '', isSelected: true },
         { 'id': 2, 'sortName': 'Tues', 'fullName': '', isSelected: true },
         { 'id': 3, 'sortName': 'Wed', 'fullName': '', isSelected: true },
@@ -87,12 +87,12 @@ $scope.uigridAiringSpend = function(){
         }
     }
 
-    formData.sidx = $scope.area_clicked;
+    formData.sidx = $stateParams.area;
     formData.rows = '10';
     formData.page = '1';
     formData.sord = 'desc';
-    formData.brand_id = $scope.brand_id;
-    formData.tab = $scope.tab;
+    formData.brand_id = $scope.id;
+    formData.tab = $stateParams.tab;
     formData.brand_name = $rootScope.brand_name;
     formData.cat_id = $rootScope.formdata.cat;
     formData.breaktype = 'A';
@@ -222,8 +222,9 @@ $scope.getAllNetworks = function () {
 }
 
 $scope.defaultPageLoad = function() {
-    $scope.getAllNetworks();
+    $scope.id = $stateParams.id;
     $scope.uigridAiringSpend();
+    $scope.getAllNetworks();
     $rootScope.networks_loading = true;
 }
     
@@ -270,7 +271,7 @@ $scope.filter_graph = function() {
     } else {
         $scope.dow_display_text = 1;
         $scope.custom_variable++;
-        angular.forEach($rootScope.weeks, function (week) {
+        angular.forEach($scope.weeks, function (week) {
             if(week.isSelected) {
                 $scope.all_day.push(week.id);
             }
@@ -402,8 +403,6 @@ angular.module('drmApp').controller('NetworkCtrl', function($scope, $rootScope, 
     }
 
     $scope.checkChildIsHide = function(id) {
-        console.log(id);
-        console.log($('#'+id+ ' div ').is(':visible'));
         return $('#'+id+ ' div ').is(':visible');
     }
     
@@ -524,7 +523,6 @@ angular.module('drmApp').controller('ProgramModalCtrl', function($scope, $http, 
             vm.gridOptionsProgram.data = data.data.rows;
         }, function (response) {
             // this function handlers error
-            console.log("rejected with", response);
         });
     }
 

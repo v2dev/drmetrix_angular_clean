@@ -4,7 +4,7 @@
 //     function config($routeProvider) {
 //         $routeProvider
 // 		.when('/', {
-// 			templateUrl: 'templates/home.html',
+// 			templateUrl: 'templates/login.html',
 // 			controller: 'LoginController'
 // 		})
 // 		.when('/red', {
