@@ -1,8 +1,4 @@
 angular.module("drmApp").controller("airingsDetailController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal){
-    if (!apiService.isUserLogged($scope)) {
-        // $state.go('home');
-        // return;
-    }
     $scope.dow_display_text = $scope.hod_display_text = $scope.daypart_display_text = 0;
     $scope.all_day = []; $scope.all_hour = []; $scope.all_dayparts = []; $scope.all_programs = []; $scope.all_networks = [];
     $rootScope.all_program_selected = true;

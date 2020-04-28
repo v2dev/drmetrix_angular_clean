@@ -1,8 +1,4 @@
 angular.module('drmApp').controller('AdminController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, modalConfirmService, $uibModal) {
-    if (!apiService.isUserLogged($scope)) {
-        $state.go('home');
-        return;
-    }
     $scope.admin = {};
     $scope.admin.complete_name =  $rootScope.complete_name = localStorage.complete_name;
     $scope.save_clicked = false;

@@ -2,12 +2,9 @@ angular.module('drmApp.directives', []);
 
 var drmApp = angular.module('drmApp', ['ui.router', 'starter.services', 'ngCookies', 'ui.bootstrap', 'ngTouch', 'ui.grid', 'ui.grid.pagination', 'ui.grid.autoResize', 'ui.grid.expandable',
     'ui.grid.selection', 'ui.grid.treeView', 'ui.grid.exporter', 'ui.grid.edit','ui.grid.cellNav', 'ui.bootstrap', 'drmApp.directives']);
-    drmApp.service('myService', function() {
-
-    });
 
 drmApp.config(function ($stateProvider, $urlRouterProvider) {
-    // states.forEach((state) => $stateProvider.state(state));
+    // states.forEach((state) => $stateProvider.state(state)); // for dyncamic routes
         $urlRouterProvider.otherwise('/home');
         $stateProvider.state('home',{
             url: '/home',
@@ -15,45 +12,57 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             controller: 'LoginController', 
           })
           .state('ranking', {
-            url: '/ranking',
-            templateUrl: 'templates/ranking.html',
-            controller: 'RankingController',
-            resolve: { authenticate: authenticate}
+              url: '/ranking',
+              templateUrl: 'templates/ranking.html',
+              controller: 'RankingController',
+              resolve: { authenticate: authenticate}
           })
           .state('network',{
-            url: '/network',
-            templateUrl: 'templates/network.html',
-            controller: 'NetworkController',
-            resolve: { authenticate: authenticate }
-          }) .state('authy',{
-            url: '/authy',
-            templateUrl: 'templates/authy.html',
-            controller: 'AuthyController'
-          }).state('eulaAgreement',{
-            name: 'eulaAgreement',
-            url: '/eulaAgreement',
-            templateUrl: 'templates/eulaAgreement.html',
-            controller: 'EulaAgreementController'
-          }).state('userAccount', {
-            url: '/userAccount',
-            templateUrl: 'templates/userAccount.html',
-            controller: 'UserController'
-          }).state('adminConsole' ,{
-            url: '/adminConsole',
-            templateUrl: 'templates/adminConsole.html',
-            controller: 'AdminController'
-          }).state('forgotPassword', {
-            url: '/forgotPassword',
-            templateUrl: 'templates/forgot-password.html',
-            controller: 'LoginController'
-          }).state('globalSearch', {
-            url: '/globalSearch',
-            templateUrl: 'templates/globalSearch.html',
-            controller: 'GlobalSearchController'
-          }).state('configureEmails', {
-            url: '/configureEmails',
-            templateUrl: 'templates/configureEmails.html',
-            controller: 'ConfigureEmailsController'
+              url: '/network',
+              templateUrl: 'templates/network.html',
+              controller: 'NetworkController',
+              resolve: { authenticate: authenticate }
+          }) 
+          .state('authy',{
+              url: '/authy',
+              templateUrl: 'templates/authy.html',
+              controller: 'AuthyController',
+              resolve: { authenticate: authenticate }
+          })
+          .state('eulaAgreement',{
+              url: '/eulaAgreement',
+              templateUrl: 'templates/eulaAgreement.html',
+              controller: 'EulaAgreementController',
+              resolve: { authenticate: authenticate }
+          })
+          .state('userAccount', {
+              url: '/userAccount',
+              templateUrl: 'templates/userAccount.html',
+              controller: 'UserController',
+              resolve: { authenticate: authenticate }
+          })
+          .state('adminConsole' ,{
+              url: '/adminConsole',
+              templateUrl: 'templates/adminConsole.html',
+              controller: 'AdminController',
+              resolve: { authenticate: authenticate }
+          })
+          .state('forgotPassword', {
+              url: '/forgotPassword',
+              templateUrl: 'templates/forgot-password.html',
+              controller: 'LoginController'
+          })
+          .state('globalSearch', {
+              url: '/globalSearch',
+              templateUrl: 'templates/globalSearch.html',
+              controller: 'GlobalSearchController',
+              resolve: { authenticate: authenticate }
+          }),
+          .state('configureEmails', {
+              url: '/configureEmails',
+              templateUrl: 'templates/configureEmails.html',
+              controller: 'ConfigureEmailsController',
+              resolve: { authenticate: authenticate }
           })
           
         function authenticate($q, apiService, $state, $timeout) {
@@ -66,7 +75,7 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
               $timeout(function() {
                 // This code runs after the authentication promise has been rejected.
                 // Go to the log-in page
-                $state.go('logInPage')
+                $state.go('home')
               })
       
               // Reject the authentication promise to prevent the state from loading
@@ -75,4 +84,3 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
           }
           
 });
-    // console.log(states);

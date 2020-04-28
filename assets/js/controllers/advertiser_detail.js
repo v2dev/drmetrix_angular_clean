@@ -1,9 +1,4 @@
 angular.module("drmApp").controller("AdvertiserDetailController", function ($scope, $http, $interval, uiGridTreeViewConstants, $state, $rootScope, apiService, $uibModal) {
-    if (!apiService.isUserLogged($scope)) {
-        // $state.go('home');
-        // return;
-    }
-
     $scope.uigridAdvertiser = function () {
         debugger;
         var formData = $rootScope.formdata;

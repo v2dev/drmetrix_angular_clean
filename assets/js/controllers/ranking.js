@@ -1,9 +1,4 @@
 angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService, uiGridConstants, uiGridExporterConstants){
-    // if (!apiService.isUserLogged($scope)) {
-    //     $state.go('home');
-    //     return;
-    // }
-
     $scope.initialisation = function() {
         $scope.page_call = 'ranking';
         $scope.page = $state.current.name;
