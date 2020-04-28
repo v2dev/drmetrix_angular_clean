@@ -17,17 +17,27 @@ angular.module('starter.services', [])
             post: function(path, postData) {
                 return $http.post(myConfig.apiUrl + path, postData,{timeout :120000});
             },
+           authenticate : function($q, $state, $timeout) {
+                if (this.isUserLogged()) {
+                  return $q.when()
+                } else {
+                  // The next bit of code is asynchronously tricky.
+          
+                  $timeout(function() {
+                    // This code runs after the authentication promise has been rejected.
+                    // Go to the log-in page
+                    $state.go('home')
+                  })
+          
+                  // Reject the authentication promise to prevent the state from loading
+                  return $q.reject()
+                }
+              },
             isUserLogged: function isUserLogged($scope){
-               var pdf =  sessionStorage.pdf;
                var username = $cookies.get('loggedIn');
                var user_role = $cookies.get('userrole');
-                if(pdf == 1){
-                    username = true;
-                }
                 if(username){
-                    localStorage.superadmin = 0;
-                    localStorage.admin = 0;
-                    localStorage.login_user = 0;
+                    localStorage.superadmin =  localStorage.admin =  localStorage.login_user = 0;
                     if(user_role == 'superadmin'){
                         localStorage.superadmin = 1;
                     }else if(user_role == 'admin'){

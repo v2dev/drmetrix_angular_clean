@@ -1,8 +1,8 @@
 angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService, uiGridConstants, uiGridExporterConstants){
-    if (!apiService.isUserLogged($scope)) {
-        $state.go('home');
-        return;
-    }
+    // if (!apiService.isUserLogged($scope)) {
+    //     $state.go('home');
+    //     return;
+    // }
 
     $scope.initialisation = function() {
         $scope.page_call = 'ranking';
@@ -225,7 +225,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             id: id,
             tab: tab,
             unchecked_category: '',
-            is_adv_page : sessionStorage.is_adv_page
+            is_adv_page : 1
         }
         var html = '';
         apiService.post('/display_categories', data, $scope.apiHeaderConfig)
@@ -236,7 +236,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                     $('#cat_col_dropdown_' + row_id).parent('td').addClass('table-overflow');
                     $('#cat_col_dropdown_' + row_id).parent('td').find('a').addClass('link-overflow');
                     global_id = row_id;
-                } else if (sessionStorage.is_adv_page == 1) {
+                } else if (localStorage.is_adv_page == 1) {
                     $('#advshort_cat_col_dropdown_' + id).parent('td').addClass('table-overflow');
                     $('#advshort_cat_col_dropdown_' + id).parent('td').find('a').addClass('link-overflow');
                     $('#advlong_cat_col_dropdown_' + id).parent('td').addClass('table-overflow');
@@ -254,7 +254,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                 if (flag == 'my_report') {
                     $('#cat_col_dropdown_' + row_id).html(html);
                     $('#cat_col_dropdown_' + row_id).css('display', 'block');
-                } else if (sessionStorage.is_adv_page == 1) {
+                } else if (localStorage.is_adv_page == 1) {
                     $('#advshort_cat_col_dropdown_' + id).html(html);
                     $('#advshort_cat_col_dropdown_' + id).css('display', 'block');
                     $('#advlong_cat_col_dropdown_' + id).html(html);
@@ -678,9 +678,9 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
         $scope.searchNet = '';
         var ndata;
         if (call_from == 'AllNetwroksFunction') {
-            ndata = JSON.parse(sessionStorage.all_networks_data);
+            ndata = JSON.parse(localStorage.all_networks_data);
         } else {
-            ndata = JSON.parse(sessionStorage.active_networks_data);
+            ndata = JSON.parse(localStorage.active_networks_data);
         }
 
         $scope.networkLists = ndata.result;
@@ -720,15 +720,15 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
 
     $scope.getNetworksWithAllFilters = function () {
         var call_api = 1;
-        if (sessionStorage.activeNetwroksParams != undefined && sessionStorage.active_networks_data != undefined) {
-            if (JSON.stringify(params) == sessionStorage.activeNetwroksParams) {
+        if (localStorage.activeNetwroksParams != undefined && localStorage.active_networks_data != undefined) {
+            if (JSON.stringify(params) == localStorage.activeNetwroksParams) {
                 $scope.dataOfAllNetworks('ActiveNetwroksFunction');
                 call_api = 0;
             } else {
-                sessionStorage.activeNetwroksParams = JSON.stringify(params);
+                localStorage.activeNetwroksParams = JSON.stringify(params);
             }
         } else {
-            sessionStorage.activeNetwroksParams = JSON.stringify(params);
+            localStorage.activeNetwroksParams = JSON.stringify(params);
         }
 
         if(call_api) {
@@ -737,7 +737,7 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
             .then(function (response) {
                 $scope.networkNotLoaded = 0;
                 var data = response.data;
-                sessionStorage.setItem('active_networks_data', JSON.stringify(data));
+                localStorage.setItem('active_networks_data', JSON.stringify(data));
                 $scope.dataOfAllNetworks('ActiveNetwroksFunction');
             }),(function (data, status, headers, config) {
             });
@@ -746,7 +746,7 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
 
     $scope.getAllActiveInactiveNetworks = function () {
         var new_filter_opt = 'none';
-        if (sessionStorage.all_networks_data != undefined) {
+        if (localStorage.all_networks_data != undefined) {
             $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
         } else {
             $scope.networkNotLoaded = 1;
@@ -754,7 +754,7 @@ angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScop
             .then(function (response) {
                 var ndata = response.data;
                 $scope.networkNotLoaded = 0;
-                sessionStorage.setItem('all_networks_data', JSON.stringify(ndata));
+                localStorage.setItem('all_networks_data', JSON.stringify(ndata));
                 $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
             }),(function () {
                 console.log("error in get all networks");

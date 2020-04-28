@@ -1,8 +1,4 @@
 angular.module('drmApp').controller('UserController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, modalConfirmService, $uibModal) {
-    if (!apiService.isUserLogged($scope)) {
-        $state.go('home');
-        return;
-    }
     var usCtrl = this;
     $scope.admin_user = {};
     $scope.save_clicked = false;
@@ -254,7 +250,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         });
     }
 
-    if(sessionStorage.role == 'superadmin'){
+    if($rootScope.role == 'superadmin'){
         $state.go('adminConsole');
     }else{
          $scope.showUsers();
@@ -560,7 +556,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
             hidden_mobile_no = $("#mobile_edit_company_hidden").val();
         }
 
-        if(sessionStorage.role == 'superadmin'){
+        if($rootScope.role == 'superadmin'){
             admin_id = $('#edit_company_admin_id').val();
             if(admin_id == ''){
                 admin_id = $('#edit_company_page_admin_id').val();
@@ -653,7 +649,6 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
         $('#edit_mobile').hide();*/
         modalConfirmService.hideModal();
         $scope.openModal('./templates/modals/addUser.html');
-        //  $('#admin_id').val(sessionStorage.admin_id);
         $('#duplicate_mobile').css('display','none');
         $scope.admin_user.first_name = '';
         $scope.admin_user.last_name = '';

@@ -9,7 +9,6 @@
 	<link href='./assets/css/circle.css' rel='stylesheet' type='text/css' />
 	<link href="./assets/css/v-accordion.css" rel="stylesheet" />
 	<link href="./assets/css/listnav.css" rel="stylesheet" />
-
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -19,8 +18,27 @@
 	<link href="./assets/css/ui.jqgrid.min.css" rel="stylesheet" />
 	<link href="./assets/css/ui-grid.css" rel="stylesheet" type="text/css" />
 	<link href="./assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
 
+<body ng-app="drmApp" ng-controller="MainController" ng-class="{'dark-theme' : theme_val == 1}" ng-init="init()">
+	<div class="wrapper">
+		<ng-include src="'./templates/mainMenu.html'"></ng-include>
+		<div class="main-page" ui-view></div>
+	</div>
+	<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
+	<div class="term-conditions">
+		<span>
+			<a
+				onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms
+				&amp; Conditions</a>|
+			<a
+				onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy
+				Policy</a>|
+			<a onclick="downloadPdf();">EULA</a></span>
+		<p>&copy; {{date| date:'yyyy'}} DRMetrix</p>
+	</div>
 	<!-- Angular Js -->
+	<!-- <script src="./assets/js/routes.js"></script> -->
 	<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.25/angular-ui-router.min.js"></script>
 	<script type="text/javascript" src="./assets/scripts/angular-cookies.js"></script>
@@ -63,138 +81,6 @@
 	<script type="text/javascript" src="./assets/js/ui-grid.js"></script>
 
 	<script src="https://content.jwplatform.com/libraries/AkDbgEI8.js"></script> <!-- For video play -->
-</head>
-
-<body ng-app="drmApp" ng-controller="MainController" ng-class="{'dark-theme' : theme_val == 1}" ng-init="init()">
-	<div class="wrapper">
-		<header class="navbar navbar-dark sticky-top bg-dark p-0" ng-show="login_user_id != ''">
-			<ul class="nav-menu">
-				<li>
-					<a ui-sref="ranking" ui-sref-active="top-menu-active">
-						<img ng-src="./assets/images/adspherelogowhite.svg" alt="drmetrix-logo">
-					</a>
-				</li>
-				<li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}"
-					ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
-					<a ng-click="menuItemClick(item, this);" ui-sref="{{item.href}}" class="{{item.aclass}}"
-						id="{{item.aid}}">
-						<img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
-					</a>
-				</li>
-				<li class="dropdown show whats-new d-none d-xl-flex">
-					<a class="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-						aria-haspopup="true">
-						<img src="assets/images/menuiconblue/menuiconset-6.svg"><label> What's New</label>
-						<div class="notification-new">5</div>
-					</a>
-					<div class="dropdown-menu common-dropdown" aria-labelledby="dropdownMenuLink">
-						<a href="{{item.href}}" target="_blank" class="dropdown-item"
-							ng-class="{'newbuild-link' : item.newBuild == 1, 'whatsnew-visited': clicked}"
-							ng-click="clicked = !clicked" ng-repeat="item in whatsNew_menu">
-							{{item.title}}
-							<img src="assets/images/blue-link-icon.svg" alt="" ng-if="item.newBuild == 1">
-							<i class="fa fa-play-circle-o fa-2x'" ng-if="item.newBuild != 1"></i>
-						</a>
-					</div>
-				</li>
-				<li class="global-search border-r-desktop">
-					<form class="shrink align-right" name="frmSearch" no-validate="" ng-submit="search_result()">
-						<div>
-							<span class="search-filter"
-								ng-class="!frmSearch.globalSearchInputText.$valid ? 'error-text-box':''">
-								<span class="search-icon">
-									<i data-feather="search"></i>
-								</span>
-								<input type="text" placeholder="Search Advertiser, Brand or Creative" autocomplete="off"
-									ng-model-options="{debounce: 250}" ng-model="globalSearchInputText"
-									id="globalSearchInputText" name="globalSearchInputText" ng-minlength="3">
-							</span>
-							<span class="inline-label search-text-validation-error"
-								ng-show="frmSearch.globalSearchInputText.$error.minlength">
-								<b>Note:</b> <span>{{searchTextValidation}}</span>
-							</span>
-							<div class="search-container scrollbar" style="display: none;">
-								<div id="no_record_msg" style="display:none;">Can't find what you're looking for?
-									<a href="#" zf-open="userFeedbackModal" onclick="showModalBolcks();">Click here</a>
-								</div>
-								<div id="adv_gs_view">
-									<div class="search-heading-main">
-										Advertisers (<span id="global_search_adv_count"></span>)
-										<span id="adv_view_all"></span>
-									</div>
-									<ul class="no-bullet" id="adv_list_ul">
-									</ul>
-								</div>
-								<div id="brands_gs_view">
-									<div class="search-heading-main">
-										Brands (<span id="global_search_brand_count"></span>)
-										<span id="brand_view_all"></span>
-									</div>
-									<ul class="no-bullet" id="brand_list_ul">
-									</ul>
-								</div>
-								<div id="creatives_gs_view">
-									<div class="search-heading-main">
-										Creatives (<span id="global_search_creative_count"></span>)
-										<span id="creative_view_all"></span>
-									</div>
-									<ul class="no-bullet" id="creative_list_ul">
-									</ul>
-								</div>
-								<div class="show-feedback-option top-border" id="feddback_div" style="display:none;">
-									Can't find what you're looking for?
-									<a zf-open="userFeedbackModal" onclick="showModalBolcks();"
-										class="link-color m-left8">Click here</a>
-								</div>
-							</div>
-						</div>
-					</form>
-				</li>
-				<li ng-repeat="item in right_menu" class="d-none d-xl-flex {{item.aclass}}">
-					<a title="{{item.title}}" target="{{item.target}}" id="{{item.aid}}"
-						ng-click="menuItemClick(item);">
-						<img ng-src="{{item.src}}" alt="{{item.alt}}">{{item.title}}
-					</a>
-				</li>
-				<li class="right-menu d-lg-flex d-xl-none" ng-click="showme=true">
-					<a class="open-menu">
-						<i data-feather="align-justify"></i>
-					</a>
-				</li>
-			</ul>
-			<!-- mobile menu -->
-			<div class="right-nav d-md-block" ng-show="showme">
-				<a class="close-menu" ng-click="showme=false">
-					<i data-feather="x"></i>
-				</a>
-				<a ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}"
-					ui-sref-active="mob-menu-active" class="d-md-flex" alt="{{item.title}}"
-					ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}">
-					<i data-feather="home"></i>{{item.title}}
-				</a>
-				<a href="" class="d-md-flex">
-					<i data-feather="mail"></i> What's New <div class="notification-new">5</div>
-				</a>
-				<a ng-repeat="item in right_menu" class="d-md-flex" title="{{item.title}}" target="{{item.target}}"
-					id="{{item.aid}}" ng-click="menuItemClick(item);">
-					<i data-feather="user"></i>{{item.title}}
-				</a>
-			</div>
-		</header>
-		<div class="main-page" ui-view></div>
-	</div>
-	<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
-	<div class="term-conditions">
-		<span>
-			<a
-				onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms
-				&amp; Conditions</a>|
-			<a
-				onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy
-				Policy</a>|
-			<a onclick="downloadPdf();">EULA</a></span>
-		<p>&copy; {{date| date:'yyyy'}} DRMetrix</p>
-	</div>
 	<script>
 		feather.replace()
 	</script>
