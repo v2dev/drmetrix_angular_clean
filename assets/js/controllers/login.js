@@ -1,27 +1,24 @@
+"use strict";
 var app = angular.module('drmApp');
 
-app.controller('LoginController', function($scope,$rootScope, apiService, $http, $cookies, $state, modalConfirmService, $timeout) {
-  var pdf = sessionStorage.pdf;
-  sessionStorage.lastLoginTime = '';
-  $rootScope.login_user_id = '';
+app.controller('LoginController', function($scope,$rootScope, apiService, $cookies, $state, modalConfirmService, $timeout) {
   $scope.login_error = 0;
+  $rootScope.login_user_id = '';
   $scope.loginForm = function (form) {
     if (form.$valid) {
         $rootScope.udata = '';
-        sessionStorage.user_company = 0 ; sessionStorage.login_user = 0; sessionStorage.admin = 0;
       apiService.post('/user_login', $scope.user)
       .then(function(response) {
         var data = response.data;
          $scope.user.errors = false;
           if (data.status) {
-            sessionStorage.company_id       = data.company_id;
-            sessionStorage.lastLoginTime    = data.last_login;
-            sessionStorage.assistant_admin  =  $rootScope.assistant_admin = data.assistant_admin;
-            sessionStorage.role             = $rootScope.role = data.role;
-            localStorage.login_user_id     = data.user_id;
-            sessionStorage.complete_name    = sessionStorage.loggedIn = $rootScope.complete_name = localStorage.complete_name = data.name;
+            $rootScope.assistant_admin = data.assistant_admin;
+            $rootScope.role = data.role;
+            $rootScope.login_user_id     = data.user_id;
+            $rootScope.complete_name = localStorage.complete_name = data.name;
             $cookies.put("loggedIn",data.name);
             $cookies.put("userrole",data.role);
+           
             if (data.new_user == 1) {
               localStorage.mobile = data.mobile;
               localStorage.authy_id = data.authy_id;
@@ -31,39 +28,21 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
                 $rootScope.udata = data;
                 $state.go('eulaAgreement');
               } else {
-                sessionStorage.roles            = data.roles;
-                sessionStorage.contactemail     = data.contactemail;
-                sessionStorage.loggedInUserId   = $rootScope.login_user_id = data.user_id;
-                sessionStorage.company_id       = data.company_id;
-                sessionStorage.company_name     = data.company_name;
+                sessionStorage.loggedInUserId   = data.user_id;
                 sessionStorage.admin_id         = data.admin_id;
                 $rootScope.loggedIn             = 1;
                 $rootScope.adsphere_blog_url = $rootScope.right_menu[2].href = data.ADSPHERE_BLOG_URL;
                 $rootScope.system_status_url = $rootScope.right_menu[5].href = data.SYSTEM_STATUS_URL;
-                if (sessionStorage.role == 'superadmin') {
-                  sessionStorage.superadmin = 1;
+                if ($rootScope.role == 'superadmin') {
                   $scope.init1(data);
                   $state.go('adminConsole');
-                } else if (sessionStorage.role == 'admin') {
-                  sessionStorage.admin = 1;
-                  sessionStorage.user_company = data.user_company;
+                } else if ($rootScope.role == 'admin') {
                   $cookies.put("user_company",data.user_company);
                 } else {
-                  sessionStorage.login_user = 1;
-                  sessionStorage.user_company = data.user_company;
                   $rootScope.user_company = data.user_company;
                   $cookies.put("user_company",data.user_company);
                 }
-                if (sessionStorage.role != 'superadmin') {
-                  if (sessionStorage.tracking !== undefined && sessionStorage.tracking != 0) {
-                    $state.go('tracking');
-                  } else if (sessionStorage.video_not_played == 1) {
-                    $scope.user.pdf = 1;
-                    $state.go('video_page', {
-                      id: sessionStorage.video_url,
-                      video: $.cookie("video") //selectedItem and id is defined
-                    });
-                  } else {
+                if ($rootScope.role != 'superadmin') {
                     if(data.notification_new_count && ((data.notification_new_count == "0" && data.notification_new_clicked != '') || data.notification_new_count != "0")) {
                       localStorage.notificationNewCount = data.notification_new_count;
                     }
@@ -83,7 +62,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
                     // $scope.init1(data);
 
                     $state.go('ranking');
-                  }
+                 
                 }
               }
             }
@@ -118,7 +97,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
 
   $scope.relogin = function() {
       $rootScope.eulaDisagreeFlag = 0;
-      $state.go('home');
+      $state.go('login');
       return false;
   }
 
@@ -142,7 +121,7 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $http,
         .then(function (response) {
           var data = response.data;
           if (data.status) {
-            $state.go('home');
+            $state.go('login');
             $scope.showModal();
           } else {
             $scope.user.invalid = true;

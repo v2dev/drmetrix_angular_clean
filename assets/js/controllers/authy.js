@@ -1,5 +1,5 @@
 // http://next.plnkr.co/edit/Cdq2d9l1XxCi10bFXtBt?p=preview&preview
-
+"use strict";
 var app = angular.module('drmApp');
 // http://next.plnkr.co/edit/Xns6KkIgR1xsWAgtDN3w?p=preview&preview
 app.controller('AuthyController', function ($scope,$rootScope, apiService, $http, $state, modalConfirmService, $uibModal) {
@@ -57,7 +57,7 @@ angular.module('drmApp').controller('AuthyModalCtrl', function($scope, $rootScop
       }
     }), function() {
         $uibModalInstance.dismiss();
-        tate.go('home');
+        $state.go('login');
           
     }
   }

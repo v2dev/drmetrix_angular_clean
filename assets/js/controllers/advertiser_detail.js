@@ -1,11 +1,6 @@
-angular.module("drmApp").controller("AdvertiserDetailController", function ($scope, $http, $interval, uiGridTreeViewConstants, $state, $rootScope, apiService, $uibModal) {
-    if (!apiService.isUserLogged($scope)) {
-        // $state.go('home');
-        // return;
-    }
-
+"use strict";
+angular.module("drmApp").controller("AdvertiserDetailController", function ($scope, $http, $interval, uiGridTreeViewConstants, $state, $rootScope, apiService, $uibModal, $stateParams) {
     $scope.uigridAdvertiser = function () {
-        debugger;
         var formData = $rootScope.formdata;
         var vm = this;
         var config = {
@@ -15,9 +10,11 @@ angular.module("drmApp").controller("AdvertiserDetailController", function ($sco
         }
 
         var c_dir = '6';
+        $scope.adv_id  = $stateParams.id;
+        $scope.tab   = $stateParams.tab;
         formData.resp_type = formData.responseType;
         formData.form_type = "short_form";
-        formData.tab = "brand";
+        formData.tab = $scope.tab;
         formData._search = false;
         formData.rows = '10';
         formData.page = '1';
@@ -50,14 +47,14 @@ angular.module("drmApp").controller("AdvertiserDetailController", function ($sco
                         row.entity.subBrandGridOptions = {
                             columnDefs: [
                             { name: 'id', displayName:'id', width:'50' },
-                            { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ng-click="grid.appScope.view_adv_tab(row.entity.creative_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'creatives\',row.entity.id,row.entity.creative_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>', width: '280' },
+                            { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.adv_id,tab : \'creative\'})">{{COL_FIELD}}</a></span>', width: '280' },
                             { name: 'language', displayName: 'Type', width: '80' },
                             { name: 'classification', displayName: 'Classification', width: '160'},
                             { name: 'duration', displayName: 'Duration', width: '94'},
 
-                            { name: 'airings', displayName: 'Airings', cellTemplate:'<a href=""><span ng-if="row.entity.airings!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(row.entity.creative_name,row.entity.id,\'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.airings,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'creative\',row.entity.creative_name,\''+formData.brand_name+'\',\''+formData.brand_id+'\');">{{COL_FIELD}} </span><span ng-if="row.entity.airings==\'\'"> - </span></a>',  width: '110' },
+                            { name: 'airings', displayName: 'Airings', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings"  ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'creative\'})">{{COL_FIELD}}</a><span ng-if="row.entity.airings==\'\'"> - </span></a>',  width: '110' },
 
-                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="/#!/ranking"><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ng-click="grid.appScope.viewAiringSpendGraph(row.entity.creative_name,row.entity.id,\'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'creative\',row.entity.creative_name,\''+formData.brand_name+'\',\''+formData.brand_id+'\');">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
+                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'creative\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
 
                             { name: 'response_type', displayName: 'Response Type', enableSorting: false, cellTemplate:'<span class="response_img"><a href="#" ng-if=row.entity.response_url == 1 title="URL" ><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a><a href="#" ng-if=row.entity.response_sms == 1 title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a><a href="#" ng-if=row.entity.response_tfn == 1 title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a><a href="#" ng-if=row.entity.response_mar == 1 title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>'
                             , width: '140'},
@@ -96,9 +93,9 @@ angular.module("drmApp").controller("AdvertiserDetailController", function ($sco
 
             { name: 'advertiser_name', pinnedLeft: true, displayName: 'Advertiser' },
 
-            { name: 'airings', pinnedLeft: true, displayName: 'Airings', cellTemplate: '<a href="" ng-click="viewAiringGraph(row.entity.brand_name, row.entity.id,\'dow\', row.entity.network_code,\'all_day\',\'all_hour\', row.entity.networks, row.entity.airings,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\')" >{{COL_FIELD}}</a>' },
+            { name: 'airings', pinnedLeft: true, displayName: 'Airings', cellTemplate: '<a href="" ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}}</a>' },
 
-            { name: 'spend_index', pinnedLeft: true, displayName: 'Spend ($)', cellTemplate: '<a href="" ng-click="viewAiringSpendGraph(row.entity.brand_name,row.entity.id,\'dow\',\''+formData.network_code+'\',\'all_day\',\'all_hour\',row.entity.networks,row.entity.spend_index,\''+formData.c+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\''+formData.responseType+'\',\''+formData.spanish+'\',\'brand\',\'\',\'\',\'\')" >{{COL_FIELD}}</a>' },
+            { name: 'spend_index', pinnedLeft: true, displayName: 'Spend ($)', cellTemplate: '<a href="" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a>' },
             { name: 'national', pinnedLeft: true, displayName: 'National' },
             { name: 'local', pinnedLeft: true, displayName: 'DPI % ' },
             { name: 'asd', pinnedLeft: true, displayName: 'ASD' },

@@ -1,10 +1,7 @@
+"use strict";
 angular.module('drmApp').controller('AdminController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, modalConfirmService, $uibModal) {
-    if (!apiService.isUserLogged($scope)) {
-        $state.go('home');
-        return;
-    }
     $scope.admin = {};
-    $scope.admin.complete_name =  sessionStorage.complete_name = $rootScope.complete_name = localStorage.complete_name;
+    $scope.admin.complete_name =  $rootScope.complete_name = localStorage.complete_name;
     $scope.save_clicked = false;
     $scope.userRowForAction = {};
     $scope.ranking = {searchText: ''};
@@ -620,7 +617,6 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
         $scope.admin_id = admin_id;
         $scope.company_id = company_id;
         $('#edit_data_user_id').val('');
-        sessionStorage.company_id = company_id;
         $scope.mobileValid = 0;
         $scope.usernameValidInCompany = 0;
         $scope.usernameValid = 0;
@@ -950,7 +946,6 @@ angular.module('drmApp').controller('AdminController', function ($scope, $timeou
     $scope.openAddCompany = function () {
         $rootScope.usernameValidInCompany = 0;
         $rootScope.usernameValid = 0;
-        sessionStorage.company_id = '';
         modalConfirmService.hideModal();
         $scope.openModal('./templates/modals/addAdmin.html');
         $scope.pricing = [{ id: 'pricing0' }];

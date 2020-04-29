@@ -2,8 +2,8 @@
     <nav class="grid-content">
         <ul class="no-bullet">
             <li ng-show="type == 'advertisers'">Advertiser: <span ng-bind-html="advertiser_name"></span></li>
-            <li ng-show="type == 'brands'">Brand: <span ng-bind-html="brand_name | trustAsHtml"></span></li>{{brand_name}}
-            <li ng-show="if_creative">Creative: <span ng-bind-html="creative_name | trustAsHtml"></span></li>
+            <li ng-show="tab == 'brand'">Brand: <span ng-bind-html="brand_name | trustAsHtml"></span></li>{{brand_name}}
+            <li ng-show="tab == 'creative'">Creative: <span ng-bind-html="creative_name | trustAsHtml"></span></li>
             <li ng-show="selectedNetwork!= ''">Network: <span ng-bind-html="selectedNetworkAlias | trustAsHtml"></span></li>
             <li ng-show="selectedNetwork!= ''"" style="margin-top:2px;">
                 <span class="dpi-symbol" style="width:30px;display:inline-grid;margin-left:0px;"><img src="assets/images/dpi_symbol.png"></span>

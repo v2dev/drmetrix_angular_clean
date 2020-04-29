@@ -38,7 +38,7 @@
     <div class="main-filter" ng-show="headerDisplay == 1" ng-include="'templates/primary_filter.html'"></div>
 </div>
    
-<div class="main-container" id="ranking_page" ng-init="initializeRankingPage();"  ng-if="page_call == 'ranking'">
+<div class="main-container" id="ranking_page" ng-init="initializeRankingPage();" >
     <category-part data="$ctrl.category_list"></category-part> 
     <main class="main" id="main" ng-class="!catgeorySideBar  ? '' : 'push-left'">
         <div class="notify-msg"> 
@@ -66,7 +66,7 @@
                 <ul>
                     <li>
                         Network
-                        <div class="open-filter-popup custom-tooltip" ng-click="openNetworkLogModal();">{{networkDisplayName ? networkDisplayName : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
+                        <div class="open-filter-popup custom-tooltip" ng-click="openModalDialog('network_ranking');">{{networkDisplayName ? networkDisplayName : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                             <div class="top">
                                 <i></i>
                                 All
@@ -75,19 +75,19 @@
                     </li>
                     <li>
                         New
-                        <span class="open-filter-popup capitalize" ng-click="openNewTypeModal();" >
+                        <span class="open-filter-popup capitalize" ng-click="openModalDialog('new_type');" >
                             {{newCheckBox ? newType : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                         </span>
                     </li>
                     <li>
                         TFN/URL
-                        <span class="open-filter-popup" ng-click="openRefineModal();">
+                        <span class="open-filter-popup" ng-click="openModalDialog('refine_by');">
                             {{refine_by ? refine_by : 'All'}} <i class="fa fa-caret-down fa-lg"></i>
                         </span>
                     </li>
                     <li ng-show="selectedNetwork != ''">
                         Programs
-                        <span class="open-filter-popup" ng-click="openProgramModal();">
+                        <span class="open-filter-popup" ng-click="openModalDialog('programs');">
                             {{programs_id ? 'Custom' : 'All'}} Programs <i class="fa fa-caret-down fa-lg"></i>
                         </span>
                     </li>
@@ -110,6 +110,3 @@
         <div id="grid1" ui-grid="gridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination ui-grid-grouping class="grid"></div>
     </main>
 </div>
-
-<div class="" ng-include="'templates/airingDetail.html'"></div>
-<div class="" ng-include="'templates/advertiserDetail.html'"></div>

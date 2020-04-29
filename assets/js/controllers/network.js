@@ -1,8 +1,5 @@
+"use strict";
 angular.module('drmApp').controller('NetworkController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, $uibModal, $cookies) {
-    if (!apiService.isUserLogged($scope)) {
-        $state.go('home');
-        return;
-    }
     $scope.letterLists = ['all', '0-9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     $scope.selectedLetter = 'all';
     $rootScope.headerDisplay = 0;
@@ -133,9 +130,7 @@ angular.module('drmApp').controller('NetworkController', function ($scope, $time
         $scope.showNetworkModal = 0;
         $scope.headerDisplay = 1;
         var checked_count = 0;
-        var my_network_called = $rootScope.my_network_called = sessionStorage.my_network_called = 1;
-        sessionStorage.selected_arr_networks = [];
-        sessionStorage.selected_networks_id = [];
+        var my_network_called = $rootScope.my_network_called = 1;
         var selected_network_code = []; // network code array
         var selected_network_id = []; // network id array
         angular.forEach($scope.networkTabList, function(value, key) {

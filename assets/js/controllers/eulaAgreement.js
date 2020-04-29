@@ -1,3 +1,4 @@
+"use strict";
 angular.module('drmApp').controller('EulaAgreementController', function ($scope, $state, $rootScope,  apiService, $uibModal) {
   // https://embed.plnkr.co/plunk/PbnBdN
  
@@ -15,7 +16,7 @@ angular.module('drmApp').controller('EulaAgreementController', function ($scope,
 
       $scope.eulaDisagree = function(){
         $rootScope.eulaDisagreeFlag = 1;
-        $state.go('home');
+        $state.go('login');
         return false;
       }
 
@@ -26,7 +27,7 @@ angular.module('drmApp').controller('EulaModalCtrl', function($scope, $rootScope
     $scope.eulaDisagree = function(){
         $rootScope.eulaDisagreeFlag = 1;
         $uibModalInstance.dismiss();
-        $state.go('home');
+        $state.go('login');
         return false;
       }
   
@@ -37,7 +38,7 @@ angular.module('drmApp').controller('EulaModalCtrl', function($scope, $rootScope
           $state.go('ranking');
       }), function() {
         $rootScope.eulaDisagreeFlag = 0;
-        $state.go('home');
+        $state.go('login');
         return false;
       }   
     }

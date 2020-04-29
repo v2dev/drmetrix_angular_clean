@@ -1,3 +1,4 @@
+"use strict";
 var maskedInput = function() {
     var directive = {
       restrict: 'EA',

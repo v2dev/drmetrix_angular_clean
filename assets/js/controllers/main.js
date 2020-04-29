@@ -1,13 +1,14 @@
-angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location, $uibModal, modalConfirmService, $timeout) {
+angular.module('drmApp').controller('MainController', function ($scope, $http, $state, $stateParams, $rootScope, apiService, $location, $uibModal, modalConfirmService, $timeout, $window, $location) {
     $scope.date = new Date(); // Footer copyright display year
     $rootScope.eulaDisagreeFlag = 0; // this flag will show poup on login page if we disagree eula agreement and redreict to login message with popup message
     $scope.whats_new_toggle = false;
     $rootScope.headerDisplay = 0;
     $scope.selectedNetwork = '';
+    $scope.selectDate = 1;
     $scope.programs_id = ''
     /* Primary filter */
     $rootScope.complete_name = localStorage.complete_name;
-    $scope.selectDate = sessionStorage.selectDate = 1;
+    $scope.selectDate =  1;
     $scope.shortFormClassification = [
         {
             "index": 1,
@@ -163,23 +164,77 @@ $scope.shortFormTrackingClassification = [
     $scope.selectedDurations = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
     $scope.creative_short_duration = [10, 15, 20, 30, 45, 60, 75, 90, 105, 120, 180, 240, 300];
     $rootScope.active_flag = 2 // keep it until not integrated active inactive all
+    
+    $scope.newWindow = function(url) {
+        $window.open(url, '_blank','scrollbars=yes,status=yes');
+    };
 
-    $scope.mapValueWithSession = function (data) {
-        for (var i in data) {
-            $scope[data[i]] = sessionStorage[data[i]];
-        }
+    $scope.downloadPdf = function() {
+        var hostname = $location.host() + ':' + $location.port();
+        window.open('http://' + hostname + '/drmetrix/api/download_pdf.php');
     }
 
-    var displayDateList = [ 'media_start_date', 'media_end_date', 'media_month_date',
-    'media_monthend_date', 'lifetime_year', 'lifetime_min_sd', 'lifetime_max_ed'];
-    $scope.mapValueWithSession(displayDateList);
-
-    var databaseFormatDate = [ 'media_start_db', 'media_end_db', 'current_start_db',
-    'current_end_db', 'media_month_start_db', 'media_month_end_db', 'last_quarter_db_start_date', 'last_quarter_db_end_date', 'media_currentmonth_start_db',
-    'media_currentmonth_end_db', 'current_quarter_db_start_date', 'current_quarter_db_end_date', 'last_year_db_start_date', 'last_year_db_end_date', 'lifetime_db_min_sd', 'lifetime_db_max_ed'];
-
-    $scope.mapValueWithSession(databaseFormatDate);
-
+    $scope.openModalDialog = function(name) {
+        var templateUrl, size;
+        $scope.modal_name = name;
+        switch(name) {
+            case 'new_type': {
+                templateUrl = './templates/modals/newTypeDialog.html';
+                controllerName = 'NewModalController';
+                break;
+            }
+            case 'refine_by': {
+                templateUrl = './templates/modals/refineDialog.html';
+                controllerName = 'RefineModalController';
+                break;
+            }
+            case 'network_ranking': {
+                templateUrl = './templates/modals/networkModalDialog.html';
+                controllerName = 'NetworkModalController';
+                size = 'xl modal-dialog-centered'
+                break;
+            }
+            case 'programs': {
+                templateUrl = './templates/modals/programModalDialog.html';
+                controllerName = 'ProgramModalController';
+                break;
+            }
+            case 'refine_by_report': {
+                templateUrl = './templates/modals/RefineByReportDialog.html';
+                controllerName = 'RefineByReportModalController';
+                size = 'lg modal-dialog-centered'
+                break;
+            }
+            case 'network': {
+                templateUrl = './templates/modals/networkDialog.html';
+                controllerName = 'NetworkDropdownModalController';
+                break;
+            }
+            case 'dow': {
+                templateUrl = './templates/modals/dowDialog.html';
+                controllerName = 'DowModalController';
+                break;
+            }
+            case 'hod' : {
+                templateUrl = './templates/modals/hodDialog.html';
+                controllerName = 'HodModalController';
+                break;
+            }
+            case 'dayparts' : {
+                templateUrl = './templates/modals/daypartDialog.html';
+                controllerName = 'DaypartModalController';
+                break;
+            }
+            case 'programs' : {
+                templateUrl = './templates/modals/programsDialog.html';
+                controllerName = 'NetworkDropdownModalController';
+                break;
+            }
+        }
+        size = size ? size : 'md modal-dialog-centered';
+        $scope.openModal(templateUrl, controllerName, size );
+    }
+    
     $scope.verifyDuplicateMobile = function (mobile) {
         var user_id = $('#edit_data_user_id').val();
         var admin_id = sessionStorage.admin_id;
@@ -188,7 +243,7 @@ $scope.shortFormTrackingClassification = [
             hidden_mobile_no = $("#mobile_edit_company_hidden").val();
         }
 
-        if (sessionStorage.role == 'superadmin') {
+        if ($rootScope.role == 'superadmin') {
             admin_id = $('#edit_company_admin_id').val();
             if (admin_id == '') {
                 admin_id = $('#edit_company_page_admin_id').val();
@@ -250,123 +305,10 @@ $scope.shortFormTrackingClassification = [
         }
     }
 
-    //date filter
-    $scope.findDiff = function (end_date, val) {
-        $rootScope.displayBtns = 0;
-        var date1 = new Date(sessionStorage.today_date);
-        var date2 = new Date(end_date);
-        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        if (diffDays >= 30) {
-            $rootScope.displayBtns = 1;
-        }
-    }
-    $scope.date_filter = function (val) {
-        if((val >= 6) && (val <= 11)){
-            $scope.ytdOther = false;
-            $scope.allOther = false;
-            $scope.lifetimeOther = false;
-        }
-        $scopemask = 0;
-        if($scope.lifetimeOther && typeof(val) != 'undefined') { // lifetime checked
-            $scope.mask = 1;
-            val = $scope.selectDate = 5;
-        }
-        
-        if(!$scope.lifetimeOther && val == 5 && $scope.showOtherDiv) { // lifetime unchecked
-            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
-            var date_detail = $scope.selectDate.split('_');
-            if (date_detail[1] !== undefined) {
-                var week = date_detail[1];
-                var sd_1 = date_detail[2].split('-');
-                var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
-                var ed_1 = date_detail[3].split('-');
-                var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
-                var date_diaply = '';
-                if (date_detail[0] == 'week31') {
-                    date_diaply = "Media Week ";
-                } else if (date_detail[0] == 'month32') {
-                    date_diaply = "Media Month ";
-                    week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
-                } else if (date_detail[0] == 'quarter33') {
-                    date_diaply = "Media Quarter ";
-                }
-                $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
-            }
-        }
-        // val = $scope.selectDate;
-        $scope.matching_criteria = 0;
-        if (val == 1) { // Last Week
-            $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
-            $scope.date_range = 'Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
-            $scope.sd = sessionStorage.media_start_db;
-        }
-        if (val == 2) { // Current Week
-            $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
-            $scope.date_range = 'Current Week ' + sessionStorage.current_calendar_id + ' - ' + sessionStorage.current_start_date + ' thru ' + sessionStorage.current_end_date;
-            $scope.sd = sessionStorage.current_start_db;
-        }
-        if (val == 3) {
-            $scope.date_range = 'Quarter ' + sessionStorage.number_of_quarter + ' - ' + sessionStorage.last_quarter_start_date + ' to ' + sessionStorage.last_quarter_end_date;
-            $scope.sd = sessionStorage.last_quarter_start_date;
-        }
-        if (val == 4) {
-            $scope.date_range = 'Year Of ' + sessionStorage.last_media_year;
-        }
-        if (val == 5) {
-            $scope.allOther = false;
-            $scope.ytdOther = false;
-            $scope.matching_criteria = val;
-            $scope.date_range = $scope.lifetime_year + ' - ' + $scope.lifetime_min_sd + ' thru ' + $scope.lifetime_max_ed;
-            $scope.sd = $scope.lifetime_min_sd;
-            $scope.findDiff($scope.sd, val);
-        }
-        if (val == 6) { // Last Week
-            $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
-            $scope.date_range = 'Last Media Week ' + sessionStorage.week_calendar_id + ' - ' + sessionStorage.media_start_date + ' thru ' + sessionStorage.media_end_date;
-            $scope.sd = sessionStorage.media_start_date;
-        }
-        if (val == 7) { // Last Month
-            $scope.freq_filter_options = { daily: false, weekly: false, monthly: true, quarterly: false };
-            $scope.date_range = 'Last Media Month ' + sessionStorage.month_calendar_id + ' - ' + sessionStorage.media_month_date + ' thru ' + sessionStorage.media_monthend_date;
-            $scope.sd = sessionStorage.media_month_date;
-        }
-        if (val == 8) { // Last Quarter
-            $scope.freq_filter_options = { daily: false, weekly: false, monthly: false, quarterly: true };
-            $scope.date_range = 'Last Media Quarter ' + sessionStorage.number_of_quarter + ' - ' + sessionStorage.last_quarter_start_date + ' thru ' + sessionStorage.last_quarter_end_date;
-            $scope.sd = sessionStorage.last_quarter_start_date;
-        }
-        if (val == 9) { // Current Week
-            $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
-            $scope.date_range = 'Current Media Week ' + sessionStorage.current_calendar_id + ' - ' + sessionStorage.current_start_date + ' thru ' + sessionStorage.current_end_date;
-            $scope.sd = sessionStorage.current_start_date;
-        }
-        if (val == 10) { // Current Month
-            $scope.matching_criteria = val;
-            $scope.date_range = 'Current Media Month ' + sessionStorage.currentmonth_calendar_id + ' - ' + sessionStorage.media_currentmonth_date + ' thru ' + sessionStorage.media_currentmonthend_date;
-            $scope.sd = sessionStorage.media_currentmonth_date;
-        }
-        if (val == 11) { // Current Quarter
-            $scope.matching_criteria = val;
-            $scope.date_range = 'Current Media Quarter ' + sessionStorage.number_of_currentquarter + ' - ' + sessionStorage.current_quarter_start_date + ' thru ' + sessionStorage.current_quarter_end_date;
-            $scope.sd = sessionStorage.current_quarter_db_start_date;
-        }
-
-        if (val == 'calender') {
-            sessionStorage.is_apply_calendar = 1;
-            $scope.findDiff(sessionStorage.start_date);
-            // $('#datepicker_checkbox').attr('checked', 'checked');
-            $scope.date_range = 'Date Range - ' + sessionStorage.disp_start_date + ' thru ' + sessionStorage.disp_end_date;
-            // $rootScope.initialise_datepicker();
-            // $('#datepicker_checkbox').prop('checked', true);
-        }
-        
-        $scope.selectDate = sessionStorage.selectDate = val;
-    }
-    $scope.date_filter($scope.selectDate);
+   
 
 
-    $scope.openModal = function(templateUrl, controller, size, backdrop) {
+    $scope.openModal = function(templateUrl, controller, size ) {
         $scope.modalInstanceMain =  modalConfirmService.showModal({
             backdrop: false,
             keyboard: true,
@@ -868,8 +810,7 @@ $scope.shortFormTrackingClassification = [
             if (angular.isUndefined($scope.refine_by)) {
                 ($rootScope.type == 'brands') ? $rootScope.uigridDataBrand() : $rootScope.uigridDataAdv();
             } else {
-                console.log('refine');
-                // $rootScope.uigridRefineData();
+                $rootScope.uigridRefineData();
             }
         } else {
             //network page grid code
@@ -1051,69 +992,14 @@ $scope.shortFormTrackingClassification = [
         $scope.initializeWeeks();
         $('#othersDiv1').modal('show');
     }
-    
-    $scope.date_detail = function (date) {
-        $scope.lifetimeOther = false;
-        $scope.mask  = 0;
-        if($scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') { // ytd checked
-            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
-            date = $scope.selectDate;
-            $scope.allOther = false;
-            sessionStorage.lifetime_flag = 0;
-            sessionStorage.calender_flag = 0;
-        } 
-        if(!$scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') {// ytd unchecked
-            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
-            date = $scope.selectDate;
-        }
-        if($scope.allOther &&  !$scope.ytdOther && typeof(date) == 'undefined') { // all checked
-            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
-            date = $scope.selectDate;
-            $scope.ytdOther = false;
-            sessionStorage.lifetime_flag = 0;
-            sessionStorage.calender_flag = 0;
-        } 
-        if(!$scope.allOther && !$scope.ytdOther && typeof(date) == 'undefined') {// all unchecked
-            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
-            date = $scope.selectDate;
-        }
-        if (date != 1) {
-            $scope.matching_criteria = 0;
-        }
-        if($scope.selectDate.indexOf("year34") > -1) {
-            $scope.mask = 1;
-        }
-        var date_detail = date.split('_');
-        if (date_detail[1] !== undefined) {
-            var week = date_detail[1];
-            var sd_1 = date_detail[2].split('-');
-            var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
-            var ed_1 = date_detail[3].split('-');
-            var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
-            var date_diaply = '';
-            if (date_detail[0] == 'week31') {
-                date_diaply = "Media Week ";
-            } else if (date_detail[0] == 'month32') {
-                date_diaply = "Media Month ";
-                week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
-            } else if (date_detail[0] == 'quarter33') {
-                date_diaply = "Media Quarter ";
-            }
-            $scope.selectDate = sessionStorage.selectDate = $rootScope.selected_date = date;
-            $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
-            $scope.findDiff(sd_2);
-            sessionStorage.calender_flag = 0;
-            // $scope.checkForLifetimeSelection();
-        }
-    }
 
     $scope.setLifetimeVariables = function() {
-        sessionStorage.lifetime_flag = 0;
+        $scope.lifetime_flag = 0;
         if($scope.lifetimeOther) {
-            sessionStorage.lifetime_flag = 1;
+            $scope.lifetime_flag = 1;
         } 
 
-        if (sessionStorage.calender_flag == 1) {
+        if ($scope.calender_flag == 1) {
             $scope.apply_filter = 0;
             $scope.lifetime_error = 1;
         }
@@ -1257,7 +1143,7 @@ $scope.shortFormTrackingClassification = [
     var yyyy = today.getFullYear();
     if (dd < 10) { dd = '0' + dd }
     if (mm < 10) { mm = '0' + mm }
-    sessionStorage.today_date = mm + '/' + dd + '/' + yyyy;
+    $scope.today_date = mm + '/' + dd + '/' + yyyy;
     //get all media data
     var async = false;
     var currentdate = new Date();
@@ -1267,10 +1153,7 @@ $scope.shortFormTrackingClassification = [
     .then(function (response) {
         // Store response data
         var data = response.data;
-
         var sd = data.last_week.sd;
-        var months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-       
         var ed = data.last_week.ed;
         var end_date = new Date(ed.replace(" ", "T"));
         var year = end_date.getUTCFullYear();
@@ -1278,60 +1161,58 @@ $scope.shortFormTrackingClassification = [
         $scope.selectedYear =  $scope.current_year = data.current_year;
 
         //life time
-        sessionStorage.lifetime_year = data.lifetime.year;
-        sessionStorage.lifetime_min_sd = data.lifetime.start_date;
-        sessionStorage.lifetime_max_ed = data.lifetime.end_date;
-        sessionStorage.lifetime_db_min_sd = data.lifetime.start_date_db;
-        sessionStorage.lifetime_db_max_ed = data.lifetime.end_date_db;
+        $scope.lifetime_year = data.lifetime.year;
+        $scope.lifetime_min_sd = data.lifetime.start_date;
+        $scope.lifetime_max_ed = data.lifetime.end_date;
+        $scope.lifetime_db_min_sd = data.lifetime.start_date_db;
+        $scope.lifetime_db_max_ed = data.lifetime.end_date_db;
 
         //last week
-        sessionStorage.media_start_date = data.last_week.start_date;
-        sessionStorage.media_end_date = data.last_week.end_date;
-        sessionStorage.media_start_db = data.last_week.sd;
-        sessionStorage.media_end_db = data.last_week.ed;
-        sessionStorage.week_calendar_id = data.last_week.calendar_id;
+        $scope.media_start_date = data.last_week.start_date;
+        $scope.media_end_date = data.last_week.end_date;
+        $scope.media_start_db = data.last_week.sd;
+        $scope.media_end_db = data.last_week.ed;
+        $scope.week_calendar_id = data.last_week.calendar_id;
 
        //last month
-        sessionStorage.media_month_date = data.last_month.start_date;
-        sessionStorage.media_monthend_date = data.last_month.end_date;
-        sessionStorage.media_month_start_db = data.last_month.sd;
-        sessionStorage.media_month_end_db = data.last_month.ed;
-        sessionStorage.month_calendar_id = "(" + data.last_month.calendar_id + ")";
+        $scope.media_month_date = data.last_month.start_date;
+        $scope.media_monthend_date = data.last_month.end_date;
+        $scope.media_month_start_db = data.last_month.sd;
+        $scope.media_month_end_db = data.last_month.ed;
+        $scope.month_calendar_id = "(" + data.last_month.calendar_id + ")";
 
         //Current week data
-        sessionStorage.current_start_date = data.current_week.start_date;
-        sessionStorage.current_end_date = data.current_week.end_date;
-        sessionStorage.current_calendar_id = data.current_week.calendar_id;
+        $scope.current_start_date = data.current_week.start_date;
+        $scope.current_end_date = data.current_week.end_date;
+        $scope.current_calendar_id = data.current_week.calendar_id;
         $scope.current_week = data.current_week.calendar_id;
 
         //Current Month Data
-        sessionStorage.media_currentmonth_date = data.current_month.start_date;
-        sessionStorage.media_currentmonthend_date = data.current_month.end_date;
-        sessionStorage.current_start_db = data.current_week.sd;
-        sessionStorage.current_end_db = data.current_week.ed;
-        sessionStorage.currentmonth_calendar_id = "(" + data.current_month.calendar_id + ")";
+        $scope.media_currentmonth_date = data.current_month.start_date;
+        $scope.media_currentmonthend_date = data.current_month.end_date;
+        $scope.current_start_db = data.current_week.sd;
+        $scope.current_end_db = data.current_week.ed;
+        $scope.currentmonth_calendar_id = "(" + data.current_month.calendar_id + ")";
         $scope.current_month = data.current_month.media_month_id;
-        sessionStorage.media_currentmonth_start_db = data.current_month.sd;
-        sessionStorage.media_currentmonth_end_db = data.current_month.ed;
+        $scope.media_currentmonth_start_db = data.current_month.sd;
+        $scope.media_currentmonth_end_db = data.current_month.ed;
 
         //Last Quarter data
-        sessionStorage.number_of_quarter = data.lst_quarter_no;
-        sessionStorage.last_quarter_start_date = data.last_quarter[1];
-        sessionStorage.last_quarter_end_date = data.last_quarter[3];
-        sessionStorage.last_quarter_db_start_date = data.last_quarter[0];
-        sessionStorage.last_quarter_db_end_date = data.last_quarter[2];
+        $scope.number_of_quarter = data.lst_quarter_no;
+        $scope.last_quarter_start_date = data.last_quarter[1];
+        $scope.last_quarter_end_date = data.last_quarter[3];
+        $scope.last_quarter_db_start_date = data.last_quarter[0];
+        $scope.last_quarter_db_end_date = data.last_quarter[2];
 
         //Current quarter data
-        sessionStorage.number_of_currentquarter = data.quarter_no;
-        sessionStorage.current_quarter_start_date = data.quarter[1];
-        sessionStorage.current_quarter_end_date = data.quarter[3];
-        sessionStorage.current_quarter_db_start_date = data.quarter[0];
-        sessionStorage.current_quarter_db_end_date = data.quarter[2];
+        $scope.number_of_currentquarter = data.quarter_no;
+        $scope.current_quarter_start_date = data.quarter[1];
+        $scope.current_quarter_end_date = data.quarter[3];
+        $scope.current_quarter_db_start_date = data.quarter[0];
+        $scope.current_quarter_db_end_date = data.quarter[2];
         $scope.current_qtr = data.quarter_no;
         $scope.years = data.years;
         $scope.createYearsArray();
-        $scope.mapValueWithSession(displayDateList);
-        $scope.mapValueWithSession(databaseFormatDate);
      });
 
     $scope.click = function() {
@@ -1449,9 +1330,8 @@ $scope.shortFormTrackingClassification = [
                 if (data.status) {
                     sessionStorage.clear();
                     localStorage.clear();
-                    $state.go('home');
                 }
-                $state.go('home');
+                $state.go('login');
             })
             ,(function (data, status, headers, config) {
             })
