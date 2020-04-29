@@ -230,6 +230,29 @@ $scope.shortFormTrackingClassification = [
                 controllerName = 'NetworkDropdownModalController';
                 break;
             }
+            case 'filters': {
+                templateUrl= "./templates/modals/FilterDialog.html";
+                controllerName = "FiltersModalController";
+                size= 'lg modal-dialog-centered';
+            }
+            case 'lists': {
+                templateUrl= "./templates/modals/ListDialog.html";
+                controllerName = "ListsModalController";
+                size= 'lg modal-dialog-centered';
+            }
+            case 'reports': {
+                templateUrl= "./templates/modals/reportsdialog.html";
+                controllerName = "ReportsModalController";
+                size= 'lg modal-dialog-centered';
+            }
+            case 'category_track': {
+                templateUrl = "/templates/modals/categoryTrackModal.html";
+                controllerName = "TrackModalController";
+            }
+            case 'other_track': {
+                templateUrl = "/templates/modals/trackModalDialog.html";
+                controllerName = "TrackModalController";
+            }
         }
         size = size ? size : 'md modal-dialog-centered';
         $scope.openModal(templateUrl, controllerName, size );
@@ -333,7 +356,7 @@ $scope.shortFormTrackingClassification = [
     };
 
     $rootScope.openCategoryTrackModal = function() {
-        $scope.openModal('./templates/modals/categoryTrackModal.html','trackCtrl','md modal-dialog-centered');
+        $scope.openModalDialog('category_track');
     }
 
     $scope.selectCategory = function (item, value, type ,tabName) {
@@ -558,7 +581,7 @@ $scope.shortFormTrackingClassification = [
                     }); 
                 }
             }
-            $scope.openModal('./templates/modals/categoryTrackModal.html','trackCtrl','md modal-dialog-centered');
+            $scope.openModalDialog('category_track');
         },function (error) {
             console.log('Error');
         });
@@ -645,7 +668,7 @@ $scope.shortFormTrackingClassification = [
                    }
                }
            }
-            $scope.openModal('./templates/modals/trackModalDialog.html','trackCtrl','md modal-dialog-centered');
+            $scope.openModalDialog('other_track');
        },function (error) {
            console.log('Error');
        });
@@ -1285,7 +1308,7 @@ $scope.shortFormTrackingClassification = [
         }
 
         if(page== 'reports'){
-            $scope.reportsModal('reports'); // 0 -> Off -> normal mode
+            $scope.openModalDialog('reports'); // 0 -> Off -> normal mode
         }
 
         if(page == 'tracking') {
@@ -1494,18 +1517,8 @@ $scope.shortFormTrackingClassification = [
     $scope.call_filter_list = function () {
         $scope.getAllFilters();
         $scope.getActiveSharedUsers('filters');
-        $scope.openFilterModal();
+        $scope.openModalDialog('filters');
     }
-
-    $scope.openFilterModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-          templateUrl: "./templates/modals/FilterDialog.html",
-          controller: "FiltersCtrl",
-          size: 'lg modal-dialog-centered',
-        });
-      };
-
-  
 
     $scope.getAllFilters = function () {
         var page = $state.current.name;
@@ -1555,18 +1568,11 @@ $scope.shortFormTrackingClassification = [
           }); 
     }
 
-    $scope.openListModal = function() {
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/ListDialog.html",
-            controller: "ListsCtrl",
-            size: 'lg modal-dialog-centered',
-          });
-    }
 
     $scope.reportsModal = function(){
         $scope.modalInstance =  $uibModal.open({
             templateUrl: "./templates/modals/reportsdialog.html",
-            controller: "ReportsModalCtrl",
+            controller: "ReportsModalController",
             size: 'lg modal-dialog-centered',
         });
     }
@@ -1591,6 +1597,7 @@ $scope.shortFormTrackingClassification = [
         $scope.getAllList();
         $scope.choose_list = true;
         $scope.getActiveSharedUsers('list');
+        $scope.openModalDialog('lists');
         $scope.openListModal();
     }
     /***List code Ends */
@@ -1603,389 +1610,9 @@ $scope.shortFormTrackingClassification = [
 
 });
 
-angular.module('drmApp').controller('FiltersCtrl', function($scope, $http, $interval, uiGridTreeViewConstants, $uibModal, $rootScope, $uibModalInstance, $state, apiService) {
-    $scope.sharedFilter = 'My';
-    $scope.selected_user = '';
-    
-    $scope.show_user_filters = function () {
-        //ui grid code
-    }
-
-    $scope.show_user_filters();
-    
-    $scope.showSharedFilters = function(item) {
-        $scope.sharedFilter = item;
-            //with ui grid code, displayes grid data according to rules set
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-   
-
-    // Call filter ui Grid
-    $scope.uigridFilterModal = function() {
-        var formData = $rootScope.formdata;
-        var vm = this;
-        var config = {
-            headers : {
-                'Content-Type': 'application/json; charset=utf-8'
-            }
-        }
-        // var c_dir = $scope.ranking.creative_type == 'short' ? '6':'1';
-        var c_dir = '6';
-        formData.tab = 'ranking';
-        formData.primary_tab = 'brand';
-        formData.secondary_tab = 'NA';
-        formData._search = true;
-        formData.rows = '10';
-        formData.page = 1;
-        formData.sidx = "created_date";
-        formData.sord = 'desc';
-
-        vm.gridOptions = {
-            enableGridMenu: true,
-            enableSelectAll: true,
-            enableSorting: true,
-            //Pagination
-            paginationPageSizes: [20],
-            paginationPageSize: 20,
-            paginationTemplate: $rootScope.correctTotalPaginationTemplate,
-            onRegisterApi: function (gridApi) {
-                $scope.gridApi = gridApi;
-                // $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
-            }
-        };
-        $scope.loading = true;
-        vm.gridOptions.columnDefs = [
-            // { name: 'row.entity.checked_schedule_email', pinnedLeft:true, displayName:'ID' },
-            // { name: 'row.entity.disabled_schedule_email', pinnedLeft:true, displayName:'ID' },
-            { name: 'full_name', pinnedLeft:true, displayName:'User'},
-            { name: 'name', pinnedLeft:true, displayName:'Filter Name'},
-            { name: 'primary_tab', pinnedLeft:true, displayName:'Tab' },
-            { name: 'created_date', pinnedLeft:true, displayName:'Created On' },
-
-            { name: 'copy_filter', pinnedLeft:true, displayName: 'Copy To My Filters', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="copy_filter checkbox-custom" id="copy_filter_{{row.entity.id}}" name="copy_filter" ng-click="copySharedFilter({{row.entity.id}})"  {{row.entity.checked_copy_filter}} {{row.entity.disable_copy_filter}} /><label for="copy_filter_{{row.entity.id}}" class="checkbox-custom-label {{row.entity.disabled_copy_filter_class}}"></label></li></ul></nav>'},
-
-            { name: 'shared_filter', displayName: 'Share Filter', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="share_filter checkbox-custom" id="share_filter_\'{{row.entity.id}}\'" name="share_filter" ng-click="updateShareFilterStatus(\'{{row.entity.id}}\')"  \'{{row.entity.checked_shared_filter}}\' \'{{row.entity.disabled_shared_filter}}\' /><label for="share_filter_\'{{row.entity.id}}\'" class="checkbox-custom-label \'{{row.entity.disabled_class}}\'"></label></li></ul></nav>'},
-
-            { name: 'query_string', pinnedLeft:true, displayName:'Detail', cellTemplate:'<span title="{{COL_FIELD}}">{{row.entity.query_string == \'\' ? \'-\' : row.entity.query_string | limitTo: 60}}</span>' },
-
-            {name: 'schedule_email', pinnedLeft:true, displayName:'Schedule Email',  cellTemplate:'<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="checkbox-custom" id="schedule_email_\'{{row.entity.id}}\'" ng-click="updateScheduleEmailStatus(\'{{row.entity.id}}\',\'{{row.entity.email_schedulable_direct}}\')" data-frequency="\'{{row.entity.email_schedulable_direct}}\'" \'{{row.entity.checked_schedule_email}}\' \'{{row.entity.disabled_schedule_email}}\' /><label for="schedule_email_\'{{row.entity.id}}\'" class="checkbox-custom-label \'{{row.entity.disabled_schedule_email_class}}\'"></label></li></ul></nav>'},
-            { name: 'apply', pinnedLeft:true, displayName:'Apply', cellTemplate: '<a href="javascript:void(0)" ng-click="apply_user_filter(\'{{row.entity.id}}\');" id="apply_filter_{{row.entity.id}}">Apply</a>' },
-        ];
-        apiService.post('/get_user_filter_list', formData, config)
-        .then(function (data) {
-            $scope.loading = false;
-            $scope.PostDataResponse = formData;
-            vm.gridOptions.data = data.data.rows;
-        }, function (response) {
-            // this function handlers error 
-        });
-    }
-
-    $scope.uigridFilterModal();
-});
 
 
-angular.module('drmApp').controller('ListsCtrl', function($scope, $http, $interval, uiGridTreeViewConstants, $uibModal, $rootScope, $uibModalInstance, $state, apiService) {
-    $scope.sharedList = 'My';
-    $scope.selected_user = '';
-    $scope.loading = true;
-    var airings_data = new Array();
-    let cachedBrandListsData = [];
-    let cachedAdvListsData = [];
-    let list_brand_api = 0;
-    let list_adv_api = 0;
-    let $dropdown;
-   
-    
-    $scope.showSharedLists = function(item) {
-        $scope.sharedList = item;
-            //with ui grid code, displayes grid data according to rules set
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-    // $scope.createDropdown = function(id) {
-    //     if($scope.lists) {
-    //         angular.forEach($scope.lists, function(value, key) {
-    //             if(jQuery.inArray( value.id, $scope.list_id_array) > -1) {
-    //                 value.selected = true;
-    //             } else {
-    //                 value.selected = false;
-    //             }
-    //         });
-    //         $dropdown = $('.dropdown-mul-1').dropdown({
-    //             data: $scope.lists,
-    //             multipleMode: 'label',
-    //             searchTextLengthErrorMessage: '',
-    //             limitCount: 100,
-    //             limitCountErrorMessage: 'There is a 100 limit for '+$scope.ranking.list_tab+'s chosen. You have reached the limit for this list.',
-    //             choice: function () {
-    //               console.log(arguments);
-    //             },
-    //             input: '<div class="search-input"> <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span><input type="text"  id="search_searchable_dropdown" placeholder="Please enter minimum 3 characters" onKeyUp="removeDisabled()"/><span id="clearIconList" class="search-icon cross-icon" style="display:none;"><i class="fa fa-times-circle" title="Clear Search"></i></span></span></div><button type="button" class="btn btn-blue applyBtn" id="search_list" disabled="disabled"><i class="fa fa-search"></i>Search</button>',
-    //             // <span class="inline-label search-text-tip">Search tip: <span> Enter minimum 3 characters</span></span>
-    //           });
-    //     }
-    //     setTimeout(function () {
-    //         $('#edit_list_'+id).show();
-    //         $('span#excel_loader_'+id).hide();  
-    //     }, 100);
-    //     // $('#edit-list-modal').show();
-    //     $('#edit-list-modal').modal('show');
-    //     $('#edit-list-modal').css("display","flex");
-    //     var scroll=$('.dropdown-mul-1');
-    //     scroll.animate({scrollTop: scroll.prop("scrollHeight")});
-    // }
-        
-    // $scope.edit_user_filter = function(id, list_ids) {
-    //     console.log($scope.listGridApi.selection.getSelectedRows());
-    //     // angular.forEach(data, function(data, index) {
-    //     //     data["index"] = index+1;
-    //     //     //data.push({"index":index+1})
-    //     // })
-    //     var p = $("#tab_list").jqGrid("getGridParam");
-    //     var iCol = p.iColByName["name"];
-    //     $scope.headerListName =  $("#" + id).find('td').eq(iCol).text();
-
-    //     if($dropdown)  $dropdown.data('dropdown').destroy();
-    //     $scope.edit_list_id = id; // the list in edit mode
-    //     let list_id_array = list_ids.split(',');
-    //     $scope.list_id_array = list_id_array;
-    //     if($scope.ranking.list_tab == 'brand') {
-    //         list_brand_api = cachedBrandListsData.length == 0 ? 1 : 0;
-    //     }
-
-    //     if($scope.ranking.list_tab == 'advertiser') {
-    //         list_adv_api = cachedAdvListsData.length == 0 ? 1 : 0;
-    //     }
-
-    //     if((list_brand_api == 1 || list_adv_api == 1)) {
-    //         setTimeout(function () {
-    //             $('#edit_list_'+id).hide();
-    //             $('#excel_loader_'+id).show();
-    //         }, 0);
-    //         $.ajax({
-    //             type: 'POST',
-    //             url: '/drmetrix/api/index.php/get_all_brands_advertisers',
-    //             // async: false,
-    //             data: {
-    //                 tab : $scope.ranking.list_tab == 'brand' ? 1 : 0
-    //             }, success: function (data) {
-    //                 let response = jQuery.parseJSON(data);
-    //                 let items = [];
-    //                 var selectedEle ;
-    //                 angular.forEach(response.result, function(value, key) {
-    //                     selectedEle = false;
-    //                     if(jQuery.inArray( value.brand_id, list_id_array )) {
-    //                         selectedEle = true;
-    //                     }
-    //                     items.push({
-    //                         'id': value.id, 
-    //                         'disabled': false,
-    //                         'selected':false,
-    //                         'name':  value.name,
-                            
-    //                     });
-    //                 });
-    //                 if($scope.ranking.list_tab == 'brand') {
-    //                     cachedBrandListsData = items;
-    //                 } else {
-    //                     cachedAdvListsData = items;
-    //                 }
-    //                 $scope.lists = items;
-    //                 $scope.createDropdown(id);
-    //             }, error: function (xhr, status, error) {
-
-    //             }
-    //         });
-    //     } else {
-    //         // $.ajax({
-    //         //     type: 'POST',
-    //         // });
-    //         // setTimeout(function () {
-    //             $('#edit_list_'+id).hide();
-    //             $('span#excel_loader_'+id).show();
-    //         // }, 0);
-    //         setTimeout(function () {
-    //             $scope.createDropdown(id);
-    //         }, 100);
-    //     }
-    // }
-
-    $scope.apply_user_list = function(row) {
-        console.log(row);
-        $scope.applied_list_ids = row.criteria_id;
-        $scope.display_list_name = row.name;
-        $scope.applied_list_type = $rootScope.my_list;
-        $scope.list_id   = row.id;
-        $rootScope.$broadcast("CallParentMethod", {'applied_list_ids' : $scope.applied_list_ids, 'applied_list_type' : $scope.applied_list_type , list_id : $scope.list_id , 'display_list_name' : $scope.display_list_name });
-        $scope.apply_user_list = 1;
-        
-        if($scope.reset_list == 1) {
-            $scope.applied_list_type = '';
-            $scope.applied_list_ids = '';
-        } 
-        
-        $scope.reset_list = 0;
-        $uibModalInstance.dismiss();
-            // $('#listModal').modal('hide');
-    }
-    // Call brand List ui Grid
-    $scope.uigridListModal = function() {
-        var formData = $rootScope.formdata;
-        var vm = this;
-        var config = {
-            headers : {
-                'Content-Type': 'application/json; charset=utf-8'
-            }
-        }
-        // var c_dir = $scope.ranking.creative_type == 'short' ? '6':'1';
-        var c_dir = '6';
-        formData.primary_tab = $rootScope.my_list;
-        formData.secondary_tab = 'NA';
-        formData._search = true;
-        formData.rows = '10';
-        formData.page = 1;
-        formData.sidx = "created_date";
-        formData.sord = 'desc';
-
-        vm.gridOptionsList = {
-            enableGridMenu: true,
-            enableSelectAll: true,
-            enableSorting: true,
-            onRegisterApi: (gridApi) => {
-                $scope.listGridApi = gridApi;
-            },
-        };
-        
-
-        vm.gridOptionsList.columnDefs = [
-            { name: 'full_name', pinnedLeft:true, displayName:'User'},
-            { name: 'name', pinnedLeft:true, displayName:'List Name'},
-            { name: 'created_date', pinnedLeft:true, displayName:'Created On' },
-            { name: 'shared_list_date', pinnedLeft:true, displayName:'Shared On' },
-
-            { name: 'copy_list', pinnedLeft:true, displayName: 'Copy To My List', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="copy_list checkbox-custom" id="copy_list_\'{{row.entity.id}}\'" name="copy_list" ng-click="copySharedList({{row.entity.id}})"  {{row.entity.checked_copy_list}} {{row.entity.disable_copy_list}} /><label for="copy_filter_{{row.entity.id}}" class="checkbox-custom-label {{row.entity.disabled_copy_list_class}}"></label></li></ul></nav>'},
-
-            { name: 'shared_list', displayName: 'Share List', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="share_filter checkbox-custom" id="share_list_\'{{row.entity.id}}\'" name="share_list" ng-click="updateShareListStatus(\'{{row.entity.id}}\')"  \'{{row.entity.checked_shared_list}}\' \'{{row.entity.disabled_shared_list}}\' /><label for="share_filter_\'{{row.entity.id}}\'" class="checkbox-custom-label \'{{row.entity.disabled_class}}\'"></label></li></ul></nav>'},
-
-            { name: 'criteria_name', pinnedLeft:true, displayName:'Detail', cellTemplate:'<span title="{{COL_FIELD}}">{{row.entity.criteria_name == \'\' ? \'-\' : row.entity.criteria_name | limitTo: 60}}</span>' },
-
-            { name: 'edit_list', pinnedLeft:true, displayName:'Edit', cellTemplate: '<span class="edit-list_\'{{row.entity.id}}\' dropdown-list edit-list-icon" id="edit_list_\'{{row.entity.id}}\'"  ng-click="grid.appScope.edit_user_filter(\'{{row.entity.id}}\',\'{{row.entity.edit_list}}\');"  class="edit-list"><i class="fa fa-pencil" aria-hidden="true"></i></span><span class="edit-list-loader_\'{{row.entity.id}}\' edit-list-loader" id="excel_loader_\'{{row.entity.id}}\'"><img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"></span>' },
-
-            { name: 'apply', pinnedLeft:true, displayName:'Apply', cellTemplate: '<a href="javascript:void(0)" ng-click="grid.appScope.apply_user_list(row.entity);" id="apply_filter_{{row.entity.id}}">Apply</a>' },
-        ];
-        apiService.post('/get_user_lists', formData, config)
-        .then(function (data) {
-            $scope.loading = false;
-            $scope.PostDataResponse = formData;
-            vm.gridOptionsList.data = data.data.rows;
-        }, function (response) {
-            // this function handlers error
-        });
-    }
-
-   
-        
-
-    //ui grid code
-    $scope.uigridListModal();
-});
 
 
-angular.module('drmApp').controller('trackCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-});
 
 
-angular.module('drmApp').controller('ReportsModalCtrl', function($scope, $http, $interval, uiGridTreeViewConstants, $uibModal, $rootScope, $uibModalInstance, $state, apiService) {
-    $scope.sharedList = 'My';
-    $scope.selected_user = '';
-
-    var user_id = sessionStorage.loggedInUserId;
-    var sharded_by = sessionStorage.loggedInUserId;
-    $rootScope.correctTotalPaginationTemplate =
-    "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"prev-page\"></div></button> Page <input ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\"> of </abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"next-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-page\"></div></button></div></div><div class=\"ui-grid-pager-count-container\"></div></div>";
-
-    $scope.show_reports_modal = function () {
-        //ui grid code
-        $scope.uigridReportsModal();
-    }
-
-    $scope.showSharedLists = function(item) {
-        $scope.sharedList = item;
-            //with ui grid code, displayes grid data according to rules set
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-    // Call brand List ui Grid
-    $scope.uigridReportsModal = function() {
-        var formData = $rootScope.formdata;
-        var vm = this;
-        var config = {
-            headers : {
-                'Content-Type': 'application/json; charset=utf-8'
-            }
-        }
-        // var c_dir = $scope.ranking.creative_type == 'short' ? '6':'1';
-        var c_dir = '6';
-        formData.primary_tab = $rootScope.my_list;
-        formData.secondary_tab = 'NA';
-        formData._search = true;
-        formData.rows = '10';
-        formData.page = 1;
-        formData.sidx = "created";
-        formData.sord = 'desc';
-
-        vm.gridOptionsReports = {
-            enableGridMenu: true,
-            enableSelectAll: true,
-            enableSorting: true,
-            paginationPageSize: 10,
-            paginationTemplate: $rootScope.correctTotalPaginationTemplate,
-            enableCellEdit: false,
-            enableCellEditOnFocus: true,
-            onRegisterApi: (gridApi) => {
-                gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
-                    console.log('edited row id:' + rowEntity.id + ', Column:' + colDef.name + ', newValue:' + newValue + ', oldValue:' + oldValue);
-                    // Make an API here to update file name on server or to validate invalie/duplicate file name
-                });
-            },
-        };
-
-        vm.gridOptionsReports.columnDefs = [
-            { name: 'file_name', pinnedLeft:true, displayName:'File Name', enableCellEdit: true},
-            { name: 'filesize', pinnedLeft:true, displayName:'File Size'},
-            // { name: 'download_link', pinnedLeft:true, displayName:'Download Link', cellTemplate: '<span ng-if="(row.entity.status == completed)"></span>' },
-            { name: 'email_alert', pinnedLeft:true, displayName:'Email Alert', cellTemplate:
-            '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" row.entity.disabled class="email_alert checkbox-custom" id=""email_alert_row.entity.id" name="email_alert" ng-click="updateEmailAlerts(row.entity.id)"  {{row.entity.checked}} /><label for="email_alert_row.entity.id" class="checkbox-custom-label row.entity.class"></label></li></ul></nav>'},
-
-            { name: 'shared_report', displayName: 'Shared Report', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="share_filter checkbox-custom" id="share_list_row.entity.id" name="share_list" ng-click="updateShareListStatus(row.entity.id)"  row.entity.checked_shared_list row.entity.disabled_shared_list /><label for="share_filter_row.entity.id" class="checkbox-custom-label \'{{row.entity.disabled_class}}\'"></label></li></ul></nav>'},
-
-            { name: 'copy_list', pinnedLeft:true, displayName: 'Copy To My List', cellTemplate: '<nav class="grid-content"><ul class="no-bullet"><li class="checkbox-normal"><input ui-grid-checkbox type="checkbox" class="copy_list checkbox-custom" id="copy_list_row.entity.id" name="copy_list" ng-click="copySharedList(row.entity.id)"  {{row.entity.checked_copy_list}} {{row.entity.disable_copy_list}} /><label for="copy_filter_row.entity.id" class="checkbox-custom-label \'{{row.entity.disabled_copy_list_class}}\'"></label></li></ul></nav>'},
-            { name: 'shared_valid_till', pinnedLeft:true, displayName:'Created' },
-            { name: 'valid_till', pinnedLeft:true, displayName:'Valid Till' },
-        ];
-        apiService.post('/get_my_reports_data', formData, config)
-        .then(function (response) {
-            var data = response.data;
-            $scope.PostDataResponse = formData;
-            vm.gridOptionsReports.data = data.rows;
-        }, function (response) {
-            // this function handlers error
-        });
-    }
-
-    $scope.show_reports_modal(user_id, sharded_by);
-});
