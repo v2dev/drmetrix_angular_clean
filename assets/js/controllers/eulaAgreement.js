@@ -1,3 +1,4 @@
+"use strict";
 angular.module('drmApp').controller('EulaAgreementController', function ($scope, $state, $rootScope,  apiService, $uibModal) {
   // https://embed.plnkr.co/plunk/PbnBdN
  

@@ -26,18 +26,8 @@
 		<ng-include src="'./templates/mainMenu.html'"></ng-include>
 		<div class="main-page" ui-view></div>
 	</div>
-	<!-- <ng-include src="'./templates/modals/modalDialog.html'"></ng-include> -->
-	<div class="term-conditions">
-		<span>
-			<a
-				onclick="window.open('https://www.drmetrix.com/termsandconditions.html', '_blank', 'scrollbars=yes,status=yes');">Terms
-				&amp; Conditions</a>|
-			<a
-				onclick="window.open('https://www.drmetrix.com/privacypolicy.html', '_blank', 'scrollbars=yes,status=yes');">Privacy
-				Policy</a>|
-			<a onclick="downloadPdf();">EULA</a></span>
-		<p>&copy; {{date| date:'yyyy'}} DRMetrix</p>
-	</div>
+	<ng-include src="'./templates/footer.html'"></ng-include>
+	
 	<!-- Angular Js -->
 	<!-- <script src="./assets/js/routes.js"></script> -->
 	<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
@@ -76,6 +66,18 @@
 	<script type="text/javascript" src="./assets/js/controllers/admin.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/network.js"></script>
 	<script type="text/javascript" src="./assets/js/masked-input.js"></script>
+
+	<!-- Start angular Js Modal controller-->
+	<script type="text/javascript" src="./assets/js/controllers/new_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/refine_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/network_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/program_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/refine_by_report_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/dow_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/hod_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/daypart_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/network_dropdown_modal.js"></script>
+	<script type="text/javascript" src="./assets/js/controllers/program_section_modal.js"></script>
 
 	<!--Start - Angular UI grid -->
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-touch.js"></script>

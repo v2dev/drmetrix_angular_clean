@@ -1,3 +1,4 @@
+"use strict";
 var app = angular.module('drmApp');
 
 app.controller('LoginController', function($scope,$rootScope, apiService, $cookies, $state, modalConfirmService, $timeout) {

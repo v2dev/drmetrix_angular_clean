@@ -23,6 +23,18 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
             controller: 'AiringsDetailController',
             resolve: { authenticate: authenticate}
         })
+        .state('advertiser_detail', {
+            url: '/advertiser_detail/:id/:tab',
+            templateUrl: 'templates/advertiserDetail.html',
+            controller: 'AdvertiserDetailController',
+            resolve: { authenticate: authenticate}
+        })
+        .state('rosdaypart_detail', {
+            url: '/rosdaypart_detail/:id/:area/:tab',
+            templateUrl: 'templates/airingDetail.html',
+            controller: 'AiringsDetailController',
+            resolve: { authenticate: authenticate}
+        })
           .state('network',{
               url: '/network',
               templateUrl: 'templates/network.html',

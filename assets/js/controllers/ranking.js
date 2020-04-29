@@ -1,3 +1,4 @@
+"use strict";
 angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService, uiGridConstants, uiGridExporterConstants){
     $scope.initialisation = function() {
         // $scope.page_call = 'ranking';
@@ -132,14 +133,14 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                         row.entity.subBrandGridOptions = {
                             columnDefs: [
                             // { name: 'id', displayName:'id', width:'50' },
-                            { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ng-click="grid.appScope.view_adv_tab(row.entity.creative_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'creatives\',row.entity.id,row.entity.creative_name,\'ranking\',row.entity.need_help)" >{{COL_FIELD}}</a></span>', width: '280' },
+                            { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.id})">{{COL_FIELD}}</a></span>', width: '280' },
                             { name: 'language', displayName: 'Type', width: '80' },
                             { name: 'classification', displayName: 'Classification', width: '160'},
                             { name: 'duration', displayName: 'Duration', width: '94'},
 
-                            { name: 'airings', displayName: 'Airings', cellTemplate:'<a href=""><span ng-if="row.entity.airings!=\'\'" class="ranking_airings"  ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}} </span><span ng-if="row.entity.airings==\'\'"> - </span></a>',  width: '110' },
+                            { name: 'airings', displayName: 'Airings', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings"  ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}} </a><span ng-if="row.entity.airings==\'\'"> - </span></a>',  width: '110' },
 
-                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="/#!/ranking"><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
+                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
 
                             { name: 'response_type', displayName: 'Response Type', enableSorting: false, cellTemplate:'<span class="response_img"><a href="#" ng-if=row.entity.response_url == 1 title="URL" ><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a><a href="#" ng-if=row.entity.response_sms == 1 title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a><a href="#" ng-if=row.entity.response_tfn == 1 title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a><a href="#" ng-if=row.entity.response_mar == 1 title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>'
                             , width: '140'},
@@ -183,19 +184,20 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             }
             vm.gridOptions.columnDefs = [
                 // { name: 'id', pinnedLeft:true, width: '60' },
+                //ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'brand\',row.entity.id,row.entity.brand_name,\'ranking\',row.entity.need_help);"
                 { name: 'rank', displayName: 'Rank', width: '70' },
-                { field: 'brand_name', displayName: 'Brand', headerCellClass: $scope.highlightFilteredHeader, cellTemplate: '<div class="grid-action-cell"><span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'brand\',row.entity.id,row.entity.brand_name,\'ranking\',row.entity.need_help);" title="row.entity.brand_name">{{COL_FIELD}}</a></span></div>', width: '250', sort: { direction: uiGridConstants.ASC, priority: 1 }},
+                { field: 'brand_name', displayName: 'Brand', headerCellClass: $scope.highlightFilteredHeader, cellTemplate: '<div class="grid-action-cell"><span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.adv_id, tab: \'brand\'})" title="row.entity.brand_name">{{COL_FIELD}}</a></span></div>', width: '250', sort: { direction: uiGridConstants.ASC, priority: 1 }},
 
                 { name: 'creative_count', displayName: 'Creatives',
                 cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subBrandGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>', width: '100' },
 
                 { name: 'category_name', displayName: 'Category', cellTemplate:'<div ng-click="grid.appScope.fetchList(row.entity,\''+formData.type+'\');"><a href="javascript://"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} - </span></a><div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_{{row.entity.id}}" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"></div>', width: '180' },
 
-                { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate:'<a href="#"><span ng-if="row.entity.advertiser_name!=\'\'" class="tooltip-hover" ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'adv\',\'\',\'\',\'ranking\',row.entity.need_help);">{{COL_FIELD}} <div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_row.entity.id" style="display:none;"></div></span><span ng-if="row.entity.advertiser_name==\'\'"> - </span></a>', width: '230' },
+                { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate:'<a href="#" ng-if="row.entity.advertiser_name!=\'\'" class="tooltip-hover" ui-sref="advertiser_detail({id: row.entity.adv_id, tab: \'adv\'})">{{COL_FIELD}}</a><span ng-if="row.entity.advertiser_name==\'\'"> - </span></a>', width: '230' },
 
-                { name: 'airings', displayName: 'Airings', cellTemplate:'<a ng-if="row.entity.airings!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span>', width: '110' },
+                { name: 'airings', displayName: 'Airings', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> - </span>', width: '110' },
 
-                { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href=""><span ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</span><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '106', sort: { direction: uiGridConstants.DESC, priority: 0 }},
+                { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '106', sort: { direction: uiGridConstants.DESC, priority: 0 }},
 
                 { name: 'national', displayName:'National', width: '96', cellTemplate:'<span ng-if="row.entity.national !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.national ==\'\'">0</span>' },
 
@@ -215,7 +217,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     $scope.fetchList = function(rowEntity, tab) {
         let flag = '';
         let id = row_id = rowEntity.id;
-        let category_name = rowEntity.category_name;
         var data = {
             id: id,
             tab: tab,
@@ -227,6 +228,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         .then(function (response) {
             let data = response.data;
             if (data.status) {
+                console.log(flag);
                 if (flag == 'my_report') {
                     $('#cat_col_dropdown_' + row_id).parent('td').addClass('table-overflow');
                     $('#cat_col_dropdown_' + row_id).parent('td').find('a').addClass('link-overflow');
@@ -268,8 +270,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
           var formData = $rootScope.formdata;
         var correctTotalPaginationTemplate =
     "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-triangle\"><div class=\"first-bar\"></div></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-triangle prev-triangle\"></div></button> <input type=\"number\" ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\">/</abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"last-triangle next-triangle\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-triangle\"><div class=\"last-bar\"></div></div></button></div></div></div>";
-        // var formData = {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":0,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":"", "_search": false, "nd":'1583484966962', "row":20, "page":1, "sidx": "spend_index", "sort":"desc", "totalrows":2000};
-
         var vm = this;
         var config = {
             headers : {
@@ -385,7 +385,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         });
     }
 
-    $scope.uigridRefineByBrand = function() {
+    $rootScope.uigridRefineData = function() {
         var formData = $rootScope.formdata;
         formData.refine_filter_opt = 800;
         formData.refine_filter_opt_text = 800;
@@ -447,21 +447,182 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         });
     }
 
-    $scope.initializeRankingPage = function() {
-        $scope.applyFilter();
+     //date filter
+     $scope.date_detail = function (date) {
+        $scope.lifetimeOther = false;
+        $scope.mask  = 0;
+        if($scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') { // ytd checked
+            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
+            date = $scope.selectDate;
+            $scope.allOther = false;
+            $scope.lifetime_flag = 0;
+            $scope.calender_flag = 0;
+        } 
+        if(!$scope.ytdOther && !$scope.allOther && typeof(date) == 'undefined') {// ytd unchecked
+            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
+            date = $scope.selectDate;
+        }
+        if($scope.allOther &&  !$scope.ytdOther && typeof(date) == 'undefined') { // all checked
+            $scope.selectDate = 'year34_'+$scope.selectedYear+'_'+$scope.years[$scope.selectedYear]["media_year_start"]+'_'+$scope.years[$scope.selectedYear]["media_year_end"];
+            date = $scope.selectDate;
+            $scope.ytdOther = false;
+            $scope.lifetime_flag = 0;
+            $scope.calender_flag = 0;
+        } 
+        if(!$scope.allOther && !$scope.ytdOther && typeof(date) == 'undefined') {// all unchecked
+            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
+            date = $scope.selectDate;
+        }
+        if (date != 1) {
+            $scope.matching_criteria = 0;
+        }
+        if($scope.selectDate.indexOf("year34") > -1) {
+            $scope.mask = 1;
+        }
+        var date_detail = date.split('_');
+        if (date_detail[1] !== undefined) {
+            var week = date_detail[1];
+            var sd_1 = date_detail[2].split('-');
+            var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
+            var ed_1 = date_detail[3].split('-');
+            var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
+            var date_diaply = '';
+            if (date_detail[0] == 'week31') {
+                date_diaply = "Media Week ";
+            } else if (date_detail[0] == 'month32') {
+                date_diaply = "Media Month ";
+                week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
+            } else if (date_detail[0] == 'quarter33') {
+                date_diaply = "Media Quarter ";
+            }
+            $scope.selectDate = $scope.selectDate = $rootScope.selected_date = date;
+            $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
+            $scope.findDiff(sd_2);
+            $scope.calender_flag = 0;
+            // $scope.checkForLifetimeSelection();
+        }
     }
-    // $scope.uigridDataBrand(formdata);
 
+     $scope.findDiff = function (end_date, val) {
+        $rootScope.displayBtns = 0;
+        var date1 = new Date($scope.today_date);
+        var date2 = new Date(end_date);
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        if (diffDays >= 30) {
+            $rootScope.displayBtns = 1;
+        }
+    }
+    
+    $scope.date_filter = function (val) {
+        if((val >= 6) && (val <= 11)){
+            $scope.ytdOther = false;
+            $scope.allOther = false;
+            $scope.lifetimeOther = false;
+        }
+        $scope.mask = 0;
+        if($scope.lifetimeOther && typeof(val) != 'undefined') { // lifetime checked
+            $scope.mask = 1;
+            val = $scope.selectDate = 5;
+        }
+        
+        if(!$scope.lifetimeOther && val == 5 && $scope.showOtherDiv) { // lifetime unchecked
+            $scope.selectDate = 'week31_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_start']+'_'+$scope.years[$scope.selectedYear]['weeks'][0]['media_week_end'];
+            var date_detail = $scope.selectDate.split('_');
+            if (date_detail[1] !== undefined) {
+                var week = date_detail[1];
+                var sd_1 = date_detail[2].split('-');
+                var sd_2 = sd_1[1] + '/' + sd_1[2] + '/' + sd_1[0];
+                var ed_1 = date_detail[3].split('-');
+                var ed_2 = ed_1[1] + '/' + ed_1[2] + '/' + ed_1[0];
+                var date_diaply = '';
+                if (date_detail[0] == 'week31') {
+                    date_diaply = "Media Week ";
+                } else if (date_detail[0] == 'month32') {
+                    date_diaply = "Media Month ";
+                    week = "(" + $scope.monthArray[date_detail[1]]['data'] + ")";
+                } else if (date_detail[0] == 'quarter33') {
+                    date_diaply = "Media Quarter ";
+                }
+                $scope.date_range = date_diaply + week + ' - ' + sd_2 + ' thru ' + ed_2;
+            }
+        }
+        console.log(val);
+        // val = $scope.selectDate;
+        $scope.matching_criteria = 0;
+        if (val == 1) { // Last Week
+            $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
+            $scope.date_range = 'Media Week ' + $scope.week_calendar_id + ' - ' + $scope.media_start_date + ' thru ' + $scope.media_end_date;
+            $scope.sd = $scope.media_start_db;
+        }
+        if (val == 2) { // Current Week
+            $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
+            $scope.date_range = 'Current Week ' + $scope.current_calendar_id + ' - ' + $scope.current_start_date + ' thru ' + $scope.current_end_date;
+            $scope.sd = $scope.current_start_db;
+        }
+        if (val == 3) {
+            $scope.date_range = 'Quarter ' + $scope.number_of_quarter + ' - ' + $scope.last_quarter_start_date + ' to ' + $scope.last_quarter_end_date;
+            $scope.sd = $scope.last_quarter_start_date;
+        }
+        if (val == 4) {
+            $scope.date_range = 'Year Of ' + $scope.last_media_year;
+        }
+        if (val == 5) {
+            $scope.allOther = false;
+            $scope.ytdOther = false;
+            $scope.matching_criteria = val;
+            $scope.date_range = $scope.lifetime_year + ' - ' + $scope.lifetime_min_sd + ' thru ' + $scope.lifetime_max_ed;
+            $scope.sd = $scope.lifetime_min_sd;
+            $scope.findDiff($scope.sd, val);
+        }
+        if (val == 6) { // Last Week
+            $scope.freq_filter_options = { daily: false, weekly: true, monthly: false, quarterly: false };
+            $scope.date_range = 'Last Media Week ' + $scope.week_calendar_id + ' - ' + $scope.media_start_date + ' thru ' + $scope.media_end_date;
+            $scope.sd = $scope.media_start_date;
+        }
+        if (val == 7) { // Last Month
+            $scope.freq_filter_options = { daily: false, weekly: false, monthly: true, quarterly: false };
+            $scope.date_range = 'Last Media Month ' + $scope.month_calendar_id + ' - ' + $scope.media_month_date + ' thru ' + $scope.media_monthend_date;
+            $scope.sd = $scope.media_month_date;
+        }
+        if (val == 8) { // Last Quarter
+            $scope.freq_filter_options = { daily: false, weekly: false, monthly: false, quarterly: true };
+            $scope.date_range = 'Last Media Quarter ' + $scope.number_of_quarter + ' - ' + $scope.last_quarter_start_date + ' thru ' + $scope.last_quarter_end_date;
+            $scope.sd = $scope.last_quarter_start_date;
+        }
+        if (val == 9) { // Current Week
+            $scope.freq_filter_options = { daily: true, weekly: false, monthly: false, quarterly: false };
+            $scope.date_range = 'Current Media Week ' + $scope.current_calendar_id + ' - ' + $scope.current_start_date + ' thru ' + $scope.current_end_date;
+            $scope.sd = $scope.current_start_date;
+        }
+        if (val == 10) { // Current Month
+            $scope.matching_criteria = val;
+            $scope.date_range = 'Current Media Month ' + $scope.currentmonth_calendar_id + ' - ' + $scope.media_currentmonth_date + ' thru ' + $scope.media_currentmonthend_date;
+            $scope.sd = $scope.media_currentmonth_date;
+        }
+        if (val == 11) { // Current Quarter
+            $scope.matching_criteria = val;
+            $scope.date_range = 'Current Media Quarter ' + $scope.number_of_currentquarter + ' - ' + $scope.current_quarter_start_date + ' thru ' + $scope.current_quarter_end_date;
+            $scope.sd = $scope.current_quarter_db_start_date;
+        }
+
+        if (val == 'calender') {
+            $scope.findDiff($scope.start_date);
+            // $('#datepicker_checkbox').attr('checked', 'checked');
+            // $scope.date_range = 'Date Range - ' + sessionStorage.disp_start_date + ' thru ' + sessionStorage.disp_end_date;
+            // $rootScope.initialise_datepicker();
+            // $('#datepicker_checkbox').prop('checked', true);
+        }
+        
+        $scope.selectDate =  val;
+    }
    
 
-    $scope.openNewTypeModal = function() {
-        $scope.openModal('./templates/modals/newTypeDialog.html','newCtrl','md modal-dialog-centered');
+    $scope.initializeRankingPage = function() {
+        $scope.date_filter(1);
+        $scope.applyFilter();
     }
-
-    $scope.openRefineModal = function() {
-        $scope.openModal('./templates/modals/refineDialog.html','refineCtrl','md modal-dialog-centered');
-    }
-
+    
     $scope.filterGridWithSearchText = function() {
         $scope.gridApi.grid.refresh();
     }
@@ -482,376 +643,12 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         return renderableRows;
       };
 
-    $scope.openNetworkLogModal = function() {
-        $scope.openModal('./templates/modals/networkLogDialog.html','networkLogCtrl','xl modal-dialog-centered');
-    }
-
-    $scope.openProgramModal = function() {
-        $scope.openModal('./templates/modals/programModalDialog.html','programCtrl','md modal-dialog-centered');
-    }
-
-    $scope.view_adv_tab = function(adv_name, adv_id, c, tab, val, sd, ed, call_from, call_id, call_name, call_page, need_help) {
-        $scope.adv_id = adv_id;
-        $scope.adv_name = adv_name;
-        $scope.call_from = call_from;
-        $scope.call_id = call_id;
-        $scope.call_name = call_name;
-        $scope.othr_grid_for = 'adv';
-        $scope.active_tab = tab;
-        $scope.sidx = "airings";
-        // $scope.page_call = 'advertiser_detail';
-    }
-
-   
-
     $scope.overlayForAirings = function (record_id, creative_id, header_name) {
         $scope.record_id = record_id;
         $scope.creative_id = creative_id;
         $scope.header_name = header_name;
-        $scope.modalInstance =  $uibModal.open({
-            templateUrl: "./templates/modals/RefineByTFNDialog.html",
-            controller: "RefineByTFNModalCtrl",
-            size: 'lg modal-dialog-centered',
-        });
+        $scope.openModalDialog('refine_by_report');
     }
     
 });
 
-angular.module('drmApp').controller('newCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
-    $scope.checkRadioButton = function() {
-        $scope.newType = 'none';
-        if($scope.newCheckBox) {
-            $scope.newType = ($rootScope.type == 'brands')  ? 'brands' : 'advertisers';
-        } else {
-            
-        }
-    }
-
-    $scope.newCheckBox = function() {
-        $scope.newCheckBox = true;
-    }
-
-    $scope.applyModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.applyModal = function() {
-        $rootScope.$broadcast("CallParentMethod", {'newType' : $scope.newType, 'newCheckBox' : $scope.newCheckBox });
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-});
-
-angular.module('drmApp').controller('programCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService, $compile) {
-    $scope.all_ranking_program  = $scope.programs_ids != '' ? false : true;
-    $scope.checkedPrograms      = angular.copy($rootScope.checkedRankingPrograms);
-
-    $scope.applyModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.getCheckedPrograms = function() {
-        var checked_programs = [];
-        if(!$scope.all_ranking_program) {
-            angular.forEach($rootScope.ranking_programs, function(item, key) {
-                angular.forEach(item, function(v, k) {
-                    if(v.isSelected) {
-                        checked_programs.push(k);
-                    }
-                });
-            });
-            $scope.length_of_programs  = checked_programs.length;
-            $scope.checked_programs_id = checked_programs.join(',');
-        }
-    }
-
-    $scope.selectAllProgram = function() {
-        angular.forEach($rootScope.ranking_programs, function(item, key) {
-            angular.forEach(item, function(v, k) {
-                v.isSelected = $scope.all_ranking_program;
-            });
-        });
-        $scope.getCheckedPrograms();
-    }
-
-    $scope.checkAllProgram = function(program) {
-        $scope.getCheckedPrograms();
-        $scope.all_ranking_program = true;
-       if($scope.length_of_programs != $rootScope.ranking_programs.length ) {
-           $scope.all_ranking_program = false;
-       }
-    }
-
-    $scope.applyModal = function() {
-        console.log($scope.checked_programs_id);
-        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork,'network_alias' : $scope.selectedNetworkAlias,'program_id' : $scope.checked_programs_id});
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.resetPrograms = function() {
-        $scope.all_ranking_program = true;
-        angular.forEach($rootScope.ranking_programs, function(item, key) {
-            angular.forEach(item, function(v, k) {
-                v.isSelected = true;
-            });
-        });
-        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork,'network_alias' : $scope.selectedNetworkAlias});
-        $uibModalInstance.dismiss();
-    }
-
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-});
-
-
-angular.module('drmApp').controller('refineCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
-    $scope.refine_by = '';
-    $scope.search_by_tfn = '';
-
-    $scope.applyModal = function() {
-        $rootScope.$broadcast("CallParentMethod", {'refine_by' : $scope.refineBy, 'search_by_tfn' : $scope.search_by_tfn });
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.resetModal = function() {
-        $rootScope.$broadcast("CallParentMethod", {'refine_by' : ''});
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.applyRefineByFilter = function () {
-        refine_apply_filter = 1;
-        export_refine_apply_filter = 1;
-        $scope.refine_by = 'All';
-        $scope.search_by_tfn = '';
-        var lbl_name = $scope.refine_by ? $scope.refine_by == '800' ? 'TFN' : $scope.refine_by == 'url' ? 'URL' : 'All' : 'All';
-        // $("#lbl_outter_tfn_url_new").html(lbl_name);
-        // $('#refine_by').html(lbl_name);
-        // $('#refine_by_text').html($scope.search_by_tfn);
-        $scope.filter($scope.type, $rootScope.active_flag);
-        // $("#tnf-url").modal('hide');
-        // $('#uiview').css('overflow', '');
-    }
-
-    $scope.resetRefineFilter = function () {
-        $scope.ranking.refine_by = 'All';
-        $scope.ranking.search_by_tfn = '';
-        $scope.closeModal();
-    }
-});
-
-angular.module('drmApp').controller('networkLogCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService) {
-    $scope.selectedLetter = 'all';
-    $scope.selectedNetwork = '';
-    $scope.letterLists    = ['all', '0-9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-    var params = {"sd":"2020-02-24","ed":"2020-03-01","startDate":1,"val":1,"c":1,"type":0,"cat":"all","flag":2,"spanish":"0,1","responseType":"(response_url = 1 or response_mar = 1 or response_sms = 1 or response_tfn = 1 )","unchecked_category":"","length_unchecked":0,"creative_duration":"10,15,20,30,45,60,75,90,105,120,180,240,300","new_filter_opt":"none","lifetime_flag":false,"all_ytd_flag":false,"refine_filter_opt":"","refine_filter_opt_text":"","refine_apply_filter":0,"applied_ids":"","primary_tab":"", };
-   
-    var today = new Date();
-    var prev_date = new Date();
-    prev_date.setMonth(today.getMonth() - 6);
-
-    $scope.dataOfAllNetworks = function (call_from) {
-        $scope.searchNet = '';
-        var ndata;
-        if (call_from == 'AllNetwroksFunction') {
-            ndata = JSON.parse(localStorage.all_networks_data);
-        } else {
-            ndata = JSON.parse(localStorage.active_networks_data);
-        }
-
-        $scope.networkLists = ndata.result;
-        var netCount = ndata.result.length;
-       
-        $scope.netCount = netCount;
-        $scope.network_name = 'All (' + netCount + ')';
-    }
-
-    $scope.networkSearchBy = function (data, selectedLetter) {
-        return function (item) {
-            if (data && data != "") {
-                return item.network_alias.toLowerCase().indexOf(data.toLowerCase()) > -1;
-            } else if (selectedLetter != 'all') {
-                return item.network_alias.toLowerCase().indexOf(selectedLetter.toLowerCase()) == 0;
-            } else {
-                return item;
-            }
-        };
-    }
-
-    $scope.checkLiveDateStatus = function (live_date) {
-        var l_date = new Date(live_date);
-        if (l_date.getTime() >= prev_date.getTime() && l_date.getTime() <= today.getTime()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    $scope.getLiveDate = function (live_date) {
-        var year = live_date.substring(0, 4);
-        var month = live_date.substring(5, 7);
-        var date = live_date.substring(8, 10);
-        return month + "/" + date + "/" + year;
-    }
-
-    $scope.getNetworksWithAllFilters = function () {
-        var call_api = 1;
-        if (localStorage.activeNetwroksParams != undefined && localStorage.active_networks_data != undefined) {
-            if (JSON.stringify(params) == localStorage.activeNetwroksParams) {
-                $scope.dataOfAllNetworks('ActiveNetwroksFunction');
-                call_api = 0;
-            } else {
-                localStorage.activeNetwroksParams = JSON.stringify(params);
-            }
-        } else {
-            localStorage.activeNetwroksParams = JSON.stringify(params);
-        }
-
-        if(call_api) {
-            $scope.networkNotLoaded = 1;
-            apiService.post('/get_networks_with_all_filters', params)
-            .then(function (response) {
-                $scope.networkNotLoaded = 0;
-                var data = response.data;
-                localStorage.setItem('active_networks_data', JSON.stringify(data));
-                $scope.dataOfAllNetworks('ActiveNetwroksFunction');
-            }),(function (data, status, headers, config) {
-            });
-        }
-    }
-
-    $scope.getAllActiveInactiveNetworks = function () {
-        var new_filter_opt = 'none';
-        if (localStorage.all_networks_data != undefined) {
-            $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
-        } else {
-            $scope.networkNotLoaded = 1;
-            apiService.post('/get_all_active_inactive_networks', {})
-            .then(function (response) {
-                var ndata = response.data;
-                $scope.networkNotLoaded = 0;
-                localStorage.setItem('all_networks_data', JSON.stringify(ndata));
-                $scope.dataOfAllNetworks('AllNetwroksFunction', new_filter_opt);
-            }),(function () {
-                console.log("error in get all networks");
-            });
-
-        }
-    }
-    
-    $scope.hasLetterDisable = function (letter) {
-        var temp = [];
-        if(typeof($scope.networkLists) != 'undefined'){
-            if (letter == 'all')
-                return false;
-                if (letter == '0-9') {
-                    var lists = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-                    for (var i in lists) {
-                        temp = $scope.networkLists.filter(function (item) {
-                            if (item.network_alias.toLowerCase().indexOf(lists[i]) == 0)
-                                return item;
-                        });
-                        if (temp.length > 0)
-                            return false;
-                    }
-                } else {
-                    temp = $scope.networkLists.filter(function (item) {
-                        if (item.network_alias.toLowerCase().indexOf(letter.toLowerCase()) == 0)
-                            return item;
-                    });
-                }
-        }
-        return temp.length > 0 ? false : true;
-    }
-
-    $scope.changeLatter = function (letter) {
-        $scope.selectedLetter = letter;
-    }
-
-    $scope.getNetworksWithAllFilters();
-
-    $scope.getSelectedNetworkName = function() {
-        var result;
-        angular.forEach($scope.networkLists, function (item) {
-            if (item.network_id == $scope.selectedNetwork) {
-                result =  item.network_alias;
-            }
-        });
-        return result;
-       
-    }
-
-    $scope.applyNetworkModal = function() {
-        $rootScope.networkDisplayName = $scope.getSelectedNetworkName();
-        $rootScope.$broadcast("CallParentMethod", {'network_id' : $scope.selectedNetwork, 'network_alias' : $rootScope.networkDisplayName });
-        $uibModalInstance.dismiss();
-    }
-
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-});
-
-angular.module('drmApp').controller('RefineByTFNModalCtrl', function($scope, $rootScope, $uibModalInstance, $state, apiService){
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss();
-    }
-
-    // Call brand List ui Grid
-    $scope.uigridRefineByTFNModdal = function() {
-        var formData = $rootScope.formdata;
-        var vm = this;
-        var config = {
-            headers : {
-                'Content-Type': 'application/json; charset=utf-8'
-            }
-        }
-        var c_dir = '6';
-        formData.sidx = "last_aired";
-        formData.sord = "desc";
-        formData.network_id = $rootScope.network_id;
-        formData.id = $rootScope.brand_id;
-        formData.area = 'brand';
-        formData.brand_id= $scope.record_id;
-        formData.record_id= $scope.record_id;
-        formData.creative_id = $scope.creative_id;
-        formData.header_name = $scope.header_name;
-
-        vm.gridOptionsRefineModal = {
-            enableGridMenu: true,
-            enableSelectAll: true,
-            enableSorting: true,
-            paginationPageSize: 10,
-            paginationTemplate: $rootScope.correctTotalPaginationTemplate,
-        };
-
-        vm.gridOptionsRefineModal.columnDefs = [
-            { name: 'network_name', pinnedLeft:true, displayName:'Network Name', cellTemplate: "<span title='row.entity.network_name'>{{COL_FIELD | limitTo: 12}}</span>"},
-            { name: 'last_aired', pinnedLeft:true, displayName:'Date/Time'},
-            { name: 'breaktype', pinnedLeft:true, displayName:'Breaktype'},
-            { name: 'phone_number', pinnedLeft:true, displayName:'Phone Number'},
-            { name: 'web_address', pinnedLeft:true, displayName:'Web Address'},
-            { name: 'program_name', pinnedLeft:true, displayName:'Program Name', cellTemplate: "<span title='row.entity.program_name'>{{COL_FIELD | limitTo: 18}}</span>"},
-            { name: 'video', pinnedLeft:true, displayName:'Play', cellTemplate: '<a href="javascript:void(0);"><i class="fa fa-play-circle-o fa-2x" onclick="displayThumbnail(row.entity.airing_id,row.entity.network_code,\'network_log_video\')"></i></a>'},
-            { name: 'thumbnail', pinnedLeft:true, displayName:'View', cellTemplate: '<a href="javascript:void(0);"><i class="fa fa-picture-o fa-2x col-00beff" ng-click="displayThumbnail(row.entity.airing_id,row.entity.network_code,\'network_log_thumbnil\')"></i></a>'},
-        ];
-        apiService.post('/view_airings_layout_tfn', formData, config)
-        .then(function (data) {
-            $scope.PostDataResponse = formData;
-            vm.gridOptionsRefineModal.data = data.data.rows;
-        }, function (response) {
-            // this function handlers error
-            console.log("rejected with", response);
-        });
-    }
-    $scope.uigridRefineByTFNModdal();
-
-});

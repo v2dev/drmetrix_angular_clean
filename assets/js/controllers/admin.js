@@ -1,3 +1,4 @@
+"use strict";
 angular.module('drmApp').controller('AdminController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, modalConfirmService, $uibModal) {
     $scope.admin = {};
     $scope.admin.complete_name =  $rootScope.complete_name = localStorage.complete_name;

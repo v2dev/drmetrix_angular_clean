@@ -1,4 +1,5 @@
 //https://www.js-tutorials.com/angularjs-tutorial/angular-bootstrap-modal-example/
+"use strict";
 angular.module('drmApp').service('modalConfirmService', ['$uibModal',
     function ($modal) {
         var modalDefaults = {

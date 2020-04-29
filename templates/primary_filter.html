@@ -6,12 +6,12 @@
     <li>
         <div>
             Date Range -
-            <span class="text-disabled" id="ranking_date_range">{{date_range}}</span>
+            <span class="text-disabled">{{date_range}}</span>
         </div>
-        <ul ng-show="editable">
+        <ul ng-show="editable" ng-init="selectDate = 1">
             <li class="radio-circular" ng-class="{'active-alert' : selectDate == 1 &&  otherDiv == 0}">
                 <input type="radio" name="date_type" value="1" id="last_date" class="radio-custom" ng-model="selectDate" ng-change="date_filter(1)"/>
-                <label class="radio-custom-label" id="display_week"  for="last_date">
+                <label class="radio-custom-label"  for="last_date">
                     Last Week
                 </label>
             </li>

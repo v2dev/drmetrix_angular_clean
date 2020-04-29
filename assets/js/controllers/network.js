@@ -1,3 +1,4 @@
+"use strict";
 angular.module('drmApp').controller('NetworkController', function ($scope, $timeout, $state, $stateParams, $filter, $interval, uiGridConstants, $rootScope, apiService, $uibModal, $cookies) {
     $scope.letterLists = ['all', '0-9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     $scope.selectedLetter = 'all';

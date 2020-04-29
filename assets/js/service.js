@@ -1,4 +1,5 @@
 //Application services used commonly throughout the app
+"use strict";
 angular.module('starter.services', [])
     .constant('myConfig', {
         'apiUrl': './api/index.php',
