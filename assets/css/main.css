@@ -4397,14 +4397,6 @@ header.sticky-top {
 
 /*grid*/
 
-/* .grid {
-  height: 550px;
-}
-
-.gridCustHeight {
-  height: 400px;
-}*/
-
 .ui-grid-viewport .ui-grid-cell-contents {
   word-wrap: break-word;
   white-space: normal !important;
@@ -4435,6 +4427,14 @@ header.sticky-top {
 } 
 
 /*angular grid*/
+
+.grid {
+  height: calc(100vh - 260px);
+}
+
+/* .gridCustHeight {
+  height: 400px;
+}*/
 .ui-grid-header-cell {
   background: #e5e5e5;
   border: none;
