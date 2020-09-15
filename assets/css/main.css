@@ -4432,6 +4432,10 @@ header.sticky-top {
   height: calc(100vh - 260px);
 }
 
+.expandableRow {
+  height: auto !important;
+}
+
 /* .gridCustHeight {
   height: 400px;
 }*/
