@@ -386,58 +386,58 @@ $scope.shortFormTrackingClassification = [
         var selectDateDropDown = $scope.selectDate;
 
         if (selectDateDropDown == 1) {
-            sd = $scope.media_start_db;
-            ed = $scope.media_end_db;
+            sd = localStorage.media_start_db;
+            ed = localStorage.media_end_db;
         }
 
         if (selectDateDropDown == 2) {
-            sd = $scope.current_start_db;
-            ed = $scope.current_end_db;
+            sd = localStorage.current_start_db;
+            ed = localStorage.current_end_db;
         }
 
         if (selectDateDropDown == 3) {
-            sd = $scope.last_quarter_db_start_date;
-            ed = $scope.last_quarter_db_end_date;
+            sd = localStorage.last_quarter_db_start_date;
+            ed = localStorage.last_quarter_db_end_date;
         }
 
         if (selectDateDropDown == 4) {
-            sd = $scope.last_year_db_start_date;
-            ed = $scope.last_year_db_end_date;
+            sd = localStorage.last_year_db_start_date;
+            ed = localStorage.last_year_db_end_date;
         }
 
         if (selectDateDropDown == 5) {
-            sd = $scope.lifetime_db_min_sd;
-            ed = $scope.lifetime_db_max_ed;
+            sd = localStorage.lifetime_db_min_sd;
+            ed = localStorage.lifetime_db_max_ed;
         }
 
         if (selectDateDropDown == 6) {
-            sd = $scope.media_start_db;
-            ed = $scope.media_end_db;
+            sd = localStorage.media_start_db;
+            ed = localStorage.media_end_db;
         }
 
         if (selectDateDropDown == 7) {
-            sd = $scope.media_month_start_db;
-            ed = $scope.media_month_end_db;
+            sd = localStorage.media_month_start_db;
+            ed = localStorage.media_month_end_db;
         }
 
         if (selectDateDropDown == 8) {
-            sd = $scope.last_quarter_db_start_date;
-            ed = $scope.last_quarter_db_end_date;
+            sd = localStorage.last_quarter_db_start_date;
+            ed = localStorage.last_quarter_db_end_date;
         }
 
         if (selectDateDropDown == 9) {
-            sd = $scope.current_start_db;
-            ed = $scope.current_end_db;
+            sd = localStorage.current_start_db;
+            ed = localStorage.current_end_db;
         }
 
         if (selectDateDropDown == 10) {
-            sd = $scope.media_currentmonth_start_db;
-            ed = $scope.media_currentmonth_end_db;
+            sd = localStorage.media_currentmonth_start_db;
+            ed = localStorage.media_currentmonth_end_db;
         }
 
         if (selectDateDropDown == 11) {
-            sd = $scope.current_quarter_db_start_date;
-            ed = $scope.current_quarter_db_end_date;
+            sd = localStorage.current_quarter_db_start_date;
+            ed = localStorage.current_quarter_db_end_date;
         }
 
         if (selectDateDropDown.toString().indexOf('month32_') != -1) {
@@ -1181,60 +1181,60 @@ $scope.shortFormTrackingClassification = [
         var end_date = new Date(ed.replace(" ", "T"));
         var year = end_date.getUTCFullYear();
         $rootScope.year = year;
-        $scope.selectedYear =  $scope.current_year = data.current_year;
+        $scope.selectedYear =  localStorage.selectedYear = $scope.current_year = data.current_year;
 
         //life time
-        $scope.lifetime_year = data.lifetime.year;
-        $scope.lifetime_min_sd = data.lifetime.start_date;
-        $scope.lifetime_max_ed = data.lifetime.end_date;
-        $scope.lifetime_db_min_sd = data.lifetime.start_date_db;
-        $scope.lifetime_db_max_ed = data.lifetime.end_date_db;
+        $scope.lifetime_year = localStorage.lifetime_year = data.lifetime.year;
+        $scope.lifetime_min_sd = localStorage.lifetime_min_sd = data.lifetime.start_date;
+        $scope.lifetime_max_ed = localStorage.lifetime_max_ed = data.lifetime.end_date;
+        $scope.lifetime_db_min_sd = localStorage.lifetime_db_min_sd = data.lifetime.start_date_db;
+        $scope.lifetime_db_max_ed = localStorage.lifetime_db_max_ed = data.lifetime.end_date_db;
 
         //last week
-        $scope.media_start_date = data.last_week.start_date;
-        $scope.media_end_date = data.last_week.end_date;
-        $scope.media_start_db = data.last_week.sd;
-        $scope.media_end_db = data.last_week.ed;
-        $scope.week_calendar_id = data.last_week.calendar_id;
+        $scope.media_start_date = localStorage.media_start_date = data.last_week.start_date;
+        $scope.media_end_date = localStorage.media_end_date = data.last_week.end_date;
+        $scope.media_start_db = localStorage.media_start_db = data.last_week.sd;
+        $scope.media_end_db = localStorage.media_end_db = data.last_week.ed;
+        $scope.week_calendar_id = localStorage.week_calendar_id = data.last_week.calendar_id;
 
        //last month
-        $scope.media_month_date = data.last_month.start_date;
-        $scope.media_monthend_date = data.last_month.end_date;
-        $scope.media_month_start_db = data.last_month.sd;
-        $scope.media_month_end_db = data.last_month.ed;
-        $scope.month_calendar_id = "(" + data.last_month.calendar_id + ")";
+        $scope.media_month_date = localStorage.media_month_date = data.last_month.start_date;
+        $scope.media_monthend_date = localStorage.media_monthend_date = data.last_month.end_date;
+        $scope.media_month_start_db = localStorage.media_month_start_db = data.last_month.sd;
+        $scope.media_month_end_db = localStorage.media_month_end_db = data.last_month.ed;
+        $scope.month_calendar_id = localStorage.month_calendar_id = "(" + data.last_month.calendar_id + ")";
 
         //Current week data
-        $scope.current_start_date = data.current_week.start_date;
-        $scope.current_end_date = data.current_week.end_date;
-        $scope.current_calendar_id = data.current_week.calendar_id;
-        $scope.current_week = data.current_week.calendar_id;
+        $scope.current_start_date = localStorage.current_start_date = data.current_week.start_date;
+        $scope.current_end_date = localStorage.current_end_date = data.current_week.end_date;
+        $scope.current_calendar_id = localStorage.current_calendar_id = data.current_week.calendar_id;
+        $scope.current_week = localStorage.current_week = data.current_week.calendar_id;
 
         //Current Month Data
-        $scope.media_currentmonth_date = data.current_month.start_date;
-        $scope.media_currentmonthend_date = data.current_month.end_date;
-        $scope.current_start_db = data.current_week.sd;
-        $scope.current_end_db = data.current_week.ed;
-        $scope.currentmonth_calendar_id = "(" + data.current_month.calendar_id + ")";
-        $scope.current_month = data.current_month.media_month_id;
-        $scope.media_currentmonth_start_db = data.current_month.sd;
-        $scope.media_currentmonth_end_db = data.current_month.ed;
+        $scope.media_currentmonth_date = localStorage.media_currentmonth_date = data.current_month.start_date;
+        $scope.media_currentmonthend_date = localStorage.media_currentmonthend_date = data.current_month.end_date;
+        $scope.current_start_db = localStorage.current_start_db = data.current_week.sd;
+        $scope.current_end_db = localStorage.current_end_db = data.current_week.ed;
+        $scope.currentmonth_calendar_id = localStorage.currentmonth_calendar_id = "(" + data.current_month.calendar_id + ")";
+        $scope.current_month = localStorage.current_month = data.current_month.media_month_id;
+        $scope.media_currentmonth_start_db = localStorage.media_currentmonth_start_db = data.current_month.sd;
+        $scope.media_currentmonth_end_db = localStorage.media_currentmonth_end_db = data.current_month.ed;
 
         //Last Quarter data
-        $scope.number_of_quarter = data.lst_quarter_no;
-        $scope.last_quarter_start_date = data.last_quarter[1];
-        $scope.last_quarter_end_date = data.last_quarter[3];
-        $scope.last_quarter_db_start_date = data.last_quarter[0];
-        $scope.last_quarter_db_end_date = data.last_quarter[2];
+        $scope.number_of_quarter = localStorage.number_of_quarter = data.lst_quarter_no;
+        $scope.last_quarter_start_date = localStorage.last_quarter_start_date = data.last_quarter[1];
+        $scope.last_quarter_end_date = localStorage.last_quarter_end_date = data.last_quarter[3];
+        $scope.last_quarter_db_start_date = localStorage.last_quarter_db_start_date = data.last_quarter[0];
+        $scope.last_quarter_db_end_date = localStorage.last_quarter_db_end_date = data.last_quarter[2];
 
         //Current quarter data
-        $scope.number_of_currentquarter = data.quarter_no;
-        $scope.current_quarter_start_date = data.quarter[1];
-        $scope.current_quarter_end_date = data.quarter[3];
-        $scope.current_quarter_db_start_date = data.quarter[0];
-        $scope.current_quarter_db_end_date = data.quarter[2];
-        $scope.current_qtr = data.quarter_no;
-        $scope.years = data.years;
+        $scope.number_of_currentquarter = localStorage.number_of_currentquarter = data.quarter_no;
+        $scope.current_quarter_start_date = localStorage.current_quarter_start_date = data.quarter[1];
+        $scope.current_quarter_end_date = localStorage.current_quarter_end_date = data.quarter[3];
+        $scope.current_quarter_db_start_date = localStorage.current_quarter_db_start_date = data.quarter[0];
+        $scope.current_quarter_db_end_date = localStorage.current_quarter_db_end_date = data.quarter[2];
+        $scope.current_qtr = localStorage.current_qtr = data.quarter_no;
+        $scope.years = localStorage.years = data.years;
         $scope.createYearsArray();
      });
 
