@@ -15,7 +15,7 @@ drmApp.config(function ($stateProvider, $urlRouterProvider) {
               url: '/ranking',
               templateUrl: 'templates/ranking.html',
               controller: 'RankingController',
-              resolve: { authenticate: authenticate}
+            //   resolve: { authenticate: authenticate}
           })
           .state('airing_detail', {
             url: '/airing_detail/:id/:area/:tab',

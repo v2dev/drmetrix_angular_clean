@@ -43,8 +43,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         "<div role=\"contentinfo\" class=\"ui-grid-pager-panel\" ui-grid-pager ng-show=\"grid.options.enablePaginationControls\"><div role=\"navigation\" class=\"ui-grid-pager-container\"><div role=\"menubar\" class=\"ui-grid-pager-control\"><button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-first\" ui-grid-one-bind-title=\"aria.pageToFirst\" ui-grid-one-bind-aria-label=\"aria.pageToFirst\" ng-click=\"pageFirstPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"first-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-previous\" ui-grid-one-bind-title=\"aria.pageBack\" ui-grid-one-bind-aria-label=\"aria.pageBack\" ng-click=\"pagePreviousPageClick()\" ng-disabled=\"cantPageBackward()\"><div class=\"prev-page\"></div></button> Page <input ui-grid-one-bind-title=\"aria.pageSelected\" ui-grid-one-bind-aria-label=\"aria.pageSelected\" class=\"ui-grid-pager-control-input\" ng-model=\"grid.options.paginationCurrentPage\" min=\"1\" max=\"{{ paginationApi.getTotalPages() }}\" required> <span class=\"ui-grid-pager-max-pages-number\" ng-show=\"paginationApi.getTotalPages() > 0\"><abbr ui-grid-one-bind-title=\"paginationOf\"> of </abbr> {{ paginationApi.getTotalPages() }}</span> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-next\" ui-grid-one-bind-title=\"aria.pageForward\" ui-grid-one-bind-aria-label=\"aria.pageForward\" ng-click=\"pageNextPageClick()\" ng-disabled=\"cantPageForward()\"><div class=\"next-page\"></div></button> <button type=\"button\" role=\"menuitem\" class=\"ui-grid-pager-last\" ui-grid-one-bind-title=\"aria.pageToLast\" ui-grid-one-bind-aria-label=\"aria.pageToLast\" ng-click=\"pageLastPageClick()\" ng-disabled=\"cantPageToLast()\"><div class=\"last-page\"></div></button></div></div><div class=\"ui-grid-pager-count-container\"></div></div>";
     // formData.network_code = '';
         vm.gridOptions = {
-            expandableRowTemplate: '<div ui-grid="row.entity.subBrandGridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination class="grid" style="height:385px;"></div>',
-            expandableRowHeight: 385,
+            expandableRowTemplate: '<div ui-grid="row.entity.subBrandGridOptions" ui-grid-exporter ui-grid-expandable ui-grid-selection ui-grid-pagination class="grid"></div>',
             enableGridMenu: true,
             enableSelectAll: true,
             enableSorting: true,
@@ -133,23 +132,23 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                         row.entity.subBrandGridOptions = {
                             columnDefs: [
                             // { name: 'id', displayName:'id', width:'50' },
-                            { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.id})">{{COL_FIELD}}</a></span>', width: '280' },
-                            { name: 'language', displayName: 'Type', width: '80' },
-                            { name: 'classification', displayName: 'Classification', width: '160'},
-                            { name: 'duration', displayName: 'Duration', width: '94'},
+                            { name: 'creative_name', displayName: 'Creatives', cellTemplate: '<span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.id})">{{COL_FIELD}}</a></span>' },
+                            { name: 'language', displayName: 'Type'},
+                            { name: 'classification', displayName: 'Classification'},
+                            { name: 'duration', displayName: 'Duration'},
 
-                            { name: 'airings', displayName: 'Airings', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings"  ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}} </a><span ng-if="row.entity.airings==\'\'"> - </span></a>',  width: '110' },
+                            { name: 'airings', displayName: 'Airings', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings"  ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}} </a><span ng-if="row.entity.airings==\'\'"> - </span></a>'},
 
-                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>', width: '110' },
+                            { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> 0 </span></a>'},
 
                             { name: 'response_type', displayName: 'Response Type', enableSorting: false, cellTemplate:'<span class="response_img"><a href="#" ng-if=row.entity.response_url == 1 title="URL" ><img src="/drmetrix/assets/img/url-icon.svg" alt="URL" /></a><a href="#" ng-if=row.entity.response_sms == 1 title="SMS"><img src="/drmetrix/assets/img/sms-icon.svg" alt="SMS" /></a><a href="#" ng-if=row.entity.response_tfn == 1 title="Telephone"><img src="/drmetrix/assets/img/telephone-icon.svg" alt="Telephone" /></a><a href="#" ng-if=row.entity.response_mar == 1 title="Mobile"><img src="/drmetrix/assets/img/mobile-icon.svg" alt="Mobile" /></a>'
-                            , width: '140'},
+                            },
 
-                            { name: 'national', displayName:'National', width: '95', cellTemplate:'<span ng-if="row.entity.national !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.national ==\'\'">0</span>' },
-                            { name: 'local', displayName: 'DPI', cellTemplate: '<span ng-if="row.entity.local !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.local ==\'\'">0</span>', width: '90' },
-                            { name: 'first_detection', displayName: 'First Aired',cellTemplate: '<div class="ngCellText">{{row.entity.first_detection}}</div>', width: '150'},
-                            { name: 'last_aired', displayName: 'Last Aired', cellTemplate: '<div class="ngCellText">{{row.entity.last_aired}}</div>', width: '150'},
-                            { name: 'video', displayName: '', width: '50', enableSorting: false, cellTemplate:'<i class="fa fa-play-circle-o fa-2x" ng-if="row.entity.thumbnail==\'\'" style="color:#cbcccc;"></i><a href="#basicModalCamp" ng-if="row.entity.thumbail!=\'\'"><i class="fa fa-play-circle-o fa-2x" onclick="playvideo({{row.entity.thumbnail}},'+formData.sd+','+formData.ed+',0,\'none\')"></i></a>'},
+                            { name: 'national', displayName:'National', cellTemplate:'<span ng-if="row.entity.national !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.national ==\'\'">0</span>' },
+                            { name: 'local', displayName: 'DPI', cellTemplate: '<span ng-if="row.entity.local !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.local ==\'\'">0</span>'},
+                            { name: 'first_detection', displayName: 'First Aired',cellTemplate: '<div class="ngCellText">{{row.entity.first_detection}}</div>',},
+                            { name: 'last_aired', displayName: 'Last Aired', cellTemplate: '<div class="ngCellText">{{row.entity.last_aired}}</div>'},
+                            { name: 'video', displayName: '', enableSorting: false, cellTemplate:'<i class="fa fa-play-circle-o fa-2x" ng-if="row.entity.thumbnail==\'\'" style="color:#cbcccc;"></i><a href="#basicModalCamp" ng-if="row.entity.thumbail!=\'\'"><i class="fa fa-play-circle-o fa-2x" onclick="playvideo({{row.entity.thumbnail}},'+formData.sd+','+formData.ed+',0,\'none\')"></i></a>'},
                         ],enableGridMenu: true,
                           enableSelectAll: true,
                           paginationPageSize: 10,
@@ -185,29 +184,29 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             vm.gridOptions.columnDefs = [
                 // { name: 'id', pinnedLeft:true, width: '60' },
                 //ng-click="grid.appScope.view_adv_tab(row.entity.advertiser_name,row.entity.adv_id,\''+c_dir+'\',\''+formData.type+'\',\''+formData.val+'\',\''+formData.sd+'\',\''+formData.ed+'\',\'brand\',row.entity.id,row.entity.brand_name,\'ranking\',row.entity.need_help);"
-                { name: 'rank', displayName: 'Rank', width: '70' },
-                { field: 'brand_name', displayName: 'Brand', headerCellClass: $scope.highlightFilteredHeader, cellTemplate: '<div class="grid-action-cell"><span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.adv_id, tab: \'brand\'})" title="row.entity.brand_name">{{COL_FIELD}}</a></span></div>', width: '250', sort: { direction: uiGridConstants.ASC, priority: 1 }},
+                { name: 'rank', displayName: 'Rank', cellClass: 'text-c',  width: '100' },
+                { field: 'brand_name', displayName: 'Brand', headerCellClass: $scope.highlightFilteredHeader, cellTemplate: '<div class="grid-action-cell"><span ng-if="'+$rootScope.displayBtns+'==1" '+$rootScope.displayBtns+'><i class="fa fa-circle" id="{{data.rows.is_active_brand == 1 ? \'active_btn\' : \'inactive_btn\'}}"></i></span><span><a href="" ui-sref="advertiser_detail({id: row.entity.adv_id, tab: \'brand\'})" title="row.entity.brand_name">{{COL_FIELD}}</a></span></div>', width: '320', sort: { direction: uiGridConstants.ASC, priority: 1 }},
 
                 { name: 'creative_count', displayName: 'Creatives',
-                cellTemplate: '<a href=""><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subBrandGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</a>', width: '100' },
+                cellTemplate: '<a href=""><span><i class="clickable ng-scope ui-grid-icon-plus-squared" ng-if="!(row.groupHeader==true || row.entity.subBrandGridOptions.disableRowExpandable)" ng-class="{\'ui-grid-icon-plus-squared\' : !row.isExpanded, \'ui-grid-icon-minus-squared\' : row.isExpanded }" ng-click="grid.api.expandable.toggleRowExpansion(row.entity, $event)"></i>{{COL_FIELD}}</span></a>', width: '100' },
 
-                { name: 'category_name', displayName: 'Category', cellTemplate:'<div ng-click="grid.appScope.fetchList(row.entity,\''+formData.type+'\');"><a href="javascript://"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} - </span></a><div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_{{row.entity.id}}" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"></div>', width: '180' },
+                { name: 'category_name', displayName: 'Category', cellTemplate:'<div ng-click="grid.appScope.fetchList(row.entity,\''+formData.type+'\');"><a href="javascript://"><span ng-if="row.entity.category_name!=\'\'" class="tooltip-hover"><i class="fa fa-caret-down float-right"></i>{{COL_FIELD}} - </span></a><div class="cat_col_dropdown select_cat_dropdown" id="cat_col_dropdown_{{row.entity.id}}" style="display:none;"></div></span><span ng-if="row.entity.category_name==\'\'"></div>', width: '320' },
 
-                { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate:'<a href="#" ng-if="row.entity.advertiser_name!=\'\'" class="tooltip-hover" ui-sref="advertiser_detail({id: row.entity.adv_id, tab: \'adv\'})">{{COL_FIELD}}</a><span ng-if="row.entity.advertiser_name==\'\'"> - </span></a>', width: '230' },
+                { name: 'advertiser_name', displayName: 'Advertiser', cellTemplate:'<a href="#" ng-if="row.entity.advertiser_name!=\'\'" class="tooltip-hover" ui-sref="advertiser_detail({id: row.entity.adv_id, tab: \'adv\'})">{{COL_FIELD}}</a><span ng-if="row.entity.advertiser_name==\'\'"> - </span></a>', width: '300' },
 
-                { name: 'airings', displayName: 'Airings', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> - </span>', width: '110' },
+                { name: 'airings', displayName: 'Airings', cellClass: 'text-c', cellTemplate:'<a href="" ng-if="row.entity.airings!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'airings\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> - </span>', width: '100' },
 
-                { name: 'spend_index', displayName: 'Spend ($)', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '106', sort: { direction: uiGridConstants.DESC, priority: 0 }},
+                { name: 'spend_index', displayName: 'Spend ($)', cellClass: 'text-c', cellTemplate:'<a href="" ng-if="row.entity.spend_index!=\'\'" class="ranking_airings" ui-sref="airing_detail({id: row.entity.id, area : \'total_spend\',tab : \'brand\'})">{{COL_FIELD}}</a><span ng-if="row.entity.spend_index==\'\'"> - </span></a>', width: '100', sort: { direction: uiGridConstants.DESC, priority: 0 }},
 
-                { name: 'national', displayName:'National', width: '96', cellTemplate:'<span ng-if="row.entity.national !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.national ==\'\'">0</span>' },
+                { name: 'national', displayName:'National', cellClass: 'text-c', width: '100', cellTemplate:'<span ng-if="row.entity.national !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.national ==\'\'">0</span>' },
 
-                { name: 'local', displayName: 'DPI', cellTemplate: '<span ng-if="row.entity.local !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.local ==\'\'">0</span>', width: '90' },
+                { name: 'local', displayName: 'DPI', cellClass: 'text-c', cellTemplate: '<span ng-if="row.entity.local !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.local ==\'\'">0</span>', width: '100' },
 
-                { name: 'asd', displayName:'ASD', width: '90', cellTemplate: '<span ng-if="row.entity.asd !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.asd ==\'\'">0 sec</span>' },
+                { name: 'asd', displayName:'ASD', width: '100', cellClass: 'text-c', cellTemplate: '<span ng-if="row.entity.asd !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.asd ==\'\'">0 sec</span>' },
 
-                { name: 'total_weeks', displayName: 'Weeks', cellTemplate: '<span ng-if="row.entity.total_weeks !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.total_weeks ==\'\'">0</span>', width: '100' },
+                { name: 'total_weeks', displayName: 'Weeks', cellClass: 'text-c', cellTemplate: '<span ng-if="row.entity.total_weeks !=\'\'">{{COL_FIELD}}</span><span ng-if="row.entity.total_weeks ==\'\'">0</span>', width: '100' },
 
-                { name: 'tracking', displayName: "Tracking", cellTemplate: '<a href="#"><i custom-attr="brand_\'{{row.entity.id}}\'" class="fa fa-eye-slash grey-eye" title="Track"></i></a>', width: '110' }
+                { name: 'tracking', displayName: "", cellClass: 'text-c', cellTemplate: '<a href="#"><i custom-attr="brand_\'{{row.entity.id}}\'" class="fa fa-eye-slash grey-eye" title="Track"></i></a>', width: '60' }
             ];
         }, function (response) {
             // this function handlers error
@@ -281,7 +280,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
 
         vm.gridOptions = {
             expandableRowTemplate: '/drmetrix_angular_clean/templates/expandableRowTemplate.html',
-            expandableRowHeight: 385,
+            // expandableRowHeight: 385,
             enableGridMenu: true,
             enableSelectAll: false,
             enableSorting: true,
@@ -317,7 +316,6 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
                             { name: 'total_weeks', displayName: 'Weeks' },
                             { name: 'tracking', displayName: "Tracking", cellTemplate: '<a href="#"><i custom-attr="brand_{{row.entity.id}}" class="fa fa-eye-slash grey-eye" title="Track"></i></a>' }
                         ],expandableRowTemplate: '/drmetrix_angular_clean/templates/expandableRowTemplate.html',
-                            expandableRowHeight: 200,
                             enableGridMenu: true,
                             enableSelectAll: true,
                             paginationPageSize: 5,
@@ -651,4 +649,5 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
     
 });
+
 
