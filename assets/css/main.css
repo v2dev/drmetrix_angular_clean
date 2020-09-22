@@ -835,6 +835,7 @@ header.sticky-top {
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
 }
 
 .main-container {
@@ -4431,11 +4432,12 @@ header.sticky-top {
 .grid {
   height: calc(100vh - 260px);
 }
+
 .expandableRow .grid {
   height: 100%;
 }
-
-  /* .expandableRow{
+/* 
+  .expandableRow{
     height: 100% !important;
   } */
 
