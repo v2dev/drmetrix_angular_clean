@@ -1,5 +1,7 @@
 "use strict";
 angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService, uiGridConstants, uiGridExporterConstants){
+    $scope.ranking = {};
+    
     $scope.initialisation = function() {
         // $scope.page_call = 'ranking';
         $scope.page = $state.current.name;
@@ -11,6 +13,8 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         //date filter
         $scope.otherDiv = 0;
         $scope.ranking = {searchText: ''};
+        $scope.ranking.complete_name = localStorage.complete_name;console.log($scope.ranking.complete_name);
+
     }
 
     $scope.apiHeaderConfig = {
