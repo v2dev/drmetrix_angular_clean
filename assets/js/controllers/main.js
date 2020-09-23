@@ -234,28 +234,34 @@ $scope.shortFormTrackingClassification = [
                 templateUrl= "./templates/modals/FilterDialog.html";
                 controllerName = "FiltersModalController";
                 size= 'lg modal-dialog-centered';
+                break;
             }
             case 'lists': {
                 templateUrl= "./templates/modals/ListDialog.html";
                 controllerName = "ListsModalController";
                 size= 'lg modal-dialog-centered';
+                break;
             }
             case 'reports': {
                 templateUrl= "./templates/modals/reportsdialog.html";
                 controllerName = "ReportsModalController";
                 size= 'lg modal-dialog-centered';
+                break;
             }
             case 'category_track': {
                 templateUrl = "/templates/modals/categoryTrackModal.html";
                 controllerName = "TrackModalController";
+                break;
             }
             case 'other_track': {
                 templateUrl = "/templates/modals/trackModalDialog.html";
                 controllerName = "TrackModalController";
+                break;
             }
             case 'save_filter_ranking': {
                 templateUrl = "./templates/modals/saveFilterModal.html";
                 controllerName = "SaveFilterRankingModalController";
+                break;
             }
         }
         size = size ? size : 'md modal-dialog-centered';
@@ -1603,7 +1609,7 @@ $scope.shortFormTrackingClassification = [
         $scope.choose_list = true;
         $scope.getActiveSharedUsers('list');
         $scope.openModalDialog('lists');
-        $scope.openListModal();
+        //$scope.openListModal();
     }
     /***List code Ends */
 
