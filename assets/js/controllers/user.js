@@ -4,6 +4,7 @@ angular.module('drmApp').controller('UserController', function ($scope, $timeout
     $scope.save_clicked = false;
     $scope.userRowForAction = {};
     $scope.ranking = {searchText: ''};
+    $scope.admin_user.complete_name = localStorage.complete_name;
 
     $scope.popupDefaultOptions = {
         size: 'md modal-dialog-centered'

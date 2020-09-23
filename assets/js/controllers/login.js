@@ -14,11 +14,10 @@ app.controller('LoginController', function($scope,$rootScope, apiService, $cooki
           if (data.status) {
             $rootScope.assistant_admin = data.assistant_admin;
             $rootScope.role = data.role;
-            $rootScope.login_user_id     = data.user_id;
-            $rootScope.complete_name = localStorage.complete_name = data.name;
+            localStorage.login_user_id   = data.user_id;
+            localStorage.complete_name = data.first_name;
             $cookies.put("loggedIn",data.name);
             $cookies.put("userrole",data.role);
-           
             if (data.new_user == 1) {
               localStorage.mobile = data.mobile;
               localStorage.authy_id = data.authy_id;
