@@ -174,7 +174,7 @@ $scope.shortFormTrackingClassification = [
         window.open('http://' + hostname + '/drmetrix/api/download_pdf.php');
     }
 
-    $scope.openModalDialog = function(name) {
+    $scope.openModalDialog = function(name, targetScope = $scope) {
         var templateUrl, size;
         $scope.modal_name = name;
         switch(name) {
@@ -253,9 +253,13 @@ $scope.shortFormTrackingClassification = [
                 templateUrl = "/templates/modals/trackModalDialog.html";
                 controllerName = "TrackModalController";
             }
+            case 'save_filter_ranking': {
+                templateUrl = "./templates/modals/saveFilterModal.html";
+                controllerName = "SaveFilterRankingModalController";
+            }
         }
         size = size ? size : 'md modal-dialog-centered';
-        $scope.openModal(templateUrl, controllerName, size );
+        $scope.openModal(templateUrl, controllerName, size, targetScope );
     }
     
     $scope.verifyDuplicateMobile = function (mobile) {
@@ -331,19 +335,19 @@ $scope.shortFormTrackingClassification = [
    
 
 
-    $scope.openModal = function(templateUrl, controller, size ) {
+    $scope.openModal = function(templateUrl, controller, size, targetScope = $scope ) {
         $scope.modalInstanceMain =  modalConfirmService.showModal({
             backdrop: false,
             keyboard: true,
             modalFade: true,
             templateUrl: templateUrl,
             controller: controller,
-            scope: $scope,
+            scope: targetScope,
             size: size ? size : 'md modal-dialog-centered',
           });
 
           $scope.modalInstanceMain.result.then(function(response){
-              $scope.result = `${response} button hitted`;
+              targetScope.result = `${response} button hitted`;
           });
 
           $scope.modalInstanceMain.result.catch(function error(error) {
@@ -1607,6 +1611,22 @@ $scope.shortFormTrackingClassification = [
             // $scope.global_search_ajax(nVal);
         }
     });
+
+    $rootScope.cleanFileName = function(changedFileName) {
+    changedFileName = $rootScope.replaceFileNameForSQLAttack(changedFileName);
+    if (/[&\/\\#$~%`@^'":;*?<>{}|]/.test(changedFileName)) {
+        return 1;
+    }
+    }
+
+    $rootScope.replaceFileNameForSQLAttack = function(filename) { 
+        var mapObj = {'Union All':"Union_All"};
+        var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+
+        return filename.replace(re, function(matched){
+            return mapObj[matched];
+        });
+    }
 
 });
 

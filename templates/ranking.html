@@ -3,12 +3,12 @@
     <div class="black-top-menu" ng-init="showTab('brands')" ng-show="headerDisplay == 1">
         <ul class="left-menu">
             <li>Welcome {{complete_name}},</li>
-            <li ng-class="{'active-alert' : type == 'brands'}">
+            <li ng-class="{'active-alert' : type == 'brands'}" id="brand_rank_tab">
                 <a ng-click="showTab('brands')">
                     <label for="">Brands</label>
                 </a>
             </li>
-            <li ng-class="{'active-alert' : type == 'advertisers'}">
+            <li ng-class="{'active-alert' : type == 'advertisers'}" id="adv_rank_tab">
                 <a ng-click="showTab('advertisers')">
                     <label for="">Advertisers</label>
                 </a>
@@ -38,7 +38,7 @@
     <div class="main-filter" ng-show="headerDisplay == 1" ng-include="'templates/primary_filter.html'"></div>
 </div>
    
-<div class="main-container" id="ranking_page" ng-init="initializeRankingPage();" >
+<div class="main-container" id="ranking_page"  ><!--ng-init="initializeRankingPage();"-->
     <category-part data="$ctrl.category_list"></category-part> 
     <main class="main" id="main" ng-class="!catgeorySideBar  ? '' : 'push-left'">
         <div class="notify-msg"> 
@@ -55,7 +55,7 @@
                     <span class="search-icon">
                         <i data-feather="search"></i>
                     </span>
-                    <input type="search" placeholder="Search Brands" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()">
+                    <input type="search" placeholder="Search Brands" ng-model="ranking.searchText" ng-keyup="filterGridWithSearchText()" id="globalSearchText">
                     <i class="fa fa-times-circle"></i>
                 </div>
                 <button class="btn btn-sm" ng-class="tracking_on ? 'btn-blue' : 'btn-black'" ng-show="networkDisplayName != ''"  ng-click="viewTrackingDialogue('network');"><i class="fa fa-eye" title="Track"></i> <span>Track</span></button>
@@ -93,7 +93,7 @@
                     </li>
                     
                     <li>
-                        <button class="btn btn-blue btn-sm"><i class="fa fa-save"></i> Save Filter</button>
+                        <button class="btn btn-blue btn-sm" ng-click="save_filter_box();"><i class="fa fa-save"></i> Save Filter</button>
                     </li>
                 </ul>
             </div>
