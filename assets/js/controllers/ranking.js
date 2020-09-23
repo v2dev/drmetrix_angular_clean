@@ -651,6 +651,30 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         $scope.header_name = header_name;
         $scope.openModalDialog('refine_by_report');
     }
+
+    $scope.save_filter_box = function() {
+    $scope.schedule_email = false;
+    $scope.schedule_email_value = 0;
+    $scope.ranking.freq_filter_options = { daily: false, weekly: false, monthly: false, quarterly: false };
+    $scope.ranking.selectDate = $scope.selectDate;
+    var val = parseInt($scope.selectDate);
+    var current_year = new Date().getFullYear();
+    var ytd =  $scope.ytdOther;
+    if (val == 1 || val == 2 || (val >= 5 && val <= 11) || (ytd && (val + '').indexOf('year') == 0)) {
+        $scope.ranking.matching_criteria = val;
+        $scope.ranking.freq_filter_options = { daily: false, weekly: false, monthly: false, quarterly: false };
+        if (val == 1 || val == 6) {
+            $scope.ranking.freq_filter_options.weekly = true;
+        } else if (val == 2 || val == 9) {
+            $scope.ranking.freq_filter_options.daily = true;
+        } else if (val == 7) {
+            $scope.ranking.freq_filter_options.monthly = true;
+        } else if (val == 8) {
+            $scope.ranking.freq_filter_options.quarterly = true;
+        }
+    }
+    $scope.openModalDialog('save_filter_ranking', $scope);
+    }
     
 });
 

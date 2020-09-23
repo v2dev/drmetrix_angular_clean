@@ -174,7 +174,7 @@ $scope.shortFormTrackingClassification = [
         window.open('http://' + hostname + '/drmetrix/api/download_pdf.php');
     }
 
-    $scope.openModalDialog = function(name) {
+    $scope.openModalDialog = function(name, targetScope = $scope) {
         var templateUrl, size;
         $scope.modal_name = name;
         switch(name) {
@@ -234,28 +234,38 @@ $scope.shortFormTrackingClassification = [
                 templateUrl= "./templates/modals/FilterDialog.html";
                 controllerName = "FiltersModalController";
                 size= 'lg modal-dialog-centered';
+                break;
             }
             case 'lists': {
                 templateUrl= "./templates/modals/ListDialog.html";
                 controllerName = "ListsModalController";
                 size= 'lg modal-dialog-centered';
+                break;
             }
             case 'reports': {
                 templateUrl= "./templates/modals/reportsdialog.html";
                 controllerName = "ReportsModalController";
                 size= 'lg modal-dialog-centered';
+                break;
             }
             case 'category_track': {
                 templateUrl = "/templates/modals/categoryTrackModal.html";
                 controllerName = "TrackModalController";
+                break;
             }
             case 'other_track': {
                 templateUrl = "/templates/modals/trackModalDialog.html";
                 controllerName = "TrackModalController";
+                break;
+            }
+            case 'save_filter_ranking': {
+                templateUrl = "./templates/modals/saveFilterModal.html";
+                controllerName = "SaveFilterRankingModalController";
+                break;
             }
         }
         size = size ? size : 'md modal-dialog-centered';
-        $scope.openModal(templateUrl, controllerName, size );
+        $scope.openModal(templateUrl, controllerName, size, targetScope );
     }
     
     $scope.verifyDuplicateMobile = function (mobile) {
@@ -331,19 +341,19 @@ $scope.shortFormTrackingClassification = [
    
 
 
-    $scope.openModal = function(templateUrl, controller, size ) {
+    $scope.openModal = function(templateUrl, controller, size, targetScope = $scope ) {
         $scope.modalInstanceMain =  modalConfirmService.showModal({
             backdrop: false,
             keyboard: true,
             modalFade: true,
             templateUrl: templateUrl,
             controller: controller,
-            scope: $scope,
+            scope: targetScope,
             size: size ? size : 'md modal-dialog-centered',
           });
 
           $scope.modalInstanceMain.result.then(function(response){
-              $scope.result = `${response} button hitted`;
+              targetScope.result = `${response} button hitted`;
           });
 
           $scope.modalInstanceMain.result.catch(function error(error) {
@@ -1274,9 +1284,10 @@ $scope.shortFormTrackingClassification = [
         $scope.editable = 0;
     }
 
+    $rootScope.menuSelected = 'ranking';
     $rootScope.menuItemClick = function (item) {
         var page = item.aid;
-
+        $rootScope.menuSelected = page;
         if(page == 'network_list'){
             $scope.create_network_pdf_page();
         }
@@ -1598,7 +1609,7 @@ $scope.shortFormTrackingClassification = [
         $scope.choose_list = true;
         $scope.getActiveSharedUsers('list');
         $scope.openModalDialog('lists');
-        $scope.openListModal();
+        //$scope.openListModal();
     }
     /***List code Ends */
 
@@ -1607,6 +1618,22 @@ $scope.shortFormTrackingClassification = [
             // $scope.global_search_ajax(nVal);
         }
     });
+
+    $rootScope.cleanFileName = function(changedFileName) {
+    changedFileName = $rootScope.replaceFileNameForSQLAttack(changedFileName);
+    if (/[&\/\\#$~%`@^'":;*?<>{}|]/.test(changedFileName)) {
+        return 1;
+    }
+    }
+
+    $rootScope.replaceFileNameForSQLAttack = function(filename) { 
+        var mapObj = {'Union All':"Union_All"};
+        var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+
+        return filename.replace(re, function(matched){
+            return mapObj[matched];
+        });
+    }
 
 });
 

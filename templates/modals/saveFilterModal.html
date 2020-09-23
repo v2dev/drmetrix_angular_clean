@@ -1,0 +1,43 @@
+
+<div class="modal-header">
+    <h5 class="modal-title">Save Filter</h5>
+    <button type="button" class="close" ng-click="closeModal();">
+       <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="filter-error-note" ng-class="alertClass"><span ng-if="filter_error" id="filter_save_error_ranking">{{filter_error}}</span></div>
+            <div class="mt-2">
+               <div class="search-input search-input1 mb-3">
+                  <input type="text" placeholder="Filter Name" id="filter_name_ranking" maxlength="200">
+               </div>
+               <div class="checkbox" ng-show="ranking.matching_criteria">
+                  <input type="checkbox" id="schedule_email" ng-model="schedule_email" ng-checked="schedule_email && ranking.matching_criteria">
+                  <label for="schedule_email">Schedule Email</label>
+               </div>
+               <div class="mt-3 mb-3">
+                  <ul class="d-flex flex-wrap mb-2" ng-show="ranking.matching_criteria && schedule_email && (ranking.selectDate == 5 || ranking.selectDate == 10 || ranking.selectDate == 11 || ranking.selectDate.indexOf('year')==0)">
+                     <li class="mr-2"><label>Please choose to receive:</label></li>
+                     <li class="checkbox mr-2">
+                        <input type="checkbox" name="freq-filter-options" id="optfilterdaily" ng-model="ranking.freq_filter_options.daily" value="daily">
+                        <label for="optfilterdaily">Daily</label>
+                     </li>
+                     <li class="checkbox mr-2">
+                        <input type="checkbox" name="freq-filter-options" id="optfilterweekly" ng-model="ranking.freq_filter_options.weekly" value="weekly">
+                        <label for="optfilterweekly">Weekly</label>
+                     </li>
+                     <li class="checkbox mr-2" ng-show="ranking.matching_criteria == 5 || ranking.matching_criteria == 11 || ranking.matching_criteria.indexOf('year')==0">
+                        <input type="checkbox" name="freq-filter-options" id="optfiltermonthly" ng-model="ranking.freq_filter_options.monthly" value="monthly">
+                        <label for="optfiltermonthly">Monthly</label>
+                     </li>
+                  </ul>
+                  <span>You can see the saved filters in Filters drop down above</span>
+               </div>
+            </div>
+            <div class="btn-grp d-flex justify-content-end border-top">
+               <button id="cancelNet" class="cancelBtn btn btn-black hide-filter-popup" data-dismiss="modal" aria-label="Close" ng-click="closeModal();" type="button"><i class="fa fa-times" title="Cancel"></i>Cancel</button>
+               <button class="applyBtn btn btn-blue save_filter" type="button" ng-click="save_filter('ranking');" ng-disabled="schedule_email && ranking.matching_criteria && !ranking.freq_filter_options.daily && !ranking.freq_filter_options.weekly && !ranking.freq_filter_options.monthly && !ranking.freq_filter_options.quarterly" ng-hide="ranking.yes_no_filter"><i class="fa fa-save" title="Save"></i>Save</button>
+               <button class="applyBtn btn btn-blue yes_no_filter" type="button" ng-click="save_filter('ranking',1,ranking.filter_id);" ng-disabled="schedule_email && ranking.matching_criteria && !ranking.freq_filter_options.daily && !ranking.freq_filter_options.weekly && !ranking.freq_filter_options.monthly && !ranking.freq_filter_options.quarterly"  ng-hide="!ranking.yes_no_filter"><i class="fa fa-check" title="Yes"></i>Yes</button>
+               <button class="applyBtn btn btn-blue yes_no_filter" type="button" ng-click="removeWarning('ranking');" ng-disabled="schedule_email && ranking.matching_criteria && !ranking.freq_filter_options.daily && !ranking.freq_filter_options.weekly && !ranking.freq_filter_options.monthly && !ranking.freq_filter_options.quarterly" ng-hide="!ranking.yes_no_filter"><i class="fa fa-times" title="No"></i>No</button>
+            </div>
+</div>

@@ -5158,3 +5158,11 @@ header.sticky-top {
     margin-bottom: 100px;
   }
 }
+
+.filter_save_error {
+  background: #c21a05;
+}
+
+.filter_save_success {
+  background: #43ac6a;
+}
