@@ -1278,9 +1278,10 @@ $scope.shortFormTrackingClassification = [
         $scope.editable = 0;
     }
 
+    $rootScope.menuSelected = 'ranking';
     $rootScope.menuItemClick = function (item) {
         var page = item.aid;
-
+        $rootScope.menuSelected = page;
         if(page == 'network_list'){
             $scope.create_network_pdf_page();
         }

@@ -43,9 +43,9 @@ angular.module('drmApp').controller('SaveFilterRankingModalController', function
             srch_txt = $("#globalSearchText").val();
         }
         var page = 'ranking';
-        if ($("#ranking").hasClass("top-menu-active") || $("#mob_ranking").hasClass("mob-menu-active")) {
+        if ($rootScope.menuSelected == 'ranking') {
             page = 'ranking';
-        } else if ($("#my_networks").hasClass("top-menu-active") || $("#mob_my_networks").hasClass("mob-menu-active")) {
+        } else if ($rootScope.menuSelected == 'my_networks' || $rootScope.menuSelected == 'mob_my_networks') {
             page = 'network';
         }
 
