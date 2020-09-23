@@ -1,18 +1,20 @@
 <header class="navbar navbar-dark sticky-top bg-dark p-0" ng-controller="NavBarController" ng-hide="state.$current.hideNavbar">
     <ul class="nav-menu"> 
         <li>
-            <a ui-sref="ranking" ui-sref-active="top-menu-active">
-                <img ng-src="./assets/images/adspherelogowhite.svg" alt="drmetrix-logo">
-            </a>
+            <div>
+                <a ui-sref="ranking" ui-sref-active="top-menu-active">
+                    <img ng-src="./assets/images/adspherelogowhite.svg" alt="drmetrix-logo">
+                </a>
+            </div>
         </li>
         <li ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}"
-            ui-sref-active="top-menu-active" class="d-none d-xl-flex" alt="{{item.title}}">
+            ui-sref-active="top-menu-active" class="d-none d-xl-block" alt="{{item.title}}">
             <a ng-click="menuItemClick(item, this);" ui-sref="{{item.href}}" class="{{item.aclass}}"
                 id="{{item.aid}}">
                 <img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
             </a>
         </li>
-        <li class="dropdown show whats-new d-none d-xl-flex">
+        <li class="dropdown show whats-new d-none d-xl-block">
             <a class="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                 aria-haspopup="true">
                 <img src="assets/images/menuiconblue/menuiconset-6.svg"><label> What's New</label>
@@ -28,7 +30,7 @@
                 </a>
             </div>
         </li>
-        <li class="global-search border-r-desktop">
+        <li class="global-search border-r-desktop d-flex align-items-center">
             <form class="shrink align-right" name="frmSearch" no-validate="" ng-submit="search_result()">
                 <div>
                     <span class="search-filter"
@@ -80,21 +82,21 @@
                     </div>
                 </div>
             </form>
-        </li>
-        <li ng-repeat="item in right_menu" class="d-none d-xl-flex {{item.aclass}}">
+        </li>      
+        <li ng-repeat="item in right_menu" class="d-none d-xl-block {{item.aclass}}">
             <a title="{{item.title}}" target="{{item.target}}" id="{{item.aid}}"
                 ng-click="menuItemClick(item);">
                 <img ng-src="{{item.src}}" alt="{{item.alt}}">{{item.title}}
             </a>
         </li>
-        <li class="right-menu d-lg-flex d-xl-none" ng-click="showme=true">
+        <li class="right-menu d-lg-block d-xl-none" ng-click="showme=true">
             <a class="open-menu">
                 <i data-feather="align-justify"></i>
             </a>
         </li>
     </ul>
     <!-- mobile menu -->
-    <div class="right-nav d-md-block" ng-show="showme">
+    <div class="right-nav" ng-show="showme">
         <a class="close-menu" ng-click="showme=false">
             <i data-feather="x"></i>
         </a>
