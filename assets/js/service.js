@@ -2,7 +2,7 @@
 "use strict";
 angular.module('starter.services', [])
     .constant('myConfig', {
-        'apiUrl': './api/index.php',
+        'apiUrl': 'http://localhost:8080',
         'apiVersion': 'QA 2.6.3'
     })
     //API service for all GET and POST calls to QA and PROD Server
