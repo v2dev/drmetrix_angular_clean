@@ -1,5 +1,5 @@
 "use strict";
-angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService, uiGridConstants, uiGridExporterConstants){
+angular.module("drmApp").controller("RankingController", function($scope, $http, $interval,uiGridTreeViewConstants, $state, $rootScope, apiService,  $uibModal, $compile, modalConfirmService, uiGridConstants, uiGridExporterConstants, listService){
     $scope.initialisation = function() {
         // $scope.page_call = 'ranking';
         $scope.page = $state.current.name;
@@ -113,13 +113,16 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             onRegisterApi: function (gridApi) {
                 $scope.gridApi =  gridApi;
                 gridApi.selection.on.rowSelectionChanged($scope, function(row){ 
-                    $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
+                    listService.listModel.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
+                    $scope.idsOfSelectedRows = listService.listModel.idsOfSelectedRows;
                 });
         
                 gridApi.selection.on.rowSelectionChangedBatch($scope, function(row){ 
-                    $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
+                    listService.listModel.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
+                    $scope.idsOfSelectedRows = listService.listModel.idsOfSelectedRows;
                 });
-                // $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows()
+                
+
                 $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
 
                 gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
@@ -671,6 +674,38 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     }
     $scope.openModalDialog('save_filter_ranking', $scope);
     }
+
+    $scope.open_list_popup = function () {
+            $scope.ranking.listName = $rootScope.type == 'brands' ? 'brand' : 'advertiser';
+            $scope.initializeListPopUpValues();
+            $scope.ranking.list_name = '';
+            $scope.openModalDialog('save_list', $scope);
+    }
+
+    $scope.initializeListPopUpValues = function() {
+            $scope.list_array = [];
+            $scope.ranking.list_message = "";
+            $scope.ranking.list_error = 0;
+            $scope.ranking.list_add = 0;
+            $scope.ranking.list_duplicate_found = 0;
+            $scope.ranking.reset_list = 0;
+            $scope.ranking.add_edit_list_overwrite = 0;
+            $scope.ranking.popup_overwrite = 0;
+            //airings_data["list_edit_save"] = 0;
+            //$("#saveUpdatedList").removeAttr("disabled");
+    }
+
+    $scope.getServiceData = function() {
+    return listService.listModel.idsOfSelectedRows;
+    }
+
+    $scope.$watch('getServiceData()', function(newValue, oldValue) {
+        if (oldValue != newValue) {
+        $scope.idsOfSelectedRows = newValue;
+            if($scope.idsOfSelectedRows == 0)
+                $scope.gridApi.selection.clearSelectedRows();
+        }
+    });
     
 });
 

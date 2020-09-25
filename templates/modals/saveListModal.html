@@ -1,0 +1,20 @@
+
+<div class="modal-header">
+    <h5 class="modal-title">Save List</h5>
+    <button type="button" class="close" ng-click="closeModal();">
+       <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="filter-error-note">
+                <span id="list_save_error_ranking" ng-class="{'filter_save_error': ranking.list_error == 1, 'filter_save_success': ranking.list_add == 1 ,'fade_in' : ranking.startFade == 1,'fade_out': ranking.startFade == 0}">{{ranking.list_message}}</span>
+            </div>
+            <p class=" mb-1 mt-2">You can see the saved {{ranking.listName}} list in choose list drop down above</p>
+            <input type="text" id="list_name_ranking" placeholder="List Name" ng-model="ranking.list_name" maxlength="200">
+            <div class="btn-grp d-flex justify-content-end border-top pt-3 mt-3">
+               <button id="save_list_cancel" class="applyBtn  btn btn-blue yes_no_list" ng-click="save_list('ranking')" ng-hide="ranking.list_duplicate_found" ng-disabled="ranking.list_name == ''"><i class="fa fa-save"></i>Save</button>
+               <button class="applyBtn btn btn-sm btn-success yes_no_list" type="button" ng-click="save_list();"  ng-hide="!ranking.list_duplicate_found"><i class="fa fa-save"></i>Yes</button>
+               <button class="cancelBtn btn btn-black  yes_no_list" ng-click="initializeListPopUpValues();"  data-dismiss="modal" aria-label="Close" ng-hide="!ranking.list_duplicate_found"><i class="fa fa-times"
+                  title="cancel"></i>No</button>
+            </div>
+</div>

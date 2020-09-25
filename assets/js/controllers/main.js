@@ -263,6 +263,11 @@ $scope.shortFormTrackingClassification = [
                 controllerName = "SaveFilterRankingModalController";
                 break;
             }
+            case 'save_list': {
+                templateUrl = "./templates/modals/saveListModal.html";
+                controllerName = "saveListModalController";
+                break;
+            }
         }
         size = size ? size : 'md modal-dialog-centered';
         $scope.openModal(templateUrl, controllerName, size, targetScope );
@@ -350,10 +355,16 @@ $scope.shortFormTrackingClassification = [
             controller: controller,
             scope: targetScope,
             size: size ? size : 'md modal-dialog-centered',
+            resolve: {
+                    data: function () {
+                  return $scope;
+                }
+              }
           });
 
-          $scope.modalInstanceMain.result.then(function(response){
+          $scope.modalInstanceMain.result.then(function(response){console.log(response);
               targetScope.result = `${response} button hitted`;
+              targetScope = response;
           });
 
           $scope.modalInstanceMain.result.catch(function error(error) {
