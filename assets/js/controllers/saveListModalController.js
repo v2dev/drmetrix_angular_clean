@@ -22,6 +22,15 @@ angular.module('drmApp').controller('saveListModalController', function($scope, 
                $scope.ranking.list_message = 'Invalid List Name';
                 return false;
             }
+
+            angular.forEach($scope.selectedRows, function (row, key) {
+                angular.forEach(row, function (column, colKey) {
+                    if (colKey == "brand_id")
+                    {
+                        listService.listModel.idsOfSelectedRows.push(column);
+                    }
+                });   
+            });
     
             var formdata = { 'list_name': list_name, 'primary_tab': primary_tab, 'criteria_ids': listService.listModel.idsOfSelectedRows.toString(), 'is_duplicate' : duplicate_found, asontv: ($scope.ranking.asontvSelection ? 1 : 0) };
             if($scope.ranking.list_duplicate_found == 1) {

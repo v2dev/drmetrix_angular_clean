@@ -118,13 +118,13 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
             onRegisterApi: function (gridApi) {
                 $scope.gridApi =  gridApi;
                 gridApi.selection.on.rowSelectionChanged($scope, function(row){ 
-                    listService.listModel.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
-                    $scope.idsOfSelectedRows = listService.listModel.idsOfSelectedRows;
+                    $scope.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                    $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
                 });
         
                 gridApi.selection.on.rowSelectionChangedBatch($scope, function(row){ 
-                    listService.listModel.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
-                    $scope.idsOfSelectedRows = listService.listModel.idsOfSelectedRows;
+                    $scope.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                    $scope.idsOfSelectedRows = $scope.gridApi.selection.getSelectedRows().length;
                 });
                 
 
@@ -707,7 +707,7 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
     $scope.$watch('getServiceData()', function(newValue, oldValue) {
         if (oldValue != newValue) {
         $scope.idsOfSelectedRows = newValue;
-            if($scope.idsOfSelectedRows == 0)
+            if($scope.idsOfSelectedRows.length == 0)
                 $scope.gridApi.selection.clearSelectedRows();
         }
     });

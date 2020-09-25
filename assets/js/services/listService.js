@@ -6,7 +6,7 @@
 
     function listService($rootScope, $log, REST_END_POINT) {
         var listModel = {
-            idsOfSelectedRows: 0
+            idsOfSelectedRows: []
         };
 
         return {
