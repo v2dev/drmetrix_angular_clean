@@ -20,6 +20,7 @@
 	<link href="./assets/css/ui.jqgrid.min.css" rel="stylesheet" />
 	<link href="./assets/css/ui-grid.css" rel="stylesheet" type="text/css" />
 	<link href="./assets/css/main.css" rel="stylesheet" type="text/css" />
+	<base href="/">
 </head>
 
 <body ng-app="drmApp" ng-controller="MainController" ng-class="{'dark-theme' : theme_val == 1}" ng-init="init()">
@@ -28,7 +29,6 @@
 		<div class="main-page" ui-view></div>
 	</div>
 	<ng-include src="'./templates/footer.html'"></ng-include>
-	
 	<!-- Angular Js -->
 	<!-- <script src="./assets/js/routes.js"></script> -->
 	<script type="text/javascript" src="./assets/scripts/angular.min.js"></script>
@@ -55,6 +55,7 @@
 	<!--Start - Angular Js controllers-->
 	<script type="text/javascript" src="./assets/js/components/categories.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/main.js"></script>
+	<!--<script type="text/javascript" src="./assets/js/controllers/nav_bar.js"></script>-->
 	<script type="text/javascript" src="./assets/js/controllers/login.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/authy.js"></script>
 	<script type="text/javascript" src="./assets/js/controllers/eulaAgreement.js"></script>
