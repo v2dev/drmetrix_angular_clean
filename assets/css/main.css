@@ -1103,6 +1103,9 @@ header.sticky-top {
 }
 
 /*modal*/
+.modal {
+  padding: 17px;
+}
 
 .modal.xl-popup .modal-dialog, .modal-lg, .modal-xl {
   max-width: 1250px;
@@ -1357,10 +1360,10 @@ header.sticky-top {
 /*main-filter*/
 
 .main-filter {
-  width: 100%;
   background: #707883;
-  box-shadow: 1px 0px 4px 0px #707883;
-  padding: 5px 10px 6px;
+  padding: 2px 5px 1px;
+  border-bottom: 1px solid #cbcccc;
+  width: 100%;
 }
 
 .main-filter .collapse-menu {
@@ -1376,15 +1379,20 @@ header.sticky-top {
 
 .main-filter .collapse-menu a {
   display: none;
-  width: 28px;
-  height: 28px;
+  line-height: 19px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.main-filter .collapse-menu a span {
+  width: 18px;
+  height: 18px;
   background: #202733;
   text-align: center;
   border-radius: 20px;
-  line-height: 28px;
-  font-size: 16px;
-  margin-right: 5px;
-  color: #fff;
+  margin-left: 5px;
+  display: inline-block;
+  line-height: 20px;
 }
 
 .main-filter>ul {
@@ -4700,6 +4708,36 @@ header.sticky-top {
     margin-left: 20px;
     text-align: left;
   }
+  .main-filter .collapse-menu {
+    display: inline;
+    position: relative;
+  }
+  .main-filter .collapse-menu a {
+    display: inline-block;
+  }
+  .main-filter>ul.hide-filter-menu {
+    display: none;
+    border-top: solid 1px #ccc;
+    padding-top: 8px;
+    margin-top: 6px;
+  }
+  .main-filter>ul.hide-filter-menu li {
+    margin: 5px 0;
+  }
+  .main-filter>ul>li {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: none;
+  }
+  .main-filter>ul>li>ul {
+    display: flex;
+  }
+  .main .disclaimer-msg span:last-child {
+    display: none;
+  }
+  .main-filter>ul>li span {
+    display: inline-block;
+  }  
 }
 
 @media (max-width: 1080px) {
@@ -4792,40 +4830,7 @@ header.sticky-top {
     align-items: center;
     justify-content: center;
     width: 100%;
-  }
-  .main-filter {
-    padding-top: 6px;
-    padding-bottom: 6px;
-  }
-  .main-filter .collapse-menu {
-    display: flex;
-  }
-  .main-filter .collapse-menu a {
-    display: inline-block;
-  }
-  .main-filter>ul.hide-filter-menu {
-    display: none;
-    border-top: solid 1px #ccc;
-    padding-top: 8px;
-    margin-top: 6px;
-  }
-  .main-filter>ul.hide-filter-menu li {
-    margin: 5px 0;
-  }
-  .main-filter>ul>li {
-    padding-right: 0;
-    margin-right: 0;
-    border-right: none;
-  }
-  .main-filter>ul>li>ul {
-    display: flex;
-  }
-  .main .disclaimer-msg span:last-child {
-    display: none;
-  }
-  .main-filter>ul>li span {
-    display: inline-block;
-  }
+  }  
   .section .right-div {
     width: 40%;
   }

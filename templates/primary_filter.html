@@ -1,6 +1,7 @@
 <div class="collapse-menu">
-    Primary Filter
-    <a href="#"><i class="fa fa-chevron-down"></i></a>
+   <div class="primary-filter">
+      <a href="#">Primary Filter <span><i class="fa fa-chevron-down"></i></span></a>
+   </div>
 </div>
 <ul class="filter-menu hide-filter-menu"  ng-class="{'edit-filter' : editable}" >
     <li>
@@ -183,37 +184,37 @@
                    <li class="media_week_cls radio-circular">
                       <input type="radio" value="9" name='date_presets' id="media_currentweek" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)">
                       <label class="radio-custom-label" for="media_currentweek">
-                         <div class="custom-div">Current Week</div>
+                        Current Week
                       </label>
                    </li>
                    <li class="media_week_cls radio-circular">
                       <input type="radio" value="6" name='date_presets' id="media_lastweek" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)">
                       <label class="radio-custom-label" for="media_lastweek">
-                         <div class="custom-div">Last Week</div>
+                         Last Week
                       </label>
                    </li>
                    <li class="media_week_cls radio-circular">
                       <input type="radio" value="10" name='date_presets' id="media_currentmonth" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
                       <label class="radio-custom-label mr-0" for="media_currentmonth">
-                         <div class="custom-div">Current Month</div>
+                         Current Month
                       </label>
                    </li>
                    <li class="media_week_cls radio-circular">
                       <input type="radio" value="7" name='date_presets' id="media_lastmonth" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
                       <label class="radio-custom-label" for="media_lastmonth">
-                         <div class="custom-div">Last Month</div>
+                         Last Month
                       </label>
                    </li>
                    <li class="media_week_cls radio-circular">
                       <input type="radio" value="11" name='date_presets' id="media_currentqtr" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
                       <label class="radio-custom-label" for="media_currentqtr">
-                         <div class="custom-div">Current Quarter</div>
+                         Current Quarter
                       </label>
                    </li>
                    <li class="media_week_cls radio-circular">
                       <input type="radio" value="8" name='date_presets' id="media_lastqtr" class="radio-custom" ng-model="selectDate"  ng-change="date_filter(selectDate)"/>
                       <label class="radio-custom-label mr-0" for="media_lastqtr">
-                         <div class="custom-div">Last Quarter</div>
+                         Last Quarter
                       </label>
                    </li>
                 </ul>
