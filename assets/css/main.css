@@ -5184,6 +5184,9 @@ header.sticky-top {
   .section {
     padding-top: 180px;
   }
+  .section .left-div {
+    width: 50%;
+  }
 }
 
 .filter_save_error {
