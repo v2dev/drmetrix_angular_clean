@@ -1109,6 +1109,11 @@ header.sticky-top {
   margin: 0 auto;
 }
 
+.modal.md-popup .modal-dialog {
+  max-width: 550px;
+  margin: 0 auto;
+}
+
 .modal.lg-popup .modal-dialog {
   max-width: 750px;
   margin: 0 auto;
@@ -3491,7 +3496,7 @@ header.sticky-top {
   border: none;
   box-shadow: none;
   height: 52px;
-  font-size: 1rem;
+  font-size: 14px;
   width: 100%;
   padding-left: 0;
 }
@@ -3513,6 +3518,10 @@ header.sticky-top {
   font-size: 20px;
   line-height: 19px;
   padding: 12px 10px;
+}
+
+.section .right-div .inner-right a {
+  color: #00beff;
 }
 
 .section .right-div .inner-right p {
@@ -4760,9 +4769,6 @@ header.sticky-top {
     display: flex;
     justify-content: space-between;
   }
-  .modal-dialog {
-    margin: 0 15px;
-  }
 }
 
 @media (max-width: 860px) {
@@ -4825,6 +4831,7 @@ header.sticky-top {
   }
   .section .left-div {
     width: 60%;
+    margin: 0 auto;
   }
   .section {
     height: 100%;
@@ -4836,6 +4843,10 @@ header.sticky-top {
   }
   .wrapper {
     height: 100%;
+  }
+  .section .right-div .inner-right .custom-input-group input {
+    height: 45px;
+    line-height: 1.5;
   }
 }
 
@@ -4873,9 +4884,7 @@ header.sticky-top {
     padding: 25px;
     overflow: hidden;
     overflow-y: auto;
-  }
-  .section .left-div {
-    width: 100%;
+    text-align: center;
   }
   .airings-filter .export-details li {
     padding: 0;
@@ -5032,10 +5041,6 @@ header.sticky-top {
   .eula-agreement .agreement-sec .information p {
     font-size: 13px;
   }
-  .inner-right img {
-    max-width: 50%;
-    margin-top: 60px;
-  }
   .filter-popup .filter-in-letters a {
     font-size: 14px;
     padding: 4px 8px;
@@ -5048,9 +5053,6 @@ header.sticky-top {
   }
   .date-preset-block {
     padding: 0 6px 6px;
-  }
-  .section {
-    display: block;
   }
 }
 
@@ -5162,6 +5164,9 @@ header.sticky-top {
     margin-bottom: 8px;
     width: 100%;
   }
+  .section {
+    display: block;
+  }
 }
 
 @media (max-width: 380px) {
@@ -5175,6 +5180,9 @@ header.sticky-top {
   .section .right-div {
     width: 100%;
     margin-bottom: 100px;
+  }
+  .section {
+    padding-top: 180px;
   }
 }
 
