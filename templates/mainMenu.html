@@ -103,14 +103,14 @@
         <a ng-repeat="item in main_menu" id="{{item.liid}}" ng-hide="{{item.nghide}}"
             ui-sref-active="mob-menu-active" class="d-md-flex" alt="{{item.title}}"
             ng-click="menuItemClick(item.title, this);" ui-sref="{{item.href}}">
-            <i data-feather="home"></i>{{item.title}}
+            <img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
         </a>
         <a href="" class="d-md-flex">
             <i data-feather="mail"></i> What's New <div class="notification-new">5</div>
         </a>
         <a ng-repeat="item in right_menu" class="d-md-flex" title="{{item.title}}" target="{{item.target}}"
             id="{{item.aid}}" ng-click="menuItemClick(item);">
-            <i data-feather="user"></i>{{item.title}}
+            <img ng-src="{{item.src}}" alt="{{item.title}}">{{item.title}}
         </a>
     </div>
 </header>
