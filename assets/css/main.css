@@ -1408,6 +1408,25 @@ header.sticky-top {
   margin-right: 6px;
 }
 
+.editable-content {
+  margin-top: 2px;
+}
+
+.filter-view.response-filter {
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+  margin-bottom: 0;
+}
+
+.response-menu .or_content {
+  top: 0px;
+  font-size: 9px;
+  line-height: 17px;
+  margin: 0 3px 0 1px;
+  color: #979797;
+}
+
 .main-filter>ul>li>div {
   font-size: 11px;
 }
@@ -1467,7 +1486,12 @@ header.sticky-top {
 
 .main-filter .response-type .response-menu {
   display: flex;
-  margin-top: 4px;
+  margin-top: 2px;
+}
+
+.response-type-details {
+  display: flex;
+  align-items: center;
 }
 
 .main-filter .response-type>ul li {
@@ -1601,7 +1625,7 @@ header.sticky-top {
 }
 .radio-circular input[type="radio"]+label {
   background: #fff;
-  padding: 1px 8px 1px 3px;
+  padding: 2px 8px 2px 3px;
   margin-right: 4px;
   margin-bottom: 0;;
   border-radius: 20px;
@@ -1610,6 +1634,7 @@ header.sticky-top {
   border: 2px solid #202b39;
   cursor: pointer;
   font-size: 12px;
+  line-height: 12px;
   color: #333;
 }
 
@@ -1677,10 +1702,9 @@ header.sticky-top {
 .datepicker-li .checkbox-custom + .checkbox-custom-label:before {
   margin-right: 8px;
 }
-#datepickeropen {
-  margin-left: 5px;
-  font-size: 16px;
-  color: #d0d0d1;
+.datepicker-li > label > div{
+  position: relative;
+  top: 2px;
 }
 
 /*sidebar*/
@@ -1807,7 +1831,7 @@ header.sticky-top {
   z-index: 0;
   background: #707883;
   border-left: solid 1px #949494;
-  width: 50px;
+  width: 40px;
   text-align: center;
   color: #fff;
   height: 100%;
@@ -1820,11 +1844,18 @@ header.sticky-top {
   transform: rotate(-90deg);
   display: inline-block;
   position: relative;
-  left: -56px;
-  top: 30%;
-  font-size: 20px;
+  left: -55px;
+  top: 40%;
+  font-size: 18px;
+  line-height: 20px;
   text-transform: uppercase;
   letter-spacing: 4px;
+}
+
+.open-left-sidebar-nav svg {
+  position: relative;
+  left: -3px;
+  top: -7px;
 }
 
 .menu-icons {
@@ -1843,17 +1874,23 @@ header.sticky-top {
 /*mob right menu*/
 .right-nav {
   background: #fff;
-  border-bottom: 1px solid #f5f5f5;
-  padding: 40px 0 20px;
+  padding: 30px 0 20px;
   margin: 0;
   overflow: auto;
-  height: 100%;
-  width: 220px;
+  width: 300px;
   position: fixed;
   z-index: 1;
-  top: 90px;
-  right: -100%;
+  top: 48px;
+  right: 0;
   transition: right 0.5s ease-out;
+  box-shadow: 0 3px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+.right-nav a i, .right-nav a img {
+  width: 30px;
+  margin-right: 8px;
+  font-size: 18px;
+  text-align: center;
 }
 
 .right-nav a {
@@ -1862,13 +1899,9 @@ header.sticky-top {
   color: #202b39;
   font-weight: 700;
   padding: 0px 20px;
-  height: 48px;
+  height: 40px;
   position: relative;
   border-bottom: solid 1px #ccc;
-}
-
-.right-nav a:last-child {
-  border-bottom: none;
 }
 
 .right-nav a svg {
@@ -1879,19 +1912,30 @@ header.sticky-top {
   background: #e5e5e5;
 }
 
+.right-nav a.mob-menu-active {
+  background: #202733;
+  color: #fff;
+  border-right: none;
+}
+
+.right-nav a.mob-menu-active img {
+  filter: brightness(0) invert(1);
+}
+
 .right-nav a .notification-new {
   left: 34px;
 }
 
 .right-nav .close-menu {
   position: absolute;
-  top: 6px;
+  top: 0px;
   right: 0;
   padding: 0;
   margin: 0;
   height: 30px;
   cursor: pointer;
   border: none;
+  background: #ccc;
 }
 
 .right-nav .close-menu:hover {
@@ -1928,7 +1972,7 @@ header.sticky-top {
 .main {
   padding-top: 6px;
   padding-right: 6px;
-  padding-left: 56px;
+  padding-left: 48px;
   transition: 0.5s;
   width: 100%;
   height: 100vh;
@@ -4819,17 +4863,14 @@ header.sticky-top {
     width: 70px;
   }
   .main .top-grid-filter .filter-refine-by>ul>li {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   .main .top-grid-filter .filter-refine-by>ul>li>.open-filter-popup {
-    margin-left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
   }  
   .section .right-div {
     width: 40%;
@@ -5070,9 +5111,6 @@ header.sticky-top {
     padding: 10px;
     flex: 1;
   }
-  .right-nav {
-    top: 70px;
-  }
   .network-filter-popup .top-filter-bar li:last-child {
     display: block;
   }
@@ -5121,7 +5159,7 @@ header.sticky-top {
   }
   .main .top-grid-filter .filter-refine-by>ul>li {
     justify-content: flex-start;
-    flex: 0 0 30%;
+    margin: 3px;
   }
   .main .top-grid-filter .filter-refine-by>ul>li:first-child {
     margin-left: 0;
@@ -5136,9 +5174,6 @@ header.sticky-top {
   }
   .main .top-grid-filter .filter-refine-by>ul {
     flex-wrap: wrap;
-  }
-  .main .top-grid-filter .filter-refine-by>ul>li>.open-filter-popup {
-    justify-content: flex-start;
   }
   .confi-page .top-grid-filter {
     display: block;
