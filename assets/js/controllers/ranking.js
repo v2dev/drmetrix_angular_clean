@@ -23,6 +23,21 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         }
     }
 
+    $scope.removeCustomClass = function () {
+        $scope.primaryFilterToggle();
+    };
+
+    $scope.primaryFilterToggle = function() {
+        $scope.toggle = !$scope.toggle;
+        if($scope.toggle) {
+            // $('.cancelBtn').trigger('click');
+            $scope.ranking.grid_overlay = 0; 
+            $scope.ranking.no_edit = 0;
+            $scope.category_error = 0;
+        }
+    }
+    
+
     $scope.initialisation() ;
 
     feather.replace();

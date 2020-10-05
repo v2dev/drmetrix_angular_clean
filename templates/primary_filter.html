@@ -1,9 +1,9 @@
 <div class="collapse-menu">
    <div class="primary-filter">
-      <a href="#">Primary Filter <span><i class="fa fa-chevron-down"></i></span></a>
+      <a ng-click="primaryFilterToggle();">Primary Filter <span><i class="fa fa-chevron-down"></i></span></a>
    </div>
 </div>
-<ul class="filter-menu hide-filter-menu"  ng-class="{'edit-filter' : editable}" >
+<ul class="filter-menu hide-filter-menu"  ng-class="{'hide-filter-menu' : toggle}" >
     <li>
         <div>
             Date Range -
