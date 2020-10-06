@@ -464,7 +464,6 @@ input[type="checkbox"].checkbox-custom {
 }
 
 .checkbox-radio .fa-calendar {
-  margin-left: 5px;
   font-size: 16px;
   color: #d0d0d1;
 }
@@ -1410,6 +1409,7 @@ header.sticky-top {
 
 .editable-content {
   margin-top: 2px;
+  margin-right: 10px;
 }
 
 .filter-view.response-filter {
@@ -1486,7 +1486,7 @@ header.sticky-top {
 
 .main-filter .response-type .response-menu {
   display: flex;
-  margin-top: 2px;
+  margin: 2px 0;
 }
 
 .response-type-details {
@@ -1636,6 +1636,7 @@ header.sticky-top {
   font-size: 12px;
   line-height: 12px;
   color: #333;
+  height: 26px;
 }
 
 .radio-circular input[type="radio"] {
@@ -4845,10 +4846,30 @@ header.sticky-top {
   .main-filter>ul.hide-filter-menu li {
     margin: 5px 0;
   }
-  .main-filter>ul>li {
+  .main-filter>ul {
+    display: block;
+    border-top: solid 1px #ccc;
+    margin-top: 6px;
+    padding-top: 4px;  
+  }
+  .oneditclicked.main-filter>ul>li {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    height: auto;
     padding-right: 0;
     margin-right: 0;
+}  
+  .main-filter>ul>li {
+    display: block;
     border-right: none;
+    border-bottom: solid 1px rgba(220, 220, 220, 0.5);
+    padding: 4px 0;
+    margin-right: 0;
+  }
+  .main-filter>ul>li>div:first-child {
+    width: 400px;
+    display: flex;
   }
   .main-filter>ul>li>ul {
     display: flex;
@@ -5015,6 +5036,12 @@ header.sticky-top {
   .main-filter .edit-filter>li {
     width: 48%;
   }
+  .oneditclicked.main-filter>ul>li>div {
+    display: flex;
+    font-size: 12px;
+    line-height: 12px;
+    margin-bottom: 4px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -5064,7 +5091,9 @@ header.sticky-top {
   .report-tab-section .left-menu li:first-child {
     margin-left: 0;
   }
-
+  .oneditclicked.main-filter>ul>li {
+    display: block;
+   }
   .right-nav {
     width: 100%;
     z-index: 9;
