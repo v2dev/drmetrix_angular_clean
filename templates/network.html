@@ -17,7 +17,7 @@
                <div class="search-input">
                   <span class="search-icon"><img src="./assets/images/search-icon-10.svg" id="magnifying_glass" ></span>
                   <input type="text" name="searchNet" id="network_search" ng-change="changeSearchNet()" placeholder="Search a Network" ng-model="searchNet">
-                  <span class="search-icon ng-hide" id="cancelSearchNet" ng-click="searchNet = ''" ng-hide="searchNet.length == 0">
+                  <span class="search-icon" id="cancelSearchNet" ng-click="searchNet = ''" ng-hide="searchNet.length == 0">
                   <i class="fa fa-times-circle" title="Clear Search"></i>
                   </span>
                </div>
@@ -36,8 +36,8 @@
                      <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>
                   </label>
                </div>
-               <span class="dpi-symbol" ng-if="network.dpi == 1"><img src="./assets/images/dpi_symbol.png"></span>
-               <span class="digi-symbol ota" ng-if="network.diginet == 1">OTA</span>
+               <span class="dpi-symbol" ng-if="network.dpi == 1">DPi</span>
+               <span class="ota" ng-if="network.diginet == 1">OTA</span>
                <span class="new-symbol" ng-if="checkLiveDateStatus(network.live_date)"><img src="./assets/images/new.svg"></span>
             </li>
       </ul>
@@ -45,15 +45,17 @@
          <div class="dpi-newnetwork">
             <a class="dpi-link" href="https://www.drmetrix.com/en/the_drmetrix_difference.html" target="_blank" title="Learn about DPI">
                <span class="dpi-symbol">
-               <img src="./assets/images/dpi_symbol.png">
-               </span>Learn about DPi
-            </a>
-            <a class="digi-link" ng-click="displayDigiPopup = true;"  title="Learn about OTA">
-               <span class="dpi-symbol ota">OTA</span>Learn about OTA
-            </a>
-            <div ng-show="displayDigiPopup" class="digi-network-page digi-popup ng-hide">
-                  <a class="close_filter digi-close" ng-click="displayDigiPopup = 0;"><img src="./assets/images/menuiconblue/VC002-closebutton-03.svg"></a>
-                  <p class="digi_text">OTA is short for Over the Air. For these networks, DRMetrix monitors over-the-air signals from two different market affiliates. Any ad that is seen at the same time in both markets is reported as a national airing.</p>
+                  DPi
+               </span><div>Learn about DPi</div>
+               </a>
+            <div class="d-flex learn-abt-digi">
+               <a class="digi-link" ng-click="displayDigiPopup = true;" title="Learn about OTA">
+               <span class="ota">OTA</span><div>Learn about OTA</div>
+               </a>
+               <div ng-show="displayDigiPopup" class="digi-network-page digi-popup ng-hide">
+                      <a class="close_filter digi-close" ng-click="displayDigiPopup = 0;"><img src="/drmetrix/assets/img/menuiconblue/VC002-closebutton-03.svg"></a>
+                      <p class="digi_text">OTA is short for Over the Air. For these networks, DRMetrix monitors over-the-air signals from two different market affiliates. Any ad that is seen at the same time in both markets is reported as a national airing.</p>
+               </div>
             </div>
             <a class="new-link" href="javascript:void();" title="New">
                <span class="new-symbol">

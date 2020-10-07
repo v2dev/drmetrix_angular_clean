@@ -250,7 +250,8 @@ select::-ms-expand {
   color: #fff;
   border: 1px solid #5cccf5;
   padding: 2px 8px;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 20px;
   border-radius: 4px;
   margin-bottom: 0;
   font-weight: 400;
@@ -777,6 +778,7 @@ header.sticky-top {
   flex-flow: row nowrap;
   background-color: #E5E5E5;
   border-top: 2px solid;
+  border-bottom: 1px solid #424546!important;
   width: 100%;
   justify-content: space-between;
 }
@@ -2125,11 +2127,6 @@ header.sticky-top {
   border: solid 1px #999;
 }
 
-.network-filter-popup .filter-popup li .checkbox span {
-  position: relative;
-  top: 1px;
-}
-
 .network-filter-popup .filter-popup .filter-in-letters a {
   color: #000;
   font-weight: 600;
@@ -2149,6 +2146,10 @@ header.sticky-top {
   display: flex;
   align-items: center;
   margin-right: 50px;
+}
+
+.network-filter-popup .filter-popup .network-filter-bottom .dpi-newnetwork a div {
+  text-decoration: underline;
 }
 
 .network-filter-popup .filter-popup .network-filter-bottom .dpi-newnetwork a span {
@@ -2256,7 +2257,6 @@ header.sticky-top {
 }
 
 .network-filter-popup .filter-popup .network-filter-bottom {
-  margin-top: 2px;
   border-top: 1px solid #bcbdc1;
 }
 
@@ -2267,11 +2267,10 @@ header.sticky-top {
   opacity: 1;
 }
 
-
 .network-filter-popup .filter-popup .network-filter-bottom .dpi-newnetwork a div {
   text-decoration: underline;
+  cursor: pointer;
 }
-
 
 .filter-popup ul {
   display: flex;
@@ -2361,9 +2360,10 @@ header.sticky-top {
 .filter-popup .networklist li {
   max-width: 282px;
   display: inline-block;
-  margin: 4px;
+  margin: 8px 4px;
   width: 100%;
   margin-left: 0;
+  line-height: 0;
 }
 
 .filter-popup .networklist li label {
@@ -2374,8 +2374,9 @@ header.sticky-top {
 }
 
 .filter-popup .network-filter-bottom {
-  margin: 25px 0 0;
+  margin: 15px 0 0 !important;
   flex-flow: wrap row;
+  padding-top: 12px !important;
 }
 
 .filter-popup .network-filter-bottom .new-network-label {
@@ -2447,6 +2448,7 @@ header.sticky-top {
 
 .network-page h4 {
   font-size: 16px;
+  margin-bottom: 0;
 }
 
 .network-page .network-filter {
@@ -2479,7 +2481,7 @@ header.sticky-top {
 }
 
 .network-page .network-filter ul li .network-search-container .open-filter-popup i {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 
 .network-page .network-filter ul li .network-search-container {
@@ -2505,7 +2507,7 @@ header.sticky-top {
   max-width: 280px;
 }
 .network-page .network-filter ul.scrollbar {
-  height: 450px;
+  height: 270px;
 }
 
 #gridoverlay {
@@ -5103,13 +5105,10 @@ header.sticky-top {
   }
 
   .network-filter-popup .filter-popup .network-filter-bottom .dpi-newnetwork {
-    margin-bottom: 0;
-    flex-flow: wrap;
-  }
-
-  .network-filter-popup .filter-popup .network-filter-bottom .dpi-newnetwork a {
     margin-bottom: 10px;
-    margin-right: 0;
+    flex-flow: wrap;
+    width: 100%;
+    justify-content: center;
   }
 
   .filter-popup .network-filter-bottom .btn-grp {
@@ -5198,7 +5197,7 @@ header.sticky-top {
     padding: 4px 8px;
   }
   .filter-popup .networklist li {
-    margin: 4px 8px;
+    margin: 5px 8px;
   }
   .network-page .network-filter ul li .network-search-container .open-filter-popup {
     padding-left: 0;
@@ -5240,6 +5239,9 @@ header.sticky-top {
   }
   .section .right-div, .section .left-div {
     width: 100%;
+  }
+  .filter-popup .networklist li {
+    width: 247px;
   }
 }
 
