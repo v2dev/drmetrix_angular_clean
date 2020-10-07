@@ -1,3 +1,16 @@
-<strong>Configure Emails</strong>
-<button ng-click="backToRankingpage();">Back</button> 
-<div id="configEmails" ui-grid="gridConfigEmails" ui-grid-exporter ui-grid-pagination ui-grid-grouping class="grid" style="height:350px;"></div>
+
+<div class="confi-page">
+    <div class="globle-search-container">
+        <h5>Global Setting</h5>
+        <div class="globle-search">
+           <p>Received Email : </p>
+           <div class="switch-container">
+             <span>No</span>
+              <input class="toggle" type="checkbox" id="subscribe" onclick="updateSubscribeStatus();">
+              <label for="subscribe"></label>
+              <span>Yes</span>
+           </div>
+        </div>
+     </div>
+    <div id="configEmails" ui-grid="gridConfigEmails" ui-grid-exporter ui-grid-pagination ui-grid-grouping class="grid" style="height:350px;"></div>
+</div>
