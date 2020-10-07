@@ -23,6 +23,28 @@ angular.module("drmApp").controller("RankingController", function($scope, $http,
         }
     }
 
+    $scope.addCustomClass = function () {
+        $scope.ranking.no_edit= 1;
+        $scope.ranking.grid_overlay = 1;
+        $scope.category_error = 1;
+    };
+
+    $scope.removeCustomClass = function () {
+        $scope.ranking.no_edit= 0;
+        $scope.ranking.grid_overlay = 0;        
+        $scope.primaryFilterToggle();
+    };
+
+    $scope.primaryFilterToggle = function() {
+        $scope.toggle = !$scope.toggle;
+        if($scope.toggle) {
+            $scope.ranking.grid_overlay = 0; 
+            $scope.ranking.no_edit = 0;
+            $scope.category_error = 0;
+        }
+    }
+    
+
     $scope.initialisation() ;
 
     feather.replace();

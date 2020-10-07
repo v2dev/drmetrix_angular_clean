@@ -4,7 +4,7 @@
         <span aria-hidden="true"></span>
     </button>
 </div>
-<div class="modal-body">
+<div class="modal-body network-filter-popup">
     <div class="filter-popup">
         <span ng-show="networkNotLoaded">Loading...</span>
         <ul class="top-filter-bar">
@@ -43,30 +43,48 @@
                     <span ng-if="checkLiveDateStatus(network.live_date)" title="Live: {{getLiveDate(network.live_date)}}">{{network.network_alias}}</span>
                     <span ng-if="!checkLiveDateStatus(network.live_date)" >{{network.network_alias}}</span>
                 </label>
-                <span class="dpi-symbol" ng-if="network.dpi == 1"><img src="./assets/images/dpi_symbol.png"></span>
-                <span class="digi-symbol" ng-if="network.diginet == 1"><img src="./assets/images/digi.svg"></span>
+                <!-- <span class="dpi-symbol" ng-if="network.dpi == 1"><img src="./assets/images/dpi_symbol.png"></span> -->
+                <span class="dpi-symbol" ng-if="network.dpi == 1">DPi</span>
+                <!-- <span class="digi-symbol" ng-if="network.diginet == 1"><img src="./assets/images/digi.svg"></span> -->
+                <span class="digi-symbol ota" ng-if="network.diginet == 1">OTA</span>
                 <span class="new-symbol" ng-if="checkLiveDateStatus(network.live_date)"><img src="./assets/images/new.svg"></span>
             </li>
         </ul>
         <button class="btn btn-blue rate-review-request">Rate Review Request</button>
         <span class="mt-1 mb-1">for selected network</span>
-        <div class="network-filter-bottom d-flex align-items-center justify-content-between btn-grp  border-top pt-3 mt-2">
+        <div class="network-filter-bottom d-flex align-items-center justify-content-between btn-grp border-top">
             <div class="d-flex dpi-newnetwork">
                 <a class="dpi-link" href="https://www.drmetrix.com/en/the_drmetrix_difference.html"
                     target="_blank" title="Learn about DPI">
-                    <span class="dpi-symbol"><img src="./assets/images/dpi_symbol.png"></span>Learn about DPi
+                    <span class="dpi-symbol">DPi</span>Learn about DPi
                 </a>
-                <div class="d-flex">
+                <!-- <div class="d-flex">
                     <span class="digi-symbol">DIGI</span>
                     <a class="network-label-container" href="#">
-                        Learn about DIGI
+                        Learn about OTA
                     </a>
-                </div>
+                </div> -->
+                <div class="learn-abt-digi">
+                    <a class="network-label-container" href="javascript:void(0);" ng-click="ranking.displayDigiPopup = true;">
+                       <span class="ota">OTA</span>
+                       <div>Learn about OTA</div>
+                       </a>
+                       <div ng-show="ranking.displayDigiPopup" class="digi-popup ng-hide">
+                           <a class="network-label-container" href="javascript:void(0);" ng-click="ranking.displayDigiPopup = true;"></a>
+                           <a class="close_filter digi-close" ng-click="ranking.displayDigiPopup = 0;"><img src="./assets/images/VC002-closebutton-02.svg"></a>
+                            <p class="digi_text">OTA is short for Over the Air. For these networks, DRMetrix monitors over-the-air signals from two different market affiliates. Any ad that is seen at the same time in both markets is reported as a national airing.</p>
+                    </div>
+                    
+                 </div>                
+                <span class="network-label-container">
+                    <span class="digi-symbol"><img src="./assets/images/new.svg"></span>
+                    New
+                </span>                
+            </div>
+            <div class="d-flex">
+                <button id="cancelNet" class="btn btn-black hide-filter-popup" ng-click="closeModal();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
+                <button id="applyNet" class="btn btn-blue" ng-click="applyNetworkModal();" ng-if="networkLists.length > 0"><i class="fa fa-check" title="apply"></i>Submit</button>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button id="cancelNet" class="btn btn-black hide-filter-popup" ng-click="closeModal();"><i class="fa fa-times" title="cancel"></i>Cancel</button>
-    <button id="applyNet" class="btn btn-blue" ng-click="applyNetworkModal();" ng-if="networkLists.length > 0"><i class="fa fa-check" title="apply"></i>Submit</button>
 </div>
