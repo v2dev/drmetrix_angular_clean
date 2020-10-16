@@ -6,7 +6,7 @@ angular.module('drmApp').controller('EulaAgreementController', function ($scope,
         var modalInstance =  $uibModal.open({
           templateUrl: "./templates/modals/eulaAgreementModalDialog.html",
           controller: "EulaModalCtrl",
-          size: 'md modal-dialog-centered',
+          size: 'sm modal-dialog-centered',
         });
         
         modalInstance.result.then(function(response){

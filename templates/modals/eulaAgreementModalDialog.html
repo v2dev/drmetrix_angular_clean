@@ -1,14 +1,9 @@
-<div class="modal-header">
-  <h3 >{{modalOptions.headerText}}</h3>
-  <button type="button" class="close" data-ng-click="modalOptions.close()" aria-label="Close" ng-show="modalOptions.closeReq == 1">
-    <span aria-hidden="true"></span>
-  </button>
-</div>
-<div class="modal-body" id="eulaAgreement">
-  <div class="text-center">
-    By clicking “Agree" you are representing that you have read the Agreement and agree to be bound by its terms and conditions.
-</div>
-<div class="modal-footer">
-    <button id="" class="btn btn-black" ng-click="eulaDisagree();">Disagree</button>
-    <button id="" class="btn btn-blue" ng-click="eulaAgree();">Agree</button>
+<div class="modal-body eula-agree-popup" id="eulaAgreement">
+  <div class="mb-2">
+    <p>By clicking "Agree" you are representing that you have read the Agreement and agree to be bound by its terms and conditions.</p>
+  </div>
+  <div class="btn-grp d-flex justify-content-end border-top pt-3">
+      <button id="" class="btn btn-black" ng-click="eulaDisagree();">Disagree</button>
+      <button id="" class="btn btn-blue" ng-click="eulaAgree();">Agree</button>
+  </div>
 </div>

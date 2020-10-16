@@ -1107,25 +1107,26 @@ header.sticky-top {
   padding: 17px;
 }
 
-.modal.xl-popup .modal-dialog, .modal-lg, .modal-xl {
+.modal-lg, .modal-xl, .modal-md, .modal-sm  {
+  margin: 0 auto;
+}  
+
+.modal-lg, .modal-xl {
   max-width: 1250px;
-  margin: 0 auto;
 }
 
-.modal.md-popup .modal-dialog {
-  max-width: 550px;
-  margin: 0 auto;
+.modal-lg {
+  max-width: 1200px;
 }
 
-.modal.lg-popup .modal-dialog {
+.modal-md {
   max-width: 750px;
-  margin: 0 auto;
 }
 
-.modal.md-popup .modal-dialog {
+.modal-sm {
   max-width: 550px;
-  margin: 0 auto;
 }
+
 
 .modal .modal-dialog .radio input+span:before {
   border-color: #9ea6b0;
@@ -2928,16 +2929,6 @@ select.select_day {
   margin: 10px 0;
 }
 
-.all-days-week-popup ul li:first-child {
-  width: 100%;
-  border-bottom: solid 1px #ccc;
-  padding-bottom: 14px;
-}
-
-.all-days-week-popup ul li:nth-child(3) {
-  flex-basis: 374px;
-}
-
 .all-hour-work-day .modal-body>ul>li:first-child {
   width: 100%;
   border-bottom: solid 1px #ccc;
@@ -3617,7 +3608,10 @@ select.select_day {
 }
 
 .eula-message-container .btn {
-  width: 120px;
+  width: 100%;
+  height: 52px;
+  border: none;
+  font-size: 20px;
 }
 
 .section .right-div .inner-right .deactivate-msg p {
@@ -3717,7 +3711,7 @@ select.select_day {
 
 .section .right-div .inner-right .network-info p .apple-icon {
   font-size: 25px;
-  color: #fff;
+  color: #B2B7BB;
   position: relative;
   top: 1px;
 }
@@ -3792,19 +3786,17 @@ select.select_day {
 }
 
 .eula-agreement {
-  overflow: hidden;
-  border-top: 1px solid #5c5c5f;
-  position: relative;
+  overflow-y: auto;
+  padding-top: 20px;
 }
 
-.eula-agreement .forgot-text {
-  margin: 15px;
-}
-
-.eula-agreement .forgot-text h5 {
+.eula-agreement  h6 {
   font-weight: bold;
   margin: 0;
   padding: 10px;
+  font-family: 'Avenir-black';
+  font-size: 14px;
+  color: #202b39;
 }
 
 .eula-agreement .agreement-sec {
@@ -3839,8 +3831,10 @@ select.select_day {
 }
 
 .eula-agreement .agreement-sec .information p span {
+  font-family: 'Avenir-black';
   font-weight: bold;
   padding-right: 6px;
+  margin-right: 5px;
 }
 
 .eula-agreement .agreement-sec .information ol {
@@ -3850,6 +3844,10 @@ select.select_day {
 .eula-agreement .agreement-sec .information ol li {
   list-style-type: lower-alpha;
   padding-left: 10px;
+}
+
+.eula-agree-popup p {
+  font-size: 16px;
 }
 
 .brand-advertiser-list {
@@ -4619,8 +4617,6 @@ select.select_day {
   height: 400px;
 }*/
 
-
-
 .ui-grid-header-cell {
   background: #e5e5e5;
   border: none;
@@ -4804,6 +4800,10 @@ select.select_day {
   background: #43ac6a;
 }
 
+.wrapper {
+  height: 100%;
+}
+
 /*mobile responsive*/
 
 @media (max-height: 800px) {
@@ -4824,6 +4824,9 @@ select.select_day {
   }
   .nav-menu>li:first-child {
     max-width: 130px;
+  }
+  .eula-agreement {
+    padding-bottom: 150px;
   }
 }
 
@@ -4977,6 +4980,9 @@ select.select_day {
   .network-page .network-filter {
     margin: 0 10px;
   }
+  .eula-agreement {
+    padding-bottom: 100px;
+  }
 }
 
 @media (max-width: 992px) {
@@ -5026,9 +5032,6 @@ select.select_day {
   }
   .section .right-div .inner-right img {
     max-width: 200px;
-  }
-  .wrapper {
-    height: 100%;
   }
   .section .right-div .inner-right .custom-input-group input {
     height: 45px;
