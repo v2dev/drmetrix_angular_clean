@@ -1,83 +1,116 @@
-<div>
-    <button history-backward>Back</button>
-    <div class="" ng-include="'templates/displayHeader.html'"></div>
-    <div class="airings-filter-container airings-filter ">
-        <div class="network-filters">
-            <ul>
-                <li ng-click="openModalDialog('network')" ng-show="selectedNetwork == '' ">
-                    {{all_networks_selected === 1 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Networks<i class="fa fa-caret-down"></i>
-                </li>
-                <li ng-click="openModalDialog('dow')">
-                    {{dow_display_text === 0 ? 'All' : custom_variable > 1 ? 'Cus.' : 'Custom'}} Days of Week<i class="fa fa-caret-down"></i>
-                </li>
-                <li ng-click="openModalDialog('hod')">
-                    {{hod_display_text === 0 ? 'All' : custom_variable > 1 ? 'Cus.' : 'Custom'}} Hour of Day<i class="fa fa-caret-down"></i>
-                </li>
-                <li ng-click="openModalDialog('dayparts')" >
-                    {{daypart_display_text === 0 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Dayparts<i class="fa fa-caret-down"></i>
-                </li>
-                    <li id="programLbl" ng-click="openModalDialog('programs')">
-                    {{all_program_selected == 1 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Programs<i class="fa fa-caret-down"></i>
-                </li>
-             </ul>
-            <div>
-                <input type="hidden" id="brand_adv_id">
-                <button class="btn btn-blue apply-btn" ng-click="filter_graph()"><i class="fa fa-check" title="apply"></i>Apply</button>
-                <button class="btn btn-blue ml-2" ng-click="resetFilter('rf')"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
+<div class="airing-network-page inner-pages">
+    <div class="main-filter airing-filter airing-network-filter" id="main-filter">
+        <div class="collapse-menu">
+            <div class="primary-filter">
+               <a ng-click="primaryFilterToggle();">Primary Filter <span><i class="fa fa-chevron-down"></i></span></a>
             </div>
-        </div>
-        <!-- Export Section -->
-        <div id="export-details" class="export-details">
-        <ul>
-            <li>
-                <label class="radio">
-                    <input type="radio" name="excel_report" value="summary_report"  id="" class="radio-custom" checked/>
-                    <span>Summary</span>
-                </label>
-            </li>
-            <li>
-                <label class="radio">
-                    <input type="radio" name="excel_report" value="airing_detail"  id="" class="radio-custom"/>
-                    <span>Airings Detail</span>
-                </label>
-            </li>
-            <li class="d-flex align-items-center">
-                <label>Type of Day: </label>
-                <select name="tod_one" class="select_day" id="tod_one">
-                    <option value='calendar'>Calendar</option>
-                    <option value='broadcast'>Broadcast</option>
-                </select>
-            </li>
-            <li>
-                <label class="radio">
-                    <input type="radio" name="opt_report" value="opt_date_range"  id="" class="radio-custom" ng-click="enableDisabled()" checked/>
-                    <span>Selected Date Range</span>
-                </label>                        
-            </li>
-            <li>
-                <label class="radio">
-                    <input type="radio" name="opt_report" value="opt_lifetime"  id="" ng-click="enableDisabled()"  class="radio-custom"/>
-                    <span>Lifetime</span>
-                </label>                         
-            </li>
+         </div>
+        <ul class="filter-menu" ng-class="{'hide-filter-menu' : toggle}">
+            <li class="desktop-back-btn">
+                <button history-backward class="btn btn-blue mr-2"><i class="fa fa-chevron-left" title="Back"></i></button>
+            </li>           
+        </ul>
+    </div>  
+    <div class="main details-container">
+        <nav class="network-outer d-flex justify-content-between">
+            <ul class="no-bullet">
+                <li ng-show="type == 'advertisers'">Advertiser: <span ng-bind-html="advertiser_name"></span></li>
+                <li ng-show="tab == 'brand'">Brand: <span ng-bind-html="brand_name | trustAsHtml"></span></li>{{brand_name}}
+                <li ng-show="tab == 'creative'">Creative: <span ng-bind-html="creative_name | trustAsHtml"></span></li>
+                <li ng-show="selectedNetwork!= ''">Network: <span ng-bind-html="selectedNetworkAlias | trustAsHtml"></span></li>
+                <li ng-show="selectedNetwork!= ''"" style="margin-top:2px;">
+                    <span class="dpi-symbol" style="width:30px;display:inline-grid;margin-left:0px;"><img src="assets/images/dpi_symbol.png"></span>
+                </li>
+                <li>Total Airings: <span ng-bind-html="total_airings | trustAsHtml"></span></li>
+                <li>National Airings: <span ng-bind-html="national_airings | trustAsHtml"></span></li>
+                <li class="border-right-0">DPI Airings: <span ng-bind-html="dpi_airings | trustAsHtml"></span></li>
             </ul>
-            <div>
-                <div>
-                    <div id='hiddenDiv'></div>
-                    <button class="btn btn-blue excel-btn" onclick="detailExcelReportCSV('checkCount');" id="excel-popup"><img src="assets/img/download.svg"> Excel</button>
-                    <img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"  id="excel_loader"/>
-                    <!-- <div class="excel-popup dpp_one renamefile-popup" id="report_alert_one"  style="display: none;"></div> -->
+            <ul class="border-right-0 network-outer-last pr-0 pl-xl-3 network-li2">
+                <li>Total Spend: $<span ng-bind-html="total_spend | trustAsHtml"></span></li>
+                <li>National Spend: $<span ng-bind-html="national_spend | trustAsHtml"></span></li>
+                <li class="border-right-0">DPI Spend: $<span ng-bind-html="dpi_spend | trustAsHtml"></span></li>
+            </ul>            
+        </nav>  
+        <div class="network-content">
+            <div class="airings-filter-container airings-filter ">
+                <div class="network-filters">
+                    <ul>
+                        <li ng-click="openModalDialog('network')" ng-show="selectedNetwork == '' ">
+                            {{all_networks_selected === 1 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Networks<i class="fa fa-caret-down"></i>
+                        </li>
+                        <li ng-click="openModalDialog('dow')">
+                            {{dow_display_text === 0 ? 'All' : custom_variable > 1 ? 'Cus.' : 'Custom'}} Days of Week<i class="fa fa-caret-down"></i>
+                        </li>
+                        <li ng-click="openModalDialog('hod')">
+                            {{hod_display_text === 0 ? 'All' : custom_variable > 1 ? 'Cus.' : 'Custom'}} Hour of Day<i class="fa fa-caret-down"></i>
+                        </li>
+                        <li ng-click="openModalDialog('dayparts')" >
+                            {{daypart_display_text === 0 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Dayparts<i class="fa fa-caret-down"></i>
+                        </li>
+                            <li id="programLbl" ng-click="openModalDialog('programs')">
+                            {{all_program_selected == 1 ? 'All' :  custom_variable > 1 ? 'Cus.' : 'Custom'}} Programs<i class="fa fa-caret-down"></i>
+                        </li>
+                        </ul>
+                    <div>
+                        <input type="hidden" id="brand_adv_id">
+                        <button class="btn btn-blue apply-btn" ng-click="filter_graph()"><i class="fa fa-check" title="apply"></i>Apply</button>
+                        <button class="btn btn-blue ml-2" ng-click="resetFilter('rf')"><i class="fa fa-rotate-right" title="reset"></i>Reset</button>
+                    </div>
                 </div>
-                <div class=" inc-week" style="display: none;">
-                    <input type="checkbox" name="inc_cmw" value="cmw"  id="inc_cmw" class="checkbox-custom"/>
-                    <label class="checkbox-custom-label">
-                        <div class="custom-div">Include Current Media Week</div>
-                    </label>
+                <!-- Export Section -->
+                <div id="export-details" class="export-details">
+                    <ul>
+                        <li>
+                            <label class="radio">
+                                <input type="radio" name="excel_report" value="summary_report"  id="" class="radio-custom" checked/>
+                                <span>Summary</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="radio">
+                                <input type="radio" name="excel_report" value="airing_detail"  id="" class="radio-custom"/>
+                                <span>Airings Detail</span>
+                            </label>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <label>Type of Day: </label>
+                            <select name="tod_one" class="select_day" id="tod_one">
+                                <option value='calendar'>Calendar</option>
+                                <option value='broadcast'>Broadcast</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label class="radio">
+                                <input type="radio" name="opt_report" value="opt_date_range"  id="" class="radio-custom" ng-click="enableDisabled()" checked/>
+                                <span>Selected Date Range</span>
+                            </label>                        
+                        </li>
+                        <li>
+                            <label class="radio">
+                                <input type="radio" name="opt_report" value="opt_lifetime"  id="" ng-click="enableDisabled()"  class="radio-custom"/>
+                                <span>Lifetime</span>
+                            </label>                         
+                        </li>
+                    </ul>
+                    <div>
+                        <div>
+                            <div id='hiddenDiv'></div>
+                            <button class="btn btn-blue excel-btn" onclick="detailExcelReportCSV('checkCount');" id="excel-popup"><img src="assets/images/download.svg"> Excel</button>
+                            <img src="/drmetrix/assets/img/excel_spinner.gif" alt="Loading icon"  id="excel_loader"/>
+                            <!-- <div class="excel-popup dpp_one renamefile-popup" id="report_alert_one"  style="display: none;"></div> -->
+                        </div>
+                        <div class=" inc-week" style="display: none;">
+                            <input type="checkbox" name="inc_cmw" value="cmw"  id="inc_cmw" class="checkbox-custom"/>
+                            <label class="checkbox-custom-label">
+                                <div class="custom-div">Include Current Media Week</div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>      
+        <div class="container-fluid">
+            <div id="gridDetailPage" ui-grid="gridAiringSpend" ui-grid-exporter ui-grid-expandable ui-grid-pagination ui-grid-grouping class="grid gridCustHeight"></div>
         </div>
-    </div>
-    <div class="container-fluid">
-        <div id="gridDetailPage" ui-grid="gridAiringSpend" ui-grid-exporter ui-grid-expandable ui-grid-pagination ui-grid-grouping class="grid gridCustHeight"></div>
     </div>
 </div>
